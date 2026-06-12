@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Despachos Pendientes — Facturación | Ingenio La Corona</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="brand-name">Despachos</span>
+      </div>
+      <div class="brand-sub">Pendientes Facturación</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Navegación</div>
+      <a class="nav-item active" href="#" onclick="return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
+      </a>
+      <a class="nav-item" href="#" onclick="document.getElementById('filterSearch').focus(); return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Buscar
+      </a>
+      <a class="nav-item" href="#" onclick="window._reintentar(); return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+        </svg>
+        Actualizar
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>Actualizado:</div>
+      <div id="fechaActualizacion">—</div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN ─── -->
+  <main id="main">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1>Despachos Pendientes</h1>
+        <div class="subtitle">Remitos de azúcar sin facturar — Gestión de facturación pendiente</div>
+      </div>
+      <div class="header-actions">
+        <span class="header-badge">Zafra 2026</span>
+        <button class="btn btn-secondary" onclick="window._reintentar()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+          </svg>
+          Actualizar
+        </button>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-green">
+        <div id="kpiRemitos"><span class="kpi-value">—</span><span class="kpi-label">Cargando...</span></div>
+      </div>
+      <div class="kpi-card kpi-blue">
+        <div id="kpiClientes"><span class="kpi-value">—</span><span class="kpi-label">Cargando...</span></div>
+      </div>
+      <div class="kpi-card">
+        <div id="kpiBolsas"><span class="kpi-value">—</span><span class="kpi-label">Cargando...</span></div>
+      </div>
+      <div class="kpi-card kpi-amber">
+        <div id="kpiToneladas"><span class="kpi-value">—</span><span class="kpi-label">Cargando...</span></div>
+      </div>
+      <div class="kpi-card kpi-red">
+        <div id="kpiImporte"><span class="kpi-value">—</span><span class="kpi-label">Cargando...</span></div>
+      </div>
+      <div class="kpi-card kpi-productos">
+        <span class="kpi-label" style="margin-bottom:6px">Productos</span>
+        <div id="kpiProductos"></div>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filter-bar">
+      <label for="filterDays">Últimos</label>
+      <select id="filterDays" class="filter-input filter-input-sm">
+        <option value="7">7 días</option>
+        <option value="15">15 días</option>
+        <option value="30" selected>30 días</option>
+        <option value="60">60 días</option>
+        <option value="90">90 días</option>
+      </select>
+      <button id="btnFilter" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </svg>
+        Filtrar
+      </button>
+      <input type="text" id="filterSearch" class="filter-input filter-input-search" placeholder="Buscar por remito, cliente, producto, CUIT o transportista..." />
+    </div>
+
+    <!-- Tabla -->
+    <div id="tablaPendientes">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando despachos pendientes...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ─── SCRIPTS ─── -->
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

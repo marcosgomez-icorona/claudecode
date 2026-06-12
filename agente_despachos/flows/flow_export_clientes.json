@@ -1,0 +1,75 @@
+[
+  {
+    "id": "exp_tab_0001",
+    "type": "tab",
+    "label": "Export Clientes",
+    "disabled": false,
+    "info": "Flow temporal para exportar clientes de Calipso a CSV"
+  },
+  {
+    "id": "exp_http_clientes",
+    "type": "http in",
+    "z": "exp_tab_0001",
+    "name": "GET /api/export/clientes",
+    "url": "/api/export/clientes",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 120,
+    "y": 100,
+    "wires": [["exp_fn_clientes"]]
+  },
+  {
+    "id": "exp_fn_clientes",
+    "type": "function",
+    "z": "exp_tab_0001",
+    "name": "Query clientes",
+    "func": "msg.query = \"SELECT CODIGO, REPLACE(DENOMINACION, CHAR(13), '') AS NOMBRE, CUIT, SUBSTRING(MOMENTO,1,4)+'-'+SUBSTRING(MOMENTO,5,2)+'-'+SUBSTRING(MOMENTO,7,2) AS FECHA_ALTA FROM V_CLIENTE WHERE DENOMINACION IS NOT NULL AND DENOMINACION != '' ORDER BY CODIGO\";\nmsg.topic = msg.query;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 340,
+    "y": 100,
+    "wires": [["exp_mssql_clientes"]]
+  },
+  {
+    "id": "exp_mssql_clientes",
+    "type": "MSSQL",
+    "z": "exp_tab_0001",
+    "mssqlCN": "sy_mssqlcn_0002",
+    "name": "Consultar V_CLIENTE",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "",
+    "queryOptType": "edit",
+    "x": 560,
+    "y": 100,
+    "wires": [["exp_fn_csv"]]
+  },
+  {
+    "id": "exp_fn_csv",
+    "type": "function",
+    "z": "exp_tab_0001",
+    "name": "To CSV",
+    "func": "var rows = msg.payload || [];\nvar csv = 'CODIGO,NOMBRE,CUIT,FECHA_ALTA\\n';\nrows.forEach(function(r) {\n  csv += '\"' + (r.CODIGO||'').trim() + '\",';\n  csv += '\"' + (r.NOMBRE||'').replace(/\"/g,'\"\"').trim() + '\",';\n  csv += '\"' + (r.CUIT||'').trim() + '\",';\n  csv += '\"' + (r.FECHA_ALTA||'').trim() + '\"\\n';\n});\nmsg.payload = csv;\nmsg.headers = { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename=clientes_calipso.csv' };\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 770,
+    "y": 100,
+    "wires": [["exp_http_resp"]]
+  },
+  {
+    "id": "exp_http_resp",
+    "type": "http response",
+    "z": "exp_tab_0001",
+    "name": "CSV Response",
+    "statusCode": "",
+    "headers": { "Content-Type": "text/csv; charset=utf-8" },
+    "x": 950,
+    "y": 100,
+    "wires": []
+  }
+]
