@@ -1,0 +1,362 @@
+
+✅ Conectado a CALIPSO - 2026-06-05T17:11:31.026Z
+
+════════════════════════════════════════════════════════════════════════════════
+1️⃣  ESTRUCTURA DE FACTURACOMPRA
+════════════════════════════════════════════════════════════════════════════════
+
+Total columnas: 21
+
+Columnas:
+  ID                             | uniqueidentifier     | Nullable: ✗
+  BO_PLACE_ID                    | uniqueidentifier     | Nullable: ✓
+  BO_OWNER_ID                    | uniqueidentifier     | Nullable: ✓
+  FECHAACTUAL                    | varchar              | Nullable: ✓
+  NUMERODOCUMENTO                | int                  | Nullable: ✓
+  TRANSACCION_ID                 | uniqueidentifier     | Nullable: ✓
+  CENTROCOSTOS_ID                | uniqueidentifier     | Nullable: ✓
+  ITEMSIMPRIMIBLES_ID            | uniqueidentifier     | Nullable: ✓
+  BUILDERITEMSIMPRIMIBLES_ID     | uniqueidentifier     | Nullable: ✓
+  ORIGINANTE_ID                  | uniqueidentifier     | Nullable: ✓
+  DESTINATARIO_ID                | uniqueidentifier     | Nullable: ✓
+  DOMICILIO_ID                   | uniqueidentifier     | Nullable: ✓
+  LISTAPRECIO_ID                 | uniqueidentifier     | Nullable: ✓
+  FECHAVENCIMIENTO               | varchar              | Nullable: ✓
+  DESCUENTO_ID                   | uniqueidentifier     | Nullable: ✓
+  SUBTOTAL_ID                    | uniqueidentifier     | Nullable: ✓
+  IVA_ID                         | uniqueidentifier     | Nullable: ✓
+  IVANOINSCRIPTO_ID              | uniqueidentifier     | Nullable: ✓
+  EXENTO_ID                      | uniqueidentifier     | Nullable: ✓
+  TOTAL_ID                       | uniqueidentifier     | Nullable: ✓
+  FECHAENTREGA                   | varchar              | Nullable: ✓
+
+════════════════════════════════════════════════════════════════════════════════
+2️⃣  ESTRUCTURA DE ITEMFACTURACOMPRA
+════════════════════════════════════════════════════════════════════════════════
+
+Total columnas: 135
+
+Columnas:
+  ID                             | uniqueidentifier     | Nullable: ✗
+  CUENTACONTABLE_ID              | uniqueidentifier     | Nullable: ✓
+  COSTO                          | decimal              | Nullable: ✓
+  FECHAREGISTRO                  | varchar              | Nullable: ✓
+  BULTOS                         | int                  | Nullable: ✓
+  DEPOSITOORI_ID                 | uniqueidentifier     | Nullable: ✓
+  DEPOSITODES_ID                 | uniqueidentifier     | Nullable: ✓
+  DESPACHO_ID                    | uniqueidentifier     | Nullable: ✓
+  UBICACIONORI_ID                | uniqueidentifier     | Nullable: ✓
+  UBICACIONDES_ID                | uniqueidentifier     | Nullable: ✓
+  PESO                           | decimal              | Nullable: ✓
+  VOLUMEN                        | decimal              | Nullable: ✓
+  KIT_ID                         | uniqueidentifier     | Nullable: ✓
+  LISTAPRECIO_ID                 | uniqueidentifier     | Nullable: ✓
+  PORCENTAJEBONIFICACION         | decimal              | Nullable: ✓
+  COMPROMISOPAGO_ID              | uniqueidentifier     | Nullable: ✓
+  IMPORTEBONIFICACION_ID         | uniqueidentifier     | Nullable: ✓
+  FECHAENTREGA                   | varchar              | Nullable: ✓
+  IMPORTEDESCUENTO_ID            | uniqueidentifier     | Nullable: ✓
+  CANTBONI2_CANTIDAD             | decimal              | Nullable: ✓
+  CANTBONI2_UNIDADMEDIDA_ID      | uniqueidentifier     | Nullable: ✓
+  IMPBONI2_IMPORTE               | decimal              | Nullable: ✓
+  IMPBONI2_UNIDADVALORIZACION_ID | uniqueidentifier     | Nullable: ✓
+  IMPBONI2_MOMENTO               | varchar              | Nullable: ✓
+  IMPBONI2_NOMBRE                | varchar              | Nullable: ✓
+  IMPDESC2_IMPORTE               | decimal              | Nullable: ✓
+  IMPDESC2_UNIDADVALORIZACION_ID | uniqueidentifier     | Nullable: ✓
+  IMPDESC2_MOMENTO               | varchar              | Nullable: ✓
+  IMPDESC2_NOMBRE                | varchar              | Nullable: ✓
+  DOMICILIO_ID                   | uniqueidentifier     | Nullable: ✓
+  CODIGOALTERNATIVO_ID           | uniqueidentifier     | Nullable: ✓
+  IMPORTEBONIFICADO              | decimal              | Nullable: ✓
+  LOTE_ID                        | uniqueidentifier     | Nullable: ✓
+  SERIE_ID                       | uniqueidentifier     | Nullable: ✓
+  DATOSCOMPLEMENTARIOS_ID        | uniqueidentifier     | Nullable: ✓
+  CANTIDAD_ID                    | uniqueidentifier     | Nullable: ✓
+  VALOR_ID                       | uniqueidentifier     | Nullable: ✓
+  CANTIDADNOLINEAL_ID            | uniqueidentifier     | Nullable: ✓
+  TOTAL_ID                       | uniqueidentifier     | Nullable: ✓
+  UNIDADMEDIDA_ID                | uniqueidentifier     | Nullable: ✓
+  UNIDADMEDIDANOLINEAL_ID        | uniqueidentifier     | Nullable: ✓
+  REFERENCIATIPO_ID              | uniqueidentifier     | Nullable: ✓
+  TOTALSINDESCUENTOS             | decimal              | Nullable: ✓
+  CANTIDAD2_CANTIDAD             | decimal              | Nullable: ✓
+  CANTIDAD2_UNIDADMEDIDA_ID      | uniqueidentifier     | Nullable: ✓
+  VALOR2_IMPORTE                 | decimal              | Nullable: ✓
+  VALOR2_UNIDADVALORIZACION_ID   | uniqueidentifier     | Nullable: ✓
+  VALOR2_MOMENTO                 | varchar              | Nullable: ✓
+  VALOR2_NOMBRE                  | varchar              | Nullable: ✓
+  CNOLINEAL2_CANTIDAD            | decimal              | Nullable: ✓
+  CNOLINEAL2_UNIDADMEDIDA_ID     | uniqueidentifier     | Nullable: ✓
+  TOTAL2_IMPORTE                 | decimal              | Nullable: ✓
+  TOTAL2_UNIDADVALORIZACION_ID   | uniqueidentifier     | Nullable: ✓
+  TOTAL2_MOMENTO                 | varchar              | Nullable: ✓
+  TOTAL2_NOMBRE                  | varchar              | Nullable: ✓
+  REFERENCIA_ID                  | uniqueidentifier     | Nullable: ✓
+  DESCRIPCION                    | varchar              | Nullable: ✓
+  MECANISMOSCALCULOITEMTR_ID     | uniqueidentifier     | Nullable: ✓
+  PLACEOWNER_ID                  | uniqueidentifier     | Nullable: ✓
+  DETALLE                        | varchar              | Nullable: ✓
+  IMPUESTOSITEMTRANSACCION_ID    | uniqueidentifier     | Nullable: ✓
+  IMPUTACIONCONTABLE_ID          | uniqueidentifier     | Nullable: ✓
+  OBSERVACION_ID                 | uniqueidentifier     | Nullable: ✓
+  CENTROCOSTOS_ID                | uniqueidentifier     | Nullable: ✓
+  ITEMPENDIENTE_ID               | uniqueidentifier     | Nullable: ✓
+  CANCELACION_ID                 | uniqueidentifier     | Nullable: ✓
+  INFRA                          | decimal              | Nullable: ✓
+  SUPRA                          | decimal              | Nullable: ✓
+  TIPOTRANSACCION_ID             | uniqueidentifier     | Nullable: ✓
+  MOMENTOTR                      | varchar              | Nullable: ✓
+  NUMERODOCUMENTO                | varchar              | Nullable: ✓
+  FECHADOCUMENTO                 | varchar              | Nullable: ✓
+  NOMBREORIGINANTETR             | varchar              | Nullable: ✓
+  NOMBREDESTINATARIOTR           | varchar              | Nullable: ✓
+  ORIGINANTETR_ID                | uniqueidentifier     | Nullable: ✓
+  DESTINATARIOTR_ID              | uniqueidentifier     | Nullable: ✓
+  COMPANIA_ID                    | uniqueidentifier     | Nullable: ✓
+  UNIDADOPERATIVA_ID             | uniqueidentifier     | Nullable: ✓
+  NOMBRETR                       | varchar              | Nullable: ✓
+  ESTADOTR                       | varchar              | Nullable: ✓
+  NOMBREREFERENCIA               | varchar              | Nullable: ✓
+  TOTALTR                        | decimal              | Nullable: ✓
+  NOMBRETOTALTR                  | varchar              | Nullable: ✓
+  NUMEROITEM                     | int                  | Nullable: ✓
+  COTIZACION                     | decimal              | Nullable: ✓
+  MONEDABASE_ID                  | uniqueidentifier     | Nullable: ✓
+  COTIZACIONCONVERSION           | decimal              | Nullable: ✓
+  SUMA_ID                        | uniqueidentifier     | Nullable: ✓
+  SUMA2_IMPORTE                  | decimal              | Nullable: ✓
+  SUMA2_UNIDADVALORIZACION_ID    | uniqueidentifier     | Nullable: ✓
+  SUMA2_MOMENTO                  | varchar              | Nullable: ✓
+  SUMA2_NOMBRE                   | varchar              | Nullable: ✓
+  BOEXTENSION_ID                 | uniqueidentifier     | Nullable: ✓
+  COMPOSICIONCOSTORECURSO_ID     | uniqueidentifier     | Nullable: ✓
+  PROYECTO_ID                    | uniqueidentifier     | Nullable: ✓
+  BO_PLACE_ID                    | uniqueidentifier     | Nullable: ✓
+  BO_OWNER_ID                    | uniqueidentifier     | Nullable: ✓
+  ITEMSCONCEPTOSDEVENGAR_ID      | uniqueidentifier     | Nullable: ✓
+  ENVASE_ID                      | uniqueidentifier     | Nullable: ✓
+  PAQUETE_ID                     | uniqueidentifier     | Nullable: ✓
+  TEXTOEVALUACION                | varchar              | Nullable: ✓
+  CPVS1                          | varchar              | Nullable: ✓
+  CPVS2                          | varchar              | Nullable: ✓
+  CPVN1                          | decimal              | Nullable: ✓
+  CPVN2                          | decimal              | Nullable: ✓
+  UNIDADNEGOCIO_ID               | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE1_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE2_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE3_ID      | uniqueidentifier     | Nullable: ✓
+  FECHADEVENGAMIENTO             | varchar              | Nullable: ✓
+  SUBSUCURSAL_ID                 | uniqueidentifier     | Nullable: ✓
+  SERIEDESTINO_ID                | uniqueidentifier     | Nullable: ✓
+  PRECIOORIGINAL                 | decimal              | Nullable: ✓
+  MONEDAORIGINAL_ID              | uniqueidentifier     | Nullable: ✓
+  COTIZACIONORIGINAL             | decimal              | Nullable: ✓
+  DIMENSIONALIDAD_ID             | uniqueidentifier     | Nullable: ✓
+  ITEMCONSOLIDADO_ID             | uniqueidentifier     | Nullable: ✓
+  DOMICILIOENTREGA_ID            | uniqueidentifier     | Nullable: ✓
+  PRECIOUNITARIOFINAL            | decimal              | Nullable: ✓
+  CENTROCOSTOSORI_ID             | uniqueidentifier     | Nullable: ✓
+  TIPODISTRIBUCIONCENCOS_ID      | uniqueidentifier     | Nullable: ✓
+  NOMBREGRUPOECONOMICO           | varchar              | Nullable: ✓
+  DISCRIMINADORCONTABLE4_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE5_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE6_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE7_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE8_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE9_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE10_ID     | uniqueidentifier     | Nullable: ✓
+  TORNEO_ID                      | uniqueidentifier     | Nullable: ✓
+  DIVISION_ID                    | uniqueidentifier     | Nullable: ✓
+  CATEGORIA_ID                   | uniqueidentifier     | Nullable: ✓
+  PARTIDO_ID                     | uniqueidentifier     | Nullable: ✓
+  CLUB_ID                        | uniqueidentifier     | Nullable: ✓
+  HITO_ID                        | uniqueidentifier     | Nullable: ✓
+
+════════════════════════════════════════════════════════════════════════════════
+3️⃣  TABLAS CONTABLES
+════════════════════════════════════════════════════════════════════════════════
+
+Tablas encontradas:
+  • AGENTETRCONTABLE
+  • CONCEPTOCONTABLE
+  • CONFIGCUENTASCONTABLES
+  • CONFIGURADORCONTABLE
+  • CONSOLIDACIONCUENTACONTABLE
+  • CUENTACONTABLEDEFAULT
+  • CUENTASCONTABLES
+  • DEFINICIONRATIOCONTABLE
+  • DESCRIPCIONCONTABLE
+  • DESCRIPCTASCONTABLES
+  • DISCRIMINADORCONTABLE
+  • DOCUMENTOCONTABLE
+  • IMPUTACIONCONTABLE
+  • ITEMCONTABLE
+  • ITEMDISCCONTABLE
+  • ITEMDISTRIBCONTABLE
+  • ITEMIMPCONTABLE
+  • ITEMRELIMPUESTOCONTABLE
+  • ITEMUNCCDISCCONTABLE
+  • RAMOCONTABLE
+  • RELACIONTRCONTABLE
+  • TITULOCONTABLE
+  • TRCONTABLE
+  • UOCONTABILIDAD
+  • V_AGENTETRCONTABLE
+  • V_AGENTETRCONTABLE_
+  • V_CONCEPTOCONTABLE
+  • V_CONCEPTOCONTABLE_
+  • V_CONFIGCUENTASCONTABLES
+  • V_CONFIGCUENTASCONTABLES_
+  • V_CONFIGURADORCONTABLE
+  • V_CONFIGURADORCONTABLE_
+  • V_CONSOLIDACIONCUENTACONTABLE
+  • V_CONSOLIDACIONCUENTACONTABLE_
+  • V_CUENTACONTABLEDEFAULT
+  • V_CUENTACONTABLEDEFAULT_
+  • V_CUENTASCONTABLES
+  • V_CUENTASCONTABLES_
+  • V_DEFINICIONRATIOCONTABLE
+  • V_DEFINICIONRATIOCONTABLE_
+  • V_DESCRIPCIONCONTABLE
+  • V_DESCRIPCIONCONTABLE_
+  • V_DESCRIPCTASCONTABLES
+  • V_DESCRIPCTASCONTABLES_
+  • V_DISCRIMINADORCONTABLE
+  • V_DISCRIMINADORCONTABLE_
+  • V_DOCUMENTOCONTABLE
+  • V_DOCUMENTOCONTABLE_
+  • V_IMPUTACIONCONTABLE
+  • V_IMPUTACIONCONTABLE_
+  • V_ITEMCONTABLE
+  • V_ITEMCONTABLE_
+  • V_ITEMDISCCONTABLE
+  • V_ITEMDISCCONTABLE_
+  • V_ITEMDISTRIBCONTABLE
+  • V_ITEMDISTRIBCONTABLE_
+  • V_ITEMIMPCONTABLE
+  • V_ITEMIMPCONTABLE_
+  • V_ITEMRELIMPUESTOCONTABLE
+  • V_ITEMRELIMPUESTOCONTABLE_
+  • V_ITEMUNCCDISCCONTABLE
+  • V_ITEMUNCCDISCCONTABLE_
+  • V_RAMOCONTABLE
+  • V_RAMOCONTABLE_
+  • V_RELACIONTRCONTABLE
+  • V_RELACIONTRCONTABLE_
+  • V_TITULOCONTABLE
+  • V_TITULOCONTABLE_
+  • V_TRCONTABLE
+  • V_TRCONTABLE_
+  • V_UOCONTABILIDAD
+  • V_UOCONTABILIDAD_
+
+════════════════════════════════════════════════════════════════════════════════
+4️⃣  ESTRUCTURA DE ITEMCONTABLE
+════════════════════════════════════════════════════════════════════════════════
+
+Total columnas: 100
+  ID                             | uniqueidentifier     | Nullable: ✗
+  UNIDADNEGOCIO_ID               | uniqueidentifier     | Nullable: ✓
+  VALOR_ID                       | uniqueidentifier     | Nullable: ✓
+  VALOR2_IMPORTE                 | decimal              | Nullable: ✓
+  VALOR2_UNIDADVALORIZACION_ID   | uniqueidentifier     | Nullable: ✓
+  VALOR2_MOMENTO                 | varchar              | Nullable: ✓
+  VALOR2_NOMBRE                  | varchar              | Nullable: ✓
+  REFERENCIA_ID                  | uniqueidentifier     | Nullable: ✓
+  DESCRIPCION                    | varchar              | Nullable: ✓
+  MECANISMOSCALCULOITEMTR_ID     | uniqueidentifier     | Nullable: ✓
+  PLACEOWNER_ID                  | uniqueidentifier     | Nullable: ✓
+  DETALLE                        | varchar              | Nullable: ✓
+  IMPUESTOSITEMTRANSACCION_ID    | uniqueidentifier     | Nullable: ✓
+  IMPUTACIONCONTABLE_ID          | uniqueidentifier     | Nullable: ✓
+  OBSERVACION_ID                 | uniqueidentifier     | Nullable: ✓
+  CENTROCOSTOS_ID                | uniqueidentifier     | Nullable: ✓
+  ITEMPENDIENTE_ID               | uniqueidentifier     | Nullable: ✓
+  CANCELACION_ID                 | uniqueidentifier     | Nullable: ✓
+  INFRA                          | decimal              | Nullable: ✓
+  SUPRA                          | decimal              | Nullable: ✓
+  TIPOTRANSACCION_ID             | uniqueidentifier     | Nullable: ✓
+  MOMENTOTR                      | varchar              | Nullable: ✓
+  NUMERODOCUMENTO                | varchar              | Nullable: ✓
+  FECHADOCUMENTO                 | varchar              | Nullable: ✓
+  NOMBREORIGINANTETR             | varchar              | Nullable: ✓
+  NOMBREDESTINATARIOTR           | varchar              | Nullable: ✓
+  ORIGINANTETR_ID                | uniqueidentifier     | Nullable: ✓
+  DESTINATARIOTR_ID              | uniqueidentifier     | Nullable: ✓
+  COMPANIA_ID                    | uniqueidentifier     | Nullable: ✓
+  UNIDADOPERATIVA_ID             | uniqueidentifier     | Nullable: ✓
+  NOMBRETR                       | varchar              | Nullable: ✓
+  ESTADOTR                       | varchar              | Nullable: ✓
+  NOMBREREFERENCIA               | varchar              | Nullable: ✓
+  TOTALTR                        | decimal              | Nullable: ✓
+  NOMBRETOTALTR                  | varchar              | Nullable: ✓
+  NUMEROITEM                     | int                  | Nullable: ✓
+  COTIZACION                     | decimal              | Nullable: ✓
+  MONEDABASE_ID                  | uniqueidentifier     | Nullable: ✓
+  COTIZACIONCONVERSION           | decimal              | Nullable: ✓
+  SUMA_ID                        | uniqueidentifier     | Nullable: ✓
+  SUMA2_IMPORTE                  | decimal              | Nullable: ✓
+  SUMA2_UNIDADVALORIZACION_ID    | uniqueidentifier     | Nullable: ✓
+  SUMA2_MOMENTO                  | varchar              | Nullable: ✓
+  SUMA2_NOMBRE                   | varchar              | Nullable: ✓
+  BOEXTENSION_ID                 | uniqueidentifier     | Nullable: ✓
+  COMPOSICIONCOSTORECURSO_ID     | uniqueidentifier     | Nullable: ✓
+  PROYECTO_ID                    | uniqueidentifier     | Nullable: ✓
+  BO_PLACE_ID                    | uniqueidentifier     | Nullable: ✓
+  BO_OWNER_ID                    | uniqueidentifier     | Nullable: ✓
+  DEBE_ID                        | uniqueidentifier     | Nullable: ✓
+  HABER_ID                       | uniqueidentifier     | Nullable: ✓
+  COMPORTAMIENTO                 | varchar              | Nullable: ✓
+  DEBEORIGINAL_ID                | uniqueidentifier     | Nullable: ✓
+  HABERORIGINAL_ID               | uniqueidentifier     | Nullable: ✓
+  CANTIDAD_ID                    | uniqueidentifier     | Nullable: ✓
+  FECHAVENCIMIENTO               | varchar              | Nullable: ✓
+  DEBE2_IMPORTE                  | decimal              | Nullable: ✓
+  DEBE2_UNIDADVALORIZACION_ID    | uniqueidentifier     | Nullable: ✓
+  DEBE2_MOMENTO                  | varchar              | Nullable: ✓
+  DEBE2_NOMBRE                   | varchar              | Nullable: ✓
+  HABER2_IMPORTE                 | decimal              | Nullable: ✓
+  HABER2_UNIDADVALORIZACION_ID   | uniqueidentifier     | Nullable: ✓
+  HABER2_MOMENTO                 | varchar              | Nullable: ✓
+  HABER2_NOMBRE                  | varchar              | Nullable: ✓
+  DEBEOR2_IMPORTE                | decimal              | Nullable: ✓
+  DEBEOR2_UNIDADVALORIZACION_ID  | uniqueidentifier     | Nullable: ✓
+  DEBEOR2_MOMENTO                | varchar              | Nullable: ✓
+  DEBEOR2_NOMBRE                 | varchar              | Nullable: ✓
+  HABEROR2_IMPORTE               | decimal              | Nullable: ✓
+  HABEROR2_UNIDADVALORIZACION_ID | uniqueidentifier     | Nullable: ✓
+  HABEROR2_MOMENTO               | varchar              | Nullable: ✓
+  HABEROR2_NOMBRE                | varchar              | Nullable: ✓
+  EJERCICIO_ID                   | uniqueidentifier     | Nullable: ✓
+  PERIODO_ID                     | uniqueidentifier     | Nullable: ✓
+  SUBDIARIO_ID                   | uniqueidentifier     | Nullable: ✓
+  NOTA                           | varchar              | Nullable: ✓
+  DISCRIMINADORCONTABLE1_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE2_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE3_ID      | uniqueidentifier     | Nullable: ✓
+  SUBSUCURSAL_ID                 | uniqueidentifier     | Nullable: ✓
+  TRANSFERIDOLIBRODIARIO         | varchar              | Nullable: ✓
+  FECHAREVERSION                 | varchar              | Nullable: ✓
+  INTERCOMPANY                   | varchar              | Nullable: ✓
+  CENTROCOSTOSORI_ID             | uniqueidentifier     | Nullable: ✓
+  TIPODISTRIBUCIONCENCOS_ID      | uniqueidentifier     | Nullable: ✓
+  NOMBREGRUPOECONOMICO           | varchar              | Nullable: ✓
+  DISCRIMINADORCONTABLE4_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE5_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE6_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE7_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE8_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE9_ID      | uniqueidentifier     | Nullable: ✓
+  DISCRIMINADORCONTABLE10_ID     | uniqueidentifier     | Nullable: ✓
+  TORNEO_ID                      | uniqueidentifier     | Nullable: ✓
+  DIVISION_ID                    | uniqueidentifier     | Nullable: ✓
+  CATEGORIA_ID                   | uniqueidentifier     | Nullable: ✓
+  PARTIDO_ID                     | uniqueidentifier     | Nullable: ✓
+  CLUB_ID                        | uniqueidentifier     | Nullable: ✓
+  HITO_ID                        | uniqueidentifier     | Nullable: ✓
+  TIPOASIENTOCIERRE              | varchar              | Nullable: ✓
+
+════════════════════════════════════════════════════════════════════════════════
+✅ Análisis completado - 2026-06-05T17:11:31.195Z
+════════════════════════════════════════════════════════════════════════════════

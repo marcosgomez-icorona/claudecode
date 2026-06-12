@@ -1,0 +1,8 @@
+Array
+(
+    [Connection] => keep-alive
+    [Host] => ingeniolacorona.com
+    [Content-Type] => application/json
+    [Content-Length] => 88
+    [User-Agent] => got (https://github.com/sindresorhus/got)
+)

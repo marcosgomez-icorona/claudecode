@@ -1,0 +1,41 @@
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+    }
+
+    .text-dark { color: #343a40 !important; }
+    .text-muted { color: #6c757d !important; }
+    .border-dark { border-color: #343a40 !important; }
+    .border-secondary { border-color: #6c757d !important; }
+
+    /* Contenedor centrado y ajustado a A4 */
+    .reporte_print-fixed-width {
+        max-width: 180mm; /* un poco menos que el ancho A4 (210mm) para márgenes */
+        margin: 0 auto;
+        font-size: 11pt;
+        background: white;
+        padding: 1mm;
+        box-sizing: border-box;
+    }
+
+    /* Botones ocultos al imprimir */
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: white;
+        }
+        .reporte_print-fixed-width {
+            box-shadow: none;
+            border: none;
+            max-width: 100%;
+            padding: 0;
+        }
+        @page {
+            size: A4;
+            margin: 1mm;
+        }
+    }

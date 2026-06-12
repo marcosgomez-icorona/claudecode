@@ -1,0 +1,167 @@
+{
+  "name": "Facturacion venta - notificaciones MVP",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "schedule_15m",
+      "name": "Cada 15 minutos",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://middleware.local/api/prefacturas?estado=ERROR,APROBADO,FACTURADO&desde={{$now.minus({hours: 1}).toISO()}}",
+        "options": {}
+      },
+      "id": "http_get_estados",
+      "name": "Consultar estados middleware",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "hay_items",
+              "leftValue": "={{$json.length || 0}}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if_hay_eventos",
+      "name": "Hay eventos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        780,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://middleware.local/api/notificaciones/facturacion-venta",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "origen",
+              "value": "n8n"
+            },
+            {
+              "name": "eventos",
+              "value": "={{$json}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http_post_notificar",
+      "name": "Notificar resumen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "no_op",
+      "name": "Sin novedades",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Cada 15 minutos": {
+      "main": [
+        [
+          {
+            "node": "Consultar estados middleware",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar estados middleware": {
+      "main": [
+        [
+          {
+            "node": "Hay eventos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hay eventos?": {
+      "main": [
+        [
+          {
+            "node": "Notificar resumen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sin novedades",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "Ingenio La Corona"
+    },
+    {
+      "name": "Facturacion venta"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-05T00:00:00.000Z",
+  "versionId": "mvp-plan"
+}

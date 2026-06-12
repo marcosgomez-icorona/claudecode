@@ -1,0 +1,326 @@
+[
+    {
+        "id": "anviz-fixed-flow",
+        "type": "tab",
+        "label": "ANVIZ → RelojImportacion (v2)",
+        "disabled": false,
+        "info": "Sistema de lectura ANVIZ EP300 PRO\n\nMANEJA: trailing commas en JSON del reloj\nLOGIN: POST /goform/chklogin con {userid, password}\nDATOS: GET /goform/GetReportFormInfo con header token\n\nGenera 2 filas por registro (firstin + lastout)\nDestino: tabla RelojImportacion"
+    },
+    {
+        "id": "trigger-cron-fix",
+        "type": "cronplus",
+        "z": "anviz-fixed-flow",
+        "name": "Cada 5 minutos",
+        "outputField": "payload",
+        "timeZone": "",
+        "storeName": "",
+        "commandResponseMsgOutput": "output1",
+        "defaultLocation": "",
+        "defaultLocationType": "default",
+        "outputs": 1,
+        "options": [
+            {
+                "name": "schedule1",
+                "topic": "ANVIZ-READ",
+                "payloadType": "default",
+                "payload": "",
+                "expressionType": "cron",
+                "expression": "0 */5 * * * *",
+                "location": "",
+                "offset": "0",
+                "solarType": "all",
+                "solarEvents": "sunrise,sunset"
+            }
+        ],
+        "x": 130,
+        "y": 100,
+        "wires": [
+            [
+                "init-readers-fix"
+            ]
+        ]
+    },
+    {
+        "id": "manual-trigger-fix",
+        "type": "inject",
+        "z": "anviz-fixed-flow",
+        "name": "▶ Ejecutar manual",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "manual",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 130,
+        "y": 60,
+        "wires": [
+            [
+                "init-readers-fix"
+            ]
+        ]
+    },
+    {
+        "id": "init-readers-fix",
+        "type": "function",
+        "z": "anviz-fixed-flow",
+        "name": "Inicializar lectores",
+        "func": "// ================================================\n// CONFIGURACIÓN DE LECTORES ANVIZ EP300 PRO\n// PERSONALIZAR según tu red\n// ================================================\nflow.set('readers', [\n    { id: 'ANVIZ-01', ip: '192.168.7.243', sucursal: 'Entrada Principal', userid: 'admin', password: '12345' },\n    { id: 'ANVIZ-02', ip: '192.168.7.244', sucursal: 'Salida Principal', userid: 'admin', password: '12345' },\n    { id: 'ANVIZ-03', ip: '192.168.7.245', sucursal: 'Almacén',          userid: 'admin', password: '12345' },\n    { id: 'ANVIZ-04', ip: '192.168.7.246', sucursal: 'Laboratorio',      userid: 'admin', password: '12345' },\n    { id: 'ANVIZ-05', ip: '192.168.7.247', sucursal: 'Control',          userid: 'admin', password: '12345' }\n]);\n\nflow.set('readerIndex', 0);\nflow.set('totalInsertados', 0);\nflow.set('totalLectores', 0);\nflow.set('totalErrores', 0);\n\nnode.log('========================================');\nnode.log('🔄 INICIANDO CICLO DE LECTURA ANVIZ');\nnode.log('========================================');\n\nreturn { payload: 'start' };",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 100,
+        "wires": [
+            [
+                "process-next-reader-fix"
+            ]
+        ]
+    },
+    {
+        "id": "process-next-reader-fix",
+        "type": "function",
+        "z": "anviz-fixed-flow",
+        "name": "Procesar siguiente lector",
+        "func": "const readers = flow.get('readers');\nconst index = flow.get('readerIndex');\n\nif (index >= readers.length) {\n    const total = flow.get('totalInsertados');\n    const lectores = flow.get('totalLectores');\n    const errores = flow.get('totalErrores');\n    \n    node.log('========================================');\n    node.log('✅ CICLO COMPLETADO');\n    node.log(`📊 Lectores OK: ${lectores}/${readers.length}`);\n    node.log(`📊 Errores: ${errores}`);\n    node.log(`📊 Total filas insertadas: ${total}`);\n    node.log('========================================');\n    \n    flow.set('readerIndex', 0);\n    flow.set('totalInsertados', 0);\n    flow.set('totalLectores', 0);\n    flow.set('totalErrores', 0);\n    \n    return [null, { \n        payload: 'finished', \n        totalFilas: total, \n        lectoresOk: lectores, \n        errores: errores \n    }];\n}\n\nconst reader = readers[index];\n\nnode.log(`📡 [${index+1}/${readers.length}] ${reader.id} (${reader.ip}) - Login...`);\n\nmsg.readerId = reader.id;\nmsg.readerIp = reader.ip;\nmsg.sucursal = reader.sucursal;\n\nmsg.url = `http://${reader.ip}/goform/chklogin?_t=${Date.now()}`;\nmsg.method = 'POST';\nmsg.headers = {\n    'Content-Type': 'application/json',\n    'Accept': 'application/json, text/plain, */*',\n    'Referer': `http://${reader.ip}/index.html`\n};\nmsg.payload = {\n    userid: reader.userid,\n    password: reader.password\n};\n\nreturn [msg, null];",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 100,
+        "wires": [
+            [
+                "http-chklogin-fix"
+            ],
+            [
+                "cycle-end-fix"
+            ]
+        ]
+    },
+    {
+        "id": "http-chklogin-fix",
+        "type": "http request",
+        "z": "anviz-fixed-flow",
+        "name": "POST /goform/chklogin",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 740,
+        "y": 100,
+        "wires": [
+            [
+                "extract-token-fix"
+            ]
+        ]
+    },
+    {
+        "id": "extract-token-fix",
+        "type": "function",
+        "z": "anviz-fixed-flow",
+        "name": "Extraer token JWT",
+        "func": "// =================================================\n// PARSER ROBUSTO PARA JSON DE ANVIZ\n// El reloj devuelve JSON con:\n// 1. Trailing commas\n// 2. Propiedades sin comillas en records\n// =================================================\n\nfunction parseAnvizJSON(text) {\n    if (typeof text !== 'string') return text;\n    \n    let cleaned = text.replace(/,(\\s*})/g, '$1');\n    cleaned = cleaned.replace(/,(\\s*\\])/g, '$1');\n    cleaned = cleaned.replace(/([{,]\\s*)([a-zA-Z_][a-zA-Z0-9_]*)\\s*:/g, '$1\"$2\":');\n    \n    return JSON.parse(cleaned);\n}\n\ntry {\n    let data = msg.payload;\n    \n    if (typeof data === 'string') {\n        try {\n            data = parseAnvizJSON(data);\n        } catch(parseErr) {\n            throw new Error(`No se puede parsear: ${parseErr.message}. Inicio: ${msg.payload.substring(0, 150)}`);\n        }\n    }\n    \n    if (data.code === 'error') {\n        throw new Error(`Login falló: msg=${data.msg || 'sin mensaje'}`);\n    }\n    \n    if (data.retvalue !== 0 && data.retvalue !== undefined) {\n        throw new Error(`retvalue=${data.retvalue}: ${data.msg || 'error desconocido'}`);\n    }\n    \n    const token = data.token;\n    \n    if (!token) {\n        throw new Error(`No se encontró token en respuesta`);\n    }\n    \n    msg.token = token;\n    node.log(`✅ ${msg.readerId}: Login OK - Token JWT obtenido`);\n    \n    const now = new Date();\n    const year = now.getFullYear();\n    const month = String(now.getMonth() + 1).padStart(2, '0');\n    const day = String(now.getDate()).padStart(2, '0');\n    const fechaHoy = `${year}-${month}-${day}`;\n    \n    msg.url = `http://${msg.readerIp}/goform/GetReportFormInfo?_t=${Date.now()}&userid=&from=${fechaHoy}&to=${fechaHoy}&intime=00:00&outtime=23:59&start=0&limit=1000`;\n    msg.method = 'GET';\n    msg.headers = {\n        'token': token,\n        'Accept': 'application/json, text/plain, */*',\n        'Referer': `http://${msg.readerIp}/index.html`\n    };\n    msg.payload = '';\n    \n    return msg;\n    \n} catch (e) {\n    node.error(`❌ ${msg.readerId}: ${e.message}`);\n    \n    const errores = flow.get('totalErrores') || 0;\n    flow.set('totalErrores', errores + 1);\n    \n    msg.skipReader = true;\n    msg.errorMsg = e.message;\n    return msg;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 950,
+        "y": 100,
+        "wires": [
+            [
+                "check-skip-fix"
+            ]
+        ]
+    },
+    {
+        "id": "check-skip-fix",
+        "type": "switch",
+        "z": "anviz-fixed-flow",
+        "name": "¿Login OK?",
+        "property": "skipReader",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1140,
+        "y": 100,
+        "wires": [
+            [
+                "next-reader-fix"
+            ],
+            [
+                "http-getreport-fix"
+            ]
+        ]
+    },
+    {
+        "id": "http-getreport-fix",
+        "type": "http request",
+        "z": "anviz-fixed-flow",
+        "name": "GET ReportFormInfo + token",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": true,
+        "headers": [],
+        "x": 220,
+        "y": 220,
+        "wires": [
+            [
+                "parse-records-fix"
+            ]
+        ]
+    },
+    {
+        "id": "parse-records-fix",
+        "type": "function",
+        "z": "anviz-fixed-flow",
+        "name": "Parsear registros",
+        "func": "// Parser robusto - maneja trailing commas Y propiedades sin comillas\nfunction parseAnvizJSON(text) {\n    if (typeof text !== 'string') return text;\n    \n    let cleaned = text.replace(/,(\\s*})/g, '$1');\n    cleaned = cleaned.replace(/,(\\s*\\])/g, '$1');\n    cleaned = cleaned.replace(/([{,]\\s*)([a-zA-Z_][a-zA-Z0-9_]*)\\s*:/g, '$1\"$2\":');\n    \n    return JSON.parse(cleaned);\n}\n\ntry {\n    let data = msg.payload;\n    \n    if (typeof data === 'string') {\n        data = parseAnvizJSON(data);\n    }\n    \n    if (data.code === 'error' || (data.retvalue !== 0 && data.retvalue !== undefined)) {\n        throw new Error(`Error API: code=${data.code}, msg=${data.msg || 'error'}`);\n    }\n    \n    const records = data.record || [];\n    \n    if (!records || records.length === 0) {\n        node.log(`ℹ ${msg.readerId}: sin registros`);\n        const ok = flow.get('totalLectores') || 0;\n        flow.set('totalLectores', ok + 1);\n        return [null, msg];\n    }\n    \n    const sqlRows = [];\n    \n    records.forEach(record => {\n        const dni = record.id || '';\n        const fecha = record.date || '';\n        const firstin = record.firstin || '';\n        const lastout = record.lastout || '';\n        \n        if (!dni || !fecha) return;\n        \n        if (firstin && firstin !== '') {\n            sqlRows.push({\n                Dni: dni,\n                Fecha: fecha,\n                Hora: firstin,\n                Sucursal: msg.sucursal,\n                HoraSeg: `${fecha} ${firstin}`,\n                ipreloj: msg.readerIp\n            });\n        }\n        \n        if (lastout && lastout !== '') {\n            sqlRows.push({\n                Dni: dni,\n                Fecha: fecha,\n                Hora: lastout,\n                Sucursal: msg.sucursal,\n                HoraSeg: `${fecha} ${lastout}`,\n                ipreloj: msg.readerIp\n            });\n        }\n    });\n    \n    if (sqlRows.length === 0) {\n        node.log(`ℹ ${msg.readerId}: ${records.length} registros, sin filas válidas`);\n        const ok = flow.get('totalLectores') || 0;\n        flow.set('totalLectores', ok + 1);\n        return [null, msg];\n    }\n    \n    msg.sqlRows = sqlRows;\n    msg.totalRows = sqlRows.length;\n    \n    node.log(`📝 ${msg.readerId}: ${records.length} registros → ${sqlRows.length} filas`);\n    \n    return [msg, null];\n    \n} catch (e) {\n    node.error(`❌ ${msg.readerId}: ${e.message}`);\n    const errores = flow.get('totalErrores') || 0;\n    flow.set('totalErrores', errores + 1);\n    return [null, msg];\n}",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 220,
+        "wires": [
+            [
+                "build-sql-fix"
+            ],
+            [
+                "next-reader-fix"
+            ]
+        ]
+    },
+    {
+        "id": "build-sql-fix",
+        "type": "function",
+        "z": "anviz-fixed-flow",
+        "name": "Construir INSERT SQL",
+        "func": "const rows = msg.sqlRows;\n\nif (!rows || rows.length === 0) return null;\n\nfunction escapeSql(value) {\n    if (value === null || value === undefined) return '';\n    return String(value).replace(/'/g, \"''\");\n}\n\nlet sql = `INSERT INTO RelojImportacion (Dni, Fecha, Hora, Sucursal, HoraSeg, ipreloj) VALUES `;\n\nconst values = rows.map(row => {\n    return `('${escapeSql(row.Dni)}', '${escapeSql(row.Fecha)}', '${escapeSql(row.Hora)}', '${escapeSql(row.Sucursal)}', '${escapeSql(row.HoraSeg)}', '${escapeSql(row.ipreloj)}')`;\n}).join(', ');\n\nsql += values + ';';\n\nconst total = flow.get('totalInsertados') + rows.length;\nflow.set('totalInsertados', total);\n\nmsg.payload = sql;\nmsg.query = sql;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 220,
+        "wires": [
+            [
+                "sql-server-insert-fix"
+            ]
+        ]
+    },
+    {
+        "id": "sql-server-insert-fix",
+        "type": "MSSQL",
+        "z": "anviz-fixed-flow",
+        "mssqlCN": "",
+        "name": "SQL Server INSERT",
+        "outField": "payload",
+        "returnType": "0",
+        "throwErrors": "0",
+        "query": "",
+        "modeOpt": "queryMode",
+        "modeOptType": "query",
+        "queryOpt": "msg",
+        "queryOptType": "editor",
+        "params": [],
+        "rows": "rows",
+        "rowsType": "msg",
+        "x": 880,
+        "y": 220,
+        "wires": [
+            [
+                "log-success-fix"
+            ]
+        ]
+    },
+    {
+        "id": "log-success-fix",
+        "type": "function",
+        "z": "anviz-fixed-flow",
+        "name": "Log éxito",
+        "func": "node.log(`✅ ${msg.readerId}: ${msg.totalRows} filas insertadas`);\n\nconst ok = flow.get('totalLectores') || 0;\nflow.set('totalLectores', ok + 1);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 220,
+        "wires": [
+            [
+                "next-reader-fix"
+            ]
+        ]
+    },
+    {
+        "id": "next-reader-fix",
+        "type": "function",
+        "z": "anviz-fixed-flow",
+        "name": "Siguiente lector",
+        "func": "const index = flow.get('readerIndex');\nflow.set('readerIndex', index + 1);\n\nsetTimeout(() => {\n    node.send({ payload: 'next' });\n}, 1000);\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1240,
+        "y": 220,
+        "wires": [
+            [
+                "process-next-reader-fix"
+            ]
+        ]
+    },
+    {
+        "id": "cycle-end-fix",
+        "type": "debug",
+        "z": "anviz-fixed-flow",
+        "name": "✅ Estado final",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 730,
+        "y": 60,
+        "wires": []
+    }
+]

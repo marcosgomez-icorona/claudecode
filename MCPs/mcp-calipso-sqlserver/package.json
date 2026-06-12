@@ -1,0 +1,22 @@
+{
+  "name": "mcp-calipso-sqlserver",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCP readonly para explorar SQL Server Calipso en entorno test.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "check": "node --check src/server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.0",
+    "dotenv": "^16.4.7",
+    "mssql": "^11.0.1",
+    "uuid": "^11.0.5",
+    "zod": "^3.24.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

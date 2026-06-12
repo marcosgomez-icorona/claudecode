@@ -1,0 +1,176 @@
+﻿[
+    {
+        "id":  "b46690d698f14d56",
+        "type":  "mysql2",
+        "z":  "64a6bbb8125062a4",
+        "name":  "ULTIMA OC",
+        "server":  "6dcd8b9470924132",
+        "bind":  false,
+        "topic":  "",
+        "x":  390,
+        "y":  140,
+        "wires":  [
+                      [
+                          "f37cf105bbe67ce0"
+                      ]
+                  ]
+    },
+    {
+        "id":  "348844eca7aa1972",
+        "type":  "inject",
+        "z":  "64a6bbb8125062a4",
+        "name":  "Iniciar proceso manual",
+        "props":  [
+
+                  ],
+        "repeat":  "600",
+        "crontab":  "",
+        "once":  false,
+        "onceDelay":  0.1,
+        "topic":  "",
+        "x":  190,
+        "y":  80,
+        "wires":  [
+                      [
+                          "36d5d7ded3e4f659"
+                      ]
+                  ]
+    },
+    {
+        "id":  "f37cf105bbe67ce0",
+        "type":  "function",
+        "z":  "64a6bbb8125062a4",
+        "name":  "Formateo JSON",
+        "func":  "let rows = msg.payload;\n\nif (Array.isArray(rows) \u0026\u0026 Array.isArray(rows[0])) {\n    rows = rows[0];\n}\n\nrows = JSON.parse(JSON.stringify(rows || []));\n\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay OC pendientes para enviar\");\n    return null;\n}\n\nconst nroOc = rows[0].nro_oc;\nconst mailProveedor = rows[0].mail;\n\nmsg.payload = {\n    api_key: \"Corona1234$\",\n    data: rows\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.oc_envio = {\n    nro_oc: nroOc,\n    mail: mailProveedor,\n    total_items: rows.length\n};\n\nreturn msg;",
+        "outputs":  1,
+        "timeout":  0,
+        "noerr":  0,
+        "initialize":  "",
+        "finalize":  "",
+        "libs":  [
+
+                 ],
+        "x":  580,
+        "y":  140,
+        "wires":  [
+                      [
+                          "9229d8c91d2ce6d6"
+                      ]
+                  ]
+    },
+    {
+        "id":  "32ebc2e8e1624904",
+        "type":  "debug",
+        "z":  "64a6bbb8125062a4",
+        "name":  "salida POST",
+        "active":  true,
+        "tosidebar":  true,
+        "console":  false,
+        "tostatus":  false,
+        "complete":  "payload",
+        "targetType":  "msg",
+        "statusVal":  "",
+        "statusType":  "auto",
+        "x":  1170,
+        "y":  80,
+        "wires":  [
+
+                  ]
+    },
+    {
+        "id":  "36d5d7ded3e4f659",
+        "type":  "function",
+        "z":  "64a6bbb8125062a4",
+        "name":  "ULTIMA OC (MySQL)",
+        "func":  "msg.topic = `\nSELECT \n    ordenes_compra.originante,\n    (SELECT ent.cuit\n     FROM entidades ent\n     WHERE ordenes_compra.originante = ent.razon_social\n     LIMIT 1) AS cuit_originante,\n    detalle_oc.nro_oc,\n    proveedores.nombre AS proveedor,\n    proveedores.cuit,\n    proveedores.mail,\n    numero_item,\n    codigo,\n    articulo,\n    cantidad,\n    uni_med,\n    pu,\n    total_item,\n    fecha_entrega,\n    ordenes_compra.plazo_entrega,\n    ordenes_compra.condicion_pago,\n    ordenes_compra.fecha_emision,\n    proveedores.domicilio,\n    ordenes_compra.detalle\nFROM detalle_oc\nLEFT JOIN ordenes_compra ON detalle_oc.nro_oc = ordenes_compra.nro_oc\nLEFT JOIN proveedores ON proveedores.nombre = ordenes_compra.proveedor\nWHERE fecha_emision\u003e\u00272026-03-30\u0027 AND ordenes_compra.nro_oc = (SELECT oc.nro_oc FROM ordenes_compra oc WHERE oc.enviado IS NULL ORDER BY oc.nro_oc DESC LIMIT 1)\nORDER BY detalle_oc.numero_item ASC;\n`;\n\nreturn msg;\n",
+        "outputs":  1,
+        "timeout":  0,
+        "noerr":  0,
+        "initialize":  "",
+        "finalize":  "",
+        "libs":  [
+
+                 ],
+        "x":  420,
+        "y":  80,
+        "wires":  [
+                      [
+                          "b46690d698f14d56"
+                      ]
+                  ]
+    },
+    {
+        "id":  "9e240f6331286144",
+        "type":  "function",
+        "z":  "64a6bbb8125062a4",
+        "d":  true,
+        "name":  "UPDATE",
+        "func":  "\n// Obtener los datos con validacion desde el contexto armado antes del POST\nconst nro_oc = msg.oc_envio \u0026\u0026 msg.oc_envio.nro_oc;\nconst mail = msg.oc_envio \u0026\u0026 msg.oc_envio.mail;\nconst httpOk = msg.statusCode \u003e= 200 \u0026\u0026 msg.statusCode \u003c 300;\n\nif (!nro_oc) {\n    node.warn(\"No se pudo obtener nro_oc, no se actualizara ningun registro\");\n    return null;\n}\n\nif (!httpOk) {\n    node.warn(`Webhook n8n respondio status ${msg.statusCode}; OC ${nro_oc} queda pendiente`);\n    return null;\n}\n\nlet estado;\nif (mail) {\n    estado = \u0027S\u0027;\n    node.log(`OC ${nro_oc} tiene mail (${mail}), estado = S`);\n} else {\n    estado = \u0027P\u0027;\n    node.log(`OC ${nro_oc} no tiene mail, estado = P`);\n}\n\nmsg.topic = `UPDATE ordenes_compra SET enviado = \u0027${estado}\u0027, fecha_envio_aut = NOW() WHERE nro_oc = \u0027${nro_oc}\u0027`;\nnode.log(`Ejecutando: ${msg.topic}`);\n\nreturn msg;\n\n",
+        "outputs":  1,
+        "timeout":  0,
+        "noerr":  0,
+        "initialize":  "",
+        "finalize":  "",
+        "libs":  [
+
+                 ],
+        "x":  860,
+        "y":  140,
+        "wires":  [
+                      [
+                          "964632996e57d637"
+                      ]
+                  ]
+    },
+    {
+        "id":  "964632996e57d637",
+        "type":  "mysql2",
+        "z":  "64a6bbb8125062a4",
+        "d":  true,
+        "name":  "Act a Enviado",
+        "server":  "6dcd8b9470924132",
+        "bind":  false,
+        "topic":  "",
+        "x":  1100,
+        "y":  140,
+        "wires":  [
+                      [
+
+                      ]
+                  ]
+    },
+    {
+        "id":  "9229d8c91d2ce6d6",
+        "type":  "http request",
+        "z":  "64a6bbb8125062a4",
+        "name":  "http REQ HOSTING",
+        "method":  "POST",
+        "ret":  "txt",
+        "paytoqs":  "ignore",
+        "url":  "https://n8n.srv1576197.hstgr.cloud/webhook/73f35d28-411a-4745-88be-34a39fab2ef7",
+        "tls":  "",
+        "persist":  false,
+        "proxy":  "",
+        "insecureHTTPParser":  false,
+        "authType":  "",
+        "senderr":  false,
+        "x":  860,
+        "y":  80,
+        "wires":  [
+                      [
+                          "32ebc2e8e1624904",
+                          "9e240f6331286144"
+                      ]
+                  ]
+    },
+    {
+        "id":  "6dcd8b9470924132",
+        "type":  "mysql2-server",
+        "host":  "localhost",
+        "port":  "3306",
+        "username":  "root",
+        "password":  "",
+        "db":  "db_extranet",
+        "servername":  "MySQL_db_extranet"
+    }
+]

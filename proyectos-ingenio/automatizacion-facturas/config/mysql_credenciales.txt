@@ -1,0 +1,40 @@
+============================================================
+  BASE DE DATOS MySQL — Automatización Facturas
+  Ingenio La Corona
+  Creada: 2026-04-24
+============================================================
+
+SERVIDOR
+  Host local:     127.0.0.1
+  Host red:       [IP del servidor on-prem donde corre Node-RED]
+  Puerto:         3306
+
+BASE DE DATOS
+  Nombre:         db_automatizaciones
+  Charset:        utf8mb4
+  Collation:      utf8mb4_unicode_ci
+
+USUARIO APLICACIÓN
+  Usuario:        usr_automatizacion
+  Contraseña:     Corona1234$
+  Permisos:       ALL PRIVILEGES sobre db_automatizaciones
+  Acceso:         local (127.0.0.1) + remoto (%)
+
+USUARIO ADMINISTRACIÓN
+  Usuario:        root
+  Acceso:         local únicamente
+
+TABLAS CREADAS
+  staging_facturas    Registro intermedio de facturas recibidas por email
+
+USADO POR
+  Node-RED            Inserta registros al recibir PDF por email
+  n8n                 Lee y actualiza registros durante validación/aprobación
+
+CADENA DE CONEXIÓN (n8n / Node-RED)
+  mysql://usr_automatizacion:Corona1234$@127.0.0.1:3306/db_automatizaciones
+
+============================================================
+  IMPORTANTE: No compartir este archivo por email ni chat.
+  Guardar en carpeta con acceso restringido.
+============================================================

@@ -1,0 +1,231 @@
+[
+    {
+        "id": "tab-registrar-facturas",
+        "type": "tab",
+        "label": "Registración de Facturas",
+        "disabled": false,
+        "info": "Recibe POST de n8n, verifica duplicado, INSERT en staging_facturas + staging_facturas_items."
+    },
+    {
+        "id": "http-in-registrar",
+        "type": "http in",
+        "z": "tab-registrar-facturas",
+        "name": "Recibir factura de n8n",
+        "url": "/recepcion/factura",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 160,
+        "wires": [
+            [
+                "fn-validar-params",
+                "debug-raw"
+            ]
+        ]
+    },
+    {
+        "id": "debug-raw",
+        "type": "debug",
+        "z": "tab-registrar-facturas",
+        "name": "RAW recibido",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "req.query",
+        "targetType": "msg",
+        "x": 160,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "fn-validar-params",
+        "type": "function",
+        "z": "tab-registrar-facturas",
+        "name": "Validar params + prep. check duplicado",
+        "func": "const q = msg.req.body || {};\n\nif (!q.staging_id || !q.mysql_query) {\n    msg.statusCode = 400;\n    msg.headers = { 'Content-Type': 'application/json' };\n    msg.payload = JSON.stringify({ ok: false, error: 'Faltan staging_id o mysql_query' });\n    return [null, msg];\n}\n\nmsg._factura = {\n    staging_id:    q.staging_id,\n    cuit:          q.cuit          || '',\n    razon_social:  q.razon_social  || '',\n    nro_documento: q.nro_documento || '',\n    letra:         q.letra         || 'A',\n    fecha_emision: q.fecha_emision || '',\n    total:         q.total         || '0',\n    tipo_operacion:q.tipo_operacion|| 'FACTURA_COMPRA',\n    confianza:     q.confianza_parseo || '',\n    mysql_query:   q.mysql_query,\n    items_json:    q.items_json    || '[]'\n};\n\nmsg.topic   = q.mysql_query;\nmsg.payload = {};\nreturn [msg, null];\n",
+        "outputs": 2,
+        "x": 420,
+        "y": 160,
+        "wires": [
+            [
+                "mysql-insert-staging"
+            ],
+            [
+                "http-resp-error"
+            ]
+        ]
+    },
+    {
+        "id": "mysql-insert-staging",
+        "type": "mysql",
+        "z": "tab-registrar-facturas",
+        "mydb": "mysql-config-automatizaciones",
+        "name": "INSERT staging_facturas",
+        "x": 680,
+        "y": 300,
+        "wires": [
+            [
+                "fn-preparar-items"
+            ]
+        ]
+    },
+    {
+        "id": "fn-preparar-items",
+        "type": "function",
+        "z": "tab-registrar-facturas",
+        "name": "Preparar INSERT ítems",
+        "func": "const f = msg._factura;\nlet items = [];\ntry { items = JSON.parse(f.items_json || '[]'); } catch(e) { items = []; }\nif (!items || items.length === 0) return [null, msg];\nconst esc = s => s ? String(s).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") : '';\nconst rows = items.map(it => {\n    const desc = esc(it.descripcion || '');\n    const cant = (it.cantidad != null) ? Number(it.cantidad) : 'NULL';\n    const uni  = esc(it.unidad || 'u');\n    const pu   = (it.precio_unitario != null) ? Number(it.precio_unitario) : 'NULL';\n    const aliq = (it.alicuota_iva != null) ? parseInt(it.alicuota_iva) : 'NULL';\n    const sub  = (it.subtotal != null) ? Number(it.subtotal) : 'NULL';\n    const mon  = esc(it.moneda || 'ARS');\n    const lin  = parseInt(it.linea) || 1;\n    return `('${f.staging_id}', ${lin}, '${desc}', ${cant}, '${uni}', ${pu}, ${aliq}, ${sub}, '${mon}')`;\n}).join(',\\n');\nmsg.topic   = `INSERT INTO staging_facturas_items (factura_id, linea, descripcion, cantidad, unidad, precio_unitario, alicuota_iva, subtotal, moneda) VALUES\\n${rows}`;\nmsg.payload = {};\nreturn [msg, null];\n",
+        "outputs": 2,
+        "x": 900,
+        "y": 300,
+        "wires": [
+            [
+                "mysql-insert-items"
+            ],
+            [
+                "fn-resp-ok"
+            ]
+        ]
+    },
+    {
+        "id": "mysql-insert-items",
+        "type": "mysql",
+        "z": "tab-registrar-facturas",
+        "mydb": "mysql-config-automatizaciones",
+        "name": "INSERT staging_facturas_items",
+        "x": 1140,
+        "y": 260,
+        "wires": [
+            [
+                "fn-resp-ok"
+            ]
+        ]
+    },
+    {
+        "id": "fn-resp-ok",
+        "type": "function",
+        "z": "tab-registrar-facturas",
+        "name": "Respuesta OK",
+        "func": "const f = msg._factura || {};\nmsg.statusCode = 200;\nmsg.headers = { 'Content-Type': 'application/json' };\nmsg.payload = JSON.stringify({\n    ok: true,\n    staging_id:    f.staging_id,\n    razon_social:  f.razon_social,\n    nro_documento: f.nro_documento,\n    total:         f.total,\n    mensaje:       'Factura registrada correctamente en staging_facturas'\n});\nreturn msg;\n",
+        "outputs": 1,
+        "x": 1380,
+        "y": 300,
+        "wires": [
+            [
+                "http-resp-ok",
+                "debug-ok"
+            ]
+        ]
+    },
+    {
+        "id": "http-resp-ok",
+        "type": "http response",
+        "z": "tab-registrar-facturas",
+        "name": "HTTP 200",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1580,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "debug-ok",
+        "type": "debug",
+        "z": "tab-registrar-facturas",
+        "name": "Log OK",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1580,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "http-resp-error",
+        "type": "http response",
+        "z": "tab-registrar-facturas",
+        "name": "HTTP 400",
+        "statusCode": "400",
+        "headers": {},
+        "x": 680,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "catch-mysql-error",
+        "type": "catch",
+        "z": "tab-registrar-facturas",
+        "name": "Error MySQL",
+        "scope": [
+            "mysql-insert-staging",
+            "mysql-insert-items"
+        ],
+        "uncaught": false,
+        "x": 680,
+        "y": 440,
+        "wires": [
+            [
+                "fn-resp-error-mysql"
+            ]
+        ]
+    },
+    {
+        "id": "fn-resp-error-mysql",
+        "type": "function",
+        "z": "tab-registrar-facturas",
+        "name": "Respuesta error MySQL",
+        "func": "const f = msg._factura || {};\nnode.error('Error MySQL [' + f.staging_id + ']: ' + (msg.error && msg.error.message));\nmsg.statusCode = 500;\nmsg.headers = { 'Content-Type': 'application/json' };\nmsg.payload = JSON.stringify({\n    ok: false, staging_id: f.staging_id,\n    error: (msg.error && msg.error.message) || 'Error desconocido en MySQL'\n});\nreturn msg;\n",
+        "outputs": 1,
+        "x": 920,
+        "y": 440,
+        "wires": [
+            [
+                "http-resp-mysql-error",
+                "debug-error"
+            ]
+        ]
+    },
+    {
+        "id": "http-resp-mysql-error",
+        "type": "http response",
+        "z": "tab-registrar-facturas",
+        "name": "HTTP 500",
+        "statusCode": "500",
+        "headers": {},
+        "x": 1140,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "debug-error",
+        "type": "debug",
+        "z": "tab-registrar-facturas",
+        "name": "Log error MySQL",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1140,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "mysql-config-automatizaciones",
+        "type": "MySQLdatabase",
+        "name": "MySQL Automatizaciones",
+        "host": "localhost",
+        "port": "3306",
+        "db": "db_automatizaciones",
+        "tz": "America/Argentina/Buenos_Aires",
+        "charset": "UTF8MB4_GENERAL_CI",
+        "user": "usr_automatizacion",
+        "password": "Corona1234$"
+    }
+]

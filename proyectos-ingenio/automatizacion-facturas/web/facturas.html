@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Facturas Pendientes — Ingenio La Corona</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body { background: #f0f2f5; font-size: 0.875rem; }
+  .navbar { background: #1a3a2a !important; }
+  .navbar-brand { font-weight: 700; letter-spacing: 0.5px; }
+  #panel-lista { height: calc(100vh - 56px); overflow-y: auto; border-right: 1px solid #dee2e6; background: #fff; padding: 0; }
+  #panel-detalle { height: calc(100vh - 56px); overflow-y: auto; padding: 1.5rem; }
+  .factura-card { border: none; border-bottom: 1px solid #e9ecef; border-radius: 0; cursor: pointer; padding: 0.75rem 1rem; transition: background .15s; }
+  .factura-card:hover { background: #f8f9fa; }
+  .factura-card.activa { background: #e8f4ec; border-left: 3px solid #1a7a3a; }
+  .factura-card .numero { font-weight: 600; color: #1a3a2a; }
+  .factura-card .proveedor { color: #495057; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .factura-card .monto { font-weight: 600; color: #1a7a3a; }
+  .seccion-titulo { font-weight: 600; color: #1a3a2a; border-bottom: 2px solid #1a3a2a; padding-bottom: 4px; margin-bottom: 1rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  .campo-label { font-size: 0.75rem; color: #6c757d; font-weight: 500; margin-bottom: 2px; }
+  .form-control-sm, .form-select-sm { font-size: 0.825rem; }
+  .tabla-items th { font-size: 0.75rem; text-transform: uppercase; color: #6c757d; font-weight: 600; }
+  .tabla-items td { vertical-align: middle; }
+  .tabla-items input { border: 1px solid transparent; background: transparent; width: 100%; }
+  .tabla-items input:focus { border-color: #1a7a3a; background: #fff; outline: none; border-radius: 3px; padding: 1px 4px; }
+  .cotizacion-widget { background: #fff8e1; border: 1px solid #ffc107; border-radius: 6px; padding: 0.75rem 1rem; }
+  .total-row td { font-weight: 600; }
+  .total-final td { font-weight: 700; font-size: 1rem; color: #1a3a2a; border-top: 2px solid #1a3a2a; }
+  .btn-aceptar { background: #1a7a3a; border-color: #1a7a3a; color: #fff; font-weight: 600; }
+  .btn-aceptar:hover { background: #155f2e; border-color: #155f2e; color: #fff; }
+  .confirmacion-card { background: #fff; border-radius: 8px; border: 2px solid #1a7a3a; padding: 2rem; }
+  .badge-pendiente { background: #fff3cd; color: #856404; }
+  #sin-seleccion { display: flex; align-items: center; justify-content: center; height: 60%; color: #adb5bd; flex-direction: column; gap: 0.5rem; }
+  .spinner-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+  .dias-cola { font-size: 0.7rem; color: #dc3545; }
+  .dias-cola.ok { color: #6c757d; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark px-3 py-2">
+  <span class="navbar-brand">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z'/%3E%3C/svg%3E" class="me-2">
+    Facturas Pendientes
+  </span>
+  <div class="d-flex align-items-center gap-3">
+    <!-- Widget cotización -->
+    <div class="cotizacion-nav d-flex align-items-center gap-2 text-white" style="font-size:0.82rem">
+      <span class="text-warning fw-bold">USD</span>
+      <input type="number" id="cotizacion-input" class="form-control form-control-sm text-end"
+             style="width:90px;background:#2d5a3d;border-color:#4a8a5d;color:#fff;font-weight:600"
+             step="0.01" placeholder="Cargando...">
+      <span id="cotizacion-fuente" class="text-white-50" style="font-size:0.72rem"></span>
+      <button class="btn btn-sm btn-outline-warning py-0" onclick="actualizarCotizacion()" title="Actualizar cotización">↻</button>
+    </div>
+    <span class="badge bg-warning text-dark" id="badge-count">0 pendientes</span>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="container-fluid p-0">
+  <div class="row g-0" style="min-height: calc(100vh - 56px)">
+
+    <!-- LISTA -->
+    <div class="col-3 col-xl-2" id="panel-lista">
+      <div class="p-2 border-bottom bg-light d-flex justify-content-between align-items-center">
+        <span class="fw-600 text-muted" style="font-size:0.78rem;text-transform:uppercase;letter-spacing:.5px">Cola de trabajo</span>
+        <button class="btn btn-sm btn-link text-muted p-0" onclick="cargarPendientes()">↻</button>
+      </div>
+      <div id="lista-facturas"></div>
+    </div>
+
+    <!-- DETALLE -->
+    <div class="col-9 col-xl-10" id="panel-detalle">
+
+      <!-- Sin selección -->
+      <div id="sin-seleccion">
+        <svg width="48" height="48" fill="none" stroke="#dee2e6" stroke-width="1.5" viewBox="0 0 24 24">
+          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <span>Seleccioná una factura para revisar</span>
+      </div>
+
+      <!-- Vista detalle -->
+      <div id="vista-detalle" style="display:none">
+
+        <!-- CABECERA -->
+        <div class="bg-white rounded-3 p-3 mb-3 shadow-sm">
+          <div class="seccion-titulo">Datos del Comprobante</div>
+          <div class="row g-2">
+            <div class="col-md-4">
+              <div class="campo-label">Proveedor</div>
+              <input type="text" id="f-proveedor-nombre" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-2">
+              <div class="campo-label">CUIT</div>
+              <input type="text" id="f-proveedor-cuit" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-1">
+              <div class="campo-label">Letra</div>
+              <select id="f-letra" class="form-select form-select-sm">
+                <option>A</option><option>B</option><option>C</option><option>M</option><option>E</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <div class="campo-label">Nro. Comprobante</div>
+              <input type="text" id="f-numerodocumento" class="form-control form-control-sm" placeholder="PPPPNNNNNNNN">
+            </div>
+            <div class="col-md-2">
+              <div class="campo-label">Tipo Operación</div>
+              <select id="f-tipo-operacion" class="form-select form-select-sm">
+                <option value="FACTURA_COMPRA">Factura Compra</option>
+                <option value="FACTURA_SERVICIO">Factura Servicio</option>
+                <option value="NC_COMPRA">Nota de Crédito</option>
+                <option value="ND_COMPRA">Nota de Débito</option>
+              </select>
+            </div>
+          </div>
+          <div class="row g-2 mt-1">
+            <div class="col-md-2">
+              <div class="campo-label">Fecha Emisión</div>
+              <input type="date" id="f-fecha-emision" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-2">
+              <div class="campo-label">Fecha Vencimiento</div>
+              <input type="date" id="f-fecha-vencimiento" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-2">
+              <div class="campo-label">Moneda</div>
+              <select id="f-moneda" class="form-select form-select-sm" onchange="toggleCotizacion()">
+                <option value="ARS">Pesos ARS</option>
+                <option value="USD">Dólares USD</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <div class="campo-label">CAE</div>
+              <input type="text" id="f-cae" class="form-control form-control-sm" placeholder="14 dígitos o vacío">
+            </div>
+            <div class="col-md-2">
+              <div class="campo-label">Vto. CAE</div>
+              <input type="date" id="f-fecha-vto-cae" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-2">
+              <div class="campo-label">Ref. OC / ConstServ</div>
+              <input type="text" id="f-referencia" class="form-control form-control-sm" placeholder="Nro. OC o Certificación">
+            </div>
+          </div>
+          <div class="row g-2 mt-1">
+            <div class="col-md-4">
+              <div class="campo-label">Centro de Costos</div>
+              <input type="text" id="f-centrocostos" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-4">
+              <div class="campo-label">Email origen</div>
+              <input type="text" id="f-email-origen" class="form-control form-control-sm" readonly>
+            </div>
+            <div class="col-md-4">
+              <div class="campo-label">Archivo PDF</div>
+              <input type="text" id="f-pdf-filename" class="form-control form-control-sm" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- COTIZACIÓN USD (solo si moneda=USD) -->
+        <div id="bloque-cotizacion" class="cotizacion-widget mb-3" style="display:none">
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            <span class="fw-bold text-warning">Conversión USD → ARS</span>
+            <div>
+              <span class="campo-label">Cotización aplicada ($)</span>
+              <input type="number" id="f-cotizacion" class="form-control form-control-sm d-inline-block" style="width:120px" step="0.01" oninput="recalcularTotales()">
+            </div>
+            <button class="btn btn-sm btn-warning" onclick="aplicarCotizacionBCRA()">Usar cotización BCRA</button>
+            <small id="cotizacion-detalle" class="text-muted"></small>
+          </div>
+        </div>
+
+        <!-- ITEMS -->
+        <div class="bg-white rounded-3 p-3 mb-3 shadow-sm">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="seccion-titulo mb-0">Ítems de la Factura</div>
+            <button class="btn btn-sm btn-outline-success" onclick="agregarItem()">+ Ítem</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-sm tabla-items mb-0" id="tabla-items">
+              <thead class="table-light">
+                <tr>
+                  <th style="width:35%">Descripción</th>
+                  <th style="width:9%" class="text-end">Cantidad</th>
+                  <th style="width:7%">Unidad</th>
+                  <th style="width:13%" class="text-end">P. Unitario</th>
+                  <th style="width:8%" class="text-center">IVA %</th>
+                  <th style="width:13%" class="text-end">Subtotal</th>
+                  <th style="width:10%" class="text-end" id="col-ars-header" style="display:none">ARS</th>
+                  <th style="width:5%"></th>
+                </tr>
+              </thead>
+              <tbody id="items-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TOTALES -->
+        <div class="bg-white rounded-3 p-3 mb-3 shadow-sm">
+          <div class="seccion-titulo">Totales</div>
+          <div class="row">
+            <div class="col-md-6 offset-md-6">
+              <table class="table table-sm mb-0">
+                <tbody>
+                  <tr>
+                    <td class="text-muted">Neto Gravado</td>
+                    <td class="text-end"><input type="number" id="t-neto" class="form-control form-control-sm text-end" step="0.01" oninput="actualizarTotalManual()"></td>
+                  </tr>
+                  <tr>
+                    <td class="text-muted">IVA 21%</td>
+                    <td class="text-end"><input type="number" id="t-iva21" class="form-control form-control-sm text-end" step="0.01" oninput="actualizarTotalManual()"></td>
+                  </tr>
+                  <tr>
+                    <td class="text-muted">IVA 10.5%</td>
+                    <td class="text-end"><input type="number" id="t-iva105" class="form-control form-control-sm text-end" step="0.01" oninput="actualizarTotalManual()"></td>
+                  </tr>
+                  <tr>
+                    <td class="text-muted">Percepciones</td>
+                    <td class="text-end"><input type="number" id="t-percepciones" class="form-control form-control-sm text-end" step="0.01" oninput="actualizarTotalManual()"></td>
+                  </tr>
+                  <tr>
+                    <td class="text-muted">Otros Impuestos</td>
+                    <td class="text-end"><input type="number" id="t-otros" class="form-control form-control-sm text-end" step="0.01" oninput="actualizarTotalManual()"></td>
+                  </tr>
+                  <tr class="total-final">
+                    <td>TOTAL</td>
+                    <td class="text-end"><input type="number" id="t-total" class="form-control form-control-sm text-end fw-bold" step="0.01"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div id="alerta-cuadre" class="alert alert-warning py-1 px-2 mt-2 mb-0" style="display:none;font-size:0.8rem">
+                ⚠ El total no cuadra con la suma de componentes.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="d-flex gap-2 mb-4">
+          <button class="btn btn-aceptar px-4" onclick="aceptarFactura()">✓ Aceptar carga</button>
+          <button class="btn btn-outline-danger px-4" onclick="rechazarFactura()">✗ Rechazar</button>
+          <button class="btn btn-outline-secondary ms-auto" onclick="guardarCambios()">Guardar cambios</button>
+        </div>
+
+      </div><!-- /vista-detalle -->
+
+      <!-- Vista confirmación -->
+      <div id="vista-confirmacion" style="display:none">
+        <div class="confirmacion-card mb-3">
+          <div class="text-center mb-3">
+            <div style="font-size:2.5rem">✅</div>
+            <h5 class="fw-bold text-success mt-1">Factura aceptada para carga</h5>
+            <p class="text-muted mb-0" style="font-size:0.85rem">El registro quedó en estado <strong>APROBADO</strong> en la base de datos.</p>
+          </div>
+          <div id="confirmacion-datos" class="row g-2 border-top pt-3 mt-2"></div>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-aceptar px-4" onclick="siguienteFactura()">→ Siguiente factura pendiente</button>
+          <button class="btn btn-outline-secondary" onclick="verListaCompleta()">Ver lista completa</button>
+        </div>
+      </div>
+
+    </div><!-- /panel-detalle -->
+  </div>
+</div>
+
+<!-- Spinner -->
+<div id="spinner" class="spinner-overlay" style="display:none">
+  <div class="spinner-border text-light" role="status"></div>
+</div>
+
+<!-- Modal rechazo -->
+<div class="modal fade" id="modal-rechazo" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title fw-bold">Rechazar factura</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label class="campo-label">Motivo del rechazo</label>
+        <textarea id="motivo-rechazo" class="form-control" rows="3" placeholder="Descripción del motivo..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="confirmarRechazo()">Rechazar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+// ============================================================
+//  CONFIGURACIÓN
+// ============================================================
+const API_BASE = window.location.origin + '/api'; // URL relativa — funciona desde cualquier host
+const OPERADOR = 'pdietrich';
+
+// ============================================================
+//  ESTADO GLOBAL
+// ============================================================
+let pendientes     = [];
+let facturaActual  = null;
+let cotizacionBCRA = null;
+let itemsEditados  = [];
+
+// ============================================================
+//  INICIALIZACIÓN
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    actualizarCotizacion();
+    cargarPendientes();
+});
+
+// ============================================================
+//  COTIZACIÓN BCRA
+// ============================================================
+async function actualizarCotizacion() {
+    const input  = document.getElementById('cotizacion-input');
+    const fuente = document.getElementById('cotizacion-fuente');
+    try {
+        const r = await fetch('https://dolarapi.com/v1/dolares/oficial');
+        if (!r.ok) throw new Error('API no disponible');
+        const d = await r.json();
+        cotizacionBCRA = d.venta;
+        input.value = cotizacionBCRA.toFixed(2);
+        fuente.textContent = 'BCRA ' + new Date(d.fechaActualizacion).toLocaleDateString('es-AR');
+    } catch {
+        fuente.textContent = 'Ingresá cotización manual';
+        if (!input.value) input.value = '';
+    }
+}
+
+function getCotizacion() {
+    return parseFloat(document.getElementById('cotizacion-input').value) || 1;
+}
+
+function aplicarCotizacionBCRA() {
+    if (cotizacionBCRA) {
+        document.getElementById('f-cotizacion').value = cotizacionBCRA.toFixed(2);
+        recalcularTotales();
+    }
+}
+
+// ============================================================
+//  LISTA DE PENDIENTES
+// ============================================================
+async function cargarPendientes() {
+    try {
+        spinner(true);
+        const r = await fetch(`${API_BASE}/facturas/pendientes`);
+        pendientes = await r.json();
+        renderLista();
+        document.getElementById('badge-count').textContent = pendientes.length + ' pendientes';
+    } catch (e) {
+        mostrarError('No se pudo conectar con el servidor Node-RED. Verificar que esté corriendo.');
+    } finally {
+        spinner(false);
+    }
+}
+
+function renderLista() {
+    const cont = document.getElementById('lista-facturas');
+    if (pendientes.length === 0) {
+        cont.innerHTML = '<div class="text-center text-muted p-4" style="font-size:0.82rem">Sin facturas pendientes</div>';
+        return;
+    }
+    cont.innerHTML = pendientes.map((f, idx) => {
+        const dias = diasDesde(f.fecha_carga);
+        const activa = facturaActual && facturaActual.id === f.id ? 'activa' : '';
+        return `<div class="factura-card ${activa}" onclick="verFactura('${f.id}')">
+          <div class="d-flex justify-content-between">
+            <span class="numero">Fac. ${f.letra} ${formatNroDoc(f.numerodocumento)}</span>
+            <span class="monto">${formatPeso(f.total)}</span>
+          </div>
+          <div class="proveedor">${f.proveedor_nombre || f.proveedor_cuit}</div>
+          <div class="d-flex justify-content-between mt-1">
+            <small class="text-muted">${formatFecha(f.fecha_emision)}</small>
+            <span class="dias-cola ${dias <= 2 ? 'ok' : ''}">${dias}d en cola</span>
+          </div>
+        </div>`;
+    }).join('');
+}
+
+// ============================================================
+//  VER FACTURA
+// ============================================================
+async function verFactura(id) {
+    try {
+        spinner(true);
+        const r = await fetch(`${API_BASE}/facturas/${id}`);
+        facturaActual = await r.json();
+        itemsEditados = JSON.parse(facturaActual.items_json || '[]');
+        renderDetalle();
+        renderLista(); // actualizar clase activa
+        mostrarVista('detalle');
+    } catch (e) {
+        mostrarError('Error al cargar la factura.');
+    } finally {
+        spinner(false);
+    }
+}
+
+function renderDetalle() {
+    const f = facturaActual;
+
+    // Cabecera
+    setVal('f-proveedor-nombre', f.proveedor_nombre);
+    setVal('f-proveedor-cuit',   f.proveedor_cuit);
+    setVal('f-numerodocumento',  f.numerodocumento);
+    setVal('f-cae',              f.cae || '');
+    setVal('f-referencia',       f.referencia || '');
+    setVal('f-centrocostos',     f.centrocostos_nombre || '');
+    setVal('f-email-origen',     f.email_origen || '');
+    setVal('f-pdf-filename',     f.pdf_filename || '');
+
+    setSelect('f-letra',          f.letra || 'A');
+    setSelect('f-tipo-operacion', f.tipo_operacion || 'FACTURA_COMPRA');
+
+    // Fechas (YYYYMMDD → YYYY-MM-DD para input date)
+    setVal('f-fecha-emision',    yyyymmddToDate(f.fecha_emision));
+    setVal('f-fecha-vencimiento',yyyymmddToDate(f.fecha_vencimiento));
+    setVal('f-fecha-vto-cae',    yyyymmddToDate(f.fecha_vto_cae));
+
+    // Moneda
+    const moneda = (f.moneda_id === '76C69768-3DAE-11D5-B059-004854841C8A') ? 'USD' : 'ARS';
+    setSelect('f-moneda', moneda);
+    setVal('f-cotizacion', f.cotizacion || 1);
+    toggleCotizacion();
+
+    // Totales
+    setVal('t-neto',        f.neto || 0);
+    setVal('t-iva21',       f.iva_21 || 0);
+    setVal('t-iva105',      f.iva_105 || 0);
+    setVal('t-percepciones',f.percepciones || 0);
+    setVal('t-otros',       f.otros_impuestos || 0);
+    setVal('t-total',       f.total || 0);
+
+    // Items
+    renderItems();
+}
+
+function renderItems() {
+    const tbody = document.getElementById('items-body');
+    const esDolar = document.getElementById('f-moneda').value === 'USD';
+    document.getElementById('col-ars-header').style.display = esDolar ? '' : 'none';
+
+    if (itemsEditados.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-3" style="font-size:0.8rem">
+            Sin ítems parseados del PDF. Podés agregarlos manualmente.</td></tr>`;
+        return;
+    }
+
+    const cot = getCotizacion();
+    tbody.innerHTML = itemsEditados.map((item, i) => {
+        const subtotalARS = esDolar ? (item.subtotal * cot).toFixed(2) : '';
+        return `<tr>
+          <td><input type="text" value="${esc(item.descripcion)}" onchange="editItem(${i},'descripcion',this.value)"></td>
+          <td><input type="number" value="${item.cantidad || ''}" class="text-end" style="width:70px" onchange="editItem(${i},'cantidad',this.value)" oninput="recalcItem(${i})"></td>
+          <td><input type="text" value="${esc(item.unidad || 'u')}" style="width:50px" onchange="editItem(${i},'unidad',this.value)"></td>
+          <td><input type="number" value="${item.precio_unitario || ''}" class="text-end" style="width:100px" step="0.0001" onchange="editItem(${i},'precio_unitario',this.value)" oninput="recalcItem(${i})"></td>
+          <td class="text-center"><input type="number" value="${item.alicuota_iva || 21}" style="width:55px;text-align:center" onchange="editItem(${i},'alicuota_iva',this.value)"></td>
+          <td class="text-end"><span id="sub-${i}">${formatPeso(item.subtotal)}</span></td>
+          ${esDolar ? `<td class="text-end text-success fw-bold" id="ars-${i}">${formatPeso(parseFloat(subtotalARS))}</td>` : '<td style="display:none"></td>'}
+          <td class="text-center"><button class="btn btn-sm btn-link text-danger p-0" onclick="eliminarItem(${i})">✕</button></td>
+        </tr>`;
+    }).join('');
+}
+
+function editItem(i, campo, valor) {
+    itemsEditados[i][campo] = isNaN(valor) || valor === '' ? valor : parseFloat(valor);
+}
+
+function recalcItem(i) {
+    const item = itemsEditados[i];
+    const cant = parseFloat(document.querySelectorAll('#items-body tr')[i].querySelector('input:nth-child(1)').closest('tr').querySelectorAll('input')[1].value) || 0;
+    const pu   = parseFloat(document.querySelectorAll('#items-body tr')[i].querySelectorAll('input')[3].value) || 0;
+    item.cantidad       = cant;
+    item.precio_unitario = pu;
+    item.subtotal        = Math.round(cant * pu * 10000) / 10000;
+    const sub = document.getElementById(`sub-${i}`);
+    if (sub) sub.textContent = formatPeso(item.subtotal);
+    const ars = document.getElementById(`ars-${i}`);
+    if (ars) ars.textContent = formatPeso(item.subtotal * getCotizacion());
+    recalcularTotales();
+}
+
+function agregarItem() {
+    itemsEditados.push({ descripcion: '', cantidad: 1, unidad: 'u', precio_unitario: 0, alicuota_iva: 21, subtotal: 0 });
+    renderItems();
+}
+
+function eliminarItem(i) {
+    itemsEditados.splice(i, 1);
+    renderItems();
+    recalcularTotales();
+}
+
+function recalcularTotales() {
+    if (itemsEditados.length === 0) return;
+    const cot    = document.getElementById('f-moneda').value === 'USD' ? getCotizacion() : 1;
+    let neto21 = 0, neto105 = 0, iva21 = 0, iva105 = 0;
+    itemsEditados.forEach(item => {
+        const sub = (item.subtotal || 0) * cot;
+        if ((item.alicuota_iva || 21) === 10.5 || (item.alicuota_iva || 21) === 10) {
+            neto105 += sub;
+            iva105  += sub * 0.105;
+        } else {
+            neto21 += sub;
+            iva21  += sub * 0.21;
+        }
+    });
+    const neto  = Math.round((neto21 + neto105) * 100) / 100;
+    const i21   = Math.round(iva21  * 100) / 100;
+    const i105  = Math.round(iva105 * 100) / 100;
+    const perc  = parseFloat(document.getElementById('t-percepciones').value) || 0;
+    const otros = parseFloat(document.getElementById('t-otros').value) || 0;
+    const total = Math.round((neto + i21 + i105 + perc + otros) * 100) / 100;
+
+    setVal('t-neto',  neto);
+    setVal('t-iva21', i21);
+    setVal('t-iva105',i105);
+    setVal('t-total', total);
+    verificarCuadre();
+}
+
+function actualizarTotalManual() {
+    verificarCuadre();
+}
+
+function verificarCuadre() {
+    const neto  = parseFloat(document.getElementById('t-neto').value)  || 0;
+    const i21   = parseFloat(document.getElementById('t-iva21').value) || 0;
+    const i105  = parseFloat(document.getElementById('t-iva105').value)|| 0;
+    const perc  = parseFloat(document.getElementById('t-percepciones').value)|| 0;
+    const otros = parseFloat(document.getElementById('t-otros').value) || 0;
+    const total = parseFloat(document.getElementById('t-total').value) || 0;
+    const suma  = Math.round((neto+i21+i105+perc+otros)*100)/100;
+    const diff  = Math.abs(suma - total);
+    document.getElementById('alerta-cuadre').style.display = diff > 1 ? '' : 'none';
+}
+
+function toggleCotizacion() {
+    const esDolar = document.getElementById('f-moneda').value === 'USD';
+    document.getElementById('bloque-cotizacion').style.display = esDolar ? '' : 'none';
+    if (esDolar && !document.getElementById('f-cotizacion').value) {
+        document.getElementById('f-cotizacion').value = getCotizacion();
+    }
+    renderItems();
+}
+
+// ============================================================
+//  GUARDAR / ACEPTAR / RECHAZAR
+// ============================================================
+function recopilarDatos() {
+    const esDolar = document.getElementById('f-moneda').value === 'USD';
+    return {
+        tipo_operacion:   document.getElementById('f-tipo-operacion').value,
+        proveedor_nombre: document.getElementById('f-proveedor-nombre').value,
+        proveedor_cuit:   document.getElementById('f-proveedor-cuit').value,
+        letra:            document.getElementById('f-letra').value,
+        numerodocumento:  document.getElementById('f-numerodocumento').value,
+        fecha_emision:    dateToYYYYMMDD(document.getElementById('f-fecha-emision').value),
+        fecha_vencimiento:dateToYYYYMMDD(document.getElementById('f-fecha-vencimiento').value),
+        cae:              document.getElementById('f-cae').value || null,
+        fecha_vto_cae:    dateToYYYYMMDD(document.getElementById('f-fecha-vto-cae').value),
+        referencia:       document.getElementById('f-referencia').value || null,
+        centrocostos_nombre: document.getElementById('f-centrocostos').value || null,
+        neto:             parseFloat(document.getElementById('t-neto').value)  || 0,
+        iva_21:           parseFloat(document.getElementById('t-iva21').value) || 0,
+        iva_105:          parseFloat(document.getElementById('t-iva105').value)|| 0,
+        percepciones:     parseFloat(document.getElementById('t-percepciones').value)|| 0,
+        otros_impuestos:  parseFloat(document.getElementById('t-otros').value) || 0,
+        total:            parseFloat(document.getElementById('t-total').value) || 0,
+        cotizacion:       esDolar ? (parseFloat(document.getElementById('f-cotizacion').value)||1) : 1,
+        items_json:       JSON.stringify(itemsEditados)
+    };
+}
+
+async function guardarCambios() {
+    try {
+        spinner(true);
+        const datos = recopilarDatos();
+        const r = await fetch(`${API_BASE}/facturas/${facturaActual.id}`, {
+            method: 'PUT',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(datos)
+        });
+        const res = await r.json();
+        if (res.ok) mostrarToast('Cambios guardados correctamente', 'success');
+        else mostrarToast('Error al guardar: ' + res.mensaje, 'danger');
+    } catch {
+        mostrarToast('Error de conexión al guardar', 'danger');
+    } finally {
+        spinner(false);
+    }
+}
+
+async function aceptarFactura() {
+    const neto  = parseFloat(document.getElementById('t-neto').value)  || 0;
+    const i21   = parseFloat(document.getElementById('t-iva21').value) || 0;
+    const i105  = parseFloat(document.getElementById('t-iva105').value)|| 0;
+    const perc  = parseFloat(document.getElementById('t-percepciones').value)|| 0;
+    const otros = parseFloat(document.getElementById('t-otros').value) || 0;
+    const total = parseFloat(document.getElementById('t-total').value) || 0;
+    if (Math.abs((neto+i21+i105+perc+otros) - total) > 1) {
+        mostrarToast('El total no cuadra. Corregí los importes antes de aceptar.', 'warning');
+        return;
+    }
+    try {
+        spinner(true);
+        // Guardar cambios primero
+        const datos = recopilarDatos();
+        await fetch(`${API_BASE}/facturas/${facturaActual.id}`, {
+            method: 'PUT',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(datos)
+        });
+        // Aprobar
+        const r = await fetch(`${API_BASE}/facturas/${facturaActual.id}/aprobar`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ aprobado_por: OPERADOR })
+        });
+        const res = await r.json();
+        if (res.ok) {
+            renderConfirmacion(datos);
+            mostrarVista('confirmacion');
+            pendientes = pendientes.filter(p => p.id !== facturaActual.id);
+            document.getElementById('badge-count').textContent = pendientes.length + ' pendientes';
+            renderLista();
+        } else {
+            mostrarToast('Error al aprobar: ' + res.mensaje, 'danger');
+        }
+    } catch {
+        mostrarToast('Error de conexión al aprobar', 'danger');
+    } finally {
+        spinner(false);
+    }
+}
+
+function rechazarFactura() {
+    document.getElementById('motivo-rechazo').value = '';
+    new bootstrap.Modal(document.getElementById('modal-rechazo')).show();
+}
+
+async function confirmarRechazo() {
+    const motivo = document.getElementById('motivo-rechazo').value.trim();
+    if (!motivo) { mostrarToast('Ingresá un motivo de rechazo', 'warning'); return; }
+    try {
+        spinner(true);
+        bootstrap.Modal.getInstance(document.getElementById('modal-rechazo')).hide();
+        const r = await fetch(`${API_BASE}/facturas/${facturaActual.id}/rechazar`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ motivo, operador: OPERADOR })
+        });
+        const res = await r.json();
+        if (res.ok) {
+            mostrarToast('Factura rechazada', 'success');
+            pendientes = pendientes.filter(p => p.id !== facturaActual.id);
+            document.getElementById('badge-count').textContent = pendientes.length + ' pendientes';
+            facturaActual = null;
+            renderLista();
+            mostrarVista('vacio');
+        }
+    } catch {
+        mostrarToast('Error al rechazar', 'danger');
+    } finally {
+        spinner(false);
+    }
+}
+
+function renderConfirmacion(datos) {
+    const campos = [
+        ['Proveedor',       datos.proveedor_nombre],
+        ['CUIT',            datos.proveedor_cuit],
+        ['Comprobante',     `${datos.letra} ${formatNroDoc(datos.numerodocumento)}`],
+        ['Tipo',            datos.tipo_operacion],
+        ['Fecha emisión',   formatFecha(datos.fecha_emision)],
+        ['Neto gravado',    formatPeso(datos.neto)],
+        ['IVA 21%',         formatPeso(datos.iva_21)],
+        ['IVA 10.5%',       formatPeso(datos.iva_105)],
+        ['TOTAL',           formatPeso(datos.total)],
+        ['CAE',             datos.cae || '— (sin CAE)'],
+        ['Ref. OC',         datos.referencia || '—'],
+        ['Centro Costos',   datos.centrocostos_nombre || '—'],
+    ];
+    document.getElementById('confirmacion-datos').innerHTML = campos.map(([k,v]) =>
+        `<div class="col-md-3 col-6 mb-2">
+           <div class="campo-label">${k}</div>
+           <div class="fw-600">${v}</div>
+         </div>`
+    ).join('');
+}
+
+function siguienteFactura() {
+    if (pendientes.length > 0) {
+        verFactura(pendientes[0].id);
+    } else {
+        mostrarVista('vacio');
+        mostrarToast('No hay más facturas pendientes', 'success');
+    }
+}
+
+function verListaCompleta() {
+    facturaActual = null;
+    mostrarVista('vacio');
+    renderLista();
+}
+
+// ============================================================
+//  UTILIDADES UI
+// ============================================================
+function mostrarVista(v) {
+    document.getElementById('sin-seleccion').style.display    = v === 'vacio'        ? '' : 'none';
+    document.getElementById('vista-detalle').style.display    = v === 'detalle'      ? '' : 'none';
+    document.getElementById('vista-confirmacion').style.display = v === 'confirmacion' ? '' : 'none';
+}
+
+function spinner(show) {
+    document.getElementById('spinner').style.display = show ? '' : 'none';
+}
+
+function mostrarToast(msg, tipo) {
+    const t = document.createElement('div');
+    t.className = `alert alert-${tipo} position-fixed top-0 end-0 m-3 shadow`;
+    t.style.cssText = 'z-index:99999;min-width:260px;font-size:0.85rem';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+}
+
+function mostrarError(msg) {
+    document.getElementById('lista-facturas').innerHTML =
+        `<div class="alert alert-danger m-2" style="font-size:0.8rem">${msg}</div>`;
+}
+
+function setVal(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.value = val !== null && val !== undefined ? val : '';
+}
+function setSelect(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+}
+
+// ============================================================
+//  FORMATO
+// ============================================================
+function formatPeso(n) {
+    if (n === null || n === undefined || isNaN(n)) return '—';
+    return '$ ' + parseFloat(n).toLocaleString('es-AR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function formatNroDoc(s) {
+    if (!s || s.length < 8) return s || '—';
+    return s.slice(0,4) + '-' + s.slice(4);
+}
+function formatFecha(s) {
+    if (!s || s.length < 8) return s || '—';
+    return s.slice(6,8)+'/'+s.slice(4,6)+'/'+s.slice(0,4);
+}
+function yyyymmddToDate(s) {
+    if (!s || s.length < 8) return '';
+    return s.slice(0,4)+'-'+s.slice(4,6)+'-'+s.slice(6,8);
+}
+function dateToYYYYMMDD(s) {
+    if (!s) return null;
+    return s.replace(/-/g,'');
+}
+function diasDesde(fechaStr) {
+    if (!fechaStr) return 0;
+    const d = new Date(fechaStr);
+    return Math.floor((Date.now() - d.getTime()) / 86400000);
+}
+function esc(s) {
+    return String(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+
+</script>
+</body>
+</html>

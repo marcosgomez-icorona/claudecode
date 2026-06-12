@@ -1,0 +1,707 @@
+[26-Apr-2025 10:52:20 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja_test/index.php:1) in /home/c2710734/public_html/caja_test/index.php on line 14
+[26-Apr-2025 10:55:59 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $loginStrGroup in /home/c2710734/public_html/caja_test/loguin/loguin.php on line 52
+[26-Apr-2025 10:55:59 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja_test/loguin/loguin.php:1) in /home/c2710734/public_html/caja_test/loguin/loguin.php on line 62
+[26-Apr-2025 10:56:27 America/Argentina/Buenos_Aires] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/c2710734/public_html/caja_test/listados/list_entidades.php on line 7
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 618
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 618
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 618
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 618
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 618
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 618
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 618
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 11:04:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:26:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:26:45 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:28:18 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $loginStrGroup in /home/c2710734/public_html/caja_test/loguin/loguin.php on line 52
+[26-Apr-2025 12:28:18 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja_test/loguin/loguin.php:1) in /home/c2710734/public_html/caja_test/loguin/loguin.php on line 62
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 623
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:28:23 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 633
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 633
+[26-Apr-2025 12:48:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 633
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 628
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 633
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 633
+[26-Apr-2025 12:48:41 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 633
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja_test/funciones.php on line 14
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 14:48:59 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja_test/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 15:02:38 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $loginStrGroup in /home/c2710734/public_html/caja/loguin/loguin.php on line 52
+[26-Apr-2025 15:02:38 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja/loguin/loguin.php:1) in /home/c2710734/public_html/caja/loguin/loguin.php on line 62
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 636
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 15:02:42 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 15:17:49 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 640
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 640
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 640
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 640
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 640
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 640
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 640
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 645
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 645
+[26-Apr-2025 15:17:50 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 645
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:09:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:13:55 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:22:06 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:24:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 641
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:27:02 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 646
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:30:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "id_usuario" in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 419
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:38:20 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:39:42 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught Error: Call to undefined function GetSQLValueString() in /home/c2710734/public_html/caja/reportes/reporte_prestamos.php:80
+Stack trace:
+#0 {main}
+  thrown in /home/c2710734/public_html/caja/reportes/reporte_prestamos.php on line 80
+[26-Apr-2025 18:40:38 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "id_usuario" in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo.php on line 263
+[26-Apr-2025 18:43:42 America/Argentina/Buenos_Aires] PHP Warning:  require_once(../Connections/db.php): Failed to open stream: No such file or directory in /home/c2710734/public_html/caja/graficar_php/Chartjs/samples/charts/bar/reporte_gastos_consumos.php on line 9
+[26-Apr-2025 18:43:42 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught Error: Failed opening required '../Connections/db.php' (include_path='.:/opt/php8-3/lib/php') in /home/c2710734/public_html/caja/graficar_php/Chartjs/samples/charts/bar/reporte_gastos_consumos.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/c2710734/public_html/caja/graficar_php/Chartjs/samples/charts/bar/reporte_gastos_consumos.php on line 9
+[26-Apr-2025 18:45:44 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $loginStrGroup in /home/c2710734/public_html/caja/loguin/loguin.php on line 52
+[26-Apr-2025 18:45:44 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja/loguin/loguin.php:1) in /home/c2710734/public_html/caja/loguin/loguin.php on line 62
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:45:48 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:46:36 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 637
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:50:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 642
+[26-Apr-2025 18:50:09 America/Argentina/Buenos_Aires] PHP Warning:  require_once(../Connections/db.php): Failed to open stream: No such file or directory in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/bar/reporte_gastos_consumos.php on line 9
+[26-Apr-2025 18:50:09 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught Error: Failed opening required '../Connections/db.php' (include_path='.:/opt/php8-3/lib/php') in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/bar/reporte_gastos_consumos.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/bar/reporte_gastos_consumos.php on line 9
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 18:53:47 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 18:54:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 32
+[26-Apr-2025 18:54:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 33
+[26-Apr-2025 18:54:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 51
+[26-Apr-2025 18:54:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 52
+[26-Apr-2025 18:54:13 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 32
+[26-Apr-2025 18:54:13 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 33
+[26-Apr-2025 18:54:13 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 36
+[26-Apr-2025 18:54:13 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 37
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 18:55:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 18:55:18 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 32
+[26-Apr-2025 18:55:18 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 33
+[26-Apr-2025 18:55:18 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 51
+[26-Apr-2025 18:55:18 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 52
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:02:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:02:10 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 56
+[26-Apr-2025 19:02:10 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 57
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:03:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:03:56 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 56
+[26-Apr-2025 19:03:56 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_gastos.php on line 57
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:05:03 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:05:34 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:06:08 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:09:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:09:11 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key 1 in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_subcateg_gastos.php on line 114
+[26-Apr-2025 19:09:24 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key 1 in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_subcateg_gastos.php on line 114
+[26-Apr-2025 19:09:57 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 32
+[26-Apr-2025 19:09:57 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 33
+[26-Apr-2025 19:09:57 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 36
+[26-Apr-2025 19:09:57 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 37
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:13:14 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:13:16 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 32
+[26-Apr-2025 19:13:16 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 33
+[26-Apr-2025 19:13:16 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 36
+[26-Apr-2025 19:13:16 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 37
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:13:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:13:39 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 32
+[26-Apr-2025 19:13:39 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 33
+[26-Apr-2025 19:13:39 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 36
+[26-Apr-2025 19:13:39 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_gasto_anual.php on line 37
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:15:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:15:13 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key 1 in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_subcateg_gastos.php on line 114
+[26-Apr-2025 19:15:31 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_flujo_ingreso_egreso.php on line 36
+[26-Apr-2025 19:15:31 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_flujo_ingreso_egreso.php on line 37
+[26-Apr-2025 19:15:31 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_flujo_ingreso_egreso.php on line 56
+[26-Apr-2025 19:15:31 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_tipo_flujo_ingreso_egreso.php on line 57
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:18:53 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:20:40 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $loginStrGroup in /home/c2710734/public_html/caja/loguin/loguin.php on line 52
+[26-Apr-2025 19:20:40 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja/loguin/loguin.php:1) in /home/c2710734/public_html/caja/loguin/loguin.php on line 62
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:34:15 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[26-Apr-2025 19:34:22 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key 1 in /home/c2710734/public_html/caja/graficar_php/chartjs/samples/charts/torta/torta_categoria_subcateg_gastos.php on line 114
+[27-Apr-2025 08:45:46 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/movimientos/gastos.php on line 466
+[27-Apr-2025 08:48:58 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/movimientos/gastos.php on line 466
+[27-Apr-2025 08:54:49 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "monto" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 208
+[27-Apr-2025 08:54:49 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "id_consumo" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 209
+[27-Apr-2025 08:55:23 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ', 3,1)' at line 1 in /home/c2710734/public_html/caja/movimientos/egresos.php:105
+Stack trace:
+#0 /home/c2710734/public_html/caja/movimientos/egresos.php(105): mysqli->query('INSERT INTO caj...')
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/movimientos/egresos.php on line 105
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 08:55:43 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 08:55:51 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 08:55:51 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 08:55:51 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 08:58:13 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught Error: Call to undefined function GetSQLValueString() in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php:35
+Stack trace:
+#0 {main}
+  thrown in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 35
+[27-Apr-2025 09:09:48 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $categoria in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 291
+[27-Apr-2025 09:09:48 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught TypeError: mysqli_free_result(): Argument #1 ($result) must be of type mysqli_result, null given in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php:291
+Stack trace:
+#0 /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php(291): mysqli_free_result(NULL)
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 291
+[27-Apr-2025 09:10:56 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "where" in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo.php on line 49
+[27-Apr-2025 09:10:57 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "where" in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo.php on line 49
+[27-Apr-2025 09:11:00 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "where" in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo.php on line 49
+[27-Apr-2025 09:11:02 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "where" in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo.php on line 49
+[27-Apr-2025 09:12:11 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "where" in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo.php on line 49
+[27-Apr-2025 09:12:12 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "where" in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo.php on line 49
+[27-Apr-2025 09:12:14 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "where" in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo.php on line 49
+[27-Apr-2025 09:14:25 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "where" in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo.php on line 50
+[27-Apr-2025 09:18:30 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "monto" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 208
+[27-Apr-2025 09:18:30 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "id_consumo" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 209
+[27-Apr-2025 09:19:03 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "monto" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 208
+[27-Apr-2025 09:19:03 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "id_consumo" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 209
+[27-Apr-2025 09:21:06 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:21:06 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:21:06 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 09:22:54 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 09:23:04 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 09:23:05 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 09:25:48 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'desde' in 'order clause' in /home/c2710734/public_html/caja/listados/list_gastos.php:58
+Stack trace:
+#0 /home/c2710734/public_html/caja/listados/list_gastos.php(58): mysqli->query('select consumos...')
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/listados/list_gastos.php on line 58
+[27-Apr-2025 09:29:48 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "monto" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 208
+[27-Apr-2025 09:29:48 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "id_consumo" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 209
+[27-Apr-2025 09:29:51 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:29:51 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:29:51 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:30:06 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'desde' in 'order clause' in /home/c2710734/public_html/caja/listados/list_gastos.php:58
+Stack trace:
+#0 /home/c2710734/public_html/caja/listados/list_gastos.php(58): mysqli->query('select consumos...')
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/listados/list_gastos.php on line 58
+[27-Apr-2025 09:42:40 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "monto" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 208
+[27-Apr-2025 09:42:40 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "id_consumo" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 209
+[27-Apr-2025 09:42:47 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:42:47 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:42:47 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:44:58 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:44:58 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:44:58 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 09:52:21 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 09:52:22 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 09:52:23 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 09:52:24 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 09:52:25 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 09:52:26 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 09:55:46 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 09:55:47 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 09:59:51 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "monto" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 208
+[27-Apr-2025 09:59:51 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "id_consumo" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 209
+[27-Apr-2025 10:02:16 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:17 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:18 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:19 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:21 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:22 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:23 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:25 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:26 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:27 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:28 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:30 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:02:31 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 37
+[27-Apr-2025 10:07:01 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "buscar" in /home/c2710734/public_html/caja/listados/list_tarjetas.php on line 44
+[27-Apr-2025 10:33:15 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja/abms/bajas.php:1) in /home/c2710734/public_html/caja/abms/bajas.php on line 101
+[27-Apr-2025 10:39:44 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja/abms/bajas.php:1) in /home/c2710734/public_html/caja/abms/bajas.php on line 101
+[27-Apr-2025 10:41:17 America/Argentina/Buenos_Aires] PHP Parse error:  syntax error, unexpected double-quoted string "", expecting ")" in /home/c2710734/public_html/caja/abms/bajas.php on line 100
+[27-Apr-2025 10:44:00 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja/abms/bajas.php:1) in /home/c2710734/public_html/caja/abms/bajas.php on line 100
+[27-Apr-2025 10:50:09 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "cant_consumo" in /home/c2710734/public_html/caja/abms/bajas.php on line 135
+[27-Apr-2025 10:57:53 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $categoria in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 291
+[27-Apr-2025 10:57:53 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught TypeError: mysqli_free_result(): Argument #1 ($result) must be of type mysqli_result, null given in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php:291
+Stack trace:
+#0 /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php(291): mysqli_free_result(NULL)
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 291
+[27-Apr-2025 10:58:13 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $categoria in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 291
+[27-Apr-2025 10:58:13 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught TypeError: mysqli_free_result(): Argument #1 ($result) must be of type mysqli_result, null given in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php:291
+Stack trace:
+#0 /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php(291): mysqli_free_result(NULL)
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 291
+[27-Apr-2025 11:32:42 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $categoria in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 292
+[27-Apr-2025 11:32:42 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught TypeError: mysqli_free_result(): Argument #1 ($result) must be of type mysqli_result, null given in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php:292
+Stack trace:
+#0 /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php(292): mysqli_free_result(NULL)
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 292
+[27-Apr-2025 11:46:05 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $categoria in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 292
+[27-Apr-2025 11:46:05 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught TypeError: mysqli_free_result(): Argument #1 ($result) must be of type mysqli_result, null given in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php:292
+Stack trace:
+#0 /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php(292): mysqli_free_result(NULL)
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 292
+[27-Apr-2025 11:46:58 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $categoria in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 292
+[27-Apr-2025 11:46:58 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught TypeError: mysqli_free_result(): Argument #1 ($result) must be of type mysqli_result, null given in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php:292
+Stack trace:
+#0 /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php(292): mysqli_free_result(NULL)
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 292
+[27-Apr-2025 11:48:31 America/Argentina/Buenos_Aires] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos_export.php on line 17
+[27-Apr-2025 11:48:31 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 11:48:31 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 11:48:31 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 12:08:28 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $totalRows_existe in /home/c2710734/public_html/caja/abms/abm_usuario.php on line 47
+[27-Apr-2025 12:09:26 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $loginStrGroup in /home/c2710734/public_html/caja/loguin/loguin.php on line 52
+[27-Apr-2025 12:09:26 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja/loguin/loguin.php:1) in /home/c2710734/public_html/caja/loguin/loguin.php on line 62
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Deprecated:  substr(): Passing null to parameter #1 ($string) of type string is deprecated in /home/c2710734/public_html/caja/funciones.php on line 14
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 638
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 12:09:38 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_gastos_consumos.php on line 643
+[27-Apr-2025 12:15:02 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'id_usuario' in where clause is ambiguous in /home/c2710734/public_html/caja/listados/list_gastos.php:58
+Stack trace:
+#0 /home/c2710734/public_html/caja/listados/list_gastos.php(58): mysqli->query('select consumos...')
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/listados/list_gastos.php on line 58
+[27-Apr-2025 12:19:08 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'id_usuario' in where clause is ambiguous in /home/c2710734/public_html/caja/listados/list_gastos.php:59
+Stack trace:
+#0 /home/c2710734/public_html/caja/listados/list_gastos.php(59): mysqli->prepare('\nSELECT consumo...')
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/listados/list_gastos.php on line 59
+[27-Apr-2025 12:23:09 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'usuarios.id_usuario' in 'where clause' in /home/c2710734/public_html/caja/listados/list_gastos.php:59
+Stack trace:
+#0 /home/c2710734/public_html/caja/listados/list_gastos.php(59): mysqli->prepare('\nSELECT consumo...')
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/listados/list_gastos.php on line 59
+[27-Apr-2025 12:30:33 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $rows_control_dependencia in /home/c2710734/public_html/caja/abms/bajas.php on line 183
+[27-Apr-2025 12:30:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/abms/bajas.php on line 183
+[27-Apr-2025 12:30:33 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/abms/bajas.php on line 186
+[27-Apr-2025 12:41:13 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 189
+[27-Apr-2025 12:41:13 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 190
+[27-Apr-2025 12:41:13 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 191
+[27-Apr-2025 12:41:13 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 192
+[27-Apr-2025 12:41:13 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 193
+[27-Apr-2025 12:41:13 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $categoria in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 292
+[27-Apr-2025 12:41:13 America/Argentina/Buenos_Aires] PHP Fatal error:  Uncaught TypeError: mysqli_free_result(): Argument #1 ($result) must be of type mysqli_result, null given in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php:292
+Stack trace:
+#0 /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php(292): mysqli_free_result(NULL)
+#1 {main}
+  thrown in /home/c2710734/public_html/caja/reportes/reporte_flujo_efectivo_export.php on line 292
+[27-Apr-2025 13:02:23 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $loginStrGroup in /home/c2710734/public_html/caja/loguin/loguin.php on line 52
+[27-Apr-2025 13:02:23 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja/loguin/loguin.php:1) in /home/c2710734/public_html/caja/loguin/loguin.php on line 62
+[27-Apr-2025 13:03:09 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "monto" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 208
+[27-Apr-2025 13:03:09 America/Argentina/Buenos_Aires] PHP Warning:  Undefined array key "id_consumo" in /home/c2710734/public_html/caja/movimientos/egresos.php on line 209
+[27-Apr-2025 13:03:09 America/Argentina/Buenos_Aires] PHP Warning:  Trying to access array offset on null in /home/c2710734/public_html/caja/movimientos/egresos.php on line 252
+[27-Apr-2025 13:11:03 America/Argentina/Buenos_Aires] PHP Warning:  Undefined variable $loginStrGroup in /home/c2710734/public_html/caja/loguin/loguin.php on line 52
+[27-Apr-2025 13:11:03 America/Argentina/Buenos_Aires] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/c2710734/public_html/caja/loguin/loguin.php:1) in /home/c2710734/public_html/caja/loguin/loguin.php on line 62

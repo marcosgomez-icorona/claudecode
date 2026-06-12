@@ -1,0 +1,82 @@
+[
+  {
+    "id": "tab_config_zafra_001",
+    "type": "tab",
+    "label": "Config Zafra",
+    "disabled": false,
+    "info": "Lee parametros de zafra desde MySQL y los guarda en global context para uso de todos los flujos"
+  },
+  {
+    "id": "inj_config_zafra_001",
+    "type": "inject",
+    "name": "Startup + cada hora",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "3600",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 2,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "z": "tab_config_zafra_001",
+    "x": 130,
+    "y": 80,
+    "wires": [
+      [
+        "fn_set_query_001"
+      ]
+    ]
+  },
+  {
+    "id": "fn_set_query_001",
+    "type": "function",
+    "name": "Armar SQL config",
+    "func": "msg.topic = \"SELECT id, anio, fecha_inicio, nombre_zafra FROM config_zafra WHERE id = 1 LIMIT 1\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "z": "tab_config_zafra_001",
+    "x": 330,
+    "y": 80,
+    "wires": [
+      [
+        "mysql_config_zafra_001"
+      ]
+    ]
+  },
+  {
+    "id": "mysql_config_zafra_001",
+    "type": "mysql",
+    "name": "Lee config_zafra",
+    "mydb": "dc69d5c9d581acf9",
+    "z": "tab_config_zafra_001",
+    "x": 530,
+    "y": 80,
+    "wires": [
+      [
+        "fn_global_zafra_001"
+      ]
+    ]
+  },
+  {
+    "id": "fn_global_zafra_001",
+    "type": "function",
+    "name": "Set global context",
+    "func": "const rows = msg.payload;\nif (!rows || rows.length === 0) {\n    node.warn('config_zafra: sin resultados');\n    return null;\n}\nconst cfg = rows[0];\n\n// fecha_inicio viene como Date de MySQL: 2026-05-18T03:00:00.000Z\nconst d = new Date(cfg.fecha_inicio);\nconst yyyy = d.getFullYear();\nconst mm   = String(d.getMonth() + 1).padStart(2, '0');\nconst dd   = String(d.getDate()).padStart(2, '0');\n\n// Formatos que usan las queries SQL Server\nglobal.set('zafra_inicio_dmY',    `${dd}/${mm}/${yyyy}`);   // '18/05/2026'\nglobal.set('zafra_inicio_Ymd',    `${yyyy}-${mm}-${dd}`);   // '2026-05-18'\nglobal.set('zafra_inicio_mes_Ymd',`${yyyy}-${mm}-01`);      // '2026-05-01'\nglobal.set('zafra_anio',           cfg.anio);\nglobal.set('zafra_nombre',         cfg.nombre_zafra);\n\nnode.log(`Config zafra cargada: ${cfg.nombre_zafra} | inicio: ${dd}/${mm}/${yyyy}`);\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "z": "tab_config_zafra_001",
+    "x": 740,
+    "y": 80,
+    "wires": [
+      []
+    ]
+  }
+]

@@ -1,0 +1,169 @@
+[
+  {
+    "id": "tab-registrar-facturas",
+    "type": "tab",
+    "label": "Registración de Facturas",
+    "disabled": false,
+    "info": "Recibe GET de n8n con los datos de la factura parseada y ejecuta el INSERT en MySQL staging_facturas."
+  },
+
+  {
+    "id": "http-in-registrar",
+    "type": "http in",
+    "z": "tab-registrar-facturas",
+    "name": "Recibir factura de n8n",
+    "url": "/facturas-registrar",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 160,
+    "y": 200,
+    "wires": [["fn-validar-params"]]
+  },
+
+  {
+    "id": "fn-validar-params",
+    "type": "function",
+    "z": "tab-registrar-facturas",
+    "name": "Validar y preparar query",
+    "func": "const q = msg.req.query;\n\n// Validar parámetros mínimos\nif (!q.staging_id || !q.mysql_query) {\n    msg.statusCode = 400;\n    msg.payload = JSON.stringify({\n        ok: false,\n        error: 'Faltan parámetros: staging_id y mysql_query son requeridos',\n        recibido: Object.keys(q)\n    });\n    msg.headers = { 'Content-Type': 'application/json' };\n    node.warn('Recepción inválida: ' + JSON.stringify(q));\n    return [null, msg];\n}\n\n// El mysql_query viene URL-encoded, Node-RED ya lo decodifica en req.query\nconst sqlQuery = q.mysql_query;\n\n// Pasar query al nodo MySQL (msg.topic = SQL a ejecutar)\nmsg.topic = sqlQuery;\nmsg.payload = {};\n\n// Guardar datos para el log y la respuesta\nmsg._factura = {\n    staging_id:    q.staging_id,\n    cuit:          q.cuit          || '',\n    razon_social:  q.razon_social  || '',\n    nro_documento: q.nro_documento || '',\n    letra:         q.letra         || '',\n    fecha_emision: q.fecha_emision || '',\n    total:         q.total         || '',\n    confianza:     q.confianza_parseo || ''\n};\n\nnode.log('Registrando factura: ' + q.staging_id + ' | ' + q.razon_social);\nreturn [msg, null];\n",
+    "outputs": 2,
+    "x": 400,
+    "y": 200,
+    "wires": [
+      ["mysql-insert-staging"],
+      ["http-resp-error"]
+    ]
+  },
+
+  {
+    "id": "mysql-insert-staging",
+    "type": "mysql",
+    "z": "tab-registrar-facturas",
+    "mydb": "mysql-config-automatizaciones",
+    "name": "INSERT staging_facturas",
+    "x": 640,
+    "y": 160,
+    "wires": [["fn-respuesta-ok"]]
+  },
+
+  {
+    "id": "fn-respuesta-ok",
+    "type": "function",
+    "z": "tab-registrar-facturas",
+    "name": "Respuesta OK",
+    "func": "const f = msg._factura || {};\nmsg.statusCode = 200;\nmsg.headers = { 'Content-Type': 'application/json' };\nmsg.payload = JSON.stringify({\n    ok: true,\n    staging_id:   f.staging_id,\n    razon_social: f.razon_social,\n    nro_documento: f.nro_documento,\n    total:        f.total,\n    mensaje:      'Factura registrada en staging_facturas'\n});\nnode.log('OK: ' + f.staging_id);\nreturn msg;\n",
+    "outputs": 1,
+    "x": 880,
+    "y": 160,
+    "wires": [["http-resp-ok", "debug-ok"]]
+  },
+
+  {
+    "id": "http-resp-ok",
+    "type": "http response",
+    "z": "tab-registrar-facturas",
+    "name": "HTTP 200 OK",
+    "statusCode": "200",
+    "headers": {},
+    "x": 1100,
+    "y": 120,
+    "wires": []
+  },
+
+  {
+    "id": "debug-ok",
+    "type": "debug",
+    "z": "tab-registrar-facturas",
+    "name": "Log registro OK",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "payload",
+    "statusType": "auto",
+    "x": 1100,
+    "y": 200,
+    "wires": []
+  },
+
+  {
+    "id": "http-resp-error",
+    "type": "http response",
+    "z": "tab-registrar-facturas",
+    "name": "HTTP 400 Error",
+    "statusCode": "400",
+    "headers": {},
+    "x": 640,
+    "y": 280,
+    "wires": []
+  },
+
+  {
+    "id": "catch-mysql-error",
+    "type": "catch",
+    "z": "tab-registrar-facturas",
+    "name": "Error MySQL",
+    "scope": ["mysql-insert-staging"],
+    "uncaught": false,
+    "x": 640,
+    "y": 360,
+    "wires": [["fn-respuesta-error-mysql"]]
+  },
+
+  {
+    "id": "fn-respuesta-error-mysql",
+    "type": "function",
+    "z": "tab-registrar-facturas",
+    "name": "Respuesta error MySQL",
+    "func": "const f = msg._factura || {};\nnode.error('Error MySQL para staging_id ' + f.staging_id + ': ' + msg.error.message);\nmsg.statusCode = 500;\nmsg.headers = { 'Content-Type': 'application/json' };\nmsg.payload = JSON.stringify({\n    ok: false,\n    staging_id: f.staging_id,\n    error: msg.error.message || 'Error desconocido en MySQL'\n});\nreturn msg;\n",
+    "outputs": 1,
+    "x": 880,
+    "y": 360,
+    "wires": [["http-resp-mysql-error", "debug-error"]]
+  },
+
+  {
+    "id": "http-resp-mysql-error",
+    "type": "http response",
+    "z": "tab-registrar-facturas",
+    "name": "HTTP 500 Error MySQL",
+    "statusCode": "500",
+    "headers": {},
+    "x": 1120,
+    "y": 320,
+    "wires": []
+  },
+
+  {
+    "id": "debug-error",
+    "type": "debug",
+    "z": "tab-registrar-facturas",
+    "name": "Log error MySQL",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1120,
+    "y": 400,
+    "wires": []
+  },
+
+  {
+    "id": "mysql-config-automatizaciones",
+    "type": "MySQLdatabase",
+    "name": "MySQL Automatizaciones",
+    "host": "mgsoluciones.duckdns.org",
+    "port": "3307",
+    "db": "db_automatizaciones",
+    "tz": "America/Argentina/Buenos_Aires",
+    "charset": "UTF8MB4_GENERAL_CI",
+    "ssl": "",
+    "user": "usr_automatizacion",
+    "password": "Corona1234$"
+  }
+]

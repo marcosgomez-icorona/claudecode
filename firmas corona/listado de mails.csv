@@ -1,0 +1,51 @@
+First Name [Required],Last Name [Required],Email Address [Required],Status [READ ONLY],Last Sign In [READ ONLY],Email Usage [READ ONLY],Licenses [READ ONLY],Storage limit [READ ONLY]
+Administracion,Ingenio La Corona,administracion@ingeniolacorona.com,Active,2026/05/05 15:17:22,31.18GB,1010020027, --
+Alfredo,Albarracin,alfredoalbarracin@ingeniolacorona.com,Active,2026/04/29 09:38:54,0.09GB,1010020027, --
+Ariel,Ruiz Lizarraga,arielruiz@ingeniolacorona.com,Active,2026/05/04 06:11:52,21.28GB,1010020027, --
+Carla,Quintana,carlaquintana@ingeniolacorona.com,Active,2026/05/04 04:12:48,2.76GB,1010020027, --
+Carlos,Andrade,carlosandrade@ingeniolacorona.com,Active,2026/05/04 03:22:21,2.65GB,1010020027, --
+Celeste,Araoz,celestearaoz@ingeniolacorona.com,Active,2026/05/04 12:53:59,27.13GB,1010020027, --
+Dante,Diaz,dantediaz@ingeniolacorona.com,Active,2026/05/06 08:23:30,2.48GB,1010020027, --
+David,Salica,davidsalica@ingeniolacorona.com,Active,2026/05/06 01:46:59,40.49GB,1010020027, --
+Deposito,de Azucar,depositoazucar@ingeniolacorona.com,Active,2026/04/30 02:54:09,0.92GB,1010020027, --
+Ezequiel,Dip,ezequieldip@ingeniolacorona.com,Active,2026/05/04 05:10:26,36.89GB,1010020027, --
+Francisco,Fernandez,franciscofernandez@ingeniolacorona.com,Active,2026/04/29 05:57:31,5.47GB,1010020027, --
+Gestion,de Calidad,gestioncalidad@ingeniolacorona.com,Active,2026/05/04 05:53:09,7.23GB,1010020027, --
+Hugo,Cuello,hugocuello@ingeniolacorona.com,Active,2026/04/27 06:02:13,9.43GB,1010020027, --
+IA Campo,Ingenio La Corona,ia.campo@ingeniolacorona.com,Active,2026/04/28 12:19:30,0.0GB,1010020027, --
+IA Comercial,Ingenio La Corona,ia.comercial@ingeniolacorona.com,Active,2026/04/30 07:04:34,0.0GB,1010020027, --
+IA Fabrica,Ingenio La Corona,ia.fabrica@ingeniolacorona.com,Active,2026/05/06 05:00:48,0.0GB,1010020027, --
+IA Finanzas,Ingenio La Corona,ia.finanzas@ingeniolacorona.com,Active,2026/04/28 20:57:45,0.0GB,1010020027, --
+IA Legales,Ingenio La Corona,ia.legales@ingeniolacorona.com,Active,2026/04/09 09:38:35,0.0GB,1010020027, --
+IA Proveedores,Ingenio La Corona,ia.proveedores@ingeniolacorona.com,Active,2026/04/16 09:59:19,0.0GB,1010020027, --
+IA RRHH,Ingenio La Corona,ia.rrhh@ingeniolacorona.com,Active,2026/04/16 10:53:52,0.0GB,1010020027, --
+Jonathan,Saavedra,jonathansaavedra@ingeniolacorona.com,Active,2026/05/04 07:22:26,4.79GB,1010020027, --
+Juan Carlos,Alcaraz,juancarlosalcaraz@ingeniolacorona.com,Active,2026/04/28 05:04:34,9.55GB,1010020027, --
+Leonor,Gramajo,leonorgramajo@ingeniolacorona.com,Active,2026/04/23 16:35:07,9.78GB,1010020027, --
+Lucas,Varela,lucasvarela@ingeniolacorona.com,Active,2026/05/05 14:03:31,1.05GB,1010020027, --
+Luis,Martinez,luismartinez@ingeniolacorona.com,Active,2026/04/29 05:22:53,2.36GB,1010020027, --
+Luis,Albornoz,luisalbornoz@ingeniolacorona.com,Active,2026/04/29 16:57:57,8.34GB,1010020027, --
+Marcelo,Diprimio,marcelodiprimio@ingeniolacorona.com,Active,2026/04/30 05:14:50,4.04GB,1010020027, --
+Marcos,Monrroy,marcosmonrroy@ingeniolacorona.com,Active,2026/05/04 06:30:24,5.3GB,1010020027, --
+Marcos Javier,Gomez,marcosgomez@ingeniolacorona.com,Active,2026/05/05 08:12:19,2.61GB,1010020028, --
+Maria Florencia,Arano,mfarano@ingeniolacorona.com,Active,2026/04/29 08:42:57,44.38GB,1010020027, --
+Mariano,Correa,marianocorrea@ingeniolacorona.com,Active,2026/05/02 11:35:33,42.6GB,1010020028, --
+Mario,Domínguez,mariodominguez@ingeniolacorona.com,Active,2026/05/06 07:05:20,37.14GB,1010020027, --
+Martin,Arano,martinarano@ingeniolacorona.com,Active,2026/04/29 11:42:07,67.39GB,1010020028, --
+María Cecilia,Wassuf,ceciliawassuf@ingeniolacorona.com,Active,2026/05/02 19:59:55,9.91GB,1010020027, --
+Miguel Angel,Lopez,miguellopez@ingeniolacorona.com,Active,2026/04/27 12:26:46,3.15GB,1010020027, --
+Oscar,Martinez Basante,oscarmartinez@ingeniolacorona.com,Active,2026/05/03 00:32:03,11.16GB,1010020027, --
+Paola,Salinas,paolasalinas@ingeniolacorona.com,Active,2026/04/27 04:43:04,17.52GB,1010020027, --
+Patricia,Dietrich,patriciadietrich@ingeniolacorona.com,Active,2026/04/24 06:33:31,17.64GB,1010020027, --
+Ricardo,Bujazha,ricardobujazha@ingeniolacorona.com,Active,2026/05/05 12:32:17,2.04GB,1010020027, --
+Roberto,Arano,robertoarano@ingeniolacorona.com,Active,2026/05/05 21:02:40,14.8GB,1010020027, --
+Roberto,Cruz,robertocruz@ingeniolacorona.com,Active,2026/05/05 09:47:15,19.27GB,1010020027, --
+Rodolfo,Zelarayan,administracioncampo@ingeniolacorona.com,Active,2026/05/04 08:49:07,8.42GB,1010020027, --
+Rodolfo,Torres,rodolfotorres@ingeniolacorona.com,Active,2026/05/04 04:32:55,4.16GB,1010020027, --
+Rodrigo,Lema,rodrigolema@ingeniolacorona.com,Active,2026/05/05 11:20:24,5.49GB,1010020027, --
+Sector de Compras,Ing. La Corona,sectorcompras@ingeniolacorona.com,Active,2026/04/28 11:36:18,13.03GB,1010020027, --
+Sergio,Barrionuevo,sergiobarrionuevo@ingeniolacorona.com,Active,2026/05/06 04:08:24,4.77GB,1010020027, --
+Sergio,Ramos,sergioramos@ingeniolacorona.com,Active,2026/04/29 07:49:25,1.1GB,1010020027, --
+Taller,Campo,tallerdecampo@ingeniolacorona.com,Active,2026/05/04 10:53:35,2.32GB,1010020027, --
+Valeria,Palacio,valeriapalacio@ingeniolacorona.com,Active,2026/04/28 06:28:41,32.17GB,1010020027, --
+Victor,Juarez,victorjuarez@ingeniolacorona.com,Active,2026/05/04 05:04:32,5.25GB,1010020027, --

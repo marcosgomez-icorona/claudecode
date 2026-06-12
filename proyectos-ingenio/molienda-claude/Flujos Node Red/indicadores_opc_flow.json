@@ -1,0 +1,2933 @@
+[
+  {
+    "id": "3073f434746d962e",
+    "type": "tab",
+    "label": "Indicadores OPC → MySQL",
+    "disabled": false,
+    "info": "Crea tabla indicadores_opc si no existe y graba lecturas OPC cada 60s en db_corona."
+  },
+  {
+    "id": "5a059acbc349e528",
+    "type": "inject",
+    "z": "3073f434746d962e",
+    "name": "Crear tabla al iniciar",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "3",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 60,
+    "wires": [
+      [
+        "796ee5e0a11ae184"
+      ]
+    ]
+  },
+  {
+    "id": "796ee5e0a11ae184",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "DDL indicadores_opc",
+    "func": "msg.topic = `CREATE TABLE IF NOT EXISTS \\`indicadores_opc\\` (\\`id\\` INT NOT NULL AUTO_INCREMENT,\\`timestamp\\` DATETIME NOT NULL,\\`velocidad_molino1\\` FLOAT DEFAULT NULL,\\`velocidad_molino6\\` FLOAT DEFAULT NULL,\\`balanza_cinta\\` FLOAT DEFAULT NULL,\\`agua_imbibicion\\` FLOAT DEFAULT NULL,\\`presion_molino6_este\\` FLOAT DEFAULT NULL,\\`presion_molino6_oeste\\` FLOAT DEFAULT NULL,\\`caudal_jugo_clarif\\` FLOAT DEFAULT NULL,\\`nivel_melado_tratado\\` FLOAT DEFAULT NULL,\\`nivel_melado\\` FLOAT DEFAULT NULL,\\`nivel_decantador1\\` FLOAT DEFAULT NULL,\\`nivel_decantador2\\` FLOAT DEFAULT NULL,\\`nivel_decantador3\\` FLOAT DEFAULT NULL,\\`descarga_tachos_1ra\\` FLOAT DEFAULT NULL,\\`descarga_tachos_2da\\` FLOAT DEFAULT NULL,\\`descarga_tachos_3ra\\` FLOAT DEFAULT NULL,\\`contador_bolsas_dia\\` FLOAT DEFAULT NULL,\\`silo_a\\` FLOAT DEFAULT NULL,\\`silo_b\\` FLOAT DEFAULT NULL,\\`silo_c\\` FLOAT DEFAULT NULL,\\`silo_e\\` FLOAT DEFAULT NULL,\\`presion_vapor_directo\\` FLOAT DEFAULT NULL,\\`presion_agua_alim\\` FLOAT DEFAULT NULL,\\`presion_aire\\` FLOAT DEFAULT NULL,\\`caudal_vapor_cald1\\` FLOAT DEFAULT NULL,\\`caudal_vapor_cald2\\` FLOAT DEFAULT NULL,\\`caudal_vapor_cald3\\` FLOAT DEFAULT NULL,\\`caudal_vapor_cald6\\` FLOAT DEFAULT NULL,\\`vapor_total\\` FLOAT DEFAULT NULL,\\`caudal_gas_cald2\\` FLOAT DEFAULT NULL,\\`caudal_gas_cald6\\` FLOAT DEFAULT NULL,\\`potencia_activa_siemens\\` FLOAT DEFAULT NULL,\\`potencia_reactiva_siemens\\` FLOAT DEFAULT NULL,\\`frecuencia_siemens\\` FLOAT DEFAULT NULL,\\`intensidad_siemens\\` FLOAT DEFAULT NULL,\\`potencia_activa_aeg\\` FLOAT DEFAULT NULL,\\`potencia_reactiva_aeg\\` FLOAT DEFAULT NULL,\\`frecuencia_aeg\\` FLOAT DEFAULT NULL,\\`intensidad_aeg\\` FLOAT DEFAULT NULL,\\`potencia_total\\` FLOAT DEFAULT NULL,\\`cv_trapiche\\` FLOAT DEFAULT NULL,\\`cv_usina_alta\\` FLOAT DEFAULT NULL,\\`cv_destileria\\` FLOAT DEFAULT NULL,\\`cv_aux_total\\` FLOAT DEFAULT NULL,\\`cv_preparacion_cania\\` FLOAT DEFAULT NULL,\\`caudal_vino\\` FLOAT DEFAULT NULL,\\`caudal_alcohol\\` FLOAT DEFAULT NULL,\\`caudal_jugo_dilutor\\` FLOAT DEFAULT NULL,\\`caudal_melaza_dilutor\\` FLOAT DEFAULT NULL,PRIMARY KEY (\\`id\\`),UNIQUE KEY \\`uk_timestamp\\` (\\`timestamp\\`),INDEX \\`idx_ts\\` (\\`timestamp\\`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`;\nmsg.payload = [];\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 400,
+    "y": 60,
+    "wires": [
+      [
+        "c50a559bc07a87ab"
+      ]
+    ]
+  },
+  {
+    "id": "c50a559bc07a87ab",
+    "type": "mysql",
+    "z": "3073f434746d962e",
+    "mydbConfig": "2bf0d8227d4cf2c4",
+    "name": "CREATE TABLE IF NOT EXISTS",
+    "x": 640,
+    "y": 60,
+    "wires": [
+      [
+        "5fc90857840213ac"
+      ]
+    ]
+  },
+  {
+    "id": "5fc90857840213ac",
+    "type": "debug",
+    "z": "3073f434746d962e",
+    "name": "DDL result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 860,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "92a8ba37b29a2b15",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=molino.molino.molino1.molino_motor_veloc1",
+    "datatype": "Float",
+    "value": "velocidad_molino1",
+    "name": "Vel. Molino 1",
+    "x": 60,
+    "y": 140,
+    "wires": [
+      [
+        "1e3eb2add4122790"
+      ]
+    ]
+  },
+  {
+    "id": "1e3eb2add4122790",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Vel. Molino 1",
+    "x": 240,
+    "y": 140,
+    "wires": [
+      [
+        "71570501c15078f1"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "71570501c15078f1",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ velocidad_molino1",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('velocidad_molino1', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "1964960a8b488f8b",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=molino.molino.molino6.molino_motor_veloc6",
+    "datatype": "Float",
+    "value": "velocidad_molino6",
+    "name": "Vel. Molino 6",
+    "x": 60,
+    "y": 196,
+    "wires": [
+      [
+        "137e6881eab14218"
+      ]
+    ]
+  },
+  {
+    "id": "137e6881eab14218",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Vel. Molino 6",
+    "x": 240,
+    "y": 196,
+    "wires": [
+      [
+        "ed222863e494cc0b"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "ed222863e494cc0b",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ velocidad_molino6",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('velocidad_molino6', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 196,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "4b61104fd89e5eed",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=molino.molino.molino1.balanza_cinta_salida_trapiche1",
+    "datatype": "Float",
+    "value": "balanza_cinta",
+    "name": "Balanza Cinta",
+    "x": 60,
+    "y": 252,
+    "wires": [
+      [
+        "40f784479d755d89"
+      ]
+    ]
+  },
+  {
+    "id": "40f784479d755d89",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Balanza Cinta",
+    "x": 240,
+    "y": 252,
+    "wires": [
+      [
+        "497654291d92aa0f"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "497654291d92aa0f",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ balanza_cinta",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('balanza_cinta', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 252,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "45a41eb082c21608",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=molino.molino.imbibicion.I_bb_imbibi1",
+    "datatype": "Float",
+    "value": "agua_imbibicion",
+    "name": "Agua Imbibicion",
+    "x": 60,
+    "y": 308,
+    "wires": [
+      [
+        "183e7d675f5c679b"
+      ]
+    ]
+  },
+  {
+    "id": "183e7d675f5c679b",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Agua Imbibicion",
+    "x": 240,
+    "y": 308,
+    "wires": [
+      [
+        "5c00bbd16c283f85"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "5c00bbd16c283f85",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ agua_imbibicion",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('agua_imbibicion', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 308,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "35c17ee9a6e43080",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=trapiche.Trapiche.lubricacion.Presion_molino6_este",
+    "datatype": "Float",
+    "value": "presion_molino6_este",
+    "name": "Pres. Molino6 Este",
+    "x": 60,
+    "y": 364,
+    "wires": [
+      [
+        "ca4cc69b062c4908"
+      ]
+    ]
+  },
+  {
+    "id": "ca4cc69b062c4908",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Pres. Molino6 Este",
+    "x": 240,
+    "y": 364,
+    "wires": [
+      [
+        "901e3b0fef6c4963"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "901e3b0fef6c4963",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ presion_molino6_este",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('presion_molino6_este', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 364,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "81c2b5c368256bb0",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=trapiche.Trapiche.lubricacion.Presion_molino6_Oeste",
+    "datatype": "Float",
+    "value": "presion_molino6_oeste",
+    "name": "Pres. Molino6 Oeste",
+    "x": 60,
+    "y": 420,
+    "wires": [
+      [
+        "0581c45b0990691e"
+      ]
+    ]
+  },
+  {
+    "id": "0581c45b0990691e",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Pres. Molino6 Oeste",
+    "x": 240,
+    "y": 420,
+    "wires": [
+      [
+        "baff1a750be7b8e8"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "baff1a750be7b8e8",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ presion_molino6_oeste",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('presion_molino6_oeste', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 420,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "4050c9c9d8d30b93",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=fabricacion.fabricacion.Caudal_Jugo_Clarificado",
+    "datatype": "Float",
+    "value": "caudal_jugo_clarif",
+    "name": "Caudal Jugo Clarif",
+    "x": 60,
+    "y": 476,
+    "wires": [
+      [
+        "15132bff9807f30c"
+      ]
+    ]
+  },
+  {
+    "id": "15132bff9807f30c",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Jugo Clarif",
+    "x": 240,
+    "y": 476,
+    "wires": [
+      [
+        "dd6fbf73afe6b900"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "dd6fbf73afe6b900",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_jugo_clarif",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_jugo_clarif', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 476,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "2006671deafb3a00",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=fabricacion.fabricacion.nivel_melado_tratado_1",
+    "datatype": "Float",
+    "value": "nivel_melado_tratado",
+    "name": "Nivel Melado Tratado",
+    "x": 60,
+    "y": 532,
+    "wires": [
+      [
+        "391b2e116490cc12"
+      ]
+    ]
+  },
+  {
+    "id": "391b2e116490cc12",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Nivel Melado Tratado",
+    "x": 240,
+    "y": 532,
+    "wires": [
+      [
+        "67a996ec466348d1"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "67a996ec466348d1",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ nivel_melado_tratado",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('nivel_melado_tratado', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 532,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "637968954e81032a",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Tacho.Tacho.nivel_melado",
+    "datatype": "Float",
+    "value": "nivel_melado",
+    "name": "Nivel Melado",
+    "x": 60,
+    "y": 588,
+    "wires": [
+      [
+        "4b1e273b4b974976"
+      ]
+    ]
+  },
+  {
+    "id": "4b1e273b4b974976",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Nivel Melado",
+    "x": 240,
+    "y": 588,
+    "wires": [
+      [
+        "299ce9af6b5db2bb"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "299ce9af6b5db2bb",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ nivel_melado",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('nivel_melado', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 588,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "19c971abdf37e6ea",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Clarificacion.Clarificacion.nivel_decantador1",
+    "datatype": "Float",
+    "value": "nivel_decantador1",
+    "name": "Nivel Dec. 1",
+    "x": 60,
+    "y": 644,
+    "wires": [
+      [
+        "1a6e8acd14aefd3f"
+      ]
+    ]
+  },
+  {
+    "id": "1a6e8acd14aefd3f",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Nivel Dec. 1",
+    "x": 240,
+    "y": 644,
+    "wires": [
+      [
+        "7aa30a205e901dd7"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "7aa30a205e901dd7",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ nivel_decantador1",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('nivel_decantador1', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 644,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "cc4b6cd854fe95b4",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Clarificacion.Clarificacion.nivel_decantador2",
+    "datatype": "Float",
+    "value": "nivel_decantador2",
+    "name": "Nivel Dec. 2",
+    "x": 60,
+    "y": 700,
+    "wires": [
+      [
+        "9b6d3e2a748f1695"
+      ]
+    ]
+  },
+  {
+    "id": "9b6d3e2a748f1695",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Nivel Dec. 2",
+    "x": 240,
+    "y": 700,
+    "wires": [
+      [
+        "b94356abfc2bbea9"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "b94356abfc2bbea9",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ nivel_decantador2",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('nivel_decantador2', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 700,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "077e544a2b461f09",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Clarificacion.Clarificacion.nivel_decantador3",
+    "datatype": "Float",
+    "value": "nivel_decantador3",
+    "name": "Nivel Dec. 3",
+    "x": 60,
+    "y": 756,
+    "wires": [
+      [
+        "673c76947956aca5"
+      ]
+    ]
+  },
+  {
+    "id": "673c76947956aca5",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Nivel Dec. 3",
+    "x": 240,
+    "y": 756,
+    "wires": [
+      [
+        "452a85d39ee2c4aa"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "452a85d39ee2c4aa",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ nivel_decantador3",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('nivel_decantador3', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 756,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "98d7dbb849e40652",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Tacho.Tacho.Descarga_tachos_1ra",
+    "datatype": "Float",
+    "value": "descarga_tachos_1ra",
+    "name": "Descarga Tachos 1ra",
+    "x": 60,
+    "y": 812,
+    "wires": [
+      [
+        "fcea9fd65a4a30e3"
+      ]
+    ]
+  },
+  {
+    "id": "fcea9fd65a4a30e3",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Descarga Tachos 1ra",
+    "x": 240,
+    "y": 812,
+    "wires": [
+      [
+        "94c47fdc81a40594"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "94c47fdc81a40594",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ descarga_tachos_1ra",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('descarga_tachos_1ra', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 812,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "2fdfdd949ea37585",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Tacho.Tacho.Descarga_tachos_2da",
+    "datatype": "Float",
+    "value": "descarga_tachos_2da",
+    "name": "Descarga Tachos 2da",
+    "x": 60,
+    "y": 868,
+    "wires": [
+      [
+        "6505479b7c6562c3"
+      ]
+    ]
+  },
+  {
+    "id": "6505479b7c6562c3",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Descarga Tachos 2da",
+    "x": 240,
+    "y": 868,
+    "wires": [
+      [
+        "bd5f4dc14c16e455"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "bd5f4dc14c16e455",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ descarga_tachos_2da",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('descarga_tachos_2da', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 868,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "64997c869b2618ad",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Tacho.Tacho.Descarga_tachos_3ra",
+    "datatype": "Float",
+    "value": "descarga_tachos_3ra",
+    "name": "Descarga Tachos 3ra",
+    "x": 60,
+    "y": 924,
+    "wires": [
+      [
+        "6a9cadd083922014"
+      ]
+    ]
+  },
+  {
+    "id": "6a9cadd083922014",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Descarga Tachos 3ra",
+    "x": 240,
+    "y": 924,
+    "wires": [
+      [
+        "d7f1bb0fb18fe183"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "d7f1bb0fb18fe183",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ descarga_tachos_3ra",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('descarga_tachos_3ra', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 924,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "b863f7aff173bdcc",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=salon.salon.balanza.salon_contador_dia",
+    "datatype": "Float",
+    "value": "contador_bolsas_dia",
+    "name": "Contador Bolsas Dia",
+    "x": 60,
+    "y": 980,
+    "wires": [
+      [
+        "e85c8dab1ff99aa2"
+      ]
+    ]
+  },
+  {
+    "id": "e85c8dab1ff99aa2",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Contador Bolsas Dia",
+    "x": 240,
+    "y": 980,
+    "wires": [
+      [
+        "3496f98ec3327060"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "3496f98ec3327060",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ contador_bolsas_dia",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('contador_bolsas_dia', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 980,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "d5b45f8725afb79d",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=salon.salon.balanza.SILO_A_BOLSAS",
+    "datatype": "Float",
+    "value": "silo_a",
+    "name": "Silo A",
+    "x": 60,
+    "y": 1036,
+    "wires": [
+      [
+        "0ceb7a02b599c9f6"
+      ]
+    ]
+  },
+  {
+    "id": "0ceb7a02b599c9f6",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Silo A",
+    "x": 240,
+    "y": 1036,
+    "wires": [
+      [
+        "967f529cbf2b9de4"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "967f529cbf2b9de4",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ silo_a",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('silo_a', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 1036,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "20df1512cb90973c",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=salon.salon.balanza.SILO_B_BOLSAS",
+    "datatype": "Float",
+    "value": "silo_b",
+    "name": "Silo B",
+    "x": 60,
+    "y": 1092,
+    "wires": [
+      [
+        "619ad295604f8ade"
+      ]
+    ]
+  },
+  {
+    "id": "619ad295604f8ade",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Silo B",
+    "x": 240,
+    "y": 1092,
+    "wires": [
+      [
+        "83ab784c9f584c57"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "83ab784c9f584c57",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ silo_b",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('silo_b', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 1092,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "9ea5a78468086f03",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=salon.salon.balanza.SILO_C_BOLSAS",
+    "datatype": "Float",
+    "value": "silo_c",
+    "name": "Silo C",
+    "x": 60,
+    "y": 1148,
+    "wires": [
+      [
+        "f148e03eaba7696d"
+      ]
+    ]
+  },
+  {
+    "id": "f148e03eaba7696d",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Silo C",
+    "x": 240,
+    "y": 1148,
+    "wires": [
+      [
+        "cb31d9577b01e24b"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "cb31d9577b01e24b",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ silo_c",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('silo_c', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 1148,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "a6380489b1583e89",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=salon.salon.balanza.SILO_E_BOLSAS",
+    "datatype": "Float",
+    "value": "silo_e",
+    "name": "Silo E",
+    "x": 60,
+    "y": 1204,
+    "wires": [
+      [
+        "44d712af1bfede81"
+      ]
+    ]
+  },
+  {
+    "id": "44d712af1bfede81",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Silo E",
+    "x": 240,
+    "y": 1204,
+    "wires": [
+      [
+        "da153cd7c7d82be8"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "da153cd7c7d82be8",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ silo_e",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('silo_e', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 420,
+    "y": 1204,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "ff0b7462ba6e36db",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=caldera.caldera.Pres_Vapor_Direc_Bajas",
+    "datatype": "Float",
+    "value": "presion_vapor_directo",
+    "name": "Pres. Vapor Directo",
+    "x": 520,
+    "y": 140,
+    "wires": [
+      [
+        "366dd9dbdd8a7540"
+      ]
+    ]
+  },
+  {
+    "id": "366dd9dbdd8a7540",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Pres. Vapor Directo",
+    "x": 700,
+    "y": 140,
+    "wires": [
+      [
+        "f48cd31d7567e503"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "f48cd31d7567e503",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ presion_vapor_directo",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('presion_vapor_directo', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "857040814faca52c",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=caldera.caldera.Pres_H2O_Alimentacion1",
+    "datatype": "Float",
+    "value": "presion_agua_alim",
+    "name": "Pres. Agua Alim.",
+    "x": 520,
+    "y": 196,
+    "wires": [
+      [
+        "2150306aa6f5ba8f"
+      ]
+    ]
+  },
+  {
+    "id": "2150306aa6f5ba8f",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Pres. Agua Alim.",
+    "x": 700,
+    "y": 196,
+    "wires": [
+      [
+        "d55b24e1aeed7e0f"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "d55b24e1aeed7e0f",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ presion_agua_alim",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('presion_agua_alim', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 196,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "39d9ff40a7671ce4",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=caldera.caldera.presion_aire",
+    "datatype": "Float",
+    "value": "presion_aire",
+    "name": "Presion Aire",
+    "x": 520,
+    "y": 252,
+    "wires": [
+      [
+        "5e0ea49051f1633d"
+      ]
+    ]
+  },
+  {
+    "id": "5e0ea49051f1633d",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Presion Aire",
+    "x": 700,
+    "y": 252,
+    "wires": [
+      [
+        "76ae463e49d7c1d1"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "76ae463e49d7c1d1",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ presion_aire",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('presion_aire', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 252,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "730b51238488a6ec",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=caldera1.caldera1.Caudal_Vapor_Cald1",
+    "datatype": "Float",
+    "value": "caudal_vapor_cald1",
+    "name": "Caudal Vapor Cald1",
+    "x": 520,
+    "y": 308,
+    "wires": [
+      [
+        "7e3c58876eedf51b"
+      ]
+    ]
+  },
+  {
+    "id": "7e3c58876eedf51b",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Vapor Cald1",
+    "x": 700,
+    "y": 308,
+    "wires": [
+      [
+        "a377c8e13daeb6f1"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "a377c8e13daeb6f1",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_vapor_cald1",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_vapor_cald1', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 308,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "e0b1de4ee3a63c42",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=caldera2.caldera2.Caudal_Vapor_Cald2",
+    "datatype": "Float",
+    "value": "caudal_vapor_cald2",
+    "name": "Caudal Vapor Cald2",
+    "x": 520,
+    "y": 364,
+    "wires": [
+      [
+        "5d944cd6a1dd2e9a"
+      ]
+    ]
+  },
+  {
+    "id": "5d944cd6a1dd2e9a",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Vapor Cald2",
+    "x": 700,
+    "y": 364,
+    "wires": [
+      [
+        "934423abcfd8e7c7"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "934423abcfd8e7c7",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_vapor_cald2",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_vapor_cald2', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 364,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "bf5606d18d1983a5",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=caldera3.caldera3.Caudal_Vapor_Cald3",
+    "datatype": "Float",
+    "value": "caudal_vapor_cald3",
+    "name": "Caudal Vapor Cald3",
+    "x": 520,
+    "y": 420,
+    "wires": [
+      [
+        "f7dfc6fe21dd8579"
+      ]
+    ]
+  },
+  {
+    "id": "f7dfc6fe21dd8579",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Vapor Cald3",
+    "x": 700,
+    "y": 420,
+    "wires": [
+      [
+        "37791283b1f5f215"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "37791283b1f5f215",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_vapor_cald3",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_vapor_cald3', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 420,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "03006da7373b94e7",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=caldera6.caldera6.Caudal_Vapor_Cald6",
+    "datatype": "Float",
+    "value": "caudal_vapor_cald6",
+    "name": "Caudal Vapor Cald6",
+    "x": 520,
+    "y": 476,
+    "wires": [
+      [
+        "4bd28b90ed934216"
+      ]
+    ]
+  },
+  {
+    "id": "4bd28b90ed934216",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Vapor Cald6",
+    "x": 700,
+    "y": 476,
+    "wires": [
+      [
+        "041d4f959f718b39"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "041d4f959f718b39",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_vapor_cald6",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_vapor_cald6', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 476,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "94639a5dcb61c90c",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=caldera2.caldera2.Caud_Gas_Cald2",
+    "datatype": "Float",
+    "value": "caudal_gas_cald2",
+    "name": "Caudal Gas Cald2",
+    "x": 520,
+    "y": 532,
+    "wires": [
+      [
+        "f8dab533dea97588"
+      ]
+    ]
+  },
+  {
+    "id": "f8dab533dea97588",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Gas Cald2",
+    "x": 700,
+    "y": 532,
+    "wires": [
+      [
+        "0db478f6a8d041ce"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "0db478f6a8d041ce",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_gas_cald2",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_gas_cald2', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 532,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "b79836767a1ead0b",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=caldera6.caldera6.Caud_Gas_Cald6",
+    "datatype": "Float",
+    "value": "caudal_gas_cald6",
+    "name": "Caudal Gas Cald6",
+    "x": 520,
+    "y": 588,
+    "wires": [
+      [
+        "900927e37aa2d69b"
+      ]
+    ]
+  },
+  {
+    "id": "900927e37aa2d69b",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Gas Cald6",
+    "x": 700,
+    "y": 588,
+    "wires": [
+      [
+        "735815115c241450"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "735815115c241450",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_gas_cald6",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_gas_cald6', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 588,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "4850325b5f2099c9",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=siemens.siemens.siemens.Potencia_Activa_Total_Siemens",
+    "datatype": "Float",
+    "value": "potencia_activa_siemens",
+    "name": "Potencia Activa Siemens",
+    "x": 520,
+    "y": 644,
+    "wires": [
+      [
+        "58b4cea587c41470"
+      ]
+    ]
+  },
+  {
+    "id": "58b4cea587c41470",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Potencia Activa Siemens",
+    "x": 700,
+    "y": 644,
+    "wires": [
+      [
+        "b47ab73b2b72f7f4"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "b47ab73b2b72f7f4",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ potencia_activa_siemens",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('potencia_activa_siemens', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 644,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "b5a8decdc622330e",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=siemens.siemens.siemens.Potencia_Reactiva_Total_Siemens",
+    "datatype": "Float",
+    "value": "potencia_reactiva_siemens",
+    "name": "Potencia Reactiva Siemens",
+    "x": 520,
+    "y": 700,
+    "wires": [
+      [
+        "3459de89a9b3397f"
+      ]
+    ]
+  },
+  {
+    "id": "3459de89a9b3397f",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Potencia Reactiva Siemens",
+    "x": 700,
+    "y": 700,
+    "wires": [
+      [
+        "7315afa431d625fe"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "7315afa431d625fe",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ potencia_reactiva_siemens",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('potencia_reactiva_siemens', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 700,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "a308efd8784ec56c",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=siemens.siemens.siemens.Frecuencia_Siemens",
+    "datatype": "Float",
+    "value": "frecuencia_siemens",
+    "name": "Frecuencia Siemens",
+    "x": 520,
+    "y": 756,
+    "wires": [
+      [
+        "b1ad5d0e280be642"
+      ]
+    ]
+  },
+  {
+    "id": "b1ad5d0e280be642",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Frecuencia Siemens",
+    "x": 700,
+    "y": 756,
+    "wires": [
+      [
+        "21404289c115822d"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "21404289c115822d",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ frecuencia_siemens",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('frecuencia_siemens', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 756,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "2c75a5bc0990cb28",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=siemens.siemens.siemens.Intensidad_Media_Siemens",
+    "datatype": "Float",
+    "value": "intensidad_siemens",
+    "name": "Intensidad Siemens",
+    "x": 520,
+    "y": 812,
+    "wires": [
+      [
+        "36051aa59916375b"
+      ]
+    ]
+  },
+  {
+    "id": "36051aa59916375b",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Intensidad Siemens",
+    "x": 700,
+    "y": 812,
+    "wires": [
+      [
+        "508d8b1d0e1ede33"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "508d8b1d0e1ede33",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ intensidad_siemens",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('intensidad_siemens', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 812,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "1eeb86bee9d989b8",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=skoda.skoda.AEG.Potencia_Activa_Total_AEG",
+    "datatype": "Float",
+    "value": "potencia_activa_aeg",
+    "name": "Potencia Activa AEG",
+    "x": 520,
+    "y": 868,
+    "wires": [
+      [
+        "d52bc39905626b39"
+      ]
+    ]
+  },
+  {
+    "id": "d52bc39905626b39",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Potencia Activa AEG",
+    "x": 700,
+    "y": 868,
+    "wires": [
+      [
+        "50f30bb4e5d95a56"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "50f30bb4e5d95a56",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ potencia_activa_aeg",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('potencia_activa_aeg', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 868,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "10a7bbfad9b283c4",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=skoda.skoda.AEG.Potencia_Reactiva_Total_AEG",
+    "datatype": "Float",
+    "value": "potencia_reactiva_aeg",
+    "name": "Potencia Reactiva AEG",
+    "x": 520,
+    "y": 924,
+    "wires": [
+      [
+        "3c873c8ad8b70b4a"
+      ]
+    ]
+  },
+  {
+    "id": "3c873c8ad8b70b4a",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Potencia Reactiva AEG",
+    "x": 700,
+    "y": 924,
+    "wires": [
+      [
+        "1e981a5273e188e9"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "1e981a5273e188e9",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ potencia_reactiva_aeg",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('potencia_reactiva_aeg', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 924,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "e02af1980bde4f94",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=skoda.skoda.AEG.Frecuencia_AEG",
+    "datatype": "Float",
+    "value": "frecuencia_aeg",
+    "name": "Frecuencia AEG",
+    "x": 520,
+    "y": 980,
+    "wires": [
+      [
+        "7dfaefee98e27d0b"
+      ]
+    ]
+  },
+  {
+    "id": "7dfaefee98e27d0b",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Frecuencia AEG",
+    "x": 700,
+    "y": 980,
+    "wires": [
+      [
+        "70f6deef31a42e6c"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "70f6deef31a42e6c",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ frecuencia_aeg",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('frecuencia_aeg', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 980,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "9bf82d4bbb2f8e5f",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=skoda.skoda.AEG.Intensidad_Media_AEG",
+    "datatype": "Float",
+    "value": "intensidad_aeg",
+    "name": "Intensidad AEG",
+    "x": 520,
+    "y": 1036,
+    "wires": [
+      [
+        "db69409ffff05f7a"
+      ]
+    ]
+  },
+  {
+    "id": "db69409ffff05f7a",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Intensidad AEG",
+    "x": 700,
+    "y": 1036,
+    "wires": [
+      [
+        "e21aff61ef6efc9d"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "e21aff61ef6efc9d",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ intensidad_aeg",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('intensidad_aeg', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 1036,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "145cde59852f369b",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=demasia.demasia.CV_Trapiche",
+    "datatype": "Float",
+    "value": "cv_trapiche",
+    "name": "CV Trapiche",
+    "x": 520,
+    "y": 1092,
+    "wires": [
+      [
+        "66e07843cdd79b5a"
+      ]
+    ]
+  },
+  {
+    "id": "66e07843cdd79b5a",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "CV Trapiche",
+    "x": 700,
+    "y": 1092,
+    "wires": [
+      [
+        "a523d84669dc96b6"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "a523d84669dc96b6",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ cv_trapiche",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('cv_trapiche', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 1092,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "92682923bb167c69",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=demasia.demasia.CV_Usina_Alta",
+    "datatype": "Float",
+    "value": "cv_usina_alta",
+    "name": "CV Usina Alta",
+    "x": 520,
+    "y": 1148,
+    "wires": [
+      [
+        "4a53eea95b1bfded"
+      ]
+    ]
+  },
+  {
+    "id": "4a53eea95b1bfded",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "CV Usina Alta",
+    "x": 700,
+    "y": 1148,
+    "wires": [
+      [
+        "e919e2c82d8c6c13"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "e919e2c82d8c6c13",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ cv_usina_alta",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('cv_usina_alta', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 1148,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "427987bc1bbca8e7",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=demasia.demasia.Cv_Destileria",
+    "datatype": "Float",
+    "value": "cv_destileria",
+    "name": "CV Destileria",
+    "x": 520,
+    "y": 1204,
+    "wires": [
+      [
+        "17d5ecfde46e8cc1"
+      ]
+    ]
+  },
+  {
+    "id": "17d5ecfde46e8cc1",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "CV Destileria",
+    "x": 700,
+    "y": 1204,
+    "wires": [
+      [
+        "3d7f6f56239a2704"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "3d7f6f56239a2704",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ cv_destileria",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('cv_destileria', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 1204,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "07a4791cb97d254f",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=demasia.demasia.Cv_Aux_total",
+    "datatype": "Float",
+    "value": "cv_aux_total",
+    "name": "CV Aux Total",
+    "x": 520,
+    "y": 1260,
+    "wires": [
+      [
+        "427ec843cedbd0cf"
+      ]
+    ]
+  },
+  {
+    "id": "427ec843cedbd0cf",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "CV Aux Total",
+    "x": 700,
+    "y": 1260,
+    "wires": [
+      [
+        "6b44354d8ba76243"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "6b44354d8ba76243",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ cv_aux_total",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('cv_aux_total', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 1260,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "1920b3a3aeb0c40c",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=demasia.demasia.CV_Preparacion_caña",
+    "datatype": "Float",
+    "value": "cv_preparacion_cania",
+    "name": "CV Prep. Cania",
+    "x": 520,
+    "y": 1316,
+    "wires": [
+      [
+        "894507c40277f94b"
+      ]
+    ]
+  },
+  {
+    "id": "894507c40277f94b",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "CV Prep. Cania",
+    "x": 700,
+    "y": 1316,
+    "wires": [
+      [
+        "db0c090006263d60"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "db0c090006263d60",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ cv_preparacion_cania",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('cv_preparacion_cania', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 1316,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "a2e5b40ec4d16bd6",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Destileria.Destileria.Caudal_Vino",
+    "datatype": "Float",
+    "value": "caudal_vino",
+    "name": "Caudal Vino",
+    "x": 980,
+    "y": 140,
+    "wires": [
+      [
+        "9946a2179cb9baa4"
+      ]
+    ]
+  },
+  {
+    "id": "9946a2179cb9baa4",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "e89251c6637bb9dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Vino",
+    "x": 1160,
+    "y": 140,
+    "wires": [
+      [
+        "d82550529754bbd4"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "d82550529754bbd4",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_vino",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_vino', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 1340,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "379dd9ac939788d5",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Destileria.Destileria.Caudal_Alcohol",
+    "datatype": "Float",
+    "value": "caudal_alcohol",
+    "name": "Caudal Alcohol",
+    "x": 980,
+    "y": 196,
+    "wires": [
+      [
+        "07bbfb16bc8a1a4b"
+      ]
+    ]
+  },
+  {
+    "id": "07bbfb16bc8a1a4b",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "e89251c6637bb9dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Alcohol",
+    "x": 1160,
+    "y": 196,
+    "wires": [
+      [
+        "d6c135b2181167ef"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "d6c135b2181167ef",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_alcohol",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_alcohol', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 1340,
+    "y": 196,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "0d70dc9384b39d81",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Fermentacion.fermentacion.caudal_jugodilutor",
+    "datatype": "Float",
+    "value": "caudal_jugo_dilutor",
+    "name": "Caudal Jugo Dilutor",
+    "x": 980,
+    "y": 252,
+    "wires": [
+      [
+        "f10e3743abac167e"
+      ]
+    ]
+  },
+  {
+    "id": "f10e3743abac167e",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "e89251c6637bb9dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Jugo Dilutor",
+    "x": 1160,
+    "y": 252,
+    "wires": [
+      [
+        "030896df991f728c"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "030896df991f728c",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_jugo_dilutor",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_jugo_dilutor', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 1340,
+    "y": 252,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "f48df95d12979b8d",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=Fermentacion.fermentacion.caudal_melazadilutor",
+    "datatype": "Float",
+    "value": "caudal_melaza_dilutor",
+    "name": "Caudal Melaza Dilutor",
+    "x": 980,
+    "y": 308,
+    "wires": [
+      [
+        "e35f541ab5ffaf80"
+      ]
+    ]
+  },
+  {
+    "id": "e35f541ab5ffaf80",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "e89251c6637bb9dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Caudal Melaza Dilutor",
+    "x": 1160,
+    "y": 308,
+    "wires": [
+      [
+        "ac9f16a2ebcbadad"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "ac9f16a2ebcbadad",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ caudal_melaza_dilutor",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('caudal_melaza_dilutor', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 1340,
+    "y": 308,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "d75670cd90e81839",
+    "type": "inject",
+    "z": "3073f434746d962e",
+    "name": "Cada 60s",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "15",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 1452,
+    "wires": [
+      [
+        "45b83752f28cdbc7"
+      ]
+    ]
+  },
+  {
+    "id": "45b83752f28cdbc7",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "Construir INSERT indicadores_opc",
+    "func": "// Lee flow context y construye INSERT en db_corona.indicadores_opc\n  const velocidad_molino1 = flow.get('velocidad_molino1') ?? null;\n  const velocidad_molino6 = flow.get('velocidad_molino6') ?? null;\n  const balanza_cinta = flow.get('balanza_cinta') ?? null;\n  const agua_imbibicion = flow.get('agua_imbibicion') ?? null;\n  const presion_molino6_este = flow.get('presion_molino6_este') ?? null;\n  const presion_molino6_oeste = flow.get('presion_molino6_oeste') ?? null;\n  const caudal_jugo_clarif = flow.get('caudal_jugo_clarif') ?? null;\n  const nivel_melado_tratado = flow.get('nivel_melado_tratado') ?? null;\n  const nivel_melado = flow.get('nivel_melado') ?? null;\n  const nivel_decantador1 = flow.get('nivel_decantador1') ?? null;\n  const nivel_decantador2 = flow.get('nivel_decantador2') ?? null;\n  const nivel_decantador3 = flow.get('nivel_decantador3') ?? null;\n  const descarga_tachos_1ra = flow.get('descarga_tachos_1ra') ?? null;\n  const descarga_tachos_2da = flow.get('descarga_tachos_2da') ?? null;\n  const descarga_tachos_3ra = flow.get('descarga_tachos_3ra') ?? null;\n  const contador_bolsas_dia = flow.get('contador_bolsas_dia') ?? null;\n  const silo_a = flow.get('silo_a') ?? null;\n  const silo_b = flow.get('silo_b') ?? null;\n  const silo_c = flow.get('silo_c') ?? null;\n  const silo_e = flow.get('silo_e') ?? null;\n  const presion_vapor_directo = flow.get('presion_vapor_directo') ?? null;\n  const presion_agua_alim = flow.get('presion_agua_alim') ?? null;\n  const presion_aire = flow.get('presion_aire') ?? null;\n  const caudal_vapor_cald1 = flow.get('caudal_vapor_cald1') ?? null;\n  const caudal_vapor_cald2 = flow.get('caudal_vapor_cald2') ?? null;\n  const caudal_vapor_cald3 = flow.get('caudal_vapor_cald3') ?? null;\n  const caudal_vapor_cald6 = flow.get('caudal_vapor_cald6') ?? null;\n  const caudal_gas_cald2 = flow.get('caudal_gas_cald2') ?? null;\n  const caudal_gas_cald6 = flow.get('caudal_gas_cald6') ?? null;\n  const potencia_activa_siemens = flow.get('potencia_activa_siemens') ?? null;\n  const potencia_reactiva_siemens = flow.get('potencia_reactiva_siemens') ?? null;\n  const frecuencia_siemens = flow.get('frecuencia_siemens') ?? null;\n  const intensidad_siemens = flow.get('intensidad_siemens') ?? null;\n  const potencia_activa_aeg = flow.get('potencia_activa_aeg') ?? null;\n  const potencia_reactiva_aeg = flow.get('potencia_reactiva_aeg') ?? null;\n  const frecuencia_aeg = flow.get('frecuencia_aeg') ?? null;\n  const intensidad_aeg = flow.get('intensidad_aeg') ?? null;\n  const cv_trapiche = flow.get('cv_trapiche') ?? null;\n  const cv_usina_alta = flow.get('cv_usina_alta') ?? null;\n  const cv_destileria = flow.get('cv_destileria') ?? null;\n  const cv_aux_total = flow.get('cv_aux_total') ?? null;\n  const cv_preparacion_cania = flow.get('cv_preparacion_cania') ?? null;\n  const caudal_vino = flow.get('caudal_vino') ?? null;\n  const caudal_alcohol = flow.get('caudal_alcohol') ?? null;\n  const caudal_jugo_dilutor = flow.get('caudal_jugo_dilutor') ?? null;\n  const caudal_melaza_dilutor = flow.get('caudal_melaza_dilutor') ?? null;\n  const potencia_activa_tgm = flow.get('potencia_activa_tgm') ?? null;\n  const intensidad_tgm = flow.get('intensidad_tgm') ?? null;\n  const vapor_total = [caudal_vapor_cald1, caudal_vapor_cald2, caudal_vapor_cald3, caudal_vapor_cald6]\n    .reduce((a, v) => v !== null ? a + v : a, 0) || null;\n  const potencia_total = [potencia_activa_siemens, potencia_activa_aeg, potencia_activa_tgm]\n    .reduce((a, v) => v !== null ? a + v : a, 0) || null;\n\n  const cols = `\\`timestamp\\`,\\`velocidad_molino1\\`,\\`velocidad_molino6\\`,\\`balanza_cinta\\`,\\`agua_imbibicion\\`,\\`presion_molino6_este\\`,\\`presion_molino6_oeste\\`,\\`caudal_jugo_clarif\\`,\\`nivel_melado_tratado\\`,\\`nivel_melado\\`,\\`nivel_decantador1\\`,\\`nivel_decantador2\\`,\\`nivel_decantador3\\`,\\`descarga_tachos_1ra\\`,\\`descarga_tachos_2da\\`,\\`descarga_tachos_3ra\\`,\\`contador_bolsas_dia\\`,\\`silo_a\\`,\\`silo_b\\`,\\`silo_c\\`,\\`silo_e\\`,\\`presion_vapor_directo\\`,\\`presion_agua_alim\\`,\\`presion_aire\\`,\\`caudal_vapor_cald1\\`,\\`caudal_vapor_cald2\\`,\\`caudal_vapor_cald3\\`,\\`caudal_vapor_cald6\\`,\\`caudal_gas_cald2\\`,\\`caudal_gas_cald6\\`,\\`potencia_activa_siemens\\`,\\`potencia_reactiva_siemens\\`,\\`frecuencia_siemens\\`,\\`intensidad_siemens\\`,\\`potencia_activa_aeg\\`,\\`potencia_reactiva_aeg\\`,\\`frecuencia_aeg\\`,\\`intensidad_aeg\\`,\\`cv_trapiche\\`,\\`cv_usina_alta\\`,\\`cv_destileria\\`,\\`cv_aux_total\\`,\\`cv_preparacion_cania\\`,\\`caudal_vino\\`,\\`caudal_alcohol\\`,\\`caudal_jugo_dilutor\\`,\\`caudal_melaza_dilutor\\`,\\`potencia_activa_tgm\\`,\\`intensidad_tgm\\`,\\`vapor_total\\`,\\`potencia_total\\``;\n  const placeholders = `NOW(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?`;\n  const updates = `\\`velocidad_molino1\\` = VALUES(\\`velocidad_molino1\\`),\\`velocidad_molino6\\` = VALUES(\\`velocidad_molino6\\`),\\`balanza_cinta\\` = VALUES(\\`balanza_cinta\\`),\\`agua_imbibicion\\` = VALUES(\\`agua_imbibicion\\`),\\`presion_molino6_este\\` = VALUES(\\`presion_molino6_este\\`),\\`presion_molino6_oeste\\` = VALUES(\\`presion_molino6_oeste\\`),\\`caudal_jugo_clarif\\` = VALUES(\\`caudal_jugo_clarif\\`),\\`nivel_melado_tratado\\` = VALUES(\\`nivel_melado_tratado\\`),\\`nivel_melado\\` = VALUES(\\`nivel_melado\\`),\\`nivel_decantador1\\` = VALUES(\\`nivel_decantador1\\`),\\`nivel_decantador2\\` = VALUES(\\`nivel_decantador2\\`),\\`nivel_decantador3\\` = VALUES(\\`nivel_decantador3\\`),\\`descarga_tachos_1ra\\` = VALUES(\\`descarga_tachos_1ra\\`),\\`descarga_tachos_2da\\` = VALUES(\\`descarga_tachos_2da\\`),\\`descarga_tachos_3ra\\` = VALUES(\\`descarga_tachos_3ra\\`),\\`contador_bolsas_dia\\` = VALUES(\\`contador_bolsas_dia\\`),\\`silo_a\\` = VALUES(\\`silo_a\\`),\\`silo_b\\` = VALUES(\\`silo_b\\`),\\`silo_c\\` = VALUES(\\`silo_c\\`),\\`silo_e\\` = VALUES(\\`silo_e\\`),\\`presion_vapor_directo\\` = VALUES(\\`presion_vapor_directo\\`),\\`presion_agua_alim\\` = VALUES(\\`presion_agua_alim\\`),\\`presion_aire\\` = VALUES(\\`presion_aire\\`),\\`caudal_vapor_cald1\\` = VALUES(\\`caudal_vapor_cald1\\`),\\`caudal_vapor_cald2\\` = VALUES(\\`caudal_vapor_cald2\\`),\\`caudal_vapor_cald3\\` = VALUES(\\`caudal_vapor_cald3\\`),\\`caudal_vapor_cald6\\` = VALUES(\\`caudal_vapor_cald6\\`),\\`caudal_gas_cald2\\` = VALUES(\\`caudal_gas_cald2\\`),\\`caudal_gas_cald6\\` = VALUES(\\`caudal_gas_cald6\\`),\\`potencia_activa_siemens\\` = VALUES(\\`potencia_activa_siemens\\`),\\`potencia_reactiva_siemens\\` = VALUES(\\`potencia_reactiva_siemens\\`),\\`frecuencia_siemens\\` = VALUES(\\`frecuencia_siemens\\`),\\`intensidad_siemens\\` = VALUES(\\`intensidad_siemens\\`),\\`potencia_activa_aeg\\` = VALUES(\\`potencia_activa_aeg\\`),\\`potencia_reactiva_aeg\\` = VALUES(\\`potencia_reactiva_aeg\\`),\\`frecuencia_aeg\\` = VALUES(\\`frecuencia_aeg\\`),\\`intensidad_aeg\\` = VALUES(\\`intensidad_aeg\\`),\\`cv_trapiche\\` = VALUES(\\`cv_trapiche\\`),\\`cv_usina_alta\\` = VALUES(\\`cv_usina_alta\\`),\\`cv_destileria\\` = VALUES(\\`cv_destileria\\`),\\`cv_aux_total\\` = VALUES(\\`cv_aux_total\\`),\\`cv_preparacion_cania\\` = VALUES(\\`cv_preparacion_cania\\`),\\`caudal_vino\\` = VALUES(\\`caudal_vino\\`),\\`caudal_alcohol\\` = VALUES(\\`caudal_alcohol\\`),\\`caudal_jugo_dilutor\\` = VALUES(\\`caudal_jugo_dilutor\\`),\\`caudal_melaza_dilutor\\` = VALUES(\\`caudal_melaza_dilutor\\`),\\`potencia_activa_tgm\\` = VALUES(\\`potencia_activa_tgm\\`),\\`intensidad_tgm\\` = VALUES(\\`intensidad_tgm\\`),\\`vapor_total\\` = VALUES(\\`vapor_total\\`),\\`potencia_total\\` = VALUES(\\`potencia_total\\`)`;\n\n  msg.topic = `INSERT INTO \\`indicadores_opc\\` (${cols}) VALUES (${placeholders}) ON DUPLICATE KEY UPDATE ${updates};`;\n  msg.payload = [velocidad_molino1, velocidad_molino6, balanza_cinta, agua_imbibicion, presion_molino6_este, presion_molino6_oeste, caudal_jugo_clarif, nivel_melado_tratado, nivel_melado, nivel_decantador1, nivel_decantador2, nivel_decantador3, descarga_tachos_1ra, descarga_tachos_2da, descarga_tachos_3ra, contador_bolsas_dia, silo_a, silo_b, silo_c, silo_e, presion_vapor_directo, presion_agua_alim, presion_aire, caudal_vapor_cald1, caudal_vapor_cald2, caudal_vapor_cald3, caudal_vapor_cald6, caudal_gas_cald2, caudal_gas_cald6, potencia_activa_siemens, potencia_reactiva_siemens, frecuencia_siemens, intensidad_siemens, potencia_activa_aeg, potencia_reactiva_aeg, frecuencia_aeg, intensidad_aeg, cv_trapiche, cv_usina_alta, cv_destileria, cv_aux_total, cv_preparacion_cania, caudal_vino, caudal_alcohol, caudal_jugo_dilutor, caudal_melaza_dilutor, potencia_activa_tgm, intensidad_tgm, vapor_total, potencia_total];\n  return msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 380,
+    "y": 1452,
+    "wires": [
+      [
+        "e5098bc439555b2a"
+      ]
+    ]
+  },
+  {
+    "id": "e5098bc439555b2a",
+    "type": "mysql",
+    "z": "3073f434746d962e",
+    "mydbConfig": "2bf0d8227d4cf2c4",
+    "name": "db_corona → indicadores_opc",
+    "x": 660,
+    "y": 1452,
+    "wires": [
+      [
+        "8b5d26df62762965"
+      ]
+    ]
+  },
+  {
+    "id": "8b5d26df62762965",
+    "type": "debug",
+    "z": "3073f434746d962e",
+    "name": "INSERT result",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "payload",
+    "x": 880,
+    "y": 1452,
+    "wires": []
+  },
+  {
+    "id": "tgm_item_pot_activa_0001",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=weg.weg.WEG_potencia_activa",
+    "datatype": "Float",
+    "value": "potencia_activa_tgm",
+    "name": "Potencia Activa TGM (WEG)",
+    "x": 520,
+    "y": 1372,
+    "wires": [
+      [
+        "tgm_client_pot_activa_01"
+      ]
+    ]
+  },
+  {
+    "id": "tgm_client_pot_activa_01",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Potencia Activa TGM (WEG)",
+    "x": 700,
+    "y": 1372,
+    "wires": [
+      [
+        "tgm_fn_pot_activa_00001"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "tgm_fn_pot_activa_00001",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ potencia_activa_tgm",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('potencia_activa_tgm', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 1372,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "tgm_item_intensidad_001",
+    "type": "OpcUa-Item",
+    "z": "3073f434746d962e",
+    "item": "ns=2;s=weg.weg.Intensidad_media",
+    "datatype": "Float",
+    "value": "intensidad_tgm",
+    "name": "Intensidad TGM (WEG)",
+    "x": 520,
+    "y": 1428,
+    "wires": [
+      [
+        "tgm_client_intensidad_1"
+      ]
+    ]
+  },
+  {
+    "id": "tgm_client_intensidad_1",
+    "type": "OpcUa-Client",
+    "z": "3073f434746d962e",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "subscribe",
+    "deadbandtype": "a",
+    "deadband": "1",
+    "time": "60",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitypolicy": "None",
+    "securitymode": "None",
+    "name": "Intensidad TGM (WEG)",
+    "x": 700,
+    "y": 1428,
+    "wires": [
+      [
+        "tgm_fn_intensidad_00001"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "tgm_fn_intensidad_00001",
+    "type": "function",
+    "z": "3073f434746d962e",
+    "name": "→ intensidad_tgm",
+    "func": "const p = msg.payload;\nlet v = null;\nif (p !== null && typeof p === 'object') {\n  v = p.value !== undefined ? p.value\n    : p.content !== undefined ? p.content : null;\n} else if (typeof p === 'number' || typeof p === 'boolean') {\n  v = p;\n}\nif (v !== null) flow.set('intensidad_tgm', parseFloat(v));\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 880,
+    "y": 1428,
+    "wires": [
+      []
+    ]
+  }
+]

@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Validación de Facturas — Ingenio La Corona</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --c-bg: #f0f2f5;
+    --c-panel: #ffffff;
+    --c-border: #d9dde6;
+    --c-header: #1a3560;
+    --c-accent: #2563eb;
+    --c-accent-h: #1d4ed8;
+    --c-ok: #16a34a;
+    --c-ok-h: #15803d;
+    --c-danger: #dc2626;
+    --c-danger-h: #b91c1c;
+    --c-warn: #d97706;
+    --c-text: #1e293b;
+    --c-muted: #64748b;
+    --c-selected: #eff6ff;
+    --c-selected-border: #2563eb;
+    --c-const: #7c3aed;
+    --c-const-bg: #f5f3ff;
+    --c-const-border: #ddd6fe;
+    --sidebar: 280px;
+    --radius: 8px;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--c-bg);
+    color: var(--c-text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-size: 13px;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────── */
+  header {
+    background: var(--c-header);
+    color: #fff;
+    padding: 0 16px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  header svg { flex-shrink: 0; }
+  header h1 { font-size: 15px; font-weight: 600; letter-spacing: .3px; }
+  header .badge {
+    margin-left: auto;
+    background: rgba(255,255,255,.15);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 12px;
+  }
+  #badge-count { font-weight: 700; }
+
+  /* ── LAYOUT ─────────────────────────────────────────── */
+  .layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    gap: 0;
+  }
+
+  /* ── SIDEBAR ─────────────────────────────────────────── */
+  .sidebar {
+    width: var(--sidebar);
+    flex-shrink: 0;
+    background: var(--c-panel);
+    border-right: 1px solid var(--c-border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-top {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--c-border);
+    background: #f8fafc;
+  }
+  .sidebar-top h2 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--c-muted);
+    margin-bottom: 6px;
+  }
+  #search-box {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    font-size: 12px;
+    background: #fff;
+    outline: none;
+  }
+  #search-box:focus { border-color: var(--c-accent); box-shadow: 0 0 0 2px rgba(37,99,235,.12); }
+
+  .invoice-list { flex: 1; overflow-y: auto; padding: 4px 0; }
+  .inv-card {
+    padding: 9px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: background .12s;
+    position: relative;
+  }
+  .inv-card:hover { background: #f8fafc; }
+  .inv-card.selected {
+    background: var(--c-selected);
+    border-left: 3px solid var(--c-selected-border);
+    padding-left: 9px;
+  }
+  .inv-card .proveedor {
+    font-weight: 600;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .inv-card .nro { font-size: 10px; color: var(--c-muted); margin-top: 1px; }
+  .inv-card .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+  }
+  .inv-card .total { font-weight: 700; color: var(--c-header); font-size: 13px; }
+  .inv-card .fecha { font-size: 10px; color: var(--c-muted); }
+  .estado-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+  }
+  .estado-PENDIENTE  { background: #fef9c3; color: #854d0e; }
+  .estado-APROBADO   { background: #dcfce7; color: #166534; }
+  .estado-RECHAZADO  { background: #fee2e2; color: #991b1b; }
+  .estado-EN_REVISION{ background: #dbeafe; color: #1e40af; }
+
+  .empty-list { text-align:center; color:var(--c-muted); padding:30px 16px; font-size:12px; }
+  .sidebar-foot {
+    padding: 6px 12px;
+    border-top: 1px solid var(--c-border);
+    background: #f8fafc;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .btn-refresh {
+    background: none;
+    border: 1px solid var(--c-border);
+    border-radius: 5px;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    color: var(--c-muted);
+  }
+  .btn-refresh:hover { background: var(--c-accent); color: #fff; border-color: var(--c-accent); }
+
+  /* ── COLUMNAS DE DETALLE ─────────────────────────────── */
+  .detail-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 10px;
+    gap: 10px;
+    background: var(--c-bg);
+  }
+
+  /* Estado vacío */
+  .detail-empty {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--c-muted);
+    font-size: 14px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .detail-empty svg { opacity: .2; }
+
+  /* Grid de columnas */
+  .col-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    min-height: 0;
+    transition: grid-template-columns .25s ease;
+  }
+  .col-layout.tres-col {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  /* Columna individual */
+  .col {
+    background: var(--c-panel);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+  }
+  .col.col-constancia {
+    border-color: var(--c-const-border);
+    display: none;
+  }
+  .col.col-constancia.visible {
+    display: flex;
+  }
+
+  .col-head {
+    background: #f8fafc;
+    border-bottom: 1px solid var(--c-border);
+    padding: 8px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--c-muted);
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .col-constancia .col-head {
+    background: var(--c-const-bg);
+    border-color: var(--c-const-border);
+    color: var(--c-const);
+  }
+
+  .col-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+  }
+  .col-foot {
+    padding: 8px 10px;
+    border-top: 1px solid var(--c-border);
+    background: #f8fafc;
+    flex-shrink: 0;
+  }
+
+  /* ── CAMPOS COMPACTOS ───────────────────────────────── */
+  .section-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--c-muted);
+    padding-bottom: 4px;
+    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 4px;
+  }
+  .field-grid {
+    display: grid;
+    gap: 5px 10px;
+  }
+  .field-grid.g2 { grid-template-columns: 1fr 1fr; }
+  .field-grid.g3 { grid-template-columns: 1fr 1fr 1fr; }
+  .field-group { display: flex; flex-direction: column; gap: 2px; }
+  .field-group label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--c-muted);
+    text-transform: uppercase;
+    letter-spacing: .4px;
+  }
+  .field-group .val {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--c-text);
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    padding: 2px 0;
+  }
+  .field-group input[type=text],
+  .field-group input[type=number],
+  .field-group input[type=date] {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--c-text);
+    border: 1px solid var(--c-border);
+    border-radius: 5px;
+    padding: 4px 7px;
+    background: #fff;
+    outline: none;
+    width: 100%;
+    height: 26px;
+  }
+  .field-group input:focus { border-color: var(--c-accent); box-shadow: 0 0 0 2px rgba(37,99,235,.1); }
+  .field-group input.modified { border-color: var(--c-warn) !important; background: #fffbeb; }
+
+  /* total destacado */
+  .total-big {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0 0;
+    border-top: 2px solid var(--c-border);
+    margin-top: 2px;
+  }
+  .total-big label { font-size: 11px; font-weight: 700; color: var(--c-muted); text-transform: uppercase; }
+  .total-big input {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--c-header);
+    text-align: right;
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    padding: 4px 8px;
+    width: 140px;
+    outline: none;
+    height: 32px;
+  }
+  .total-big input:focus { border-color: var(--c-accent); box-shadow: 0 0 0 2px rgba(37,99,235,.1); }
+  .total-big .val-big { font-size: 18px; font-weight: 800; color: var(--c-header); }
+
+  /* ── CHECK CONSTANCIA ───────────────────────────────── */
+  .check-constancia-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: var(--c-const-bg);
+    border: 1px solid var(--c-const-border);
+    border-radius: 6px;
+  }
+  .check-constancia-wrap input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--c-const); }
+  .check-constancia-wrap label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--c-const);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* ── BOTONES ────────────────────────────────────────── */
+  .action-bar {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .action-bar .spacer { flex: 1; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .12s, transform .1s;
+    outline: none;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+  .btn-save    { background: var(--c-accent); color: #fff; }
+  .btn-save:hover:not(:disabled) { background: var(--c-accent-h); }
+  .btn-approve { background: var(--c-ok); color: #fff; }
+  .btn-approve:hover:not(:disabled) { background: var(--c-ok-h); }
+  .btn-reject  { background: var(--c-danger); color: #fff; }
+  .btn-reject:hover:not(:disabled) { background: var(--c-danger-h); }
+
+  /* ── TABLA OC ───────────────────────────────────────── */
+  .oc-table-wrap { overflow-x: auto; }
+  table.oc-enc { width: 100%; border-collapse: collapse; font-size: 11px; }
+  table.oc-enc thead th {
+    background: #f1f5f9;
+    border-bottom: 2px solid var(--c-border);
+    padding: 5px 7px;
+    text-align: left;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    color: var(--c-muted);
+    white-space: nowrap;
+  }
+  table.oc-enc tbody tr { border-bottom: 1px solid #f1f5f9; transition: background .1s; }
+  table.oc-enc tbody tr:hover { background: #f8fafc; }
+  table.oc-enc tbody tr.oc-vinculada { background: #eff6ff; }
+  table.oc-enc tbody td { padding: 5px 7px; vertical-align: middle; }
+  .oc-estado { display:inline-block; padding:1px 6px; border-radius:8px; font-size:9px; font-weight:700; }
+  .oc-estado-C { background:#dcfce7; color:#166534; }
+  .oc-estado-A { background:#fef9c3; color:#854d0e; }
+  .oc-estado-P { background:#dbeafe; color:#1e40af; }
+  .oc-items-row { background: #f8fafc; }
+  .oc-items-row td { padding: 0 7px 8px 20px; }
+  table.oc-det { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 4px; }
+  table.oc-det thead th { background: #e2e8f0; padding: 4px 6px; text-align: left; font-size: 10px; color: var(--c-muted); }
+  table.oc-det tbody td { padding: 3px 6px; border-bottom: 1px solid #e2e8f0; }
+  table.oc-det tbody td.num { text-align: right; }
+  .btn-vincular {
+    background: var(--c-accent); color: #fff; border: none;
+    border-radius: 4px; padding: 3px 8px; font-size: 10px;
+    font-weight: 600; cursor: pointer; white-space: nowrap;
+  }
+  .btn-vincular:hover { background: var(--c-accent-h); }
+  .btn-vincular.vinculada { background: var(--c-ok); cursor: default; }
+  .btn-ver-items {
+    background: none; border: 1px solid var(--c-border);
+    border-radius: 4px; padding: 2px 7px; font-size: 10px;
+    cursor: pointer; color: var(--c-muted);
+  }
+  .btn-ver-items:hover { background: #f1f5f9; }
+  .oc-loading { text-align:center; color:var(--c-muted); padding:12px; font-size:12px; }
+
+  /* badge "tiene constancias" en tabla OC */
+  .badge-const {
+    display: inline-block;
+    padding: 1px 5px;
+    background: var(--c-const-bg);
+    color: var(--c-const);
+    border: 1px solid var(--c-const-border);
+    border-radius: 6px;
+    font-size: 9px;
+    font-weight: 700;
+    margin-left: 4px;
+  }
+
+  /* ── TABLA CONSTANCIAS ──────────────────────────────── */
+  .const-card {
+    border: 1px solid var(--c-const-border);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .const-card:hover { border-color: var(--c-const); }
+  .const-card.seleccionada {
+    border-color: var(--c-const);
+    box-shadow: 0 0 0 2px rgba(124,58,237,.2);
+  }
+  .const-card-head {
+    background: var(--c-const-bg);
+    padding: 6px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+  }
+  .const-nro { font-weight: 700; font-size: 12px; color: var(--c-const); }
+  .const-fecha { font-size: 10px; color: var(--c-muted); }
+  .const-card-body { padding: 6px 10px; font-size: 11px; }
+  .const-desc { color: var(--c-text); margin-bottom: 4px; font-style: italic; }
+  .const-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .const-total { font-size: 13px; font-weight: 700; color: var(--c-header); }
+  .const-ya-facturada {
+    display: inline-block;
+    padding: 2px 7px;
+    background: #fee2e2;
+    color: #991b1b;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .const-disponible {
+    display: inline-block;
+    padding: 2px 7px;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .btn-seleccionar-const {
+    background: var(--c-const);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-seleccionar-const:hover { background: #6d28d9; }
+  .btn-seleccionar-const.ya-seleccionada { background: var(--c-ok); cursor: default; }
+  .const-seleccionada-info {
+    padding: 7px 10px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #166534;
+  }
+  .const-advertencia {
+    padding: 6px 10px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #92400e;
+  }
+  .const-bloqueo {
+    padding: 7px 10px;
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #991b1b;
+    font-weight: 600;
+  }
+  .const-neto-banner {
+    padding: 6px 10px;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #166534;
+    margin-bottom: 6px;
+  }
+  .const-empty { text-align:center; color:var(--c-muted); padding:20px; font-size:12px; }
+
+  /* ── CONFIANZA + ESTADO ─────────────────────────────── */
+  .confianza { padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; }
+  .confianza-ALTA  { background: #dcfce7; color: #166534; }
+  .confianza-MEDIA { background: #fef9c3; color: #854d0e; }
+  .confianza-BAJA  { background: #fee2e2; color: #991b1b; }
+
+  /* spinner */
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── TOAST ──────────────────────────────────────────── */
+  #toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s;
+    z-index: 999;
+    max-width: 320px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  }
+  #toast.show { opacity: 1; }
+  #toast.ok      { background: var(--c-ok); }
+  #toast.error   { background: var(--c-danger); }
+  #toast.warning { background: var(--c-warn); }
+
+  /* scrollbar slim */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+  /* ── BARRA IMPORTES COMPACTA ────────────────────────── */
+  .importes-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: stretch;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .imp-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 60px;
+    padding: 5px 8px;
+    border-right: 1px solid #e2e8f0;
+  }
+  .imp-cell:last-child { border-right: none; }
+  .imp-lbl {
+    font-size: 9px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    white-space: nowrap;
+  }
+  .imp-val {
+    font-size: 11px;
+    font-weight: 500;
+    color: #1e293b;
+    white-space: nowrap;
+  }
+  .imp-input {
+    width: 100%;
+    font-size: 11px;
+    border: 1px solid #d1d5db;
+    border-radius: 3px;
+    padding: 1px 3px;
+    text-align: right;
+    min-width: 0;
+  }
+  .imp-total-cell {
+    background: #eff6ff;
+    border-left: 2px solid #2563eb !important;
+  }
+  .imp-val-total {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a3560;
+    white-space: nowrap;
+  }
+  .imp-input-total {
+    width: 100%;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid #93c5fd;
+    border-radius: 3px;
+    padding: 1px 3px;
+    text-align: right;
+    background: #eff6ff;
+    min-width: 0;
+  }
+  .imp-neto-cell {
+    background: #f0fdf4;
+    border-left: 2px solid #16a34a !important;
+  }
+  .imp-neto-cell .imp-lbl { color: #166534; font-weight: 800; }
+  .imp-neto-cell .imp-val { color: #166534; font-weight: 700; }
+  .imp-neto-cell .imp-input { border-color: #86efac; background: #f0fdf4; }
+
+  /* ── TABLA ÍTEMS FACTURA ────────────────────────────── */
+  .items-wrap {
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 3px;
+  }
+  .items-scroll {
+    overflow-y: auto;
+  }
+  table.items-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    table-layout: auto;
+  }
+  table.items-tbl thead th {
+    background: #f1f5f9;
+    padding: 4px 6px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+  }
+  table.items-tbl tbody tr { border-bottom: 1px solid #f1f5f9; }
+  table.items-tbl tbody tr:last-child { border-bottom: none; }
+  table.items-tbl tbody tr:hover { background: #f8fafc; }
+  table.items-tbl tbody td { padding: 5px 6px; vertical-align: top; }
+  table.items-tbl .col-num  { width: 20px; color: #94a3b8; font-size: 10px; white-space: nowrap; }
+  table.items-tbl .col-desc { word-break: break-word; line-height: 1.3; min-width: 100px; }
+  table.items-tbl .col-cant { width: 48px; text-align: right; white-space: nowrap; color: #475569; }
+  table.items-tbl .col-pu   { width: 80px; text-align: right; white-space: nowrap; font-family: monospace; }
+  table.items-tbl .col-iva  { width: 38px; text-align: right; white-space: nowrap; color: #64748b; }
+  table.items-tbl .col-sub  { width: 84px; text-align: right; white-space: nowrap; font-weight: 600; font-family: monospace; }
+</style>
+</head>
+<body>
+
+<header>
+  <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+    <rect width="30" height="30" rx="6" fill="#2563eb"/>
+    <path d="M7 22V8h5l3 8 3-8h5v14h-3V13l-3 8h-4l-3-8v9H7z" fill="white"/>
+  </svg>
+  <h1>Validación de Facturas de Proveedores</h1>
+  <div class="badge">Pendientes: <span id="badge-count">—</span></div>
+</header>
+
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <h2>Facturas pendientes</h2>
+      <input id="search-box" type="text" placeholder="Buscar proveedor o número..." oninput="filterList()">
+    </div>
+    <div class="invoice-list" id="invoice-list">
+      <div class="empty-list">Cargando…</div>
+    </div>
+    <div class="sidebar-foot">
+      <button class="btn-refresh" onclick="loadList()">↺ Actualizar</button>
+      <span id="last-update" style="font-size:10px;color:#94a3b8;margin-left:auto;"></span>
+    </div>
+  </aside>
+
+  <!-- ── ÁREA DE DETALLE ── -->
+  <div class="detail-area" id="detail-area">
+
+    <!-- Estado vacío -->
+    <div class="detail-empty" id="detail-empty">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      <span>Seleccioná una factura de la lista para revisarla</span>
+    </div>
+
+    <!-- Grid de columnas (oculto hasta que se seleccione factura) -->
+    <div class="col-layout" id="col-layout" style="display:none;">
+
+      <!-- COLUMNA 1: FACTURA -->
+      <div class="col" id="col-factura">
+        <div class="col-head">
+          <span>Factura</span>
+          <span id="col1-badges" style="display:flex;gap:4px;"></span>
+        </div>
+        <div class="col-body" id="col-factura-body">
+          <!-- renderizado por JS -->
+        </div>
+        <div class="col-foot" id="col-factura-foot">
+          <!-- acciones -->
+        </div>
+      </div>
+
+      <!-- COLUMNA 2: OC -->
+      <div class="col" id="col-oc">
+        <div class="col-head">
+          <span>Orden de Compra</span>
+          <span id="oc-vinculada-label" style="font-size:10px;font-weight:400;color:var(--c-accent);"></span>
+        </div>
+        <div class="col-body" style="padding:0;">
+          <div id="oc-panel"><div class="oc-loading">Cargando…</div></div>
+        </div>
+      </div>
+
+      <!-- COLUMNA 3: CONSTANCIAS (condicional) -->
+      <div class="col col-constancia" id="col-constancia">
+        <div class="col-head">
+          <span>Certificación de Servicio</span>
+          <span id="const-seleccionada-label" style="font-size:10px;font-weight:400;"></span>
+        </div>
+        <div class="col-body" id="col-constancia-body">
+          <div class="const-empty">Seleccioná una OC para ver sus certificaciones</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ── CONFIG ─────────────────────────────────────────── */
+const API_BASE = '';
+let allInvoices = [];
+let currentId   = null;
+let hasChanges  = false;
+
+/* Estado constancia */
+window._constanciaSeleccionada  = null;
+window._requiereConstancia      = false;
+window._constanciaAutoRequerida = false;  // true cuando OC '01-' tiene constancias en Calipso
+window._ocVinculada             = null;  // nro de OC actualmente vinculada
+window._currentFact             = null;
+window._currentItems            = [];
+const _ocItemsCache = {};
+const _ocConstanciasCache = {};  // cache de constancias por OC
+
+/* ── UTILS ──────────────────────────────────────────── */
+const fmt = (n, dec=2) => {
+  if (n == null || n === '') return '—';
+  return Number(n).toLocaleString('es-AR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+};
+function toIsoStr(d) {
+  if (!d) return '';
+  const str = String(d).trim();
+  // Formato ISO directo: YYYY-MM-DD o YYYY-MM-DDTHH:...
+  const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;
+  // Formato compacto: YYYYMMDD
+  const compact = str.replace(/[^0-9]/g, '');
+  if (compact.length >= 8) return `${compact.substring(0,4)}-${compact.substring(4,6)}-${compact.substring(6,8)}`;
+  return '';
+}
+const fmtDate = d => {
+  const s = toIsoStr(d);
+  if (!s || s === '0000-00-00') return '—';
+  const [y, m, day] = s.split('-');
+  if (!y || !m || !day || y === '0000') return '—';
+  return `${day}/${m}/${y}`;
+};
+const fmtCalipsoDate = d => {
+  if (!d) return '—';
+  const s = String(d).replace(/[^0-9]/g, '');
+  if (s.length >= 8) return s.substring(6,8)+'/'+s.substring(4,6)+'/'+s.substring(0,4);
+  return d;
+};
+const isoDate = d => {
+  const s = toIsoStr(d);
+  return s === '0000-00-00' ? '' : s;
+};
+function esc(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+function showToast(msg, type='ok', dur=3500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `show ${type}`;
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), dur);
+}
+function markChanged(el) {
+  el.classList.add('modified');
+  hasChanges = true;
+  updateSaveButton();
+}
+function updateSaveButton() {
+  const btn = document.getElementById('btn-save');
+  if (btn) btn.disabled = !hasChanges;
+}
+
+/* ── LISTA ──────────────────────────────────────────── */
+async function loadList() {
+  try {
+    const r = await fetch(`${API_BASE}/api/facturas/pendientes`);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    allInvoices = await r.json();
+    document.getElementById('badge-count').textContent = allInvoices.length;
+    document.getElementById('last-update').textContent =
+      'Act. ' + new Date().toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit' });
+    renderList(allInvoices);
+  } catch(e) {
+    document.getElementById('invoice-list').innerHTML =
+      `<div class="empty-list" style="color:#dc2626">Error: ${e.message}</div>`;
+  }
+}
+
+function renderList(invoices) {
+  const el = document.getElementById('invoice-list');
+  if (!invoices.length) {
+    el.innerHTML = '<div class="empty-list">No hay facturas pendientes</div>';
+    return;
+  }
+  el.innerHTML = invoices.map(f => `
+    <div class="inv-card ${f.id === currentId ? 'selected' : ''}" onclick="loadDetail('${f.id}')" data-id="${f.id}">
+      <div class="proveedor">${esc(f.proveedor_nombre || f.proveedor_cuit || '—')}</div>
+      <div class="nro">Fact. ${esc(f.letra||'')} ${esc(f.numerodocumento||'—')} · CUIT ${esc(f.proveedor_cuit||'—')}</div>
+      <div class="total-row">
+        <span class="total">$ ${fmt(f.total)}</span>
+        <span class="fecha">${fmtDate(f.fecha_emision)}</span>
+      </div>
+      <div style="margin-top:4px;display:flex;gap:4px;align-items:center;">
+        <span class="estado-badge estado-${f.estado_proceso}">${f.estado_proceso}</span>
+        ${f.confianza_parseo ? `<span class="confianza confianza-${f.confianza_parseo}">${f.confianza_parseo}</span>` : ''}
+        ${f.requiere_constancia ? `<span class="badge-const">CONST</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterList() {
+  const q = document.getElementById('search-box').value.toLowerCase();
+  const filtered = q
+    ? allInvoices.filter(f =>
+        (f.proveedor_nombre||'').toLowerCase().includes(q) ||
+        (f.numerodocumento||'').toLowerCase().includes(q) ||
+        (f.proveedor_cuit||'').includes(q))
+    : allInvoices;
+  renderList(filtered);
+}
+
+/* ── DETALLE ────────────────────────────────────────── */
+async function loadDetail(id) {
+  currentId = id;
+  hasChanges = false;
+  window._constanciaSeleccionada  = null;
+  window._requiereConstancia      = false;
+  window._constanciaAutoRequerida = false;
+  window._ocVinculada             = null;
+
+  document.querySelectorAll('.inv-card').forEach(c =>
+    c.classList.toggle('selected', c.dataset.id === id));
+
+  document.getElementById('detail-empty').style.display = 'none';
+  const layout = document.getElementById('col-layout');
+  layout.style.display = 'grid';
+  layout.classList.remove('tres-col');
+
+  document.getElementById('col-constancia').classList.remove('visible');
+  document.getElementById('col-factura-body').innerHTML =
+    '<div style="color:#64748b;font-size:12px;">Cargando…</div>';
+  document.getElementById('oc-panel').innerHTML =
+    '<div class="oc-loading">Cargando…</div>';
+
+  try {
+    const [rFact, rItems] = await Promise.all([
+      fetch(`${API_BASE}/api/facturas/${id}`),
+      fetch(`${API_BASE}/api/facturas/${id}/items`)
+    ]);
+    const f = await rFact.json();
+    const items = await rItems.json();
+    window._currentFact = f;
+
+    let itemsData = items;
+    if (!itemsData.length && f.items_json) {
+      try { itemsData = JSON.parse(f.items_json) || []; } catch(e) { itemsData = []; }
+    }
+    window._currentItems = itemsData;
+
+    // restaurar estado de constancia guardado
+    window._requiereConstancia = !!f.requiere_constancia;
+    // si la OC guardada es '01-' y tenía constancia requerida, restaurar modo auto
+    window._constanciaAutoRequerida = !!f.requiere_constancia && !!(f.referencia && f.referencia.startsWith('01-'));
+    if (f.constancia_nro) {
+      window._constanciaSeleccionada = {
+        nro:          f.constancia_nro,
+        id_calipso:   f.constancia_id_calipso,
+        total:        f.constancia_total,
+        fecha:        f.constancia_fecha,
+        detalle:      f.constancia_detalle
+      };
+    }
+    window._ocVinculada = f.referencia || null;
+
+    renderColFactura(f, itemsData);
+    if (f.proveedor_cuit) loadOCs(f.proveedor_cuit, f.referencia || '');
+    if (window._requiereConstancia && window._ocVinculada) {
+      mostrarColumnaConstancia(true);
+      loadConstancias(window._ocVinculada);
+    }
+  } catch(e) {
+    document.getElementById('col-factura-body').innerHTML =
+      `<div style="color:#dc2626;font-size:12px;">Error: ${e.message}</div>`;
+  }
+}
+
+/* ── COLUMNA 1: FACTURA ─────────────────────────────── */
+function renderColFactura(f, itemsData) {
+  const esAprobada = f.estado_proceso === 'APROBADO' || f.estado_proceso === 'RECHAZADO';
+  const body = document.getElementById('col-factura-body');
+  const foot = document.getElementById('col-factura-foot');
+
+  // badges en header col1
+  const badges = document.getElementById('col1-badges');
+  badges.innerHTML = `
+    <span class="estado-badge estado-${f.estado_proceso}" style="font-size:9px;">${f.estado_proceso}</span>
+    ${f.confianza_parseo ? `<span class="confianza confianza-${f.confianza_parseo}" style="font-size:9px;">${f.confianza_parseo}</span>` : ''}
+  `;
+
+  const ro = (id, val) => esAprobada
+    ? `<div class="val">${esc(val||'—')}</div>`
+    : `<input type="text" id="${id}" value="${esc(val||'')}" onchange="markChanged(this)">`;
+  const roDate = (id, val) => esAprobada
+    ? `<div class="val">${fmtDate(val)}</div>`
+    : `<input type="date" id="${id}" value="${isoDate(val)}" onchange="markChanged(this)">`;
+  const roNum = (id, val) => esAprobada
+    ? `<div class="val">$ ${fmt(val)}</div>`
+    : `<input type="number" id="${id}" value="${val||0}" step="0.01" onchange="markChanged(this)">`;
+
+  body.innerHTML = `
+    <!-- Proveedor -->
+    <div class="section-label">Proveedor</div>
+    <div class="field-grid g2">
+      <div class="field-group" style="grid-column:1/-1;">
+        <label>Razón Social</label>
+        ${ro('f-proveedor_nombre', f.proveedor_nombre)}
+      </div>
+      <div class="field-group">
+        <label>CUIT</label>
+        ${ro('f-proveedor_cuit', f.proveedor_cuit)}
+      </div>
+      <div class="field-group">
+        <label>Cód. Calipso</label>
+        <div class="val">${esc(f.proveedor_codigo||'—')}</div>
+      </div>
+    </div>
+
+    <!-- Comprobante -->
+    <div class="section-label" style="margin-top:4px;">Comprobante</div>
+    <div class="field-grid g3">
+      <div class="field-group">
+        <label>Tipo</label>
+        ${ro('f-tipo_operacion', f.tipo_operacion||'FACTURA_COMPRA')}
+      </div>
+      <div class="field-group">
+        <label>Letra</label>
+        ${ro('f-letra', f.letra||'A')}
+      </div>
+      <div class="field-group">
+        <label>Número</label>
+        ${ro('f-numerodocumento', f.numerodocumento)}
+      </div>
+      <div class="field-group">
+        <label>Emisión</label>
+        ${roDate('f-fecha_emision', f.fecha_emision)}
+      </div>
+      <div class="field-group">
+        <label>Vencimiento</label>
+        ${roDate('f-fecha_vencimiento', f.fecha_vencimiento)}
+      </div>
+      <div class="field-group">
+        <label>Vto. CAE</label>
+        ${roDate('f-fecha_vto_cae', f.fecha_vto_cae)}
+      </div>
+    </div>
+
+    <!-- CAE + Referencia en misma fila -->
+    <div class="field-grid g2" style="margin-top:4px;">
+      <div class="field-group">
+        <label>CAE</label>
+        ${ro('f-cae', f.cae)}
+      </div>
+      <div class="field-group">
+        <label>Referencia / OC</label>
+        ${esAprobada
+          ? `<div class="val">${esc(f.referencia||'—')}</div>`
+          : `<input type="text" id="f-referencia" value="${esc(f.referencia||'')}" onchange="onReferenciaChange(this)">`}
+      </div>
+    </div>
+
+    <!-- Ítems parseados -->
+    ${itemsData.length ? `
+    <div class="section-label" style="margin-top:6px;">Ítems (${itemsData.length})</div>
+    <div class="items-wrap">
+      <div class="items-scroll">
+        <table class="items-tbl">
+          <thead><tr>
+            <th class="col-num">#</th>
+            <th class="col-desc">Descripción</th>
+            <th class="col-cant">Cant.</th>
+            <th class="col-pu">P.Unit.</th>
+            <th class="col-iva">IVA%</th>
+            <th class="col-sub">Subtotal</th>
+          </tr></thead>
+          <tbody>
+            ${itemsData.map(it => `<tr>
+              <td class="col-num">${it.linea||''}</td>
+              <td class="col-desc">${esc(it.descripcion||'—')}</td>
+              <td class="col-cant">${it.cantidad!=null?it.cantidad:''} ${esc(it.unidad||'')}</td>
+              <td class="col-pu">$ ${fmt(it.precio_unitario)}</td>
+              <td class="col-iva">${it.alicuota_iva!=null?it.alicuota_iva+'%':'—'}</td>
+              <td class="col-sub">$ ${fmt(it.subtotal)}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>` : ''}
+
+    <!-- Remito -->
+    ${f.nro_remito ? `
+    <div class="field-grid g2" style="margin-top:4px;">
+      <div class="field-group" style="grid-column:1/-1;">
+        <label>Nro. Remito</label>
+        <div class="val">${esc(f.nro_remito)}</div>
+      </div>
+    </div>` : ''}
+
+    <!-- Importes — barra compacta -->
+    <div class="section-label" style="margin-top:6px;">Importes</div>
+    <div class="importes-bar">
+      <div class="imp-cell imp-neto-cell">
+        <span class="imp-lbl">Neto Grav.</span>
+        ${esAprobada
+          ? `<span class="imp-val">$ ${fmt(f.neto)}</span>`
+          : `<input class="imp-input" type="number" id="f-neto" value="${f.neto||0}" step="0.01" onchange="markChanged(this)">`}
+      </div>
+      <div class="imp-cell">
+        <span class="imp-lbl">No Grav.</span>
+        ${esAprobada
+          ? `<span class="imp-val">$ ${fmt(f.neto_no_gravado)}</span>`
+          : `<input class="imp-input" type="number" id="f-neto_no_gravado" value="${f.neto_no_gravado||0}" step="0.01" onchange="markChanged(this)">`}
+      </div>
+      <div class="imp-cell">
+        <span class="imp-lbl">IVA 21%</span>
+        ${esAprobada
+          ? `<span class="imp-val">$ ${fmt(f.iva_21)}</span>`
+          : `<input class="imp-input" type="number" id="f-iva_21" value="${f.iva_21||0}" step="0.01" onchange="markChanged(this)">`}
+      </div>
+      <div class="imp-cell">
+        <span class="imp-lbl">IVA 10.5%</span>
+        ${esAprobada
+          ? `<span class="imp-val">$ ${fmt(f.iva_105)}</span>`
+          : `<input class="imp-input" type="number" id="f-iva_105" value="${f.iva_105||0}" step="0.01" onchange="markChanged(this)">`}
+      </div>
+      <div class="imp-cell">
+        <span class="imp-lbl">Percep.</span>
+        ${esAprobada
+          ? `<span class="imp-val">$ ${fmt(f.percepciones)}</span>`
+          : `<input class="imp-input" type="number" id="f-percepciones" value="${f.percepciones||0}" step="0.01" onchange="markChanged(this)">`}
+      </div>
+      <div class="imp-cell">
+        <span class="imp-lbl">Otros</span>
+        ${esAprobada
+          ? `<span class="imp-val">$ ${fmt(f.otros_impuestos)}</span>`
+          : `<input class="imp-input" type="number" id="f-otros_impuestos" value="${f.otros_impuestos||0}" step="0.01" onchange="markChanged(this)">`}
+      </div>
+      <div class="imp-cell imp-total-cell">
+        <span class="imp-lbl">TOTAL</span>
+        ${esAprobada
+          ? `<span class="imp-val-total">$ ${fmt(f.total)}</span>`
+          : `<input class="imp-input-total" type="number" id="f-total" value="${f.total||0}" step="0.01" onchange="markChanged(this)">`}
+      </div>
+    </div>
+
+    <!-- Check constancia -->
+    <div id="check-constancia-container" style="margin-top:6px;${!window._ocVinculada ? 'display:none' : ''}">
+      ${window._constanciaAutoRequerida
+        ? `<div class="check-constancia-wrap" style="background:#fef3c7;border:1px solid #f59e0b;border-radius:6px;padding:6px 8px;">
+            <span style="font-size:13px;">⚠</span>
+            <span style="font-size:12px;font-weight:600;color:#92400e;">OC tipo 01: constancia de servicio requerida automáticamente</span>
+          </div>`
+        : `<div class="check-constancia-wrap">
+            <input type="checkbox" id="chk-requiere-constancia"
+              ${window._requiereConstancia ? 'checked' : ''}
+              onchange="onCheckConstancia(this)"
+              ${esAprobada ? 'disabled' : ''}>
+            <label for="chk-requiere-constancia">Esta OC requiere validación de constancia de servicio</label>
+          </div>`}
+    </div>
+
+    <!-- Info constancia seleccionada -->
+    <div id="constancia-info-col1"></div>
+
+    <!-- Registrado en ERP -->
+    ${f.registrado_erp ? `
+    <div style="padding:6px 8px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;font-size:11px;color:#166534;margin-top:4px;">
+      Registrado en Calipso el ${fmtDate(f.fecha_registro_erp)}
+    </div>` : ''}
+  `;
+
+  // Actualizar info constancia en col1
+  actualizarInfoConstanciaCol1();
+
+  // Acciones
+  foot.innerHTML = esAprobada ? `
+    <div style="font-size:11px;color:#94a3b8;text-align:right;">
+      Factura ${f.estado_proceso.toLowerCase()} — acción definitiva
+    </div>
+  ` : `
+    <div class="action-bar">
+      <button class="btn btn-save" id="btn-save" onclick="guardarCambios()" disabled>
+        Guardar
+      </button>
+      <div class="spacer"></div>
+      <button class="btn btn-reject" onclick="rechazarFactura()">✕ Rechazar</button>
+      <button class="btn btn-approve" onclick="aprobarFactura()">✓ Aprobar</button>
+    </div>
+  `;
+}
+
+function actualizarInfoConstanciaCol1() {
+  const cont = document.getElementById('constancia-info-col1');
+  if (!cont) return;
+  const cs = window._constanciaSeleccionada;
+  const f  = window._currentFact;
+  if (!cs) { cont.innerHTML = ''; return; }
+
+  const netoFact   = f ? parseFloat(f.neto) || 0 : 0;
+  const totalConst = parseFloat(cs.total) || 0;
+  const dif = Math.abs(netoFact - totalConst);
+  const hayDif = dif > 1;
+
+  cont.innerHTML = `
+    <div class="const-seleccionada-info" style="margin-top:4px;">
+      Constancia: <strong>${esc(cs.nro)}</strong> — $ ${fmt(totalConst)}
+      ${cs.fecha ? ` — ${fmtCalipsoDate(String(cs.fecha).replace(/-/g,''))}` : ''}
+    </div>
+    ${hayDif ? `
+    <div class="const-bloqueo" style="margin-top:4px;">
+      ✕ No coinciden: Neto factura $ ${fmt(netoFact)} ≠ Importe constancia $ ${fmt(totalConst)}<br>
+      <span style="font-weight:400;">Diferencia: $ ${fmt(dif)} — no se podrá aprobar hasta corregir.</span>
+    </div>` : `
+    <div class="const-seleccionada-info" style="margin-top:4px;border-color:#86efac;">
+      ✓ Neto factura $ ${fmt(netoFact)} coincide con constancia
+    </div>`}
+  `;
+}
+
+/* ── CHECK CONSTANCIA ───────────────────────────────── */
+function onCheckConstancia(chk) {
+  window._requiereConstancia = chk.checked;
+  hasChanges = true;
+  updateSaveButton();
+
+  if (chk.checked && window._ocVinculada) {
+    mostrarColumnaConstancia(true);
+    loadConstancias(window._ocVinculada);
+  } else {
+    mostrarColumnaConstancia(false);
+    if (!chk.checked) {
+      window._constanciaSeleccionada = null;
+      actualizarInfoConstanciaCol1();
+      actualizarLabelConstancia();
+    }
+  }
+}
+
+function mostrarColumnaConstancia(show) {
+  const layout = document.getElementById('col-layout');
+  const col    = document.getElementById('col-constancia');
+  if (show) {
+    layout.classList.add('tres-col');
+    col.classList.add('visible');
+  } else {
+    layout.classList.remove('tres-col');
+    col.classList.remove('visible');
+  }
+}
+
+function actualizarCheckConstanciaContainer() {
+  const wrap = document.querySelector('#check-constancia-container .check-constancia-wrap');
+  if (!wrap) return;
+  if (window._constanciaAutoRequerida) {
+    wrap.style.background = '#fef3c7';
+    wrap.style.border = '1px solid #f59e0b';
+    wrap.style.borderRadius = '6px';
+    wrap.style.padding = '6px 8px';
+    wrap.innerHTML = `<span style="font-size:13px;">⚠</span>
+      <span style="font-size:12px;font-weight:600;color:#92400e;">OC tipo 01: constancia de servicio requerida automáticamente</span>`;
+  } else {
+    wrap.style.background = '';
+    wrap.style.border = '';
+    wrap.style.borderRadius = '';
+    wrap.style.padding = '';
+    wrap.innerHTML = `<input type="checkbox" id="chk-requiere-constancia"
+        ${window._requiereConstancia ? 'checked' : ''}
+        onchange="onCheckConstancia(this)">
+      <label for="chk-requiere-constancia">Esta OC requiere validación de constancia de servicio</label>`;
+  }
+}
+
+function onReferenciaChange(input) {
+  markChanged(input);
+  const newOC = input.value.trim();
+  window._ocVinculada = newOC || null;
+  const cont = document.getElementById('check-constancia-container');
+  if (cont) cont.style.display = newOC ? '' : 'none';
+}
+
+/* ── COLUMNA 2: OC ──────────────────────────────────── */
+function fmtOCDate(d) {
+  if (!d) return '—';
+  const s = String(d).replace(/[^0-9]/g,'');
+  if (s.length >= 8) return s.substring(6,8)+'/'+s.substring(4,6)+'/'+s.substring(0,4);
+  return d;
+}
+function ocEstadoBadge(e) {
+  const map = { 'C':'Cumplida','A':'Abierta','P':'Pendiente' };
+  return `<span class="oc-estado oc-estado-${e||'P'}">${map[e]||e||'—'}</span>`;
+}
+
+async function loadOCs(cuit, refActual) {
+  const panel = document.getElementById('oc-panel');
+  if (!cuit) { panel.innerHTML = '<div class="oc-loading">CUIT no disponible</div>'; return; }
+  panel.innerHTML = '<div class="oc-loading">Consultando SQL Server…</div>';
+  try {
+    const r = await fetch(`${API_BASE}/api/oc?cuit=${encodeURIComponent(cuit)}`);
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'Error SQL Server');
+    if (!data.length) {
+      panel.innerHTML = '<div class="oc-loading">No se encontraron OC para este proveedor</div>';
+      return;
+    }
+    renderOCTable(data, refActual);
+  } catch(e) {
+    panel.innerHTML = `<div class="oc-loading" style="color:#dc2626">Error: ${esc(e.message)}<br>
+      <small>Verificar mssql-plus instalado y configurado en Node-RED</small></div>`;
+  }
+}
+
+function fmtOCTotal(oc) {
+  if (oc.NOMBREMONEDA === 'Dólares') {
+    const usd = 'USD ' + fmt(oc.btotal_doc);
+    const cotiz = window._currentFact && parseFloat(window._currentFact.cotizacion);
+    if (cotiz && cotiz > 1) {
+      return usd + ' <span style="color:var(--c-muted);font-weight:400;font-size:11px;">(≈&nbsp;$&nbsp;' + fmt(oc.btotal_doc * cotiz, 0) + ')</span>';
+    }
+    return usd;
+  }
+  return '$ ' + fmt(oc.btotal_doc);
+}
+
+function renderOCTable(ocs, refActual) {
+  const panel = document.getElementById('oc-panel');
+  const labelOC = document.getElementById('oc-vinculada-label');
+  if (refActual) labelOC.textContent = 'Vinculada: ' + refActual;
+
+  const rows = ocs.map((oc, i) => {
+    const ocNum = oc.OC || '';
+    const esVinc = refActual && (refActual === ocNum || refActual.includes(ocNum) || ocNum.includes(refActual));
+    if (esVinc) window._ocVinculada = ocNum;
+
+    return `
+    <tr id="oc-row-${i}" class="${esVinc?'oc-vinculada':''}">
+      <td style="font-weight:700;font-size:11px;color:var(--c-header);">${esc(ocNum)}</td>
+      <td>${fmtOCDate(oc.FECHAACTUAL)}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
+          title="${esc(oc.DESCRIPCION||oc.NOMBRE_OC||'')}">
+        ${esc((oc.DESCRIPCION||oc.NOMBRE_OC||'—').substring(0,50))}
+      </td>
+      <td>${ocEstadoBadge(oc.ESTADO)}</td>
+      <td style="text-align:right;font-weight:600;">${fmtOCTotal(oc)}</td>
+      <td>
+        <button class="btn-ver-items" onclick="toggleOCItems(${i},'${esc(ocNum)}')">▼</button>
+      </td>
+      <td>
+        <button class="btn-vincular ${esVinc?'vinculada':''}" onclick="vincularOC('${esc(ocNum)}',${i})">
+          ${esVinc ? '✓ Vinculada' : 'Vincular'}
+        </button>
+      </td>
+    </tr>
+    <tr id="oc-items-${i}" class="oc-items-row" style="display:none;">
+      <td colspan="7"><div id="oc-items-body-${i}" class="oc-loading" style="padding:6px;">…</div></td>
+    </tr>`;
+  }).join('');
+
+  panel.innerHTML = `
+  <div class="oc-table-wrap">
+    <table class="oc-enc">
+      <thead>
+        <tr>
+          <th>OC</th><th>Fecha</th><th>Descripción</th>
+          <th>Estado</th><th style="text-align:right">Total</th><th></th><th></th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+async function toggleOCItems(idx, oc) {
+  const row  = document.getElementById(`oc-items-${idx}`);
+  const body = document.getElementById(`oc-items-body-${idx}`);
+  if (!row) return;
+  const visible = row.style.display !== 'none';
+  row.style.display = visible ? 'none' : 'table-row';
+  if (visible || _ocItemsCache[oc]) {
+    if (_ocItemsCache[oc]) body.innerHTML = _ocItemsCache[oc];
+    return;
+  }
+  body.innerHTML = 'Cargando ítems…';
+  try {
+    const r = await fetch(`${API_BASE}/api/oc/${encodeURIComponent(oc)}/items`);
+    const items = await r.json();
+    if (!items.length) { body.innerHTML = '<em style="color:#94a3b8;font-size:11px;">Sin ítems</em>'; return; }
+    const html = `<table class="oc-det">
+      <thead><tr><th>#</th><th>Detalle</th><th>Unidad</th>
+        <th class="num">Cant.</th><th class="num">P.Unit.</th><th class="num">Total</th><th class="num">IVA%</th></tr></thead>
+      <tbody>
+      ${items.map(it => `<tr>
+        <td style="color:#94a3b8;">${it.NRO_ITEM||''}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
+            title="${esc(it.DETALLE||'')}">
+          ${esc((it.DETALLE||'').substring(0,70))}
+        </td>
+        <td>${esc(it.UNI_MED||'')}</td>
+        <td class="num">${fmt(it.CANTIDAD,4)}</td>
+        <td class="num">$ ${fmt(it.PU)}</td>
+        <td class="num" style="font-weight:600;">$ ${fmt(it.TOTAL_ITEM)}</td>
+        <td class="num">${it.IVATASA!=null?it.IVATASA+'%':'—'}</td>
+      </tr>`).join('')}
+      </tbody>
+    </table>`;
+    _ocItemsCache[oc] = html;
+    body.innerHTML = html;
+  } catch(e) {
+    body.innerHTML = `<span style="color:#dc2626;font-size:11px;">Error: ${esc(e.message)}</span>`;
+  }
+}
+
+async function vincularOC(oc, idx) {
+  const refInput = document.getElementById('f-referencia');
+  if (refInput) { refInput.value = oc; markChanged(refInput); }
+
+  document.querySelectorAll('.btn-vincular').forEach(b => {
+    b.className = 'btn-vincular';
+    b.textContent = 'Vincular';
+  });
+  document.querySelectorAll('table.oc-enc tbody tr[id^="oc-row-"]').forEach(r => r.classList.remove('oc-vinculada'));
+
+  const btn = document.querySelector(`#oc-row-${idx} .btn-vincular`);
+  if (btn) { btn.className = 'btn-vincular vinculada'; btn.textContent = '✓ Vinculada'; }
+  const rowEl = document.getElementById(`oc-row-${idx}`);
+  if (rowEl) rowEl.classList.add('oc-vinculada');
+
+  const label = document.getElementById('oc-vinculada-label');
+  if (label) label.textContent = 'Vinculada: ' + oc;
+
+  window._ocVinculada = oc;
+
+  const es01 = oc.startsWith('01-');
+
+  if (es01) {
+    // OC tipo 01: verificar automáticamente si hay constancias en Calipso
+    const cont = document.getElementById('check-constancia-container');
+    if (cont) cont.style.display = '';
+    const constancias = await fetchConstancias(oc);
+    if (constancias && constancias.length > 0) {
+      window._requiereConstancia      = true;
+      window._constanciaAutoRequerida = true;
+      window._constanciaSeleccionada  = null;  // reset selección anterior
+      mostrarColumnaConstancia(true);
+      renderConstancias(constancias);
+      actualizarLabelConstancia();
+      actualizarCheckConstanciaContainer();
+      showToast(`OC tipo 01: ${constancias.length} constancia(s) de servicio encontrada(s). Seleccioná la que corresponde.`, 'warning', 6000);
+    } else {
+      window._requiereConstancia      = false;
+      window._constanciaAutoRequerida = false;
+      mostrarColumnaConstancia(false);
+      actualizarCheckConstanciaContainer();
+    }
+  } else {
+    // OC no-01-: comportamiento manual con checkbox
+    window._constanciaAutoRequerida = false;
+    const cont = document.getElementById('check-constancia-container');
+    if (cont) cont.style.display = '';
+    if (window._requiereConstancia) {
+      mostrarColumnaConstancia(true);
+      loadConstancias(oc);
+    } else {
+      const constancias = await fetchConstancias(oc);
+      if (constancias && constancias.length > 0) {
+        const chk = document.getElementById('chk-requiere-constancia');
+        if (chk && !chk.checked) {
+          showToast(`Esta OC tiene ${constancias.length} certificacion(es) de servicio. Activá el check si corresponde.`, 'warning', 5000);
+        }
+      }
+    }
+  }
+
+  showToast(`OC ${oc} vinculada. Guardá los cambios.`, 'warning', 3000);
+}
+
+/* ── COLUMNA 3: CONSTANCIAS ─────────────────────────── */
+async function fetchConstancias(oc) {
+  if (_ocConstanciasCache[oc]) return _ocConstanciasCache[oc];
+  try {
+    const r = await fetch(`${API_BASE}/api/constancias?oc=${encodeURIComponent(oc)}`);
+    if (!r.ok) return [];
+    const data = await r.json();
+    _ocConstanciasCache[oc] = data;
+    return data;
+  } catch(e) {
+    return [];
+  }
+}
+
+async function loadConstancias(oc) {
+  const body = document.getElementById('col-constancia-body');
+  if (!body) return;
+  body.innerHTML = '<div class="const-empty">Consultando certificaciones…</div>';
+  actualizarLabelConstancia();
+
+  const data = await fetchConstancias(oc);
+
+  if (!data || !data.length) {
+    body.innerHTML = `<div class="const-empty">
+      Sin certificaciones de servicio para OC ${esc(oc)}<br>
+      <small style="color:#94a3b8;">Verificar en Calipso que la constancia esté cargada</small>
+    </div>`;
+    return;
+  }
+
+  renderConstancias(data);
+}
+
+function renderConstancias(constancias) {
+  const body = document.getElementById('col-constancia-body');
+  const csAct    = window._constanciaSeleccionada;
+  const netoFact = window._currentFact ? parseFloat(window._currentFact.neto) || 0 : 0;
+
+  const cards = constancias.map((c, i) => {
+    const esSeleccionada = csAct && csAct.nro === c.nro_constancia;
+    const yaFacturada    = !!c.factura_existente;
+    const totalConst     = parseFloat(c.totalConstancia) || 0;
+    const difAbs         = Math.abs(totalConst - netoFact);
+    const hayDif         = difAbs > 1;
+
+    return `
+    <div class="const-card ${esSeleccionada ? 'seleccionada' : ''}" id="const-card-${i}" onclick="seleccionarConstancia(${i})">
+      <div class="const-card-head">
+        <div>
+          <span class="const-nro">${esc(c.nro_constancia)}</span>
+          ${yaFacturada
+            ? `<span class="const-ya-facturada">Ya facturada: ${esc(c.factura_existente)}</span>`
+            : `<span class="const-disponible">Disponible</span>`}
+        </div>
+        <span class="const-fecha">${fmtCalipsoDate(c.FECHAACTUAL)}</span>
+      </div>
+      <div class="const-card-body">
+        <div class="const-desc">${esc(c.descripcion || c.DETALLE || '—')}</div>
+        <div class="const-row">
+          <span class="const-total">$ ${fmt(totalConst)}</span>
+          ${hayDif
+            ? `<span style="font-size:10px;color:var(--c-danger);font-weight:700;">✕ Dif. neto: $${fmt(difAbs)}</span>`
+            : `<span style="font-size:10px;color:var(--c-ok);font-weight:700;">✓ Coincide con neto</span>`}
+          <button class="btn-seleccionar-const ${esSeleccionada ? 'ya-seleccionada' : ''}"
+            onclick="event.stopPropagation(); seleccionarConstancia(${i})">
+            ${esSeleccionada ? '✓ Seleccionada' : 'Seleccionar'}
+          </button>
+        </div>
+        ${c.detalle_interno ? `<div style="font-size:10px;color:var(--c-muted);margin-top:2px;">Nro interno: ${esc(c.detalle_interno)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const bannerNeto = netoFact > 0
+    ? `<div class="const-neto-banner">Neto factura: <strong>$ ${fmt(netoFact)}</strong> — la constancia seleccionada debe coincidir con este importe</div>`
+    : '';
+
+  body.innerHTML = `
+    ${bannerNeto}
+    <div style="font-size:10px;color:var(--c-muted);margin-bottom:2px;">${constancias.length} certificacion(es) encontrada(s)</div>
+    ${cards}
+  `;
+
+  // guardar referencia a los datos
+  body._constanciasData = constancias;
+}
+
+function seleccionarConstancia(idx) {
+  const body = document.getElementById('col-constancia-body');
+  const data = body._constanciasData;
+  if (!data || !data[idx]) return;
+
+  const c = data[idx];
+  window._constanciaSeleccionada = {
+    nro:        c.nro_constancia,
+    id_calipso: c.id_constancia,
+    total:      parseFloat(c.totalConstancia) || 0,
+    fecha:      c.FECHAACTUAL,
+    detalle:    c.detalle_interno || c.descripcion || ''
+  };
+
+  hasChanges = true;
+  updateSaveButton();
+
+  // re-render cards para reflejar selección
+  renderConstancias(data);
+  actualizarInfoConstanciaCol1();
+  actualizarLabelConstancia();
+}
+
+function actualizarLabelConstancia() {
+  const label = document.getElementById('const-seleccionada-label');
+  if (!label) return;
+  const cs = window._constanciaSeleccionada;
+  label.textContent = cs ? `Seleccionada: ${cs.nro}` : 'Sin seleccionar';
+  label.style.color = cs ? '#166534' : '#94a3b8';
+}
+
+/* ── RECOLECTAR PAYLOAD ─────────────────────────────── */
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : null;
+}
+
+function collectPayload() {
+  const cs = window._constanciaSeleccionada;
+  return {
+    tipo_operacion:       val('f-tipo_operacion'),
+    proveedor_nombre:     val('f-proveedor_nombre'),
+    proveedor_cuit:       val('f-proveedor_cuit'),
+    letra:                val('f-letra'),
+    numerodocumento:      val('f-numerodocumento'),
+    fecha_emision:        val('f-fecha_emision'),
+    fecha_vencimiento:    val('f-fecha_vencimiento'),
+    cae:                  val('f-cae'),
+    fecha_vto_cae:        val('f-fecha_vto_cae'),
+    referencia:           val('f-referencia'),
+    neto:                 val('f-neto'),
+    neto_no_gravado:      val('f-neto_no_gravado'),
+    iva_21:               val('f-iva_21'),
+    iva_105:              val('f-iva_105'),
+    percepciones:         val('f-percepciones'),
+    otros_impuestos:      val('f-otros_impuestos'),
+    total:                val('f-total'),
+    items_json:           JSON.stringify(window._currentItems || []),
+    // campos constancia
+    requiere_constancia:  window._requiereConstancia ? 1 : 0,
+    constancia_nro:       cs ? cs.nro : null,
+    constancia_id_calipso:cs ? cs.id_calipso : null,
+    constancia_total:     cs ? cs.total : null,
+    constancia_fecha:     cs ? (String(cs.fecha||'').substring(0,8) || null) : null,
+    constancia_detalle:   cs ? cs.detalle : null
+  };
+}
+
+/* ── ACCIONES ───────────────────────────────────────── */
+async function guardarCambios() {
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    const body = collectPayload();
+    const r = await fetch(`${API_BASE}/api/facturas/${currentId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await r.json();
+    if (data.ok) {
+      showToast('Cambios guardados', 'ok');
+      hasChanges = false;
+      document.querySelectorAll('.modified').forEach(e => e.classList.remove('modified'));
+    } else {
+      throw new Error(data.mensaje || 'Error al guardar');
+    }
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  } finally {
+    btn.disabled = !hasChanges;
+    btn.innerHTML = 'Guardar';
+  }
+}
+
+async function aprobarFactura() {
+  const f  = window._currentFact;
+  const cs = window._constanciaSeleccionada;
+
+  // Bloqueo duro OC '01-': debe tener constancia seleccionada
+  if (window._constanciaAutoRequerida && !cs) {
+    showToast(
+      'Esta OC tipo 01 requiere constancia de servicio. Seleccioná la constancia correspondiente antes de aprobar.',
+      'error', 8000
+    );
+    return;
+  }
+
+  // Bloqueo duro: neto factura ≠ importe constancia (aplica para auto y manual)
+  if (window._requiereConstancia && cs) {
+    const netoFact   = parseFloat(f ? f.neto : 0) || 0;
+    const totalConst = parseFloat(cs.total) || 0;
+    if (Math.abs(netoFact - totalConst) > 1) {
+      showToast(
+        `No se puede aprobar: neto factura $ ${fmt(netoFact)} ≠ importe constancia $ ${fmt(totalConst)}. Diferencia: $ ${fmt(Math.abs(netoFact - totalConst))}`,
+        'error', 8000
+      );
+      return;
+    }
+  }
+
+  // Advertencia: constancia manual requerida pero no seleccionada (solo modo checkbox manual)
+  if (window._requiereConstancia && !cs && !window._constanciaAutoRequerida) {
+    const ok = confirm(
+      'Atención: marcaste que esta OC requiere constancia pero no seleccionaste ninguna.\n\n' +
+      '¿Querés aprobar igualmente sin constancia vinculada?'
+    );
+    if (!ok) return;
+  }
+
+  if (!confirm('¿Aprobar esta factura para carga en Calipso?')) return;
+
+  if (hasChanges) await guardarCambios();
+
+  try {
+    const payload = { aprobado_por: 'pdietrich' };
+    if (window._constanciaSeleccionada) {
+      payload.constancia_nro        = window._constanciaSeleccionada.nro;
+      payload.constancia_id_calipso = window._constanciaSeleccionada.id_calipso;
+    }
+    const r = await fetch(`${API_BASE}/api/facturas/${currentId}/aprobar`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await r.json();
+    if (data.ok) {
+      showToast('Factura aprobada. Lista para Calipso.', 'ok', 4000);
+      await loadList();
+      await loadDetail(currentId);
+    } else {
+      throw new Error(data.mensaje || 'Error al aprobar');
+    }
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  }
+}
+
+async function rechazarFactura() {
+  const motivo = prompt('Motivo del rechazo (opcional):');
+  if (motivo === null) return;
+  try {
+    const r = await fetch(`${API_BASE}/api/facturas/${currentId}/rechazar`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ operador: 'pdietrich', motivo: motivo || 'Rechazado por operador' })
+    });
+    const data = await r.json();
+    if (data.ok) {
+      showToast('Factura rechazada', 'warning', 4000);
+      await loadList();
+      document.getElementById('col-layout').style.display = 'none';
+      document.getElementById('detail-empty').style.display = 'flex';
+      currentId = null;
+    } else {
+      throw new Error(data.mensaje || 'Error al rechazar');
+    }
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  }
+}
+
+/* ── INIT ───────────────────────────────────────────── */
+loadList();
+setInterval(loadList, 300_000);
+</script>
+</body>
+</html>

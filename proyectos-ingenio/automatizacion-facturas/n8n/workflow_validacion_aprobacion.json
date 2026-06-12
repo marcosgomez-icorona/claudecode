@@ -1,0 +1,222 @@
+{
+  "name": "Facturas Compra - Validación y Aprobación",
+  "nodes": [
+
+    {
+      "name": "Webhook Entrada",
+      "type": "n8n-nodes-base.webhook",
+      "position": [200, 300],
+      "parameters": {
+        "path": "facturas-entrada",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "notes": "Recibe payload de Node-RED con datos extraídos del PDF"
+    },
+
+    {
+      "name": "Buscar Proveedor por CUIT",
+      "type": "n8n-nodes-base.microsoftSql",
+      "position": [450, 300],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.ID, p.CODIGO, p.DENOMINACION, p.CUIT, p.ACTIVESTATUS, p.DIASPLAZO, p.MONEDA_ID, p.POSICIONADORIMPUESTOS_ID, m.NOMBRE AS moneda_nombre FROM PROVEEDOR p LEFT JOIN MONEDA m ON m.ID = p.MONEDA_ID WHERE p.CUIT = '{{$json[\"cuit\"]}}' AND p.ACTIVESTATUS = 0"
+      },
+      "notes": "VAL-01: Proveedor activo por CUIT"
+    },
+
+    {
+      "name": "Switch Proveedor Existe",
+      "type": "n8n-nodes-base.if",
+      "position": [700, 300],
+      "parameters": {
+        "conditions": {
+          "number": [{
+            "value1": "={{$json.length}}",
+            "operation": "larger",
+            "value2": 0
+          }]
+        }
+      }
+    },
+
+    {
+      "name": "Verificar Duplicado Calipso",
+      "type": "n8n-nodes-base.microsoftSql",
+      "position": [950, 200],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*) AS cant FROM TRFACTURACOMPRA WHERE NUMERODOCUMENTO = '{{$node[\"Webhook Entrada\"].json[\"nro_documento\"]}}' AND CODIGODESTINATARIO = '{{$node[\"Buscar Proveedor por CUIT\"].json[0][\"CODIGO\"]}}' AND FECHAREGISTRO = '{{$node[\"Webhook Entrada\"].json[\"fecha_emision\"]}}' AND TIPOTRANSACCION_ID = '50829758-5905-11D5-86C4-0080AD403F5F'"
+      },
+      "notes": "VAL-02: Factura duplicada en Calipso"
+    },
+
+    {
+      "name": "Verificar ConstServ si Servicio",
+      "type": "n8n-nodes-base.microsoftSql",
+      "position": [950, 350],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT cs.ID, cs.NUMERODOCUMENTO, cs.VALORTOTAL, cs.CENTROCOSTOS_ID, cc.NOMBRE AS cc_nombre, CASE WHEN f.ID IS NOT NULL THEN 1 ELSE 0 END AS ya_facturada FROM TRORDENCOMPRA cs LEFT JOIN TRFACTURACOMPRA f ON f.DETALLE = cs.NUMERODOCUMENTO LEFT JOIN CENTROCOSTOS cc ON cc.ID = cs.CENTROCOSTOS_ID WHERE cs.NUMERODOCUMENTO = '{{$node[\"Webhook Entrada\"].json[\"referencia\"]}}' AND cs.TIPOTRANSACCION_ID IN ('E5887DA3-618D-11D5-931E-00E07D9040B9','08D2A275-E50E-47B5-90A6-5E06088DA3CA') AND cs.ESTADO = 'C'"
+      },
+      "notes": "VAL-05: ConstServ válida y sin factura"
+    },
+
+    {
+      "name": "Armar Resultado Validaciones",
+      "type": "n8n-nodes-base.function",
+      "position": [1200, 300],
+      "parameters": {
+        "functionCode": "const entrada = $node['Webhook Entrada'].json;\nconst proveedor = $node['Buscar Proveedor por CUIT'].json[0] || null;\nconst dup_cant = ($node['Verificar Duplicado Calipso'].json[0] || {}).cant || 0;\n\nconst errores = [];\nconst alertas = [];\n\n// VAL-01\nif (!proveedor) {\n    errores.push('VAL-01: CUIT ' + entrada.cuit + ' no encontrado o inactivo en Calipso');\n}\n\n// VAL-02\nif (parseInt(dup_cant) > 0) {\n    errores.push('VAL-02: Factura ' + entrada.nro_documento + ' ya existe en Calipso');\n}\n\n// VAL-03 (duplicado en staging — se verifica en el SP)\n\n// VAL-06: CAE\nif (!entrada.cae || entrada.cae.length !== 14) {\n    alertas.push('VAL-06: CAE ausente o inválido: ' + (entrada.cae || 'VACIO'));\n}\n\n// VAL-07: vencimiento CAE\nif (entrada.cae_vto) {\n    const hoy = new Date().toISOString().slice(0,10).replace(/-/g,'');\n    if (entrada.cae_vto < hoy) {\n        alertas.push('VAL-07: CAE vencido el ' + entrada.cae_vto + ' (hoy: ' + hoy + ')');\n    }\n}\n\n// VAL-08: cuadre importes\nconst suma = (entrada.neto||0) + (entrada.iva21||0) + (entrada.iva105||0);\nif (Math.abs(suma - (entrada.total||0)) > 1) {\n    alertas.push('VAL-08: Total ' + entrada.total + ' no cuadra. Suma: ' + suma.toFixed(2));\n}\n\nconst puede_aprobar = errores.length === 0;\n\nreturn [{\n    json: {\n        ...entrada,\n        validacion: {\n            puede_aprobar,\n            errores,\n            alertas,\n            proveedor_id: proveedor ? proveedor.ID : null,\n            proveedor_codigo: proveedor ? proveedor.CODIGO : null,\n            proveedor_nombre: proveedor ? proveedor.DENOMINACION : null,\n            moneda_nombre: proveedor ? proveedor.moneda_nombre : 'Pesos'\n        }\n    }\n}];\n"
+      }
+    },
+
+    {
+      "name": "Split Puede / No Puede Aprobar",
+      "type": "n8n-nodes-base.if",
+      "position": [1450, 300],
+      "parameters": {
+        "conditions": {
+          "boolean": [{
+            "value1": "={{$json.validacion.puede_aprobar}}",
+            "operation": "true"
+          }]
+        }
+      }
+    },
+
+    {
+      "name": "Email Aprobación a pdietrich",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [1700, 200],
+      "parameters": {
+        "fromEmail": "n8n@ingeniolacorona.com",
+        "toEmail": "pdietrich@ingeniolacorona.com",
+        "subject": "✅ Factura lista para cargar: {{$json.letra}} {{$json.nro_documento}} | {{$json.validacion.proveedor_nombre}}",
+        "emailFormat": "html",
+        "message": "<!DOCTYPE html><html><body style='font-family:Arial,sans-serif;max-width:600px'>\n<h2 style='color:#2c5282'>Nueva Factura de Compra para cargar en Calipso</h2>\n<table style='width:100%;border-collapse:collapse;font-size:14px'>\n  <tr style='background:#ebf8ff'><td style='padding:8px;font-weight:bold'>Proveedor</td><td style='padding:8px'>{{$json.validacion.proveedor_nombre}} ({{$json.validacion.proveedor_codigo}})</td></tr>\n  <tr><td style='padding:8px;font-weight:bold'>CUIT</td><td style='padding:8px'>{{$json.cuit}}</td></tr>\n  <tr style='background:#ebf8ff'><td style='padding:8px;font-weight:bold'>Comprobante</td><td style='padding:8px'>Factura <strong>{{$json.letra}}</strong> {{$json.nro_documento}}</td></tr>\n  <tr><td style='padding:8px;font-weight:bold'>Fecha emisión</td><td style='padding:8px'>{{$json.fecha_emision}}</td></tr>\n  <tr style='background:#ebf8ff'><td style='padding:8px;font-weight:bold'>Neto</td><td style='padding:8px'>${{$json.neto}}</td></tr>\n  <tr><td style='padding:8px;font-weight:bold'>IVA 21%</td><td style='padding:8px'>${{$json.iva21}}</td></tr>\n  <tr style='background:#ebf8ff'><td style='padding:8px;font-weight:bold;font-size:16px'>TOTAL</td><td style='padding:8px;font-size:16px;font-weight:bold;color:#2b6cb0'>${{$json.total}}</td></tr>\n  <tr><td style='padding:8px;font-weight:bold'>CAE</td><td style='padding:8px'>{{$json.cae}} (vto: {{$json.cae_vto}})</td></tr>\n  <tr style='background:#ebf8ff'><td style='padding:8px;font-weight:bold'>Referencia</td><td style='padding:8px'>{{$json.referencia || 'Sin referencia'}}</td></tr>\n  <tr><td style='padding:8px;font-weight:bold'>Archivo PDF</td><td style='padding:8px'>{{$json.pdf_filename}}</td></tr>\n  <tr style='background:#ebf8ff'><td style='padding:8px;font-weight:bold'>Email origen</td><td style='padding:8px'>{{$json.email_from}}</td></tr>\n</table>\n{{#if $json.validacion.alertas.length}}\n<div style='background:#fffbeb;border:1px solid #f6e05e;padding:10px;margin-top:15px;border-radius:4px'>\n  <strong>⚠️ Alertas (no bloquean):</strong><ul>{{#each $json.validacion.alertas}}<li>{{this}}</li>{{/each}}</ul>\n</div>\n{{/if}}\n<div style='margin-top:20px;text-align:center'>\n  <a href='https://n8n.ingeniolacorona.com/webhook/facturas-aprobar?id={{$json.pdf_hash}}&accion=APROBAR' style='background:#38a169;color:white;padding:12px 30px;text-decoration:none;border-radius:4px;margin-right:10px;font-weight:bold'>✅ APROBAR Y PONER EN COLA</a>\n  <a href='https://n8n.ingeniolacorona.com/webhook/facturas-aprobar?id={{$json.pdf_hash}}&accion=RECHAZAR' style='background:#e53e3e;color:white;padding:12px 30px;text-decoration:none;border-radius:4px;font-weight:bold'>❌ RECHAZAR</a>\n</div>\n<p style='font-size:11px;color:#718096;margin-top:20px'>Generado automáticamente por el sistema de automatización de facturas — Ingenio La Corona</p>\n</body></html>"
+      }
+    },
+
+    {
+      "name": "Email Error a pdietrich",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [1700, 400],
+      "parameters": {
+        "fromEmail": "n8n@ingeniolacorona.com",
+        "toEmail": "pdietrich@ingeniolacorona.com",
+        "subject": "❌ Factura con errores: {{$json.nro_documento}} | {{$json.cuit}}",
+        "emailFormat": "html",
+        "message": "<!DOCTYPE html><html><body style='font-family:Arial,sans-serif;max-width:600px'>\n<h2 style='color:#c53030'>Factura rechazada automáticamente por errores de validación</h2>\n<table style='width:100%;border-collapse:collapse;font-size:14px'>\n  <tr><td style='padding:8px;font-weight:bold'>CUIT</td><td style='padding:8px'>{{$json.cuit}}</td></tr>\n  <tr style='background:#fff5f5'><td style='padding:8px;font-weight:bold'>Comprobante</td><td style='padding:8px'>Factura {{$json.letra}} {{$json.nro_documento}}</td></tr>\n  <tr><td style='padding:8px;font-weight:bold'>Archivo</td><td style='padding:8px'>{{$json.pdf_filename}}</td></tr>\n  <tr style='background:#fff5f5'><td style='padding:8px;font-weight:bold'>Email origen</td><td style='padding:8px'>{{$json.email_from}}</td></tr>\n</table>\n<div style='background:#fff5f5;border:1px solid #fc8181;padding:10px;margin-top:15px;border-radius:4px'>\n  <strong>🚫 Errores bloqueantes:</strong>\n  <ul>{{#each $json.validacion.errores}}<li style='color:#c53030'>{{this}}</li>{{/each}}</ul>\n</div>\n<p>Revisar manualmente y cargar en Calipso si corresponde.</p>\n</body></html>"
+      }
+    },
+
+    {
+      "name": "Webhook Aprobación",
+      "type": "n8n-nodes-base.webhook",
+      "position": [200, 600],
+      "parameters": {
+        "path": "facturas-aprobar",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "notes": "Recibe click de pdietrich en email: ?id=HASH&accion=APROBAR|RECHAZAR"
+    },
+
+    {
+      "name": "Switch Accion",
+      "type": "n8n-nodes-base.if",
+      "position": [450, 600],
+      "parameters": {
+        "conditions": {
+          "string": [{
+            "value1": "={{$json.query.accion}}",
+            "operation": "equal",
+            "value2": "APROBAR"
+          }]
+        }
+      }
+    },
+
+    {
+      "name": "Llamar SP Insertar en Staging",
+      "type": "n8n-nodes-base.microsoftSql",
+      "position": [700, 550],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DECLARE @res INT, @msg VARCHAR(500); EXEC UD_EZI_SP_STAGING_INSERTAR @UUID_OPERACION=NEWID(), @TIPO_OPERACION='{{$node[\"Cache Payload\"].json[\"tipo_operacion\"]}}', @ORIGEN='PDF_EMAIL', @USUARIO_CARGA='middleware', @TIPOTRANSACCION_ID='50829758-5905-11D5-86C4-0080AD403F5F', @NUMERODOCUMENTO='{{$node[\"Cache Payload\"].json[\"nro_documento\"]}}', @LETRA='{{$node[\"Cache Payload\"].json[\"letra\"]}}', @FECHA_EMISION='{{$node[\"Cache Payload\"].json[\"fecha_emision\"]}}', @FECHA_VENCIMIENTO=NULL, @REFERENCIA='{{$node[\"Cache Payload\"].json[\"referencia\"]}}', @PROVEEDOR_CUIT='{{$node[\"Cache Payload\"].json[\"cuit\"]}}', @NETO={{$node[\"Cache Payload\"].json[\"neto\"]}}, @IVA_21={{$node[\"Cache Payload\"].json[\"iva21\"]}}, @IVA_105={{$node[\"Cache Payload\"].json[\"iva105\"]}}, @PERCEPCIONES=0, @OTROS_IMPUESTOS=0, @TOTAL={{$node[\"Cache Payload\"].json[\"total\"]}}, @COTIZACION=1, @CAE='{{$node[\"Cache Payload\"].json[\"cae\"]}}', @FECHA_VTO_CAE='{{$node[\"Cache Payload\"].json[\"cae_vto\"]}}', @CENTROCOSTOS_CODIGO=NULL, @PDF_FILENAME='{{$node[\"Cache Payload\"].json[\"pdf_filename\"]}}', @PDF_HASH='{{$node[\"Cache Payload\"].json[\"pdf_hash\"]}}', @EMAIL_ORIGEN='{{$node[\"Cache Payload\"].json[\"email_from\"]}}', @EMAIL_ASUNTO='{{$node[\"Cache Payload\"].json[\"email_subject\"]}}', @RESULTADO=@res OUTPUT, @MENSAJE=@msg OUTPUT; SELECT @res AS resultado, @msg AS mensaje"
+      },
+      "notes": "Inserta en staging si aprueba pdietrich"
+    },
+
+    {
+      "name": "Email Confirmación en Cola",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [950, 550],
+      "parameters": {
+        "fromEmail": "n8n@ingeniolacorona.com",
+        "toEmail": "pdietrich@ingeniolacorona.com",
+        "subject": "📋 Factura en cola para cargar en Calipso",
+        "emailFormat": "html",
+        "message": "<h3>La factura fue aprobada y está lista en la cola de carga.</h3><p>Ejecutar en SSMS para ver pendientes:</p><pre style='background:#f7f7f7;padding:10px'>EXEC UD_EZI_SP_STAGING_PENDIENTES</pre><p>Después de cargar en Calipso, marcar como procesada:</p><pre style='background:#f7f7f7;padding:10px'>EXEC UD_EZI_SP_STAGING_MARCAR_PROCESADO\n  @ID = 'UUID-STAGING',\n  @TR_GENERADO_ID = 'UUID-TR-CALIPSO',\n  @OPERADOR = 'pdietrich'</pre>"
+      }
+    },
+
+    {
+      "name": "Alerta Revision Manual",
+      "type": "n8n-nodes-base.webhook",
+      "position": [200, 800],
+      "parameters": {
+        "path": "facturas-revision-manual",
+        "responseMode": "onReceived"
+      },
+      "notes": "Recibe PDFs con confianza de parseo < 80%"
+    },
+
+    {
+      "name": "Email Revisión Manual",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [450, 800],
+      "parameters": {
+        "fromEmail": "n8n@ingeniolacorona.com",
+        "toEmail": "pdietrich@ingeniolacorona.com",
+        "subject": "⚠️ PDF requiere revisión manual: {{$json.pdf_filename}}",
+        "emailFormat": "html",
+        "message": "<h3>Un PDF fue recibido pero no pudo parsearse con suficiente confianza ({{$json.confianza_parseo}}%)</h3><p><strong>Archivo:</strong> {{$json.pdf_filename}}</p><p><strong>Email origen:</strong> {{$json.email_from}}</p><p><strong>Campos faltantes:</strong> {{$json.campos_faltantes}}</p><p>Cargar manualmente en Calipso o reenviar el PDF en mejor formato.</p>"
+      }
+    }
+
+  ],
+
+  "connections": {
+    "Webhook Entrada": {"main": [[{"node": "Buscar Proveedor por CUIT", "type": "main", "index": 0}]]},
+    "Buscar Proveedor por CUIT": {"main": [[{"node": "Switch Proveedor Existe", "type": "main", "index": 0}]]},
+    "Switch Proveedor Existe": {
+      "main": [
+        [{"node": "Verificar Duplicado Calipso", "type": "main", "index": 0}],
+        [{"node": "Email Error a pdietrich", "type": "main", "index": 0}]
+      ]
+    },
+    "Verificar Duplicado Calipso": {"main": [[{"node": "Armar Resultado Validaciones", "type": "main", "index": 0}]]},
+    "Armar Resultado Validaciones": {"main": [[{"node": "Split Puede / No Puede Aprobar", "type": "main", "index": 0}]]},
+    "Split Puede / No Puede Aprobar": {
+      "main": [
+        [{"node": "Email Aprobación a pdietrich", "type": "main", "index": 0}],
+        [{"node": "Email Error a pdietrich", "type": "main", "index": 0}]
+      ]
+    },
+    "Webhook Aprobación": {"main": [[{"node": "Switch Accion", "type": "main", "index": 0}]]},
+    "Switch Accion": {
+      "main": [
+        [{"node": "Llamar SP Insertar en Staging", "type": "main", "index": 0}],
+        []
+      ]
+    },
+    "Llamar SP Insertar en Staging": {"main": [[{"node": "Email Confirmación en Cola", "type": "main", "index": 0}]]},
+    "Alerta Revision Manual": {"main": [[{"node": "Email Revisión Manual", "type": "main", "index": 0}]]}
+  },
+
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

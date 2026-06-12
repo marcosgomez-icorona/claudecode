@@ -1,0 +1,831 @@
+[
+    {
+        "id": "3da28582ee4c5149",
+        "type": "http in",
+        "z": "5519da82a1fff81f",
+        "name": "GET /facturas",
+        "url": "/facturas",
+        "method": "get",
+        "upload": false,
+        "x": 170,
+        "y": 60,
+        "wires": [
+            [
+                "e92c472d86848574"
+            ]
+        ]
+    },
+    {
+        "id": "e92c472d86848574",
+        "type": "change",
+        "z": "5519da82a1fff81f",
+        "name": "Set filename",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "C:\\automatizacion-facturas\\web\\facturas_validacion.html",
+                "tot": "str"
+            }
+        ],
+        "x": 360,
+        "y": 60,
+        "wires": [
+            [
+                "fb90e21334df107e"
+            ]
+        ]
+    },
+    {
+        "id": "fb90e21334df107e",
+        "type": "file in",
+        "z": "5519da82a1fff81f",
+        "name": "Leer archivo",
+        "filename": "",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 540,
+        "y": 60,
+        "wires": [
+            [
+                "b0d59349fe1ac0f8"
+            ]
+        ]
+    },
+    {
+        "id": "b0d59349fe1ac0f8",
+        "type": "change",
+        "z": "5519da82a1fff81f",
+        "name": "Content-Type HTML",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "{\"Content-Type\":\"text/html; charset=utf-8\"}",
+                "tot": "json"
+            }
+        ],
+        "x": 730,
+        "y": 60,
+        "wires": [
+            [
+                "9035950ae2a8cf40"
+            ]
+        ]
+    },
+    {
+        "id": "9035950ae2a8cf40",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "name": "",
+        "x": 920,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "64abf16f0646ab2e",
+        "type": "catch",
+        "z": "5519da82a1fff81f",
+        "name": "Error archivo",
+        "scope": [
+            "fb90e21334df107e"
+        ],
+        "uncaught": false,
+        "x": 540,
+        "y": 110,
+        "wires": [
+            [
+                "dd02bc16f8b49e89"
+            ]
+        ]
+    },
+    {
+        "id": "dd02bc16f8b49e89",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "404 archivo no encontrado",
+        "func": "msg.statusCode = 404;\nmsg.headers = {'Content-Type':'text/html'};\nmsg.payload = '<html><body style=\"font-family:sans-serif;padding:2rem\"><h3 style=\"color:#c00\">No se encontró el archivo HTML</h3><p>Copiá <code>facturas_validacion.html</code> a: <code>C:\\\\automatizacion-facturas\\\\web\\\\</code></p></body></html>';\nreturn msg;\n",
+        "outputs": 1,
+        "x": 740,
+        "y": 110,
+        "wires": [
+            [
+                "9035950ae2a8cf40"
+            ]
+        ]
+    },
+    {
+        "id": "0a549897b3247538",
+        "type": "http in",
+        "z": "5519da82a1fff81f",
+        "name": "GET /api/facturas/pendientes",
+        "url": "/api/facturas/pendientes",
+        "method": "get",
+        "x": 170,
+        "y": 140,
+        "wires": [
+            [
+                "308308222be36b3f"
+            ]
+        ]
+    },
+    {
+        "id": "308308222be36b3f",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Query pendientes",
+        "func": "msg._req = msg.req;\nmsg._res = msg.res;\nmsg.topic = `SELECT id, tipo_operacion, estado_proceso, fecha_carga,\n    numerodocumento, letra, fecha_emision, fecha_vencimiento,\n    proveedor_cuit, proveedor_nombre, proveedor_codigo,\n    neto, iva_21, iva_105, total, moneda_id, cotizacion,\n    cae, referencia, pdf_filename, email_origen\nFROM staging_facturas\nWHERE estado_proceso = 'PENDIENTE'\nORDER BY fecha_carga ASC`;\nmsg.payload = [];\nreturn msg;\n",
+        "outputs": 1,
+        "x": 400,
+        "y": 140,
+        "wires": [
+            [
+                "fbbbef77f2541313"
+            ]
+        ]
+    },
+    {
+        "id": "fbbbef77f2541313",
+        "type": "mysql",
+        "z": "5519da82a1fff81f",
+        "mydb": "mysql-api-config",
+        "name": "SELECT pendientes",
+        "x": 590,
+        "y": 140,
+        "wires": [
+            [
+                "fd495feafd398aad"
+            ]
+        ]
+    },
+    {
+        "id": "fd495feafd398aad",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Responder JSON",
+        "func": "msg.res = msg._res;\nmsg.headers = {\n    'Content-Type': 'application/json',\n    'Access-Control-Allow-Origin': '*'\n};\nmsg.payload = JSON.stringify(msg.payload || []);\nreturn msg;\n",
+        "outputs": 1,
+        "x": 780,
+        "y": 140,
+        "wires": [
+            [
+                "d6b96f6f1bd4ef5b"
+            ]
+        ]
+    },
+    {
+        "id": "d6b96f6f1bd4ef5b",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "x": 950,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "620c77670fb52329",
+        "type": "http in",
+        "z": "5519da82a1fff81f",
+        "name": "GET /api/facturas/:id",
+        "url": "/api/facturas/:id",
+        "method": "get",
+        "x": 170,
+        "y": 220,
+        "wires": [
+            [
+                "ebdfff1cc4579dff"
+            ]
+        ]
+    },
+    {
+        "id": "ebdfff1cc4579dff",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Query factura por ID",
+        "func": "msg._req = msg.req;\nmsg._res = msg.res;\nmsg.topic = 'SELECT * FROM staging_facturas WHERE id = ?';\nmsg.payload = [msg.req.params.id];\nreturn msg;\n",
+        "outputs": 1,
+        "x": 410,
+        "y": 220,
+        "wires": [
+            [
+                "08a2e8e086c3cdca"
+            ]
+        ]
+    },
+    {
+        "id": "08a2e8e086c3cdca",
+        "type": "mysql",
+        "z": "5519da82a1fff81f",
+        "mydb": "mysql-api-config",
+        "name": "SELECT factura",
+        "x": 610,
+        "y": 220,
+        "wires": [
+            [
+                "cc1723d390546347"
+            ]
+        ]
+    },
+    {
+        "id": "cc1723d390546347",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Responder JSON",
+        "func": "msg.res = msg._res;\nmsg.headers = {\n    'Content-Type': 'application/json',\n    'Access-Control-Allow-Origin': '*'\n};\nconst rows = msg.payload;\nmsg.payload = JSON.stringify(rows && rows.length > 0 ? rows[0] : null);\nreturn msg;\n",
+        "outputs": 1,
+        "x": 800,
+        "y": 220,
+        "wires": [
+            [
+                "a336eaac1acce842"
+            ]
+        ]
+    },
+    {
+        "id": "a336eaac1acce842",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "x": 970,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "0dc7b6ca98dbfb74",
+        "type": "http in",
+        "z": "5519da82a1fff81f",
+        "name": "PUT /api/facturas/:id",
+        "url": "/api/facturas/:id",
+        "method": "put",
+        "x": 170,
+        "y": 300,
+        "wires": [
+            [
+                "aca3822ae5df6814"
+            ]
+        ]
+    },
+    {
+        "id": "aca3822ae5df6814",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Query UPDATE",
+        "func": "msg._req = msg.req;\nmsg._res = msg.res;\nconst b = msg.req.body;\nmsg.topic = `UPDATE staging_facturas SET\n    tipo_operacion    = ?,\n    proveedor_nombre  = ?,\n    proveedor_cuit    = ?,\n    letra             = ?,\n    numerodocumento   = ?,\n    fecha_emision     = ?,\n    fecha_vencimiento = ?,\n    cae               = ?,\n    fecha_vto_cae     = ?,\n    referencia        = ?,\n    centrocostos_nombre = ?,\n    neto              = ?,\n    iva_21            = ?,\n    iva_105           = ?,\n    percepciones      = ?,\n    otros_impuestos   = ?,\n    total             = ?,\n    cotizacion        = ?,\n    items_json        = ?\nWHERE id = ? AND estado_proceso = 'PENDIENTE'`;\nmsg.payload = [\n    b.tipo_operacion    || 'FACTURA_COMPRA',\n    b.proveedor_nombre  || null,\n    b.proveedor_cuit    || null,\n    b.letra             || 'A',\n    b.numerodocumento   || null,\n    b.fecha_emision     || null,\n    b.fecha_vencimiento || null,\n    b.cae               || null,\n    b.fecha_vto_cae     || null,\n    b.referencia        || null,\n    b.centrocostos_nombre || null,\n    parseFloat(b.neto)   || 0,\n    parseFloat(b.iva_21) || 0,\n    parseFloat(b.iva_105)|| 0,\n    parseFloat(b.percepciones) || 0,\n    parseFloat(b.otros_impuestos) || 0,\n    parseFloat(b.total)  || 0,\n    parseFloat(b.cotizacion) || 1,\n    b.items_json         || null,\n    msg.req.params.id\n];\nreturn msg;\n",
+        "outputs": 1,
+        "x": 390,
+        "y": 300,
+        "wires": [
+            [
+                "375fee7f9cc34295"
+            ]
+        ]
+    },
+    {
+        "id": "375fee7f9cc34295",
+        "type": "mysql",
+        "z": "5519da82a1fff81f",
+        "mydb": "mysql-api-config",
+        "name": "UPDATE factura",
+        "x": 590,
+        "y": 300,
+        "wires": [
+            [
+                "b4b03ad2117e5fb9"
+            ]
+        ]
+    },
+    {
+        "id": "b4b03ad2117e5fb9",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Responder OK",
+        "func": "msg.res = msg._res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nmsg.payload = JSON.stringify({ ok: true, mensaje: 'Guardado correctamente' });\nreturn msg;\n",
+        "outputs": 1,
+        "x": 770,
+        "y": 300,
+        "wires": [
+            [
+                "e4e528ce03476b1b"
+            ]
+        ]
+    },
+    {
+        "id": "e4e528ce03476b1b",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "x": 930,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "978b36506771eb39",
+        "type": "http in",
+        "z": "5519da82a1fff81f",
+        "name": "POST /api/facturas/:id/aprobar",
+        "url": "/api/facturas/:id/aprobar",
+        "method": "post",
+        "x": 170,
+        "y": 380,
+        "wires": [
+            [
+                "fb56c3647dbf4ba9"
+            ]
+        ]
+    },
+    {
+        "id": "fb56c3647dbf4ba9",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Query APROBAR",
+        "func": "msg._req = msg.req;\nmsg._res = msg.res;\nconst operador = (msg.req.body && msg.req.body.aprobado_por) ? msg.req.body.aprobado_por : 'pdietrich';\nmsg.topic = `UPDATE staging_facturas\nSET estado_proceso   = 'APROBADO',\n    fecha_aprobacion = NOW(),\n    aprobado_por     = ?\nWHERE id = ?\n  AND estado_proceso = 'PENDIENTE'`;\nmsg.payload = [operador, msg.req.params.id];\nreturn msg;\n",
+        "outputs": 1,
+        "x": 410,
+        "y": 380,
+        "wires": [
+            [
+                "b09c3de8d48eb89d"
+            ]
+        ]
+    },
+    {
+        "id": "b09c3de8d48eb89d",
+        "type": "mysql",
+        "z": "5519da82a1fff81f",
+        "mydb": "mysql-api-config",
+        "name": "UPDATE APROBADO",
+        "x": 610,
+        "y": 380,
+        "wires": [
+            [
+                "a8bb9b1a479192b9"
+            ]
+        ]
+    },
+    {
+        "id": "a8bb9b1a479192b9",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Responder OK",
+        "func": "msg.res = msg._res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nmsg.payload = JSON.stringify({ ok: true, mensaje: 'Factura aprobada para carga' });\nreturn msg;\n",
+        "outputs": 1,
+        "x": 800,
+        "y": 380,
+        "wires": [
+            [
+                "8a22520024599231"
+            ]
+        ]
+    },
+    {
+        "id": "8a22520024599231",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "x": 970,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "33ed1a1f26def7f6",
+        "type": "http in",
+        "z": "5519da82a1fff81f",
+        "name": "POST /api/facturas/:id/rechazar",
+        "url": "/api/facturas/:id/rechazar",
+        "method": "post",
+        "x": 170,
+        "y": 460,
+        "wires": [
+            [
+                "f010dde96eb22303"
+            ]
+        ]
+    },
+    {
+        "id": "f010dde96eb22303",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Query RECHAZAR",
+        "func": "msg._req = msg.req;\nmsg._res = msg.res;\nconst b = msg.req.body || {};\nmsg.topic = `UPDATE staging_facturas\nSET estado_proceso   = 'RECHAZADO',\n    fecha_aprobacion = NOW(),\n    aprobado_por     = ?,\n    error_detalle    = ?\nWHERE id = ?\n  AND estado_proceso IN ('PENDIENTE','EN_REVISION')`;\nmsg.payload = [\n    b.operador || 'pdietrich',\n    b.motivo   || 'Rechazado sin motivo',\n    msg.req.params.id\n];\nreturn msg;\n",
+        "outputs": 1,
+        "x": 410,
+        "y": 460,
+        "wires": [
+            [
+                "8f8c2bd85131938b"
+            ]
+        ]
+    },
+    {
+        "id": "8f8c2bd85131938b",
+        "type": "mysql",
+        "z": "5519da82a1fff81f",
+        "mydb": "mysql-api-config",
+        "name": "UPDATE RECHAZADO",
+        "x": 610,
+        "y": 460,
+        "wires": [
+            [
+                "ba2da001a37a063b"
+            ]
+        ]
+    },
+    {
+        "id": "ba2da001a37a063b",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Responder OK",
+        "func": "msg.res = msg._res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nmsg.payload = JSON.stringify({ ok: true, mensaje: 'Factura rechazada' });\nreturn msg;\n",
+        "outputs": 1,
+        "x": 800,
+        "y": 460,
+        "wires": [
+            [
+                "9d78f2be071157ef"
+            ]
+        ]
+    },
+    {
+        "id": "9d78f2be071157ef",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "x": 970,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "249b5c0505ca2d9e",
+        "type": "http in",
+        "z": "5519da82a1fff81f",
+        "name": "GET /api/facturas/:id/items",
+        "url": "/api/facturas/:id/items",
+        "method": "get",
+        "x": 170,
+        "y": 540,
+        "wires": [
+            [
+                "67bcd220a93b817f"
+            ]
+        ]
+    },
+    {
+        "id": "67bcd220a93b817f",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Query ítems",
+        "func": "msg._req = msg.req;\nmsg._res = msg.res;\nmsg.topic = 'SELECT id, linea, descripcion, cantidad, unidad, precio_unitario, alicuota_iva, subtotal, moneda FROM staging_facturas_items WHERE factura_id = ? ORDER BY linea ASC';\nmsg.payload = [msg.req.params.id];\nreturn msg;\n",
+        "outputs": 1,
+        "x": 380,
+        "y": 540,
+        "wires": [
+            [
+                "104937e9f1dfb788"
+            ]
+        ]
+    },
+    {
+        "id": "104937e9f1dfb788",
+        "type": "mysql",
+        "z": "5519da82a1fff81f",
+        "mydb": "mysql-api-config",
+        "name": "SELECT ítems",
+        "x": 570,
+        "y": 540,
+        "wires": [
+            [
+                "63f7f3644c7d93ee"
+            ]
+        ]
+    },
+    {
+        "id": "63f7f3644c7d93ee",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Responder JSON",
+        "func": "msg.res = msg._res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nmsg.payload = JSON.stringify(msg.payload || []);\nreturn msg;\n",
+        "outputs": 1,
+        "x": 760,
+        "y": 540,
+        "wires": [
+            [
+                "aa1760c67fd71b77"
+            ]
+        ]
+    },
+    {
+        "id": "aa1760c67fd71b77",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "x": 930,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "9359bb5da4628c5b",
+        "type": "http in",
+        "z": "5519da82a1fff81f",
+        "name": "OPTIONS /* (CORS preflight)",
+        "url": "/*",
+        "method": "options",
+        "x": 180,
+        "y": 620,
+        "wires": [
+            [
+                "c6ba9f99695178ce"
+            ]
+        ]
+    },
+    {
+        "id": "c6ba9f99695178ce",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "CORS OK",
+        "func": "msg.statusCode = 204;\nmsg.headers = {\n  'Access-Control-Allow-Origin': '*',\n  'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',\n  'Access-Control-Allow-Headers': 'Content-Type'\n};\nmsg.payload = '';\nreturn msg;\n",
+        "outputs": 1,
+        "x": 380,
+        "y": 620,
+        "wires": [
+            [
+                "7ff848d4e0f568a6"
+            ]
+        ]
+    },
+    {
+        "id": "7ff848d4e0f568a6",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "x": 550,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "921dd4c7c65397f5",
+        "type": "http in",
+        "z": "5519da82a1fff81f",
+        "name": "GET /api/oc",
+        "url": "/api/oc",
+        "method": "get",
+        "upload": false,
+        "x": 170,
+        "y": 720,
+        "wires": [
+            [
+                "9b50f9c6bd9ef950"
+            ]
+        ]
+    },
+    {
+        "id": "3b36bfeaeaa2db83",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Responder OC list",
+        "func": "msg.res = msg._res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nmsg.payload = JSON.stringify(msg.payload || []);\nreturn msg;\n",
+        "outputs": 1,
+        "x": 780,
+        "y": 720,
+        "wires": [
+            [
+                "e867c0b622da3f84"
+            ]
+        ]
+    },
+    {
+        "id": "e867c0b622da3f84",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "name": "",
+        "x": 950,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "a412237f63bc8cda",
+        "type": "catch",
+        "z": "5519da82a1fff81f",
+        "name": "Error SQL Server OC list",
+        "scope": [
+            "27435cf50b8dfc6e"
+        ],
+        "uncaught": false,
+        "x": 580,
+        "y": 770,
+        "wires": [
+            [
+                "664c1aab26e01de7"
+            ]
+        ]
+    },
+    {
+        "id": "ccbbd902029a4652",
+        "type": "http in",
+        "z": "5519da82a1fff81f",
+        "name": "GET /api/oc/:oc/items",
+        "url": "/api/oc/:oc/items",
+        "method": "get",
+        "upload": false,
+        "x": 170,
+        "y": 840,
+        "wires": [
+            [
+                "b4cc4f6c56d4f06c"
+            ]
+        ]
+    },
+    {
+        "id": "755a1e1f07153abd",
+        "type": "MSSQL",
+        "z": "5519da82a1fff81f",
+        "mssqlCN": "6814eb4bb7e82ddb",
+        "name": "Query ítems SQL Server",
+        "outField": "payload",
+        "returnType": "0",
+        "throwErrors": "0",
+        "query": "",
+        "modeOpt": "",
+        "modeOptType": "query",
+        "queryOpt": "payload",
+        "queryOptType": "msg",
+        "paramsOpt": "queryParams",
+        "paramsOptType": "msg",
+        "rows": "",
+        "rowsType": "msg",
+        "parseMustache": false,
+        "params": [],
+        "x": 600,
+        "y": 840,
+        "wires": [
+            [
+                "fe9699259e919b7c"
+            ]
+        ]
+    },
+    {
+        "id": "fe9699259e919b7c",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Responder ítems OC",
+        "func": "msg.res = msg._res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nmsg.payload = JSON.stringify(msg.payload || []);\nreturn msg;\n",
+        "outputs": 1,
+        "x": 850,
+        "y": 820,
+        "wires": [
+            [
+                "2c9d9612ab9bd3c7"
+            ]
+        ]
+    },
+    {
+        "id": "2c9d9612ab9bd3c7",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "name": "",
+        "x": 950,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "ae02e5c324787f36",
+        "type": "catch",
+        "z": "5519da82a1fff81f",
+        "name": "Error SQL Server OC items",
+        "scope": [
+            "755a1e1f07153abd"
+        ],
+        "uncaught": false,
+        "x": 580,
+        "y": 890,
+        "wires": [
+            [
+                "664c1aab26e01de7"
+            ]
+        ]
+    },
+    {
+        "id": "664c1aab26e01de7",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Error SQL Server",
+        "func": "node.error('SQL Server error: ' + (msg.error && msg.error.message));\nmsg.statusCode = 500;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nmsg.payload = JSON.stringify({\n  ok: false,\n  error: (msg.error && msg.error.message) || 'Error al consultar SQL Server'\n});\nreturn msg;\n",
+        "outputs": 1,
+        "x": 780,
+        "y": 890,
+        "wires": [
+            [
+                "df43b57186fa2fa1"
+            ]
+        ]
+    },
+    {
+        "id": "df43b57186fa2fa1",
+        "type": "http response",
+        "z": "5519da82a1fff81f",
+        "name": "HTTP 500 MSSQL",
+        "x": 950,
+        "y": 890,
+        "wires": []
+    },
+    {
+        "id": "9b50f9c6bd9ef950",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Query OC por CUIT",
+        "func": "msg._res = msg.res;\nconst cuit = (msg.req.query.cuit || '').replace(/[^0-9]/g, '');\nif (!cuit) {\n  msg.statusCode = 400;\n  msg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\n  msg.payload = JSON.stringify({ ok: false, error: 'Falta parámetro cuit' });\n  return [null, msg];\n}\nmsg.payload = `SELECT TOP 5  OC, FECHAACTUAL, FECHAENTREGA, nom_PROVEEDOR, CUIT, ESTADO,  DESCRIPCION,DETALLE AS NOMBRE_OC, NOMBREMONEDA,\n               total_doc AS  btotal_doc, '' AS NUMREQ,Observaciones AS DETALLE \n               FROM V_EZI_PROV_ORDENCOMPRA_ENC \n               WHERE CUIT = '${cuit}'\n               ORDER BY FECHAACTUAL DESC;`;\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 680,
+        "wires": [
+            [
+                "488143989753e3d5"
+            ],
+            [
+                "e867c0b622da3f84"
+            ]
+        ]
+    },
+    {
+        "id": "b4cc4f6c56d4f06c",
+        "type": "function",
+        "z": "5519da82a1fff81f",
+        "name": "Query ítems OC",
+        "func": "msg._res = msg.res;\nconst oc = (msg.req.params.oc || '').replace(/[^0-9A-Za-z\\-]/g, '');\nif (!oc) {\n  msg.statusCode = 400;\n  msg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\n  msg.payload = JSON.stringify({ ok: false, error: 'Falta OC' });\n  return [null, msg];\n}\nmsg.payload = `SELECT OC, NUMEROITEM AS NRO_ITEM,\n                  (NOM_PRODUCTO + ' - ' + DESCRIPCION) AS DETALLE,\n                  UNI_MED, CANTIDAD, PU, BONIFICACION,\n                  TOTAL_ITEM, IVATASA, fechaentrega, MEMO\n              FROM V_EZI_ORDENDECOMPRA0\n              WHERE OC = '${oc}'\n              ORDER BY NRO_ITEM ASC`;\nreturn [msg, null];\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 840,
+        "wires": [
+            [
+                "755a1e1f07153abd"
+            ],
+            [
+                "2c9d9612ab9bd3c7"
+            ]
+        ]
+    },
+    {
+        "id": "488143989753e3d5",
+        "type": "MSSQL",
+        "z": "5519da82a1fff81f",
+        "mssqlCN": "6814eb4bb7e82ddb",
+        "name": "",
+        "outField": "payload",
+        "returnType": 0,
+        "throwErrors": 1,
+        "query": "",
+        "modeOpt": "queryMode",
+        "modeOptType": "query",
+        "queryOpt": "payload",
+        "queryOptType": "msg",
+        "paramsOpt": "queryParams",
+        "paramsOptType": "msg",
+        "rows": "rows",
+        "rowsType": "msg",
+        "parseMustache": false,
+        "params": [],
+        "x": 570,
+        "y": 720,
+        "wires": [
+            [
+                "3b36bfeaeaa2db83"
+            ]
+        ]
+    },
+    {
+        "id": "mysql-api-config",
+        "type": "MySQLdatabase",
+        "name": "MySQL Automatizaciones",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "db_automatizaciones",
+        "tz": "",
+        "charset": "UTF8MB4_UNICODE_CI"
+    },
+    {
+        "id": "6814eb4bb7e82ddb",
+        "type": "MSSQL-CN",
+        "tdsVersion": "7_3_A",
+        "name": "Calipso",
+        "server": "192.168.0.177",
+        "port": "1433",
+        "encyption": false,
+        "trustServerCertificate": false,
+        "database": "CORONA",
+        "useUTC": true,
+        "connectTimeout": "15000",
+        "requestTimeout": "15000",
+        "cancelTimeout": "5000",
+        "pool": "5",
+        "parseJSON": false,
+        "enableArithAbort": true,
+        "readOnlyIntent": false
+    }
+]

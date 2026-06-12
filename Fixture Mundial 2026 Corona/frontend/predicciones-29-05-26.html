@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Predicciones - Corona Mundial 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top"><div class="container"><a class="navbar-brand" href="index.html"><img class="navbar-logo" src="assets/img/logo-corona-original.png" onerror="this.onerror=null;this.src='assets/img/logo-corona.jpg';" alt="Ingenio La Corona"><span class="navbar-title">Corona Mundial 2026<small>Ingenio La Corona</small></span></a><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="nav"><div class="navbar-nav ms-auto"><a class="nav-link" href="index.html">Inicio</a><a class="nav-link active" href="predicciones.html">Predicciones</a><a class="nav-link" href="ranking.html">Ranking</a><a class="nav-link" href="ranking-areas.html">Areas</a><a class="nav-link" href="reglamento.html">Reglamento</a><a class="nav-link" href="premios.html">Premios</a></div></div></div></nav>
+  <header class="page-header matches-premium-bg section-with-bg"><div class="container"><p class="eyebrow mb-2">Carga de pronosticos</p><h1 class="h2 section-title">Predicciones</h1><p class="mb-0 text-muted">Modificables hasta el cierre de cada partido.</p></div></header>
+  <main class="matches-premium-bg section-with-bg py-5">
+    <div class="container">
+    <div class="card corona-card">
+      <div class="card-body">
+        <form id="prediccionForm" class="row g-3">
+          <div class="col-md-6"><label class="form-label">Email registrado</label><input class="form-control" type="email" name="email" required></div>
+          <div class="col-md-6"><label class="form-label">Partido</label><select class="form-select" id="partido_id" name="partido_id" required><option>Cargando...</option></select></div>
+          <div class="col-md-4"><label class="form-label">Ganador predicho</label><select class="form-select" id="ganador_predicho" name="ganador_predicho" required><option value="">Seleccionar partido primero</option></select></div>
+          <div class="col-md-4"><label class="form-label">Goles equipo A</label><input class="form-control" type="number" min="0" name="goles_a_predicho" required></div>
+          <div class="col-md-4"><label class="form-label">Goles equipo B</label><input class="form-control" type="number" min="0" name="goles_b_predicho" required></div>
+          <div class="col-12"><button class="btn btn-corona" type="submit">Guardar prediccion</button></div>
+        </form>
+        <div id="prediccionStatus" class="status-message mt-3"></div>
+      </div>
+    </div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/config.js"></script><script src="assets/js/api.js"></script><script src="assets/js/app.js"></script><script src="assets/js/predicciones.js"></script>
+</body>
+</html>

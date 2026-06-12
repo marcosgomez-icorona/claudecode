@@ -1,0 +1,38 @@
+/* styles.css */
+/* Personaliza los estilos según tus necesidades */
+
+body {
+    background-color: #f8f9fa;
+  }
+  
+  .container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .recibo {
+    border: 1px solid #dee2e6;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  .recibo:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+  }
+
+  .btn-custom {
+    color: #a59999;
+    background-color: #dd821b9c;
+    border-color: #dd821b;
+}
+
+.btn-custom:hover {
+    background-color: #7e776f;
+    border-color: #dbc6ad;
+}
+
+  

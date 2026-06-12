@@ -1,0 +1,100 @@
+[
+  {
+    "id": "tab-facturas",
+    "type": "tab",
+    "label": "Facturas por Email",
+    "disabled": false,
+    "info": "CAPA DELGADA: solo extrae texto del PDF y hace POST a n8n. Toda la lógica de negocio está en n8n."
+  },
+
+  {
+    "id": "imap-inbox",
+    "type": "e-mail in",
+    "z": "tab-facturas",
+    "name": "Bandeja Facturas",
+    "proto": "IMAP",
+    "server": "imap.gmail.com",
+    "port": "993",
+    "useSSL": true,
+    "user": "sectorcompras@ingeniolacorona.com",
+    "password": "",
+    "box": "INBOX",
+    "useRecentFlag": false,
+    "criteria": "UNSEEN",
+    "fetch": "auto",
+    "repeat": 300,
+    "inputs": 0,
+    "outputs": 1,
+    "x": 100,
+    "y": 100,
+    "wires": [["filtrar-adjuntos"]]
+  },
+
+  {
+    "id": "filtrar-adjuntos",
+    "type": "function",
+    "z": "tab-facturas",
+    "name": "Filtrar PDFs adjuntos",
+    "func": "if (!msg.attachments || msg.attachments.length === 0) return null;\nconst pdfs = msg.attachments.filter(a =>\n    a.contentType === 'application/pdf' ||\n    (a.filename && a.filename.toLowerCase().endsWith('.pdf'))\n);\nif (pdfs.length === 0) return null;\nreturn [pdfs.map(pdf => ({\n    payload: {\n        pdf_content:      pdf.content,\n        pdf_filename:     pdf.filename,\n        email_from:       msg.from,\n        email_subject:    msg.topic,\n        email_date:       msg.date,\n        email_messageId:  msg.messageId\n    }\n}))];\n",
+    "outputs": 1,
+    "x": 280,
+    "y": 100,
+    "wires": [["extraer-texto-pdf"]]
+  },
+
+  {
+    "id": "extraer-texto-pdf",
+    "type": "function",
+    "z": "tab-facturas",
+    "name": "Extraer texto PDF",
+    "func": "// Requiere: cd ~/.node-red && npm install pdf-parse\nconst pdfParse = require('pdf-parse');\nconst pdfBuffer = Buffer.isBuffer(msg.payload.pdf_content)\n    ? msg.payload.pdf_content\n    : Buffer.from(msg.payload.pdf_content, 'base64');\npdfParse(pdfBuffer).then(data => {\n    msg.payload.pdf_text  = data.text;\n    msg.payload.pdf_pages = data.numpages;\n    node.send(msg);\n}).catch(err => node.error('pdf-parse: ' + err.message, msg));\nreturn null;\n",
+    "outputs": 1,
+    "x": 460,
+    "y": 100,
+    "wires": [["preparar-payload"]]
+  },
+
+  {
+    "id": "preparar-payload",
+    "type": "function",
+    "z": "tab-facturas",
+    "name": "Preparar payload para n8n",
+    "func": "// Node-RED solo calcula el hash y empaqueta el texto plano.\n// Toda la lógica (parseo, validación, MySQL, SQL Server) está en n8n.\nconst crypto = require('crypto');\nconst p = msg.payload;\nmsg.payload = {\n    pdf_text:        p.pdf_text,\n    pdf_pages:       p.pdf_pages,\n    pdf_filename:    p.pdf_filename,\n    pdf_hash:        crypto.createHash('sha256').update(p.pdf_content).digest('hex'),\n    email_from:      p.email_from,\n    email_subject:   p.email_subject,\n    email_date:      p.email_date,\n    email_messageId: p.email_messageId,\n    fuente:          'EMAIL_IMAP',\n    timestamp:       new Date().toISOString()\n};\nreturn msg;\n",
+    "outputs": 1,
+    "x": 650,
+    "y": 100,
+    "wires": [["enviar-n8n"]]
+  },
+
+  {
+    "id": "enviar-n8n",
+    "type": "http request",
+    "z": "tab-facturas",
+    "name": "POST a n8n",
+    "method": "POST",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.20:5678/webhook/facturas-entrada",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "authType": "",
+    "x": 850,
+    "y": 100,
+    "wires": [["log-enviado"]]
+  },
+
+  {
+    "id": "log-enviado",
+    "type": "debug",
+    "z": "tab-facturas",
+    "name": "Log respuesta n8n",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "complete": "payload",
+    "x": 1050,
+    "y": 100,
+    "wires": []
+  }
+]

@@ -1,0 +1,255 @@
+[
+  {
+    "id": "tab_facturacion_venta_mvp",
+    "type": "tab",
+    "label": "Facturacion Venta MVP",
+    "disabled": false,
+    "info": "Sincroniza remitos pendientes de azucar/alcohol, procesa prefacturas aprobadas y registra auditoria. Completar credenciales SQL Server/MySQL en Node-RED."
+  },
+  {
+    "id": "inject_sync_pendientes",
+    "type": "inject",
+    "z": "tab_facturacion_venta_mvp",
+    "name": "Cada 10 min - sync pendientes",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "600",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 80,
+    "wires": [
+      [
+        "fn_armar_queries_pendientes"
+      ]
+    ]
+  },
+  {
+    "id": "fn_armar_queries_pendientes",
+    "type": "function",
+    "z": "tab_facturacion_venta_mvp",
+    "name": "Armar queries SQL Server",
+    "func": "msg.queries = [\n  {\n    producto_tipo: 'AZUCAR',\n    sql: \"SELECT r.id, r.remito, r.numeroremito, r.fecha, r.razonsocial, r.cuit, r.factura, r.confirmado, r.cumplido, r.importado, r.estado, r.pesoremito, r.cantidadremito, r.unidadmedida, r.patente, r.chasis, r.chofer, r.dniChofer, i.orden, CONVERT(varchar(80), i.producto) AS producto_id, i.descripcion, i.cantidad, i.unidadmedida AS item_unidadmedida, i.cantidad2, i.unidamedida2, i.precio FROM dbo.pr_ezi_remitos r LEFT JOIN dbo.pr_ezi_remitos_items i ON i.Remito = r.remito WHERE (r.factura IS NULL OR LTRIM(RTRIM(r.factura)) = '') AND ISNULL(r.estado, '') NOT IN ('ANULADO', 'Anulado', 'ANULADA', 'Anulada') ORDER BY r.fecha DESC, r.remito DESC, i.orden\"\n  },\n  {\n    producto_tipo: 'ALCOHOL',\n    sql: \"SELECT r.id, r.remito, r.numeroremito, r.fecha, r.razonsocial, r.cuit, r.factura, r.confirmado, r.cumplido, r.importado, r.estado, r.nroAnalisis, r.gl, r.ltsAlcohol, r.neto, r.bruto, r.pesoremito, r.cantidadremito, r.unidadmedida, r.patente, r.chasis, r.chofer, r.dniChofer, i.orden, CONVERT(varchar(80), i.producto) AS producto_id, i.descripcion, i.cantidad, i.unidadmedida AS item_unidadmedida FROM dbo.pr_ezi_remitos_alcohol r LEFT JOIN dbo.pr_ezi_remitos_alcohol_items i ON i.Remito = r.remito WHERE (r.factura IS NULL OR LTRIM(RTRIM(r.factura)) = '') AND ISNULL(r.estado, '') NOT IN ('ANULADO', 'Anulado', 'ANULADA', 'Anulada') ORDER BY r.fecha DESC, r.remito DESC, i.orden\"\n  }\n];\nreturn [msg.queries.map(q => ({ payload: q.sql, producto_tipo: q.producto_tipo }))];",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 430,
+    "y": 80,
+    "wires": [
+      [
+        "mssql_select_pendientes"
+      ]
+    ]
+  },
+  {
+    "id": "mssql_select_pendientes",
+    "type": "MSSQL",
+    "z": "tab_facturacion_venta_mvp",
+    "mssqlCN": "cfg_sqlserver_calipso_readonly",
+    "name": "SQL Server readonly - pendientes",
+    "query": "",
+    "outField": "payload",
+    "x": 720,
+    "y": 80,
+    "wires": [
+      [
+        "fn_normalizar_pendientes"
+      ]
+    ]
+  },
+  {
+    "id": "fn_normalizar_pendientes",
+    "type": "function",
+    "z": "tab_facturacion_venta_mvp",
+    "name": "Normalizar para MySQL",
+    "func": "const crypto = global.get('crypto') || null;\nconst rows = Array.isArray(msg.payload) ? msg.payload : [];\nmsg.payload = rows.map(row => {\n  const base = {\n    producto_tipo: msg.producto_tipo,\n    origen_tabla: msg.producto_tipo === 'AZUCAR' ? 'pr_ezi_remitos' : 'pr_ezi_remitos_alcohol',\n    origen_id: String(row.id),\n    remito: row.remito,\n    numero_remito: row.numeroremito || null,\n    fecha_remito: row.fecha || null,\n    cliente_nombre: row.razonsocial || null,\n    cliente_cuit: row.cuit || null,\n    factura_origen: row.factura || null,\n    estado_origen: row.estado || null,\n    importado: row.importado,\n    confirmado: row.confirmado,\n    cumplido: row.cumplido,\n    orden: row.orden ? String(row.orden) : null,\n    producto_id: row.producto_id || null,\n    descripcion: row.descripcion || null,\n    cantidad: row.cantidad || null,\n    unidad: row.item_unidadmedida || row.unidadmedida || null,\n    precio: row.precio || null,\n    patente: row.patente || null,\n    chasis: row.chasis || null,\n    chofer: row.chofer || null,\n    dni_chofer: row.dniChofer || null,\n    alcohol_gl: row.gl || null,\n    alcohol_litros: row.ltsAlcohol || null,\n    alcohol_nro_analisis: row.nroAnalisis || null,\n    alcohol_neto: row.neto || null,\n    alcohol_bruto: row.bruto || null\n  };\n  base.hash_fuente = Buffer.from(JSON.stringify(base)).toString('base64').substring(0, 64);\n  return base;\n});\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1010,
+    "y": 80,
+    "wires": [
+      [
+        "mysql_upsert_pendientes"
+      ]
+    ]
+  },
+  {
+    "id": "mysql_upsert_pendientes",
+    "type": "mysql",
+    "z": "tab_facturacion_venta_mvp",
+    "mydb": "cfg_mysql_facturacion_mw",
+    "name": "MySQL upsert pendientes",
+    "x": 1280,
+    "y": 80,
+    "wires": [
+      [
+        "debug_sync_ok"
+      ]
+    ]
+  },
+  {
+    "id": "inject_outbox",
+    "type": "inject",
+    "z": "tab_facturacion_venta_mvp",
+    "name": "Cada 1 min - procesar outbox",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "SELECT id, uuid, prefactura_id, tipo_evento, payload_json FROM integracion_outbox WHERE estado = 'PENDIENTE' AND procesar_desde <= NOW() ORDER BY id LIMIT 10",
+    "payloadType": "str",
+    "x": 180,
+    "y": 200,
+    "wires": [
+      [
+        "mysql_select_outbox"
+      ]
+    ]
+  },
+  {
+    "id": "mysql_select_outbox",
+    "type": "mysql",
+    "z": "tab_facturacion_venta_mvp",
+    "mydb": "cfg_mysql_facturacion_mw",
+    "name": "MySQL leer outbox",
+    "x": 460,
+    "y": 200,
+    "wires": [
+      [
+        "fn_preparar_envio_calipso"
+      ]
+    ]
+  },
+  {
+    "id": "fn_preparar_envio_calipso",
+    "type": "function",
+    "z": "tab_facturacion_venta_mvp",
+    "name": "Preparar envio Calipso",
+    "func": "const eventos = Array.isArray(msg.payload) ? msg.payload : [];\nreturn [eventos.map(e => ({ payload: e }))];",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 720,
+    "y": 200,
+    "wires": [
+      [
+        "http_middleware_calipso"
+      ]
+    ]
+  },
+  {
+    "id": "http_middleware_calipso",
+    "type": "http request",
+    "z": "tab_facturacion_venta_mvp",
+    "name": "POST middleware Calipso autorizado",
+    "method": "POST",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "http://127.0.0.1:8080/api/calipso/facturas-venta",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 1010,
+    "y": 200,
+    "wires": [
+      [
+        "mysql_actualizar_resultado"
+      ]
+    ]
+  },
+  {
+    "id": "mysql_actualizar_resultado",
+    "type": "mysql",
+    "z": "tab_facturacion_venta_mvp",
+    "mydb": "cfg_mysql_facturacion_mw",
+    "name": "MySQL actualizar resultado",
+    "x": 1300,
+    "y": 200,
+    "wires": [
+      [
+        "debug_outbox_ok"
+      ]
+    ]
+  },
+  {
+    "id": "debug_sync_ok",
+    "type": "debug",
+    "z": "tab_facturacion_venta_mvp",
+    "name": "sync ok",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "x": 1510,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "debug_outbox_ok",
+    "type": "debug",
+    "z": "tab_facturacion_venta_mvp",
+    "name": "outbox ok",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "x": 1530,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "cfg_sqlserver_calipso_readonly",
+    "type": "MSSQL-CN",
+    "name": "Calipso readonly TEST",
+    "server": "CONFIGURAR",
+    "port": "1433",
+    "encyption": false,
+    "trustServerCertificate": true,
+    "database": "CALIPSO_TEST",
+    "useUTC": false,
+    "connectTimeout": "15000",
+    "requestTimeout": "60000",
+    "cancelTimeout": "5000",
+    "pool": "5"
+  },
+  {
+    "id": "cfg_mysql_facturacion_mw",
+    "type": "MySQLdatabase",
+    "name": "facturacion_venta_mw",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "db": "facturacion_venta_mw",
+    "tz": "",
+    "charset": "UTF8MB4"
+  }
+]
