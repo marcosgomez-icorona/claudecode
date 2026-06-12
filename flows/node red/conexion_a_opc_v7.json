@@ -1,0 +1,1143 @@
+[
+  {
+    "id": "91826f9841428059",
+    "type": "inject",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "Crear tabla al iniciar",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "3",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 40,
+    "wires": [
+      [
+        "061d1209543dc797"
+      ]
+    ]
+  },
+  {
+    "id": "061d1209543dc797",
+    "type": "function",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "DDL indicadores_opc",
+    "func": "msg.topic = `CREATE TABLE IF NOT EXISTS \\`indicadores_opc\\` (\\`id\\` INT NOT NULL AUTO_INCREMENT,\\`timestamp\\` DATETIME NOT NULL,\\`velocidad_molino1\\` FLOAT DEFAULT NULL,\\`velocidad_molino6\\` FLOAT DEFAULT NULL,\\`balanza_cinta\\` FLOAT DEFAULT NULL,\\`agua_imbibicion\\` FLOAT DEFAULT NULL,\\`presion_molino6_este\\` FLOAT DEFAULT NULL,\\`presion_molino6_oeste\\` FLOAT DEFAULT NULL,\\`caudal_jugo_clarif\\` FLOAT DEFAULT NULL,\\`nivel_melado_tratado\\` FLOAT DEFAULT NULL,\\`nivel_melado\\` FLOAT DEFAULT NULL,\\`nivel_decantador1\\` FLOAT DEFAULT NULL,\\`nivel_decantador2\\` FLOAT DEFAULT NULL,\\`nivel_decantador3\\` FLOAT DEFAULT NULL,\\`descarga_tachos_1ra\\` FLOAT DEFAULT NULL,\\`descarga_tachos_2da\\` FLOAT DEFAULT NULL,\\`descarga_tachos_3ra\\` FLOAT DEFAULT NULL,\\`contador_bolsas_dia\\` FLOAT DEFAULT NULL,\\`silo_a\\` FLOAT DEFAULT NULL,\\`silo_b\\` FLOAT DEFAULT NULL,\\`silo_c\\` FLOAT DEFAULT NULL,\\`silo_e\\` FLOAT DEFAULT NULL,\\`presion_vapor_directo\\` FLOAT DEFAULT NULL,\\`presion_agua_alim\\` FLOAT DEFAULT NULL,\\`presion_aire\\` FLOAT DEFAULT NULL,\\`caudal_vapor_cald1\\` FLOAT DEFAULT NULL,\\`caudal_vapor_cald2\\` FLOAT DEFAULT NULL,\\`caudal_vapor_cald3\\` FLOAT DEFAULT NULL,\\`caudal_vapor_cald6\\` FLOAT DEFAULT NULL,\\`vapor_total\\` FLOAT DEFAULT NULL,\\`caudal_gas_cald2\\` FLOAT DEFAULT NULL,\\`caudal_gas_cald6\\` FLOAT DEFAULT NULL,\\`potencia_activa_siemens\\` FLOAT DEFAULT NULL,\\`potencia_reactiva_siemens\\` FLOAT DEFAULT NULL,\\`frecuencia_siemens\\` FLOAT DEFAULT NULL,\\`intensidad_siemens\\` FLOAT DEFAULT NULL,\\`potencia_activa_aeg\\` FLOAT DEFAULT NULL,\\`potencia_reactiva_aeg\\` FLOAT DEFAULT NULL,\\`frecuencia_aeg\\` FLOAT DEFAULT NULL,\\`intensidad_aeg\\` FLOAT DEFAULT NULL,\\`potencia_total\\` FLOAT DEFAULT NULL,\\`cv_trapiche\\` FLOAT DEFAULT NULL,\\`cv_usina_alta\\` FLOAT DEFAULT NULL,\\`cv_destileria\\` FLOAT DEFAULT NULL,\\`cv_aux_total\\` FLOAT DEFAULT NULL,\\`cv_preparacion_cania\\` FLOAT DEFAULT NULL,\\`caudal_vino\\` FLOAT DEFAULT NULL,\\`caudal_alcohol\\` FLOAT DEFAULT NULL,\\`caudal_jugo_dilutor\\` FLOAT DEFAULT NULL,\\`caudal_melaza_dilutor\\` FLOAT DEFAULT NULL,PRIMARY KEY (\\`id\\`),UNIQUE KEY \\`uk_timestamp\\` (\\`timestamp\\`),INDEX \\`idx_ts\\` (\\`timestamp\\`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`;\nmsg.payload = [];\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 400,
+    "y": 40,
+    "wires": [
+      [
+        "96bcaec9bfcbea7d"
+      ]
+    ]
+  },
+  {
+    "id": "96bcaec9bfcbea7d",
+    "type": "mysql",
+    "z": "ce2fbd4775ed5ecf",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "CREATE TABLE IF NOT EXISTS",
+    "x": 720,
+    "y": 40,
+    "wires": [
+      [
+        "beccbf66c1ed7d6a"
+      ]
+    ]
+  },
+  {
+    "id": "beccbf66c1ed7d6a",
+    "type": "debug",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "DDL result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 990,
+    "y": 40,
+    "wires": []
+  },
+  {
+    "id": "cc000001",
+    "type": "inject",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "Leer OPC cada 60s",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "5",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 540,
+    "wires": [
+      [
+        "c0000001",
+        "c0000002",
+        "c0000003",
+        "c0000004",
+        "c0000005",
+        "c0000006",
+        "c0000007",
+        "c0000008",
+        "c0000009",
+        "c000000a",
+        "c000000b",
+        "c000000c",
+        "c000000d",
+        "c000000e",
+        "c000000f",
+        "c0000010",
+        "c0000011",
+        "c0000012",
+        "c0000013",
+        "c0000014",
+        "c0000015",
+        "c0000016",
+        "c0000018",
+        "c0000019",
+        "c000001a",
+        "c000001b",
+        "c000001c",
+        "c000001d",
+        "c000001e",
+        "c000001f",
+        "c0000020",
+        "c0000021",
+        "c0000022",
+        "c0000023",
+        "c0000024",
+        "c0000025",
+        "c0000026",
+        "c0000027",
+        "c0000028",
+        "c0000029",
+        "c000002a",
+        "c000002b",
+        "c0000100",
+        "c0000101",
+        "c0000102",
+        "c0000103",
+        "c0000104",
+        "c0000105",
+        "c0000106"
+      ]
+    ]
+  },
+  {
+    "id": "c0000001",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=trapiche_molino.trapiche_molino.trap_molino1_OUT",
+    "datatype": "Float",
+    "value": "velocidad_molino1",
+    "name": "Vel Molino 1",
+    "x": 430,
+    "y": 120,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000002",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=trapiche_molino.trapiche_molino.trap_molino6_motor_velocidad",
+    "datatype": "Float",
+    "value": "velocidad_molino6",
+    "name": "Vel Molino 6",
+    "x": 430,
+    "y": 160,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000003",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=trapiche_molino.trapiche_molino.trap_cinta_salida1",
+    "datatype": "Float",
+    "value": "balanza_cinta",
+    "name": "Balanza Cinta",
+    "x": 430,
+    "y": 200,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000004",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=vapor.vapor.vapor_agua_imbibicion_caudal",
+    "datatype": "Float",
+    "value": "agua_imbibicion",
+    "name": "Agua Imbibicion",
+    "x": 430,
+    "y": 240,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000005",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=trapiche_molino.trapiche_molino.trap_molino6_flotacion_este",
+    "datatype": "Float",
+    "value": "presion_molino6_este",
+    "name": "Presion M6 Este",
+    "x": 430,
+    "y": 280,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000006",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=trapiche_molino.trapiche_molino.trap_molino6_flotacion_oeste",
+    "datatype": "Float",
+    "value": "presion_molino6_oeste",
+    "name": "Presion M6 Oeste",
+    "x": 430,
+    "y": 320,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000007",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=fabrica.fabrica.Fab_jugo_clarificado_caudal",
+    "datatype": "Float",
+    "value": "caudal_jugo_clarif",
+    "name": "Caudal Jugo Clarif",
+    "x": 430,
+    "y": 360,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000008",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=tacho2da3ra.tacho2da3ra.Tacho_melado_tratado",
+    "datatype": "Float",
+    "value": "nivel_melado_tratado",
+    "name": "Nivel Melado Tratado",
+    "x": 430,
+    "y": 400,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000009",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=fabrica.fabrica.Tacho_melado_evaporacion_nivel",
+    "datatype": "Float",
+    "value": "nivel_melado",
+    "name": "Nivel Melado",
+    "x": 430,
+    "y": 440,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000000a",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Clarificacion2.Clarificacion2.clar2_decant1_nivel",
+    "datatype": "Float",
+    "value": "nivel_decantador1",
+    "name": "Decantador 1",
+    "x": 430,
+    "y": 480,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000000b",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Clarificacion2.Clarificacion2.clar2_decant2_nivel",
+    "datatype": "Float",
+    "value": "nivel_decantador2",
+    "name": "Decantador 2",
+    "x": 430,
+    "y": 520,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000000c",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Clarificacion2.Clarificacion2.clar2_decant3_nivel",
+    "datatype": "Float",
+    "value": "nivel_decantador3",
+    "name": "Decantador 3",
+    "x": 430,
+    "y": 560,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000000d",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Tacho1ra.Tacho1ra.Tacho_cristalizador1ra_nivel",
+    "datatype": "Float",
+    "value": "descarga_tachos_1ra",
+    "name": "Cristalizador 1ra",
+    "x": 430,
+    "y": 600,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000000e",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Tacho1ra.Tacho1ra.Tacho_melado_tachos_nivel1",
+    "datatype": "Float",
+    "value": "descarga_tachos_2da",
+    "name": "Melado Tachos Niv1",
+    "x": 430,
+    "y": 640,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000000f",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Tacho1ra.Tacho1ra.Tacho_melado_tachos_nivel2",
+    "datatype": "Float",
+    "value": "descarga_tachos_3ra",
+    "name": "Melado Tachos Niv2",
+    "x": 430,
+    "y": 680,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000010",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=salon.salon.salon.salon_contador_dia",
+    "datatype": "Float",
+    "value": "contador_bolsas_dia",
+    "name": "Contador Bolsas",
+    "x": 430,
+    "y": 720,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000011",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=salon.salon.salon.SILO_A_BOLSAS",
+    "datatype": "Float",
+    "value": "silo_a",
+    "name": "Silo A",
+    "x": 430,
+    "y": 760,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000012",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=salon.salon.salon.SILO_B_BOLSAS",
+    "datatype": "Float",
+    "value": "silo_b",
+    "name": "Silo B",
+    "x": 430,
+    "y": 800,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000013",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=salon.salon.salon.SILO_C_BOLSAS",
+    "datatype": "Float",
+    "value": "silo_c",
+    "name": "Silo C",
+    "x": 430,
+    "y": 840,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000014",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=salon.salon.salon.SILO_E_BOLSAS",
+    "datatype": "Float",
+    "value": "silo_e",
+    "name": "Silo E",
+    "x": 430,
+    "y": 880,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000015",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=caldera.Caldera.cald_vapor_baja_presion",
+    "datatype": "Float",
+    "value": "presion_vapor_directo",
+    "name": "Pres Vapor Directo",
+    "x": 430,
+    "y": 920,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000016",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=caldera.Caldera.cald_agua_aliment1_presion",
+    "datatype": "Float",
+    "value": "presion_agua_alim",
+    "name": "Pres Agua Alim",
+    "x": 430,
+    "y": 960,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000018",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=caldera2.caldera2.cald2_vapor_caudal",
+    "datatype": "Float",
+    "value": "caudal_vapor_cald2",
+    "name": "Caudal Vapor Cald2",
+    "x": 430,
+    "y": 1000,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000019",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=caldera3.caldera3.cald3_vapor_caudal",
+    "datatype": "Float",
+    "value": "caudal_vapor_cald3",
+    "name": "Caudal Vapor Cald3",
+    "x": 430,
+    "y": 1040,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000001a",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=caldera6.caldera6.cald6_vapor_caudal",
+    "datatype": "Float",
+    "value": "caudal_vapor_cald6",
+    "name": "Caudal Vapor Cald6",
+    "x": 430,
+    "y": 1080,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000001b",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=caldera2.caldera2.cald2_gas_caudal",
+    "datatype": "Float",
+    "value": "caudal_gas_cald2",
+    "name": "Caudal Gas Cald2",
+    "x": 430,
+    "y": 1120,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000001c",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=caldera6.caldera6.cald6_gas_caudal",
+    "datatype": "Float",
+    "value": "caudal_gas_cald6",
+    "name": "Caudal Gas Cald6",
+    "x": 430,
+    "y": 1160,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000001d",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=siemens.siemens.siemens_potencia_activa",
+    "datatype": "Float",
+    "value": "potencia_activa_siemens",
+    "name": "Pot Activa Siemens",
+    "x": 430,
+    "y": 1200,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000001e",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=siemens.siemens.siemens_potencia_reactiva",
+    "datatype": "Float",
+    "value": "potencia_reactiva_siemens",
+    "name": "Pot Reactiva Siemens",
+    "x": 430,
+    "y": 1240,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000001f",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=siemens.siemens.siemens_frecuencia",
+    "datatype": "Float",
+    "value": "frecuencia_siemens",
+    "name": "Frecuencia Siemens",
+    "x": 430,
+    "y": 1280,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000020",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=siemens.siemens.siemens_Intensidad_media",
+    "datatype": "Float",
+    "value": "intensidad_siemens",
+    "name": "Intensidad Siemens",
+    "x": 430,
+    "y": 1320,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000021",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=skoda.skoda.Potencia_Activa_Total_AEG",
+    "datatype": "Float",
+    "value": "potencia_activa_aeg",
+    "name": "Pot Activa AEG",
+    "x": 430,
+    "y": 1360,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000022",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=skoda.skoda.Potencia_Reactiva_Total_AEG",
+    "datatype": "Float",
+    "value": "potencia_reactiva_aeg",
+    "name": "Pot Reactiva AEG",
+    "x": 430,
+    "y": 1400,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000023",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=skoda.skoda.Frecuencia_AEG",
+    "datatype": "Float",
+    "value": "frecuencia_aeg",
+    "name": "Frecuencia AEG",
+    "x": 430,
+    "y": 1440,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000024",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=skoda.skoda.Intensidad_Media_AEG",
+    "datatype": "Float",
+    "value": "intensidad_aeg",
+    "name": "Intensidad AEG",
+    "x": 430,
+    "y": 1480,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000025",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=vapor.vapor.vapor_trapiche_caudal",
+    "datatype": "Float",
+    "value": "cv_trapiche",
+    "name": "CV Trapiche",
+    "x": 430,
+    "y": 1520,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000026",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=vapor.vapor.vapor_usina_alta_caudal",
+    "datatype": "Float",
+    "value": "cv_usina_alta",
+    "name": "CV Usina Alta",
+    "x": 430,
+    "y": 1560,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000027",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=vapor.vapor.vapor_destileria_caudal",
+    "datatype": "Float",
+    "value": "cv_destileria",
+    "name": "CV Destileria",
+    "x": 430,
+    "y": 1600,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000028",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=vapor.vapor.vapor_auxilio_caudal",
+    "datatype": "Float",
+    "value": "cv_aux_total",
+    "name": "CV Aux Total",
+    "x": 430,
+    "y": 1640,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000029",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=vapor.vapor.vapor_reducido_caudal",
+    "datatype": "Float",
+    "value": "cv_preparacion_cania",
+    "name": "CV Preparacion Cana",
+    "x": 430,
+    "y": 1680,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000002a",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Destileria.Destileria.dest_vino_caudal",
+    "datatype": "Float",
+    "value": "caudal_vino",
+    "name": "Caudal Vino",
+    "x": 430,
+    "y": 1720,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c000002b",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Destileria.Destileria.dest_alcohol_caudal",
+    "datatype": "Float",
+    "value": "caudal_alcohol",
+    "name": "Caudal Alcohol",
+    "x": 430,
+    "y": 1760,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "dd000001",
+    "type": "OpcUa-Client",
+    "z": "ce2fbd4775ed5ecf",
+    "endpoint": "e89251c6637bb9dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": "0",
+    "time": "0",
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securityPolicy": "None",
+    "securityMode": "None",
+    "name": "SRV-CONTROL READ",
+    "x": 710,
+    "y": 940,
+    "wires": [
+      [
+        "ee000001"
+      ],
+      [
+        "ebd713b36d463ea2"
+      ]
+    ]
+  },
+  {
+    "id": "ee000001",
+    "type": "function",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "Escala y guarda en flow context",
+    "func": "const tagMap = {\n    'ns=2;s=trapiche_molino.trapiche_molino.trap_molino1_OUT': 'velocidad_molino1',\n    'ns=2;s=trapiche_molino.trapiche_molino.trap_molino6_motor_velocidad': 'velocidad_molino6',\n    'ns=2;s=trapiche_molino.trapiche_molino.trap_cinta_salida1': 'balanza_cinta',\n    'ns=2;s=vapor.vapor.vapor_agua_imbibicion_caudal': 'agua_imbibicion',\n    'ns=2;s=trapiche_molino.trapiche_molino.trap_molino6_flotacion_este': 'presion_molino6_este',\n    'ns=2;s=trapiche_molino.trapiche_molino.trap_molino6_flotacion_oeste': 'presion_molino6_oeste',\n    'ns=2;s=fabrica.fabrica.Fab_jugo_clarificado_caudal': 'caudal_jugo_clarif',\n    'ns=2;s=tacho2da3ra.tacho2da3ra.Tacho_melado_tratado': 'nivel_melado_tratado',\n    'ns=2;s=fabrica.fabrica.Tacho_melado_evaporacion_nivel': 'nivel_melado',\n    'ns=2;s=Clarificacion2.Clarificacion2.clar2_decant1_nivel': 'nivel_decantador1',\n    'ns=2;s=Clarificacion2.Clarificacion2.clar2_decant2_nivel': 'nivel_decantador2',\n    'ns=2;s=Clarificacion2.Clarificacion2.clar2_decant3_nivel': 'nivel_decantador3',\n    'ns=2;s=Tacho1ra.Tacho1ra.Tacho_cristalizador1ra_nivel': 'descarga_tachos_1ra',\n    'ns=2;s=Tacho1ra.Tacho1ra.Tacho_melado_tachos_nivel1': 'descarga_tachos_2da',\n    'ns=2;s=Tacho1ra.Tacho1ra.Tacho_melado_tachos_nivel2': 'descarga_tachos_3ra',\n    'ns=2;s=salon.salon.salon.salon_contador_dia': 'contador_bolsas_dia',\n    'ns=2;s=salon.salon.salon.SILO_A_BOLSAS': 'silo_a',\n    'ns=2;s=salon.salon.salon.SILO_B_BOLSAS': 'silo_b',\n    'ns=2;s=salon.salon.salon.SILO_C_BOLSAS': 'silo_c',\n    'ns=2;s=salon.salon.salon.SILO_E_BOLSAS': 'silo_e',\n    'ns=2;s=caldera.Caldera.cald_vapor_baja_presion': 'presion_vapor_directo',\n    'ns=2;s=caldera.Caldera.cald_agua_aliment1_presion': 'presion_agua_alim',\n    'ns=2;s=caldera2.caldera2.cald2_vapor_caudal': 'caudal_vapor_cald2',\n    'ns=2;s=caldera3.caldera3.cald3_vapor_caudal': 'caudal_vapor_cald3',\n    'ns=2;s=caldera6.caldera6.cald6_vapor_caudal': 'caudal_vapor_cald6',\n    'ns=2;s=caldera2.caldera2.cald2_gas_caudal': 'caudal_gas_cald2',\n    'ns=2;s=caldera6.caldera6.cald6_gas_caudal': 'caudal_gas_cald6',\n    'ns=2;s=siemens.siemens.siemens_potencia_activa': 'potencia_activa_siemens',\n    'ns=2;s=siemens.siemens.siemens_potencia_reactiva': 'potencia_reactiva_siemens',\n    'ns=2;s=siemens.siemens.siemens_frecuencia': 'frecuencia_siemens',\n    'ns=2;s=siemens.siemens.siemens_Intensidad_media': 'intensidad_siemens',\n    'ns=2;s=skoda.skoda.Potencia_Activa_Total_AEG': 'potencia_activa_aeg',\n    'ns=2;s=skoda.skoda.Potencia_Reactiva_Total_AEG': 'potencia_reactiva_aeg',\n    'ns=2;s=skoda.skoda.Frecuencia_AEG': 'frecuencia_aeg',\n    'ns=2;s=skoda.skoda.Intensidad_Media_AEG': 'intensidad_aeg',\n    'ns=2;s=vapor.vapor.vapor_trapiche_caudal': 'cv_trapiche',\n    'ns=2;s=vapor.vapor.vapor_usina_alta_caudal': 'cv_usina_alta',\n    'ns=2;s=vapor.vapor.vapor_destileria_caudal': 'cv_destileria',\n    'ns=2;s=vapor.vapor.vapor_auxilio_caudal': 'cv_aux_total',\n    'ns=2;s=vapor.vapor.vapor_reducido_caudal': 'cv_preparacion_cania',\n    'ns=2;s=Destileria.Destileria.dest_vino_caudal': 'caudal_vino',\n    'ns=2;s=Destileria.Destileria.dest_alcohol_caudal': 'caudal_alcohol',\n    'ns=2;s=Clarificacion3.Clarificacion3.clar3_jugo_pesado_nivel': 'nivel_jugo_pesado',\n    'ns=2;s=fabrica.fabrica.Fab_jugo_clarificado_nivel': 'nivel_jugo_clarificado',\n    'ns=2;s=caldera.Caldera.cald_agua_aliment_temp': 'temp_agua_alim',\n    'ns=2;s=siemens.siemens.siemens_vapor_escape_presion': 'presion_vapor_escape',\n    'ns=2;s=Fermentacion.fermentacion.Ferm_melaza_dilutor_caudal': 'caudal_melaza_dilutor',\n    'ns=2;s=Fermentacion.fermentacion.Ferm_agua_dilutor_caudal': 'caudal_agua_dilutor',\n    'ns=2;s=Fermentacion.fermentacion.Ferm_jugo_dilutor_caudal': 'caudal_jugo_dilutor'\n};\n\n// [min_kep, max_kep, min_real, max_real]\n// Omitidos = sin escalado (S): ya en unidades de ingeniería\nconst SCALING = {\n    'velocidad_molino1':     [0, 4000, 0, 100],\n    'velocidad_molino6':     [0, 4000, 0, 100],\n    'balanza_cinta':         [0, 4000, 0, 1500],\n    'presion_molino6_este':  [0, 4000, 0, 200],\n    'presion_molino6_oeste': [0, 4000, 0, 200],\n    'nivel_melado_tratado':  [6662, 13000, 0, 100],\n    'nivel_melado':          [6662, 13000, 0, 100],\n    'nivel_decantador1':     [6662, 13000, 0, 100],\n    'nivel_decantador2':     [6662, 13000, 0, 100],\n    'nivel_decantador3':     [6662, 13000, 0, 100],\n    'descarga_tachos_1ra':   [6400, 13000, 0, 100],\n    'descarga_tachos_2da':   [6400, 13000, 0, 100],\n    'descarga_tachos_3ra':   [6400, 13000, 0, 100],\n    'presion_vapor_directo': [0, 4000, 0, 5],\n    'presion_agua_alim':     [0, 4000, 0, 5],\n    'presion_aire':          [0, 4000, 0, 10],\n    'caudal_vapor_cald1':    [0, 4000, 0, 60],\n    'caudal_vapor_cald2':    [0, 4000, 0, 60],\n    'caudal_vapor_cald3':    [0, 4000, 0, 60],\n    'caudal_vapor_cald6':    [0, 4000, 0, 60],\n    'caudal_gas_cald2':      [0, 4000, 0, 1500],\n    'caudal_gas_cald6':      [0, 4000, 0, 1500],\n    'potencia_activa_siemens':   [0, 4000, 0, 3000],\n    'potencia_reactiva_siemens': [0, 4000, 0, 3000],\n    'frecuencia_siemens':    [0, 4000, 0, 60],\n    'intensidad_siemens':    [0, 4000, 0, 5000],\n    'potencia_activa_aeg':   [0, 4000, 0, 3000],\n    'potencia_reactiva_aeg': [0, 4000, 0, 3000],\n    'frecuencia_aeg':        [0, 4000, 0, 60],\n    'intensidad_aeg':        [0, 4000, 0, 5000],\n    'cv_trapiche':           [0, 4000, 0, 80],\n    'cv_usina_alta':         [0, 4000, 0, 40],\n    'cv_destileria':         [0, 4000, 0, 30],\n    'cv_aux_total':          [0, 4000, 0, 30],\n    'cv_preparacion_cania':  [0, 4000, 0, 30],\n    'nivel_jugo_pesado':      [6662, 13000, 0, 100],\n    'nivel_jugo_clarificado': [6662, 13000, 0, 100],\n    'presion_vapor_escape':   [0, 4000, 0, 2]\n};\n\nconst nodeId = msg.topic\n    || (msg.addressSpaceItems && msg.addressSpaceItems[0] && msg.addressSpaceItems[0].value);\n\nif (!nodeId || !tagMap[nodeId]) return null;\n\nlet rawVal = msg.payload;\nif (rawVal !== null && rawVal !== undefined && typeof rawVal === 'object') {\n    rawVal = (rawVal.value && rawVal.value.value !== undefined) ? rawVal.value.value\n           : rawVal.value !== undefined ? rawVal.value\n           : rawVal;\n}\n\nconst kep = parseFloat(rawVal);\nif (isNaN(kep)) return null;\n\nconst varName = tagMap[nodeId];\nconst s = SCALING[varName];\nlet realVal;\nif (s) {\n    realVal = (kep - s[0]) / (s[1] - s[0]) * (s[3] - s[2]) + s[2];\n    realVal = parseFloat(realVal.toFixed(2));\n} else {\n    realVal = parseFloat(kep.toFixed(2));\n}\n\nflow.set(varName, realVal);\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 960,
+    "y": 940,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "ebd713b36d463ea2",
+    "type": "debug",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "OPC errores",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "x": 960,
+    "y": 1040,
+    "wires": []
+  },
+  {
+    "id": "aa11111111111111",
+    "type": "inject",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "INSERT cada 60s (offset 30s)",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "35",
+    "payload": "",
+    "payloadType": "date",
+    "x": 200,
+    "y": 1860,
+    "wires": [
+      [
+        "bb22222222222222"
+      ]
+    ]
+  },
+  {
+    "id": "bb22222222222222",
+    "type": "function",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "Construye INSERT",
+    "func": "const now = new Date();\nnow.setSeconds(0, 0);\nconst ts = now.toISOString().replace('T', ' ').substring(0, 19);\n\nfunction g(k) {\n    const v = flow.get(k);\n    return (v === undefined || v === null || isNaN(parseFloat(v))) ? null : parseFloat(v);\n}\nfunction sql(k) { const v = g(k); return v === null ? 'NULL' : v; }\n\nconst vt = (g('caudal_vapor_cald1') || 0) + (g('caudal_vapor_cald2') || 0) +\n           (g('caudal_vapor_cald3') || 0) + (g('caudal_vapor_cald6') || 0);\nconst pt = (g('potencia_activa_siemens') || 0) + (g('potencia_activa_aeg') || 0);\n\nconst cols = [\n    'velocidad_molino1','velocidad_molino6','balanza_cinta','agua_imbibicion',\n    'presion_molino6_este','presion_molino6_oeste','caudal_jugo_clarif','nivel_melado_tratado',\n    'nivel_melado','nivel_decantador1','nivel_decantador2','nivel_decantador3',\n    'descarga_tachos_1ra','descarga_tachos_2da','descarga_tachos_3ra','contador_bolsas_dia',\n    'silo_a','silo_b','silo_c','silo_e',\n    'presion_vapor_directo','presion_agua_alim','presion_aire',\n    'caudal_vapor_cald1','caudal_vapor_cald2','caudal_vapor_cald3','caudal_vapor_cald6',\n    'caudal_gas_cald2','caudal_gas_cald6',\n    'potencia_activa_siemens','potencia_reactiva_siemens','frecuencia_siemens','intensidad_siemens',\n    'potencia_activa_aeg','potencia_reactiva_aeg','frecuencia_aeg','intensidad_aeg',\n    'cv_trapiche','cv_usina_alta','cv_destileria','cv_aux_total','cv_preparacion_cania',\n    'caudal_vino',\n    'nivel_jugo_pesado','nivel_jugo_clarificado','temp_agua_alim','presion_vapor_escape',\n    'caudal_agua_dilutor'\n];\n\nconst vals = cols.map(c => sql(c)).join(',');\nconst colsQ = cols.map(c => '`' + c + '`').join(',');\nconst upd = cols.map(c => '`' + c + '`=VALUES(`' + c + '`)').join(',');\n\nmsg.topic = 'INSERT INTO `indicadores_opc` (`timestamp`,`vapor_total`,`potencia_total`,' + colsQ +\n    ',`caudal_alcohol`,`caudal_jugo_dilutor`,`caudal_melaza_dilutor`) VALUES (' +\n    \"'\" + ts + \"',\" + vt + ',' + pt + ',' + vals + ',' + sql('caudal_alcohol') + ',' + sql('caudal_jugo_dilutor') + ',' + sql('caudal_melaza_dilutor') + ')' +\n    ' ON DUPLICATE KEY UPDATE `vapor_total`=VALUES(`vapor_total`),`potencia_total`=VALUES(`potencia_total`),' + upd +\n    ',`caudal_alcohol`=VALUES(`caudal_alcohol`),`caudal_jugo_dilutor`=NULL,`caudal_melaza_dilutor`=NULL';\nmsg.payload = [];\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 500,
+    "y": 1860,
+    "wires": [
+      [
+        "cc33333333333333"
+      ]
+    ]
+  },
+  {
+    "id": "cc33333333333333",
+    "type": "mysql",
+    "z": "ce2fbd4775ed5ecf",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "INSERT indicadores_opc",
+    "x": 760,
+    "y": 1860,
+    "wires": [
+      [
+        "dd44444444444444"
+      ]
+    ]
+  },
+  {
+    "id": "dd44444444444444",
+    "type": "debug",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "INSERT result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 1000,
+    "y": 1860,
+    "wires": []
+  },
+  {
+    "id": "e89251c6637bb9dc",
+    "type": "OpcUa-Endpoint",
+    "endpoint": "opc.tcp://SRV-CONTROL:49320",
+    "securityPolicy": "None",
+    "securityMode": "None",
+    "name": "SRV-CONTROL"
+  },
+  {
+    "id": "2bf0d8227d4cf2c4",
+    "type": "MySQLdatabase",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "db": "db_corona",
+    "tz": "",
+    "name": "db_corona"
+  },
+  {
+    "id": "c0000100",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Clarificacion3.Clarificacion3.clar3_jugo_pesado_nivel",
+    "datatype": "Float",
+    "value": "nivel_jugo_pesado",
+    "name": "Nivel Jugo Pesado",
+    "x": 430,
+    "y": 1800,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000101",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=fabrica.fabrica.Fab_jugo_clarificado_nivel",
+    "datatype": "Float",
+    "value": "nivel_jugo_clarificado",
+    "name": "Nivel Jugo Clarif",
+    "x": 430,
+    "y": 1840,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000102",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=caldera.Caldera.cald_agua_aliment_temp",
+    "datatype": "Float",
+    "value": "temp_agua_alim",
+    "name": "Temp Agua Alim",
+    "x": 430,
+    "y": 1880,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000103",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=siemens.siemens.siemens_vapor_escape_presion",
+    "datatype": "Float",
+    "value": "presion_vapor_escape",
+    "name": "Pres Vapor Escape",
+    "x": 430,
+    "y": 1920,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000104",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Fermentacion.fermentacion.Ferm_melaza_dilutor_caudal",
+    "datatype": "Float",
+    "value": "caudal_melaza_dilutor",
+    "name": "Caudal Melaza Dilutor",
+    "x": 430,
+    "y": 1960,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000105",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Fermentacion.fermentacion.Ferm_agua_dilutor_caudal",
+    "datatype": "Float",
+    "value": "caudal_agua_dilutor",
+    "name": "Caudal Agua Dilutor",
+    "x": 430,
+    "y": 2000,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "c0000106",
+    "type": "OpcUa-Item",
+    "z": "ce2fbd4775ed5ecf",
+    "item": "ns=2;s=Fermentacion.fermentacion.Ferm_jugo_dilutor_caudal",
+    "datatype": "Float",
+    "value": "caudal_jugo_dilutor",
+    "name": "Caudal Jugo Dilutor",
+    "x": 430,
+    "y": 2040,
+    "wires": [
+      [
+        "dd000001"
+      ]
+    ]
+  },
+  {
+    "id": "alt_inject_001",
+    "type": "inject",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "ALTER columnas al iniciar",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "6",
+    "payload": "",
+    "payloadType": "date",
+    "x": 190,
+    "y": 80,
+    "wires": [
+      [
+        "alt_func_001"
+      ]
+    ]
+  },
+  {
+    "id": "alt_func_001",
+    "type": "function",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "ALTER columnas nuevas",
+    "func": "const newCols = [\n    'nivel_jugo_pesado',\n    'nivel_jugo_clarificado',\n    'temp_agua_alim',\n    'presion_vapor_escape',\n    'caudal_agua_dilutor'\n];\nconst msgs = newCols.map(c => ({\n    topic: 'ALTER TABLE `indicadores_opc` ADD COLUMN IF NOT EXISTS `' + c + '` FLOAT DEFAULT NULL',\n    payload: []\n}));\nreturn [msgs];",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 450,
+    "y": 80,
+    "wires": [
+      [
+        "alt_mysql_001"
+      ]
+    ]
+  },
+  {
+    "id": "alt_mysql_001",
+    "type": "mysql",
+    "z": "ce2fbd4775ed5ecf",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "ALTER TABLE",
+    "x": 700,
+    "y": 80,
+    "wires": [
+      [
+        "alt_debug_001"
+      ]
+    ]
+  },
+  {
+    "id": "alt_debug_001",
+    "type": "debug",
+    "z": "ce2fbd4775ed5ecf",
+    "name": "ALTER result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 930,
+    "y": 80,
+    "wires": []
+  }
+]

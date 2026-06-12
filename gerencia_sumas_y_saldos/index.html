@@ -1,0 +1,2239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sumas y Saldos — Gerencia Administrativa | Ingenio La Corona</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <style>
+    :root {
+      --corona-green: #1D9E75;
+      --corona-green-dark: #0F6E56;
+      --corona-green-light: #E1F5EE;
+      --corona-green-mid: #5DCAA5;
+      --accent-amber: #BA7517;
+      --accent-amber-light: #FAEEDA;
+      --accent-red: #A32D2D;
+      --accent-red-light: #FCEBEB;
+      --accent-blue: #185FA5;
+      --accent-blue-light: #E6F1FB;
+      --surface: #FFFFFF;
+      --surface-2: #F7F8FA;
+      --surface-3: #F0F2F5;
+      --border: rgba(0,0,0,0.08);
+      --border-strong: rgba(0,0,0,0.15);
+      --text-primary: #1A1D23;
+      --text-secondary: #5A6170;
+      --text-muted: #9BA3AF;
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--surface-3);
+      color: var(--text-primary);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ─── SIDEBAR ─── */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 240px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      background: var(--corona-green);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-logo svg { width: 18px; height: 18px; fill: white; }
+
+    .brand-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 42px;
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 16px 20px 6px;
+    }
+
+    .nav-item-custom {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      border-left: 2px solid transparent;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+
+    .nav-item-custom:hover {
+      color: var(--corona-green-dark);
+      background: var(--corona-green-light);
+    }
+
+    .nav-item-custom.active {
+      color: var(--corona-green-dark);
+      background: var(--corona-green-light);
+      border-left-color: var(--corona-green);
+      font-weight: 500;
+    }
+
+    .nav-item-custom .nav-icon {
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    .nav-item-custom.active .nav-icon { opacity: 1; }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .sync-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sync-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--corona-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    #main-content {
+      margin-left: 240px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── TOPBAR ─── */
+    #topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-title h1 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .topbar-title p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+    .badge-period {
+      background: var(--corona-green-light);
+      color: var(--corona-green-dark);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-family: var(--font-mono);
+    }
+
+    .btn-icon {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-secondary);
+    }
+
+    .btn-icon:hover {
+      background: var(--surface-2);
+      color: var(--text-primary);
+    }
+
+    .btn-primary-custom {
+      background: var(--corona-green);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary-custom:hover { background: var(--corona-green-dark); }
+
+    /* ─── PAGE CONTENT ─── */
+    .page-content {
+      padding: 24px 28px;
+      flex: 1;
+    }
+
+    /* ─── UPLOAD ZONE ─── */
+    #upload-zone {
+      border: 2px dashed var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      text-align: center;
+      background: var(--surface);
+      transition: all 0.2s;
+      cursor: pointer;
+      margin-bottom: 24px;
+    }
+
+    #upload-zone:hover, #upload-zone.dragging {
+      border-color: var(--corona-green);
+      background: var(--corona-green-light);
+    }
+
+    #upload-zone.has-file {
+      border-style: solid;
+      border-color: var(--corona-green);
+      background: var(--corona-green-light);
+    }
+
+    .upload-icon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 12px;
+      color: var(--corona-green);
+    }
+
+    /* ─── PARAM BAR ─── */
+    .param-bar {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .param-group { display: flex; flex-direction: column; gap: 4px; }
+
+    .param-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .param-input {
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 13px;
+      font-family: var(--font-sans);
+      background: var(--surface);
+      color: var(--text-primary);
+      width: 160px;
+      transition: border-color 0.15s;
+    }
+
+    .param-input:focus {
+      outline: none;
+      border-color: var(--corona-green);
+    }
+
+    .param-input.narrow { width: 100px; }
+    .param-input.date-input { width: 130px; font-family: var(--font-mono); font-size: 12px; }
+
+    /* ─── KPI GRID ─── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .kpi-card.green::before { background: var(--corona-green); }
+    .kpi-card.amber::before { background: var(--accent-amber); }
+    .kpi-card.red::before { background: var(--accent-red); }
+    .kpi-card.blue::before { background: var(--accent-blue); }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 6px;
+      font-feature-settings: 'tnum';
+    }
+
+    .kpi-value.mono { font-family: var(--font-mono); font-size: 18px; }
+
+    .kpi-delta {
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .kpi-delta.up { color: var(--corona-green-dark); }
+    .kpi-delta.down { color: var(--accent-red); }
+    .kpi-delta.neutral { color: var(--text-muted); }
+
+    /* ─── SECTION PANELS ─── */
+    .section-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .panel-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-title .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--corona-green);
+    }
+
+    .panel-tools { display: flex; align-items: center; gap: 8px; }
+
+    .panel-tool-btn {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .panel-tool-btn:hover { border-color: var(--corona-green); color: var(--corona-green-dark); }
+
+    .panel-body { padding: 0; }
+
+    /* ─── TABLES ─── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .data-table thead th {
+      background: var(--surface-2);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .data-table thead th.num { text-align: right; }
+
+    .data-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+
+    .data-table tbody tr:last-child { border-bottom: none; }
+
+    .data-table tbody tr:hover { background: var(--surface-2); }
+
+    .data-table tbody td {
+      padding: 10px 16px;
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+
+    .data-table tbody td.num {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .data-table tbody td.code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* ─── STATUS BADGES ─── */
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .badge-ok { background: var(--corona-green-light); color: var(--corona-green-dark); }
+    .badge-warn { background: var(--accent-amber-light); color: var(--accent-amber); }
+    .badge-crit { background: var(--accent-red-light); color: var(--accent-red); }
+    .badge-info { background: var(--accent-blue-light); color: var(--accent-blue); }
+
+    .badge-status::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ─── VARIATION PILL ─── */
+    .var-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .var-up { background: var(--corona-green-light); color: var(--corona-green-dark); }
+    .var-down { background: var(--accent-red-light); color: var(--accent-red); }
+    .var-neutral { background: var(--surface-2); color: var(--text-muted); }
+
+    /* ─── ALERTS ─── */
+    .alert-strip {
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .alert-strip.critical {
+      background: var(--accent-red-light);
+      border-left: 3px solid var(--accent-red);
+    }
+
+    .alert-strip.warning {
+      background: var(--accent-amber-light);
+      border-left: 3px solid var(--accent-amber);
+    }
+
+    .alert-strip.info {
+      background: var(--accent-blue-light);
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .alert-strip .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .alert-strip .alert-body { flex: 1; }
+    .alert-strip .alert-title { font-weight: 600; margin-bottom: 2px; }
+    .alert-strip .alert-desc { color: var(--text-secondary); font-size: 12px; }
+
+    /* ─── CHART WRAPPER ─── */
+    .chart-wrap {
+      padding: 20px;
+      position: relative;
+    }
+
+    /* ─── TABS ─── */
+    .panel-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      background: var(--surface-2);
+    }
+
+    .panel-tab {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 10px 14px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .panel-tab:hover { color: var(--text-primary); }
+
+    .panel-tab.active {
+      color: var(--corona-green-dark);
+      border-bottom-color: var(--corona-green);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ─── SEARCH BAR ─── */
+    .search-bar {
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 200px;
+      padding: 6px 10px 6px 30px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      font-size: 12px;
+      background: var(--surface-2);
+      color: var(--text-primary);
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: var(--corona-green);
+      background: var(--surface);
+    }
+
+    .search-bar svg {
+      position: absolute;
+      left: 8px; top: 50%;
+      transform: translateY(-50%);
+      width: 14px; height: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ─── INTEREMPRESA ─── */
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .flow-row:last-child { border-bottom: none; }
+
+    .flow-entity {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-weight: 500;
+      font-size: 12px;
+    }
+
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .flow-arrow::before, .flow-arrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-strong);
+    }
+
+    .flow-amount {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state svg {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+
+    .empty-state h3 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .empty-state p { font-size: 12px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      #sidebar { transform: translateX(-240px); }
+      #main-content { margin-left: 0; }
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
+
+    /* ─── PRINT ─── */
+    @media print {
+      #sidebar { display: none; }
+      #main-content { margin-left: 0; }
+      #topbar { position: static; }
+      .btn-primary-custom, .btn-icon, .panel-tool-btn { display: none; }
+    }
+
+    .section-view { display: none; }
+    .section-view.active { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════════════════════════ -->
+<aside id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-mark">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L4 6v6c0 5.5 3.4 10.7 8 12 4.6-1.3 8-6.5 8-12V6l-8-4z"/>
+        </svg>
+      </div>
+      <span class="brand-name">Ingenio La Corona</span>
+    </div>
+    <div class="brand-sub">Gerencia Administrativa</div>
+  </div>
+
+  <div class="sidebar-section-label">Tablero</div>
+  <a class="nav-item-custom active" onclick="showSection('resumen')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Resumen Gerencial
+  </a>
+
+  <div class="sidebar-section-label">Contabilidad</div>
+  <a class="nav-item-custom" onclick="showSection('sumasSaldos')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    Sumas y Saldos
+  </a>
+  <a class="nav-item-custom" onclick="showSection('detalleCuenta')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Mayor por Cuenta
+  </a>
+  <a class="nav-item-custom" onclick="showSection('libroDiario')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    Libro Diario
+  </a>
+  <a class="nav-item-custom" onclick="showSection('imputaciones')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    Imputaciones
+  </a>
+
+  <div class="sidebar-section-label">Tesorería</div>
+  <a class="nav-item-custom" onclick="showSection('ev')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+    Egresos de Valores
+  </a>
+  <a class="nav-item-custom" onclick="showSection('iv')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    Ingresos de Valores
+  </a>
+
+  <div class="sidebar-section-label">Proveedores</div>
+  <a class="nav-item-custom" onclick="showSection('proveedoresSaldos')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+    Saldos
+  </a>
+  <a class="nav-item-custom" onclick="showSection('proveedoresPendientes')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Pendientes
+  </a>
+
+  <div class="sidebar-section-label">Empresas</div>
+  <a class="nav-item-custom" onclick="showSection('interempresas')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+    Interempresas
+  </a>
+
+  <div class="sidebar-section-label">Control</div>
+  <a class="nav-item-custom" onclick="showSection('alertas')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    Alertas
+  </a>
+
+  <div class="sidebar-footer">
+    <div class="sync-indicator">
+      <div class="sync-dot"></div>
+      <span>Sync cada 8 h — Node-RED</span>
+    </div>
+    <div style="margin-top: 6px;">v1.0.0 — Zafra 2026</div>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN CONTENT
+════════════════════════════════════════════════════════════ -->
+<div id="main-content">
+
+  <!-- TOPBAR -->
+  <header id="topbar">
+    <div class="topbar-title">
+      <h1 id="topbar-section-title">Resumen Gerencial</h1>
+      <p id="topbar-section-desc">Dashboard ejecutivo — datos consolidados</p>
+    </div>
+    <div class="topbar-actions">
+      <span class="badge-period" id="badge-period">Cargando período...</span>
+      <div class="btn-icon" title="Exportar CSV" onclick="exportCSV()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <div class="btn-icon" title="Imprimir" onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      </div>
+      <button class="btn-primary-custom" onclick="processData()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        Actualizar
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  <div class="page-content">
+
+    <!-- ─── PARAM BAR (siempre visible) ─── -->
+    <div class="param-bar">
+      <div class="param-group" style="flex:1; min-width:200px;">
+        <div class="param-label">Archivo CSV (Calipso)</div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input type="file" id="fileInput" accept=".csv" style="display:none;" onchange="handleFileChange(this)"/>
+          <div id="upload-zone" onclick="document.getElementById('fileInput').click()"
+               ondragover="event.preventDefault(); this.classList.add('dragging')"
+               ondragleave="this.classList.remove('dragging')"
+               ondrop="handleDrop(event)"
+               style="border:2px dashed var(--border-strong); border-radius:8px; padding:8px 16px; cursor:pointer; display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted); background:var(--surface-2); transition:all 0.2s; flex:1;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span id="upload-label">Soltar CSV aquí o hacer clic</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="param-group">
+        <div class="param-label">Umbral crítico ($)</div>
+        <input type="number" class="param-input narrow" id="criticalThreshold" value="10000000" min="0" step="1000000" />
+      </div>
+
+      <div class="param-group">
+        <div class="param-label">Variación % alerta</div>
+        <input type="number" class="param-input narrow" id="variationThreshold" value="30" min="0" max="100" step="0.5" />
+      </div>
+
+      <div class="param-group">
+        <div class="param-label">Fecha inicio</div>
+        <input type="date" class="param-input" id="startDate" style="width:155px;font-family:var(--font-mono);font-size:12px;" />
+      </div>
+
+      <div class="param-group">
+        <div class="param-label">Fecha fin</div>
+        <input type="date" class="param-input" id="endDate" style="width:155px;font-family:var(--font-mono);font-size:12px;" />
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button class="btn-primary-custom" onclick="processData()">
+          Procesar CSV
+        </button>
+        <button class="btn-primary-custom" style="background:var(--corona-green);" onclick="loadFromNodeRED()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          Consultar Node-RED
+        </button>
+        <button class="btn-primary-custom" style="background:var(--accent-blue);" onclick="loadMockData()">
+          Cargar Demo
+        </button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: RESUMEN GERENCIAL
+    ═════════════════════════════════════════════ -->
+    <div id="section-resumen" class="section-view active">
+      <!-- KPI GRID -->
+      <div class="kpi-grid" id="kpi-grid">
+        <div class="kpi-card green">
+          <div class="kpi-label">Saldo Total</div>
+          <div class="kpi-value mono" id="kpi-saldo-total">—</div>
+          <div class="kpi-delta neutral" id="kpi-saldo-delta">Sin datos cargados</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Cuentas Críticas</div>
+          <div class="kpi-value" id="kpi-crit-count">—</div>
+          <div class="kpi-delta neutral" id="kpi-crit-desc">Umbral: $10.000.000</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Alertas Activas</div>
+          <div class="kpi-value" id="kpi-alert-count">—</div>
+          <div class="kpi-delta neutral" id="kpi-alert-desc">Sin datos</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-label">Variación Prom.</div>
+          <div class="kpi-value" id="kpi-avg-var">—</div>
+          <div class="kpi-delta neutral" id="kpi-var-desc">vs. período anterior</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Total Egresos</div>
+          <div class="kpi-value mono" id="kpi-egresos">—</div>
+          <div class="kpi-delta neutral">Período seleccionado</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-label">Total Ingresos</div>
+          <div class="kpi-value mono" id="kpi-ingresos">—</div>
+          <div class="kpi-delta neutral">Período seleccionado</div>
+        </div>
+      </div>
+
+      <!-- GRÁFICO EVOLUCIÓN + DISTRIBUCIÓN -->
+      <div style="display:grid; grid-template-columns:2fr 1fr; gap:16px; margin-bottom:20px;">
+
+        <div class="section-panel">
+          <div class="panel-header">
+            <div class="panel-title"><div class="dot"></div> Evolución de Saldos</div>
+            <div class="panel-tools">
+              <button class="panel-tool-btn" onclick="toggleChartType()">Alternar tipo</button>
+            </div>
+          </div>
+          <div class="chart-wrap" style="height:260px;">
+            <canvas id="evolutionChart" role="img" aria-label="Evolución mensual de saldos de cuentas principales">Sin datos</canvas>
+          </div>
+        </div>
+
+        <div class="section-panel">
+          <div class="panel-header">
+            <div class="panel-title"><div class="dot" style="background:var(--accent-amber)"></div> Distribución</div>
+          </div>
+          <div class="chart-wrap" style="height:260px;">
+            <canvas id="distributionChart" role="img" aria-label="Distribución de saldos por categoría de cuenta">Sin datos</canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOP CUENTAS -->
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot" style="background:var(--accent-blue)"></div> Top Cuentas por Saldo</div>
+          <div class="panel-tools">
+            <div class="search-bar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Buscar cuenta..." id="search-top" oninput="filterTopTable(this.value)" />
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="data-table" id="top-accounts-table">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Cuenta</th>
+                <th class="num">Saldo Debe</th>
+                <th class="num">Saldo Haber</th>
+                <th class="num">Saldo Neto</th>
+                <th>Var %</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="top-accounts-body">
+              <tr><td colspan="7"><div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                <h3>Sin datos cargados</h3>
+                <p>Cargue un CSV de Calipso o use los datos demo</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: SUMAS Y SALDOS
+    ═════════════════════════════════════════════ -->
+    <div id="section-sumasSaldos" class="section-view">
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot"></div> Balance de Sumas y Saldos</div>
+          <div class="panel-tools">
+            <div class="search-bar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Filtrar..." id="search-ss" oninput="filterTable('ss-body', this.value)" />
+            </div>
+            <button class="panel-tool-btn" onclick="exportSectionCSV('ss-body', 'sumas_saldos')">Exportar</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Cuenta</th>
+                <th class="num">Debe Acum.</th>
+                <th class="num">Haber Acum.</th>
+                <th class="num">Saldo Debe</th>
+                <th class="num">Saldo Haber</th>
+                <th>Var %</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="ss-body">
+              <tr><td colspan="8"><div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                <h3>Sin datos</h3><p>Cargue datos para ver el balance</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:12px 16px; border-top:1px solid var(--border); background:var(--surface-2); display:flex; gap:24px; font-size:12px;">
+          <span>Total Debe: <strong id="total-debe" style="font-family:var(--font-mono)">—</strong></span>
+          <span>Total Haber: <strong id="total-haber" style="font-family:var(--font-mono)">—</strong></span>
+          <span>Diferencia: <strong id="total-diff" style="font-family:var(--font-mono)">—</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: MAYOR POR CUENTA
+    ═════════════════════════════════════════════ -->
+    <div id="section-detalleCuenta" class="section-view">
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot"></div> Mayor por Cuenta</div>
+          <div class="panel-tools">
+            <select class="panel-tool-btn" id="select-cuenta" onchange="filterMayor(this.value)" style="padding:4px 8px; border-radius:6px;">
+              <option value="">Todas las cuentas</option>
+            </select>
+            <button class="panel-tool-btn" onclick="exportSectionCSV('mayor-body', 'mayor_cuenta')">Exportar</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Asiento</th>
+                <th>Descripción</th>
+                <th class="num">Debe</th>
+                <th class="num">Haber</th>
+                <th class="num">Saldo</th>
+              </tr>
+            </thead>
+            <tbody id="mayor-body">
+              <tr><td colspan="6"><div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <h3>Sin datos</h3><p>Cargue datos o seleccione una cuenta</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: LIBRO DIARIO
+    ═════════════════════════════════════════════ -->
+    <div id="section-libroDiario" class="section-view">
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot"></div> Libro Diario</div>
+          <div class="panel-tools">
+            <div class="search-bar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Buscar asiento..." id="search-ld" oninput="filterTable('ld-body', this.value)" />
+            </div>
+            <button class="panel-tool-btn" onclick="exportSectionCSV('ld-body', 'libro_diario')">Exportar</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>N° Asiento</th>
+                <th>Descripción</th>
+                <th>Cuenta Debe</th>
+                <th>Cuenta Haber</th>
+                <th class="num">Importe</th>
+                <th>Referencia</th>
+              </tr>
+            </thead>
+            <tbody id="ld-body">
+              <tr><td colspan="7"><div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                <h3>Sin datos</h3><p>Cargue datos para ver el diario</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: IMPUTACIONES
+    ═════════════════════════════════════════════ -->
+    <div id="section-imputaciones" class="section-view">
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot"></div> Imputaciones</div>
+          <div class="panel-tools">
+            <select class="panel-tool-btn" id="filter-imputacion-tipo" onchange="filterImputaciones()">
+              <option value="">Todos los tipos</option>
+              <option value="COMPRA">Compra</option>
+              <option value="VENTA">Venta</option>
+              <option value="GASTO">Gasto</option>
+              <option value="AJUSTE">Ajuste</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Comprobante</th>
+                <th>Proveedor / Cliente</th>
+                <th>Centro Costo</th>
+                <th class="num">Neto</th>
+                <th class="num">IVA</th>
+                <th class="num">Total</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="imput-body">
+              <tr><td colspan="9"><div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>
+                <h3>Sin datos</h3><p>Cargue datos para ver imputaciones</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: EGRESOS DE VALORES
+    ═════════════════════════════════════════════ -->
+    <div id="section-ev" class="section-view">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div class="kpi-card red">
+          <div class="kpi-label">Total Egresos</div>
+          <div class="kpi-value mono" id="kpi-ev-total">—</div>
+          <div class="kpi-delta neutral">Período seleccionado</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">N° de Egresos</div>
+          <div class="kpi-value" id="kpi-ev-count">—</div>
+          <div class="kpi-delta neutral">Operaciones</div>
+        </div>
+      </div>
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot" style="background:var(--accent-red)"></div> Egresos de Valores (EV)</div>
+          <div class="panel-tools">
+            <button class="panel-tool-btn" onclick="exportSectionCSV('ev-body', 'egresos_valores')">Exportar</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>N° EV</th>
+                <th>Beneficiario</th>
+                <th>Concepto</th>
+                <th>Medio de Pago</th>
+                <th class="num">Importe</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="ev-body">
+              <tr><td colspan="7"><div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                <h3>Sin datos</h3><p>Cargue datos para ver egresos</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: INGRESOS DE VALORES
+    ═════════════════════════════════════════════ -->
+    <div id="section-iv" class="section-view">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div class="kpi-card green">
+          <div class="kpi-label">Total Ingresos</div>
+          <div class="kpi-value mono" id="kpi-iv-total">—</div>
+          <div class="kpi-delta neutral">Período seleccionado</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-label">N° de Ingresos</div>
+          <div class="kpi-value" id="kpi-iv-count">—</div>
+          <div class="kpi-delta neutral">Operaciones</div>
+        </div>
+      </div>
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot"></div> Ingresos de Valores (IV)</div>
+          <div class="panel-tools">
+            <button class="panel-tool-btn" onclick="exportSectionCSV('iv-body', 'ingresos_valores')">Exportar</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>N° IV</th>
+                <th>Origen</th>
+                <th>Concepto</th>
+                <th>Medio de Cobro</th>
+                <th class="num">Importe</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="iv-body">
+              <tr><td colspan="7"><div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                <h3>Sin datos</h3><p>Cargue datos para ver ingresos</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: SALDOS DE PROVEEDORES
+    ═════════════════════════════════════════════ -->
+    <div id="section-proveedoresSaldos" class="section-view">
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot" style="background:var(--accent-amber)"></div> Saldos de Proveedores</div>
+          <div class="panel-tools">
+            <div class="search-bar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Buscar proveedor..." id="search-prov" oninput="filterTable('prov-saldos-body', this.value)" />
+            </div>
+            <button class="panel-tool-btn" onclick="exportSectionCSV('prov-saldos-body', 'saldos_proveedores')">Exportar</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>CUIT</th>
+                <th>Proveedor</th>
+                <th>Categoría</th>
+                <th class="num">Saldo Actual</th>
+                <th class="num">Vencido</th>
+                <th class="num">A Vencer</th>
+                <th>Último Mov.</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="prov-saldos-body">
+              <tr><td colspan="8"><div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/></svg>
+                <h3>Sin datos</h3><p>Cargue datos para ver saldos</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: PENDIENTES DE PROVEEDORES
+    ═════════════════════════════════════════════ -->
+    <div id="section-proveedoresPendientes" class="section-view">
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot" style="background:var(--accent-red)"></div> Facturas Pendientes de Pago</div>
+          <div class="panel-tools">
+            <select class="panel-tool-btn" id="filter-pend-estado" onchange="filterPendientes()">
+              <option value="">Todos</option>
+              <option value="VENCIDO">Vencido</option>
+              <option value="A_VENCER">A vencer (7 días)</option>
+              <option value="VIGENTE">Vigente</option>
+            </select>
+            <button class="panel-tool-btn" onclick="exportSectionCSV('prov-pend-body', 'pendientes_proveedores')">Exportar</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Proveedor</th>
+                <th>Comprobante</th>
+                <th>Fecha</th>
+                <th>Vencimiento</th>
+                <th>Días</th>
+                <th class="num">Importe</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="prov-pend-body">
+              <tr><td colspan="7"><div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <h3>Sin datos</h3><p>Cargue datos para ver pendientes</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: INTEREMPRESAS
+    ═════════════════════════════════════════════ -->
+    <div id="section-interempresas" class="section-view">
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot" style="background:var(--accent-blue)"></div> Movimientos Interempresas</div>
+          <div class="panel-tools">
+            <button class="panel-tool-btn" onclick="exportSectionCSV('inter-body', 'interempresas')">Exportar</button>
+          </div>
+        </div>
+        <div class="panel-body" id="inter-body">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+            <h3>Sin datos</h3><p>Cargue datos para ver movimientos interempresas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         SECCIÓN: ALERTAS
+    ═════════════════════════════════════════════ -->
+    <div id="section-alertas" class="section-view">
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-title"><div class="dot" style="background:var(--accent-red)"></div> Alertas y Recomendaciones</div>
+          <div class="panel-tools">
+            <select class="panel-tool-btn" id="filter-alert-severity" onchange="filterAlertas()">
+              <option value="">Todas</option>
+              <option value="critical">Críticas</option>
+              <option value="warning">Advertencias</option>
+              <option value="info">Informativas</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel-body" style="padding:16px;" id="alertas-body">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <h3>Sin alertas activas</h3><p>Cargue datos para evaluar reglas de alerta</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-content -->
+
+  <!-- FOOTER -->
+  <footer style="background:var(--surface); border-top:1px solid var(--border); padding:12px 28px; display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--text-muted);">
+    <span>Ingenio La Corona — Gerencia Administrativa</span>
+    <span>UUID: <span id="uuid" style="font-family:var(--font-mono)"></span></span>
+    <span>Generado: <span id="date-footer"></span></span>
+  </footer>
+
+</div><!-- /main-content -->
+
+<!-- MODAL DETALLE MOVIMIENTOS -->
+<div class="modal fade" id="movimientosModal" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title">Movimientos de cuenta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="padding:0;">
+        <div id="movimientos-loading" style="text-align:center;padding:40px;">Consultando movimientos...</div>
+        <div id="movimientos-content" style="display:none;">
+          <table class="data-table" style="margin:0;font-size:12px;">
+            <thead><tr>
+              <th>Fecha</th><th>Asiento</th><th>Descripción</th><th>Proveedor</th>
+              <th class="num">Debe</th><th class="num">Haber</th><th class="num">Saldo</th>
+            </tr></thead>
+            <tbody id="movimientos-body"></tbody>
+          </table>
+          <div style="padding:8px 16px;border-top:1px solid var(--border);background:var(--surface-2);display:flex;gap:24px;font-size:12px;">
+            <span>Movimientos: <strong id="mov-count">0</strong></span>
+            <span>Total Debe: <strong id="mov-total-debe">$ 0</strong></span>
+            <span>Total Haber: <strong id="mov-total-haber">$ 0</strong></span>
+            <span>Saldo: <strong id="mov-saldo">$ 0</strong></span>
+          </div>
+        </div>
+        <div id="movimientos-error" style="display:none;text-align:center;padding:40px;color:var(--accent-red);"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script>
+/* ════════════════════════════════════════════════
+   CONFIG
+════════════════════════════════════════════════ */
+const CONFIG = {
+  criticalThreshold: 10_000_000,
+  variationThreshold: 30,
+  startDate: '20260601',
+  endDate: '20260630',
+  currency: 'ARS',
+  locale: 'es-AR',
+  dbUrl: 'http://192.168.0.23:3000/query',
+  // Node-RED endpoint
+  nodeRedUrl: (window.location.origin || 'http://192.168.0.23:1880') + '/api/sumas-saldos',
+  useNodeRed: true
+};
+
+/* ════════════════════════════════════════════════
+   ESTADO GLOBAL
+════════════════════════════════════════════════ */
+let STATE = {
+  data: null,
+  filteredData: null,
+  currentSection: 'resumen',
+  evolutionChartInstance: null,
+  distributionChartInstance: null,
+  evolutionChartType: 'line'
+};
+
+/* ════════════════════════════════════════════════
+   MOCK DATA
+════════════════════════════════════════════════ */
+const MOCK = {
+  sumasSaldos: [
+    { codigo: '1.1.01', cuenta: 'Caja y Bancos',     debeAcum: 45200000, haberAcum: 12300000, variacion: 8.2,   estado: 'ok' },
+    { codigo: '1.1.02', cuenta: 'Cuentas a Cobrar',  debeAcum: 38700000, haberAcum:  9100000, variacion: 14.5,  estado: 'ok' },
+    { codigo: '1.2.01', cuenta: 'Bienes de Cambio',  debeAcum: 67400000, haberAcum: 18200000, variacion: -5.1,  estado: 'warn' },
+    { codigo: '1.3.01', cuenta: 'Bienes de Uso',     debeAcum: 185000000,haberAcum: 42000000, variacion: 2.1,   estado: 'ok' },
+    { codigo: '2.1.01', cuenta: 'Proveedores',       debeAcum:  8900000, haberAcum: 47300000, variacion: 38.7,  estado: 'crit' },
+    { codigo: '2.1.02', cuenta: 'Deudas Fiscales',   debeAcum:  3200000, haberAcum: 11800000, variacion: 22.3,  estado: 'warn' },
+    { codigo: '2.2.01', cuenta: 'Préstamos L/P',     debeAcum:  1500000, haberAcum: 28000000, variacion: -3.2,  estado: 'ok' },
+    { codigo: '3.1.01', cuenta: 'Capital Social',    debeAcum:       0,  haberAcum: 95000000, variacion: 0,     estado: 'ok' },
+    { codigo: '4.1.01', cuenta: 'Ventas Azúcar',     debeAcum: 12000000, haberAcum: 143000000,variacion: 18.9,  estado: 'ok' },
+    { codigo: '4.1.02', cuenta: 'Ventas Alcohol',    debeAcum:  5400000, haberAcum: 67800000, variacion: 31.2,  estado: 'crit' },
+    { codigo: '5.1.01', cuenta: 'Costo Producción',  debeAcum: 98700000, haberAcum: 14200000, variacion: 7.3,   estado: 'ok' },
+    { codigo: '5.2.01', cuenta: 'Gs. Comercializ.',  debeAcum: 18300000, haberAcum:  2100000, variacion: 11.1,  estado: 'ok' },
+    { codigo: '5.3.01', cuenta: 'Gs. Administración',debeAcum: 24100000, haberAcum:  3800000, variacion: 5.6,   estado: 'ok' },
+    { codigo: '5.4.01', cuenta: 'Gs. Financieros',   debeAcum:  9800000, haberAcum:   900000, variacion: 47.8,  estado: 'crit' },
+  ],
+  mayor: [
+    { fecha:'2026-06-02', asiento:'A-00142', descripcion:'Cobro fact. 0001-00482 - Azúcar',      debe:12500000, haber:0,        cuenta:'1.1.01' },
+    { fecha:'2026-06-03', asiento:'A-00143', descripcion:'Pago prov. "Química del Norte"',        debe:0,        haber:4320000,  cuenta:'1.1.01' },
+    { fecha:'2026-06-05', asiento:'A-00144', descripcion:'Depósito bancario Cta 001-234567',      debe:8700000,  haber:0,        cuenta:'1.1.01' },
+    { fecha:'2026-06-08', asiento:'A-00145', descripcion:'Pago cuota préstamo BNA',               debe:0,        haber:2800000,  cuenta:'1.1.01' },
+    { fecha:'2026-06-10', asiento:'A-00146', descripcion:'Cobro anticipo cliente "La Esperanza"', debe:5100000,  haber:0,        cuenta:'1.1.01' },
+  ],
+  libroDiario: [
+    { fecha:'2026-06-02', asiento:'A-00142', descripcion:'Cobro factura azúcar', ctaDebe:'1.1.01 Caja y Bancos', ctaHaber:'1.1.02 Ctas a Cobrar', importe:12500000, ref:'FAC-0001-00482' },
+    { fecha:'2026-06-03', asiento:'A-00143', descripcion:'Pago proveedor insumos', ctaDebe:'2.1.01 Proveedores', ctaHaber:'1.1.01 Caja y Bancos', importe:4320000,  ref:'OC-2026-0089' },
+    { fecha:'2026-06-05', asiento:'A-00144', descripcion:'Depósito bancario',     ctaDebe:'1.1.01 Caja y Bancos', ctaHaber:'1.1.01 Banco Cta.Cte', importe:8700000,  ref:'DEP-00231' },
+    { fecha:'2026-06-08', asiento:'A-00145', descripcion:'Cuota préstamo BNA',    ctaDebe:'2.2.01 Préstamos L/P', ctaHaber:'1.1.01 Caja y Bancos', importe:2800000,  ref:'PREST-BNA-004' },
+    { fecha:'2026-06-10', asiento:'A-00146', descripcion:'Anticipo cliente',      ctaDebe:'1.1.01 Caja y Bancos', ctaHaber:'2.3.01 Anticips.',      importe:5100000,  ref:'ANT-0012' },
+  ],
+  imputaciones: [
+    { fecha:'2026-06-02', tipo:'VENTA',  comp:'FAC-A 0001-00482', ente:'La Esperanza S.A.',       cc:'VENTAS', neto:10330579, iva:2169421, total:12500000, estado:'ok' },
+    { fecha:'2026-06-03', tipo:'COMPRA', comp:'FAC-B 0002-00197', ente:'Química del Norte S.R.L.', cc:'PRODUCCION', neto:3570248, iva:749752, total:4320000, estado:'ok' },
+    { fecha:'2026-06-05', tipo:'GASTO',  comp:'REC-0001-00031',   ente:'Servicios Tecnológicos',   cc:'ADMIN', neto:1900000, iva:0, total:1900000, estado:'warn' },
+    { fecha:'2026-06-08', tipo:'COMPRA', comp:'FAC-A 0001-00511', ente:'Agroquímicos del NOA',     cc:'PRODUCCION', neto:6900826, iva:1449174, total:8350000, estado:'ok' },
+    { fecha:'2026-06-10', tipo:'AJUSTE', comp:'NC-0001-00008',    ente:'Devolución insumo',         cc:'PRODUCCION', neto:-350000, iva:-73500, total:-423500, estado:'warn' },
+  ],
+  egresos: [
+    { fecha:'2026-06-03', nro:'EV-00741', beneficiario:'Química del Norte S.R.L.', concepto:'Pago factura B 0002-00197', medio:'Transf. BNA', importe:4320000, estado:'ok' },
+    { fecha:'2026-06-05', nro:'EV-00742', beneficiario:'Servicios Tecnológicos',   concepto:'Servicios mes junio',         medio:'Transf. BBVA', importe:1900000, estado:'ok' },
+    { fecha:'2026-06-08', nro:'EV-00743', beneficiario:'Agroquímicos del NOA',     concepto:'Anticipo OC-0124',            medio:'Cheque',       importe:4175000, estado:'warn' },
+    { fecha:'2026-06-09', nro:'EV-00744', beneficiario:'BNA - Cuota préstamo',     concepto:'Cuota 12/24',                 medio:'Débito auto.', importe:2800000, estado:'ok' },
+    { fecha:'2026-06-10', nro:'EV-00745', beneficiario:'AFIP - Anticipos IIGG',    concepto:'Anticipo impuesto jun-26',    medio:'Transf. BNA',  importe:3500000, estado:'crit' },
+  ],
+  ingresos: [
+    { fecha:'2026-06-02', nro:'IV-00318', origen:'La Esperanza S.A.',         concepto:'Cobro fact. 0001-00482', medio:'Transf. Banco',  importe:12500000, estado:'ok' },
+    { fecha:'2026-06-06', nro:'IV-00319', origen:'Azucarera del Centro S.A.', concepto:'Cobro fact. 0001-00471', medio:'Transf. Banco',  importe:8300000,  estado:'ok' },
+    { fecha:'2026-06-10', nro:'IV-00320', origen:'La Esperanza S.A.',         concepto:'Anticipo zafra 2026',    medio:'Transf. Banco',  importe:5100000,  estado:'ok' },
+  ],
+  proveedoresSaldos: [
+    { cuit:'30-71234567-8', proveedor:'Química del Norte S.R.L.', categoria:'Insumos',          saldo:8400000, vencido:0,       aVencer:8400000,  ultimoMov:'2026-06-03', estado:'ok'   },
+    { cuit:'30-68901234-5', proveedor:'Agroquímicos del NOA',     categoria:'Agroquímicos',      saldo:16700000,vencido:4320000, aVencer:12380000, ultimoMov:'2026-06-08', estado:'crit' },
+    { cuit:'20-34512678-9', proveedor:'Transporte Regional S.A.', categoria:'Logística',         saldo:3200000, vencido:3200000, aVencer:0,        ultimoMov:'2026-05-28', estado:'crit' },
+    { cuit:'30-71890123-1', proveedor:'Talleres Metalúrgicos JM', categoria:'Mantenimiento',     saldo:1800000, vencido:0,       aVencer:1800000,  ultimoMov:'2026-06-01', estado:'ok'   },
+    { cuit:'20-22345678-2', proveedor:'Servicios Tecnológicos',   categoria:'IT/Sistemas',       saldo:1900000, vencido:0,       aVencer:1900000,  ultimoMov:'2026-06-05', estado:'warn' },
+    { cuit:'30-77654321-4', proveedor:'Repuestos Industriales SH',categoria:'Repuestos',         saldo:5400000, vencido:2100000, aVencer:3300000,  ultimoMov:'2026-06-07', estado:'warn' },
+  ],
+  proveedoresPendientes: [
+    { proveedor:'Agroquímicos del NOA',     comp:'FAC-A 0001-00488', fecha:'2026-05-10', venc:'2026-06-09', dias:1,   importe:4320000,  estado:'VENCIDO'  },
+    { proveedor:'Transporte Regional S.A.', comp:'FAC-B 0001-00201', fecha:'2026-05-01', venc:'2026-05-31', dias:10,  importe:3200000,  estado:'VENCIDO'  },
+    { proveedor:'Repuestos Industriales SH',comp:'FAC-A 0002-00112', fecha:'2026-05-15', venc:'2026-06-14', dias:-4,  importe:2100000,  estado:'A_VENCER' },
+    { proveedor:'Química del Norte S.R.L.', comp:'FAC-B 0002-00197', fecha:'2026-06-03', venc:'2026-07-03', dias:-23, importe:8400000,  estado:'VIGENTE'  },
+    { proveedor:'Servicios Tecnológicos',   comp:'REC-0001-00031',   fecha:'2026-06-05', venc:'2026-07-05', dias:-25, importe:1900000,  estado:'VIGENTE'  },
+    { proveedor:'Repuestos Industriales SH',comp:'FAC-A 0002-00118', fecha:'2026-06-07', venc:'2026-06-14', dias:-4,  importe:3300000,  estado:'A_VENCER' },
+  ],
+  interempresas: [
+    { desde:'Ingenio La Corona', hacia:'Destilería Corona S.A.',  concepto:'Transfer. alcohol desnaturalizado', importe:14300000, fecha:'2026-06-04', tipo:'salida' },
+    { desde:'Destilería Corona S.A.', hacia:'Ingenio La Corona',  concepto:'Liquidación ventas Junio',          importe:22700000, fecha:'2026-06-09', tipo:'entrada' },
+    { desde:'Ingenio La Corona', hacia:'Finca Las Palmas S.A.',   concepto:'Adelanto campaña cañazo',           importe:5800000,  fecha:'2026-06-10', tipo:'salida' },
+  ],
+  evolucion: {
+    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+    caja:     [32100000, 29800000, 35600000, 41200000, 43800000, 45200000],
+    ventas:   [98000000, 91000000, 115000000, 124000000, 139000000, 143000000],
+    costos:   [74000000, 71000000, 88000000, 93000000, 97000000, 98700000],
+  }
+};
+
+/* ════════════════════════════════════════════════
+   FORMATEO
+════════════════════════════════════════════════ */
+function fmtMoney(n) {
+  if (n == null) return '—';
+  return new Intl.NumberFormat('es-AR', { style:'currency', currency:'ARS', maximumFractionDigits:0 }).format(n);
+}
+
+function fmtNum(n) {
+  if (n == null) return '—';
+  return new Intl.NumberFormat('es-AR', { maximumFractionDigits:0 }).format(n);
+}
+
+function fmtPct(n) {
+  if (n == null) return '—';
+  return (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
+}
+
+function fmtDate(s) {
+  if (!s) return '—';
+  const d = new Date(s + 'T00:00:00');
+  return d.toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' });
+}
+
+function estadoBadge(e) {
+  const m = { ok:'ok', warn:'warn', crit:'crit', info:'info' };
+  const l = { ok:'Normal', warn:'Atención', crit:'Crítico', info:'Info' };
+  const k = m[e] || 'neutral';
+  return `<span class="badge-status badge-${k}">${l[e] || e}</span>`;
+}
+
+function varPill(v) {
+  if (v == null) return '<span class="var-pill var-neutral">—</span>';
+  const cls = v > 0 ? 'var-up' : v < 0 ? 'var-down' : 'var-neutral';
+  return `<span class="var-pill ${cls}">${fmtPct(v)}</span>`;
+}
+
+function diasBadge(d) {
+  if (d > 0) return `<span class="badge-status badge-crit">+${d} días</span>`;
+  if (d >= -7) return `<span class="badge-status badge-warn">${Math.abs(d)} días</span>`;
+  return `<span class="badge-status badge-ok">${Math.abs(d)} días</span>`;
+}
+
+/* ════════════════════════════════════════════════
+   MOVIMIENTOS POR CUENTA
+════════════════════════════════════════════════ */
+function verMovimientos(codigo, cuenta) {
+  var modal = new bootstrap.Modal(document.getElementById('movimientosModal'));
+  document.getElementById('modal-title').textContent = 'Movimientos: ' + codigo + ' - ' + (cuenta || '');
+  document.getElementById('movimientos-loading').style.display = '';
+  document.getElementById('movimientos-content').style.display = 'none';
+  document.getElementById('movimientos-error').style.display = 'none';
+  modal.show();
+  var url = (CONFIG.nodeRedUrl || '').replace('/api/sumas-saldos', '/api/sumas-saldos/movimientos') + '?codigo=' + encodeURIComponent(codigo.trim());
+  if (!CONFIG.nodeRedUrl) { url = CONFIG.dbUrl.replace('/query', '/movimientos') + '?codigo=' + encodeURIComponent(codigo.trim()); }
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      document.getElementById('movimientos-loading').style.display = 'none';
+      if (!data.success || !data.movimientos || data.movimientos.length === 0) {
+        document.getElementById('movimientos-error').style.display = '';
+        document.getElementById('movimientos-error').textContent = 'Sin movimientos para esta cuenta.';
+        return;
+      }
+      document.getElementById('movimientos-content').style.display = '';
+      var tbody = document.getElementById('movimientos-body');
+      tbody.innerHTML = '';
+      data.movimientos.forEach(function(m){
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td class="code">' + (m.fecha || '') + '</td>' +
+          '<td class="code">' + (m.asiento || '') + '</td>' +
+          '<td>' + (m.descripcion || '') + '</td>' +
+          '<td>' + (m.proveedor || '') + '</td>' +
+          '<td class="num">' + (m.debe ? fmtMoney(m.debe) : '—') + '</td>' +
+          '<td class="num">' + (m.haber ? fmtMoney(m.haber) : '—') + '</td>' +
+          '<td class="num"><strong>' + fmtMoney(m.saldo) + '</strong></td>';
+        tbody.appendChild(tr);
+      });
+      document.getElementById('mov-count').textContent = data.total;
+      document.getElementById('mov-total-debe').textContent = fmtMoney(data.totalDebe);
+      document.getElementById('mov-total-haber').textContent = fmtMoney(data.totalHaber);
+      document.getElementById('mov-saldo').textContent = fmtMoney(data.saldoTotal);
+    })
+    .catch(function(err){
+      document.getElementById('movimientos-loading').style.display = 'none';
+      document.getElementById('movimientos-error').style.display = '';
+      document.getElementById('movimientos-error').textContent = 'Error: ' + err.message;
+    });
+}
+
+/* ════════════════════════════════════════════════
+   NAVEGACIÓN
+════════════════════════════════════════════════ */
+const SECTION_META = {
+  resumen:              { title: 'Resumen Gerencial',         desc: 'Dashboard ejecutivo — datos consolidados' },
+  sumasSaldos:          { title: 'Sumas y Saldos',           desc: 'Balance de sumas y saldos por cuenta' },
+  detalleCuenta:        { title: 'Mayor por Cuenta',         desc: 'Movimientos detallados por cuenta contable' },
+  libroDiario:          { title: 'Libro Diario',             desc: 'Registro cronológico de asientos' },
+  imputaciones:         { title: 'Imputaciones',             desc: 'Imputaciones contables del período' },
+  ev:                   { title: 'Egresos de Valores',       desc: 'Pagos y salidas de fondos registrados' },
+  iv:                   { title: 'Ingresos de Valores',      desc: 'Cobros y entradas de fondos registrados' },
+  proveedoresSaldos:    { title: 'Saldos de Proveedores',    desc: 'Posición actual por proveedor' },
+  proveedoresPendientes:{ title: 'Pendientes de Proveedores',desc: 'Facturas pendientes y fechas de vencimiento' },
+  interempresas:        { title: 'Movimientos Interempresas',desc: 'Transacciones entre empresas del grupo' },
+  alertas:              { title: 'Alertas y Recomendaciones',desc: 'Reglas de control y señales críticas' },
+};
+
+function showSection(id) {
+  document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item-custom').forEach(el => el.classList.remove('active'));
+
+  const target = document.getElementById('section-' + id);
+  if (target) target.classList.add('active');
+
+  document.querySelectorAll('.nav-item-custom').forEach(el => {
+    if (el.getAttribute('onclick') && el.getAttribute('onclick').includes("'" + id + "'")) {
+      el.classList.add('active');
+    }
+  });
+
+  STATE.currentSection = id;
+  const meta = SECTION_META[id] || {};
+  document.getElementById('topbar-section-title').textContent = meta.title || id;
+  document.getElementById('topbar-section-desc').textContent = meta.desc || '';
+}
+
+/* ════════════════════════════════════════════════
+   CARGAR DESDE NODE-RED
+════════════════════════════════════════════════ */
+async function loadFromNodeRED() {
+  var sd = document.getElementById('startDate').value;
+  var ed = document.getElementById('endDate').value;
+  // Convertir de YYYY-MM-DD a YYYYMMDD para la API
+  sd = sd ? sd.replace(/-/g, '') : CONFIG.startDate;
+  ed = ed ? ed.replace(/-/g, '') : CONFIG.endDate;
+  var ct = document.getElementById('criticalThreshold').value || CONFIG.criticalThreshold;
+
+  var url = CONFIG.nodeRedUrl + '?startDate=' + sd + '&endDate=' + ed + '&criticalThreshold=' + ct;
+
+  // Estados de carga
+  document.getElementById('upload-label').textContent = 'Consultando...';
+  document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3>Consultando Calipso... 🔄</h3><p>Esperando respuesta del servidor</p></div></td></tr>';
+  document.getElementById('ss-body').innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3>Consultando...</h3></div></td></tr>';
+  document.getElementById('kpi-saldo-total').textContent = '···';
+  document.getElementById('kpi-crit-count').textContent = '···';
+  document.getElementById('kpi-alert-count').textContent = '···';
+
+  try {
+    var res = await fetch(url);
+    if (!res.ok) {
+      var err = await res.json().catch(function(){ return { error: res.statusText }; });
+      console.warn('Node-RED error:', err);
+      document.getElementById('upload-label').textContent = 'Error Node-RED';
+      document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3 style="color:var(--accent-red);">⚠ Error de conexión</h3><p>' + (err.error || 'No se pudo conectar con Node-RED') + '</p><p style="font-size:11px;margin-top:8px;">Verificá que Node-RED esté corriendo en 192.168.0.23:1880</p></div></td></tr>';
+      document.getElementById('ss-body').innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3 style="color:var(--accent-red);">Sin datos</h3></div></td></tr>';
+      document.getElementById('kpi-saldo-total').textContent = '—';
+      document.getElementById('kpi-crit-count').textContent = '—';
+      document.getElementById('kpi-alert-count').textContent = '—';
+      showToast('Node-RED: ' + (err.error || res.statusText) + '. Cargando demo.', 'warn');
+      loadMockData();
+      return;
+    }
+    var data = await res.json();
+    STATE.data = data;
+    renderAll();
+    var total = data._metadata?.totalCuentas || data.sumasSaldos?.length || 0;
+    document.getElementById('upload-label').textContent = 'Node-RED: ' + total + ' cuentas';
+    document.getElementById('kpi-saldo-delta').textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-AR');
+    showToast('Datos desde Calipso vía Node-RED (' + total + ' cuentas)', 'ok');
+  } catch (e) {
+    console.warn('Node-RED fetch failed:', e.message);
+    document.getElementById('upload-label').textContent = 'Sin conexión';
+    document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3 style="color:var(--accent-red);">⚠ Sin conexión con Node-RED</h3><p>' + e.message + '</p><p style="font-size:11px;margin-top:8px;">Verificá que Node-RED esté funcionando en 192.168.0.23:1880</p></div></td></tr>';
+    document.getElementById('ss-body').innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3 style="color:var(--accent-red);">Sin datos</h3></div></td></tr>';
+    document.getElementById('kpi-saldo-total').textContent = '—';
+    document.getElementById('kpi-crit-count').textContent = '—';
+    document.getElementById('kpi-alert-count').textContent = '—';
+    showToast('No se pudo conectar con Node-RED. Cargando demo.', 'warn');
+    loadMockData();
+  }
+}
+
+/* ════════════════════════════════════════════════
+   CARGAR DATOS DEMO
+════════════════════════════════════════════════ */
+function loadMockData() {
+  STATE.data = MOCK;
+  renderAll();
+  document.getElementById('upload-label').textContent = 'Datos demo';
+  showToast('Datos demo cargados correctamente', 'ok');
+}
+
+/* ════════════════════════════════════════════════
+   PROCESAR CSV
+════════════════════════════════════════════════ */
+function handleFileChange(input) {
+  if (!input.files[0]) return;
+  const name = input.files[0].name;
+  document.getElementById('upload-label').textContent = name;
+  document.getElementById('upload-zone').classList.add('has-file');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('dragging');
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.csv')) {
+    document.getElementById('upload-label').textContent = file.name;
+    document.getElementById('upload-zone').classList.add('has-file');
+    parseCSV(file);
+  }
+}
+
+function processData() {
+  // Si hay conexión Node-RED activa, usarla
+  if (CONFIG.useNodeRed) {
+    loadFromNodeRED();
+    return;
+  }
+  const fileInput = document.getElementById('fileInput');
+  if (!fileInput.files[0]) {
+    loadMockData();
+    return;
+  }
+  parseCSV(fileInput.files[0]);
+}
+
+function parseCSV(file) {
+  Papa.parse(file, {
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+      if (!results.data || results.data.length === 0) {
+        showToast('El CSV no tiene datos válidos', 'warn');
+        loadMockData();
+        return;
+      }
+      const mapped = mapCSVToState(results.data);
+      STATE.data = mapped;
+      renderAll();
+      showToast(`CSV cargado: ${results.data.length} registros`, 'ok');
+    },
+    error: function() {
+      showToast('Error al leer el CSV. Cargando datos demo.', 'warn');
+      loadMockData();
+    }
+  });
+}
+
+function mapCSVToState(rows) {
+  // Mapeo flexible: busca columnas comunes del export Calipso
+  const find = (row, ...keys) => {
+    for (const k of keys) {
+      const col = Object.keys(row).find(c => c.toLowerCase().replace(/\s/g,'').includes(k.toLowerCase()));
+      if (col) return row[col];
+    }
+    return '';
+  };
+
+  const parsed = rows.map(r => ({
+    codigo:     find(r,'codigo','code','cta'),
+    cuenta:     find(r,'cuenta','nombre','name','description'),
+    debeAcum:   parseFloat(find(r,'debe','debeacum','debito')) || 0,
+    haberAcum:  parseFloat(find(r,'haber','haberacum','credito')) || 0,
+    variacion:  parseFloat(find(r,'variacion','var','change')) || 0,
+    estado:     'ok'
+  }));
+
+  // Aplicar reglas de estado
+  const crit = parseFloat(document.getElementById('criticalThreshold').value) || CONFIG.criticalThreshold;
+  const varThr = parseFloat(document.getElementById('variationThreshold').value) || CONFIG.variationThreshold;
+  parsed.forEach(r => {
+    const saldo = Math.abs(r.debeAcum - r.haberAcum);
+    if (saldo >= crit || Math.abs(r.variacion) >= varThr) r.estado = 'crit';
+    else if (Math.abs(r.variacion) >= varThr * 0.6) r.estado = 'warn';
+  });
+
+  return { sumasSaldos: parsed, mayor: [], libroDiario: [], imputaciones: [], egresos: [], ingresos: [], proveedoresSaldos: [], proveedoresPendientes: [], interempresas: [], evolucion: MOCK.evolucion };
+}
+
+/* ════════════════════════════════════════════════
+   RENDER ALL
+════════════════════════════════════════════════ */
+function renderAll() {
+  if (!STATE.data) return;
+  updateParams();
+  renderKPIs();
+  renderTopAccounts();
+  renderSumasSaldos();
+  renderMayor();
+  renderLibroDiario();
+  renderImputaciones();
+  renderEgresos();
+  renderIngresos();
+  renderProveedoresSaldos();
+  renderProveedoresPendientes();
+  renderInterempresas();
+  renderAlertas();
+  renderCharts();
+}
+
+function updateParams() {
+  CONFIG.criticalThreshold = parseFloat(document.getElementById('criticalThreshold').value) || 10_000_000;
+  CONFIG.variationThreshold = parseFloat(document.getElementById('variationThreshold').value) || 30;
+  const sd = document.getElementById('startDate').value || '20260601';
+  const ed = document.getElementById('endDate').value || '20260630';
+  document.getElementById('badge-period').textContent = `${sd.slice(6,8)}/${sd.slice(4,6)}/${sd.slice(0,4)} — ${ed.slice(6,8)}/${ed.slice(4,6)}/${ed.slice(0,4)}`;
+}
+
+/* ─── KPIs ─── */
+function renderKPIs() {
+  const ss = STATE.data.sumasSaldos || [];
+  const saldoTotal = ss.reduce((acc, r) => acc + (r.debeAcum - r.haberAcum), 0);
+  const critCount = ss.filter(r => r.estado === 'crit').length;
+  const alertCount = ss.filter(r => r.estado !== 'ok').length;
+  const avgVar = ss.length ? ss.reduce((a,r) => a + Math.abs(r.variacion), 0) / ss.length : 0;
+
+  const ev = STATE.data.egresos || [];
+  const iv = STATE.data.ingresos || [];
+  const totalEg = ev.reduce((a,r) => a + (r.importe || 0), 0);
+  const totalIv = iv.reduce((a,r) => a + (r.importe || 0), 0);
+
+  document.getElementById('kpi-saldo-total').textContent = fmtMoney(saldoTotal);
+  document.getElementById('kpi-saldo-delta').textContent = 'Saldo neto acumulado';
+  document.getElementById('kpi-crit-count').textContent = critCount;
+  document.getElementById('kpi-crit-desc').textContent = `Umbral: ${fmtMoney(CONFIG.criticalThreshold)}`;
+  document.getElementById('kpi-alert-count').textContent = alertCount;
+  document.getElementById('kpi-alert-desc').textContent = `${critCount} críticas, ${alertCount - critCount} advertencias`;
+  document.getElementById('kpi-avg-var').textContent = fmtPct(avgVar);
+  document.getElementById('kpi-var-desc').textContent = 'Variación media absoluta';
+  document.getElementById('kpi-egresos').textContent = fmtMoney(totalEg);
+  document.getElementById('kpi-ingresos').textContent = fmtMoney(totalIv);
+  document.getElementById('kpi-ev-total').textContent = fmtMoney(totalEg);
+  document.getElementById('kpi-ev-count').textContent = ev.length;
+  document.getElementById('kpi-iv-total').textContent = fmtMoney(totalIv);
+  document.getElementById('kpi-iv-count').textContent = iv.length;
+}
+
+/* ─── TOP ACCOUNTS TABLE ─── */
+function renderTopAccounts() {
+  const ss = (STATE.data.sumasSaldos || []).slice().sort((a,b) => Math.abs(b.debeAcum - b.haberAcum) - Math.abs(a.debeAcum - a.haberAcum)).slice(0, 10);
+  const tbody = document.getElementById('top-accounts-body');
+  tbody.innerHTML = ss.map(r => `
+    <tr>
+      <td class="code"><a href="#" onclick="verMovimientos(\'' + r.codigo + '\',\'' + r.cuenta + '\');return false;" style="color:var(--accent-blue);text-decoration:none;">${r.codigo}</a></td>
+      <td>${r.cuenta}</td>
+      <td class="num">${fmtMoney(r.debeAcum)}</td>
+      <td class="num">${fmtMoney(r.haberAcum)}</td>
+      <td class="num"><strong>${fmtMoney(r.debeAcum - r.haberAcum)}</strong></td>
+      <td>${varPill(r.variacion)}</td>
+      <td>${estadoBadge(r.estado)}</td>
+    </tr>`).join('');
+}
+
+/* ─── SUMAS Y SALDOS ─── */
+function renderSumasSaldos() {
+  const ss = STATE.data.sumasSaldos || [];
+  const tbody = document.getElementById('ss-body');
+  tbody.innerHTML = ss.map(r => `
+    <tr>
+      <td class="code"><a href="#" onclick="verMovimientos(\'' + r.codigo + '\',\'' + r.cuenta + '\');return false;" style="color:var(--accent-blue);text-decoration:none;">${r.codigo}</a></td>
+      <td>${r.cuenta}</td>
+      <td class="num">${fmtMoney(r.debeAcum)}</td>
+      <td class="num">${fmtMoney(r.haberAcum)}</td>
+      <td class="num">${fmtMoney(Math.max(0, r.debeAcum - r.haberAcum))}</td>
+      <td class="num">${fmtMoney(Math.max(0, r.haberAcum - r.debeAcum))}</td>
+      <td>${varPill(r.variacion)}</td>
+      <td>${estadoBadge(r.estado)}</td>
+    </tr>`).join('');
+
+  const totDebe = ss.reduce((a,r) => a + r.debeAcum, 0);
+  const totHaber = ss.reduce((a,r) => a + r.haberAcum, 0);
+  document.getElementById('total-debe').textContent = fmtMoney(totDebe);
+  document.getElementById('total-haber').textContent = fmtMoney(totHaber);
+  const diff = totDebe - totHaber;
+  const diffEl = document.getElementById('total-diff');
+  diffEl.textContent = fmtMoney(diff);
+  diffEl.style.color = Math.abs(diff) < 1 ? 'var(--corona-green-dark)' : 'var(--accent-red)';
+}
+
+/* ─── MAYOR ─── */
+function renderMayor(cuenta) {
+  const items = STATE.data.mayor || [];
+  const filtered = cuenta ? items.filter(r => r.cuenta === cuenta) : items;
+  const tbody = document.getElementById('mayor-body');
+  let saldoAcc = 0;
+  tbody.innerHTML = filtered.map(r => {
+    saldoAcc += (r.debe || 0) - (r.haber || 0);
+    return `<tr>
+      <td class="code">${fmtDate(r.fecha)}</td>
+      <td class="code">${r.asiento}</td>
+      <td>${r.descripcion}</td>
+      <td class="num">${r.debe ? fmtMoney(r.debe) : '—'}</td>
+      <td class="num">${r.haber ? fmtMoney(r.haber) : '—'}</td>
+      <td class="num"><strong style="color:${saldoAcc>=0?'var(--corona-green-dark)':'var(--accent-red)'}">${fmtMoney(saldoAcc)}</strong></td>
+    </tr>`;
+  }).join('');
+
+  // Populate select
+  const sel = document.getElementById('select-cuenta');
+  const cuentas = [...new Set(items.map(r => r.cuenta))];
+  sel.innerHTML = '<option value="">Todas las cuentas</option>' + cuentas.map(c => `<option value="${c}">${c}</option>`).join('');
+}
+
+function filterMayor(v) { renderMayor(v); }
+
+/* ─── LIBRO DIARIO ─── */
+function renderLibroDiario() {
+  const items = STATE.data.libroDiario || [];
+  document.getElementById('ld-body').innerHTML = items.map(r => `
+    <tr>
+      <td class="code">${fmtDate(r.fecha)}</td>
+      <td class="code">${r.asiento}</td>
+      <td>${r.descripcion}</td>
+      <td style="font-size:12px;">${r.ctaDebe}</td>
+      <td style="font-size:12px;">${r.ctaHaber}</td>
+      <td class="num"><strong>${fmtMoney(r.importe)}</strong></td>
+      <td class="code">${r.ref}</td>
+    </tr>`).join('');
+}
+
+/* ─── IMPUTACIONES ─── */
+function renderImputaciones(tipo) {
+  const items = (STATE.data.imputaciones || []).filter(r => !tipo || r.tipo === tipo);
+  document.getElementById('imput-body').innerHTML = items.map(r => `
+    <tr>
+      <td class="code">${fmtDate(r.fecha)}</td>
+      <td><span class="badge-status ${r.tipo==='VENTA'?'badge-ok':r.tipo==='AJUSTE'?'badge-warn':'badge-info'}">${r.tipo}</span></td>
+      <td class="code">${r.comp}</td>
+      <td>${r.ente}</td>
+      <td><span style="font-size:11px; background:var(--surface-2); border:1px solid var(--border); border-radius:4px; padding:2px 6px;">${r.cc}</span></td>
+      <td class="num">${fmtMoney(r.neto)}</td>
+      <td class="num">${r.iva ? fmtMoney(r.iva) : '—'}</td>
+      <td class="num"><strong>${fmtMoney(r.total)}</strong></td>
+      <td>${estadoBadge(r.estado)}</td>
+    </tr>`).join('');
+}
+
+function filterImputaciones() {
+  renderImputaciones(document.getElementById('filter-imputacion-tipo').value);
+}
+
+/* ─── EGRESOS ─── */
+function renderEgresos() {
+  const items = STATE.data.egresos || [];
+  document.getElementById('ev-body').innerHTML = items.map(r => `
+    <tr>
+      <td class="code">${fmtDate(r.fecha)}</td>
+      <td class="code">${r.nro}</td>
+      <td>${r.beneficiario}</td>
+      <td>${r.concepto}</td>
+      <td><span style="font-size:11px; color:var(--text-secondary);">${r.medio}</span></td>
+      <td class="num"><strong>${fmtMoney(r.importe)}</strong></td>
+      <td>${estadoBadge(r.estado)}</td>
+    </tr>`).join('');
+}
+
+/* ─── INGRESOS ─── */
+function renderIngresos() {
+  const items = STATE.data.ingresos || [];
+  document.getElementById('iv-body').innerHTML = items.map(r => `
+    <tr>
+      <td class="code">${fmtDate(r.fecha)}</td>
+      <td class="code">${r.nro}</td>
+      <td>${r.origen}</td>
+      <td>${r.concepto}</td>
+      <td><span style="font-size:11px; color:var(--text-secondary);">${r.medio}</span></td>
+      <td class="num"><strong>${fmtMoney(r.importe)}</strong></td>
+      <td>${estadoBadge(r.estado)}</td>
+    </tr>`).join('');
+}
+
+/* ─── PROVEEDORES SALDOS ─── */
+function renderProveedoresSaldos() {
+  const items = STATE.data.proveedoresSaldos || [];
+  document.getElementById('prov-saldos-body').innerHTML = items.map(r => `
+    <tr>
+      <td class="code">${r.cuit}</td>
+      <td><strong>${r.proveedor}</strong></td>
+      <td><span style="font-size:11px; color:var(--text-secondary);">${r.categoria}</span></td>
+      <td class="num"><strong>${fmtMoney(r.saldo)}</strong></td>
+      <td class="num" style="color:${r.vencido>0?'var(--accent-red)':'var(--text-muted)'};">${r.vencido > 0 ? fmtMoney(r.vencido) : '—'}</td>
+      <td class="num">${fmtMoney(r.aVencer)}</td>
+      <td class="code">${fmtDate(r.ultimoMov)}</td>
+      <td>${estadoBadge(r.estado)}</td>
+    </tr>`).join('');
+}
+
+/* ─── PROVEEDORES PENDIENTES ─── */
+function renderProveedoresPendientes(estado) {
+  const items = (STATE.data.proveedoresPendientes || []).filter(r => !estado || r.estado === estado);
+  document.getElementById('prov-pend-body').innerHTML = items.map(r => `
+    <tr>
+      <td><strong>${r.proveedor}</strong></td>
+      <td class="code">${r.comp}</td>
+      <td class="code">${fmtDate(r.fecha)}</td>
+      <td class="code" style="color:${r.estado==='VENCIDO'?'var(--accent-red)':r.estado==='A_VENCER'?'var(--accent-amber)':'var(--text-secondary)'};">${fmtDate(r.venc)}</td>
+      <td>${diasBadge(r.dias)}</td>
+      <td class="num"><strong>${fmtMoney(r.importe)}</strong></td>
+      <td><span class="badge-status ${r.estado==='VENCIDO'?'badge-crit':r.estado==='A_VENCER'?'badge-warn':'badge-ok'}">${r.estado==='A_VENCER'?'A vencer':r.estado==='VIGENTE'?'Vigente':'Vencido'}</span></td>
+    </tr>`).join('');
+}
+
+function filterPendientes() {
+  renderProveedoresPendientes(document.getElementById('filter-pend-estado').value);
+}
+
+/* ─── INTEREMPRESAS ─── */
+function renderInterempresas() {
+  const items = STATE.data.interempresas || [];
+  const container = document.getElementById('inter-body');
+  container.innerHTML = '';
+  items.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'flow-row';
+    row.innerHTML = `
+      <span class="flow-entity">${r.desde}</span>
+      <div class="flow-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${r.tipo==='entrada'?'var(--corona-green)':'var(--accent-red)'}" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+      <span class="flow-entity">${r.hacia}</span>
+      <span style="flex:1; font-size:12px; color:var(--text-secondary); margin-left:12px;">${r.concepto}</span>
+      <span class="flow-amount" style="color:${r.tipo==='entrada'?'var(--corona-green-dark)':'var(--accent-red)'};">${r.tipo==='entrada'?'+':'−'}${fmtMoney(r.importe)}</span>
+      <span class="code" style="margin-left:12px; color:var(--text-muted);">${fmtDate(r.fecha)}</span>
+    `;
+    container.appendChild(row);
+  });
+}
+
+/* ─── ALERTAS ─── */
+function renderAlertas(severity) {
+  const d = STATE.data;
+  const alerts = [];
+
+  // Cuentas críticas
+  (d.sumasSaldos || []).filter(r => r.estado === 'crit').forEach(r => {
+    alerts.push({ type: 'critical', title: `Cuenta crítica: ${r.cuenta}`, desc: `Saldo: ${fmtMoney(r.debeAcum - r.haberAcum)} | Variación: ${fmtPct(r.variacion)}` });
+  });
+
+  // Proveedores vencidos
+  (d.proveedoresPendientes || []).filter(r => r.estado === 'VENCIDO').forEach(r => {
+    alerts.push({ type: 'critical', title: `Pago vencido: ${r.proveedor}`, desc: `${r.comp} — ${fmtMoney(r.importe)} — Vencido hace ${r.dias} día(s)` });
+  });
+
+  // A vencer
+  (d.proveedoresPendientes || []).filter(r => r.estado === 'A_VENCER').forEach(r => {
+    alerts.push({ type: 'warning', title: `Próximo vencimiento: ${r.proveedor}`, desc: `${r.comp} — ${fmtMoney(r.importe)} — Vence en ${Math.abs(r.dias)} día(s)` });
+  });
+
+  // Variaciones altas warn
+  (d.sumasSaldos || []).filter(r => r.estado === 'warn').forEach(r => {
+    alerts.push({ type: 'warning', title: `Variación elevada: ${r.cuenta}`, desc: `Variación ${fmtPct(r.variacion)} supera el umbral configurado` });
+  });
+
+  // Info: sync
+  alerts.push({ type: 'info', title: 'Próxima sincronización', desc: 'El flujo Node-RED ejecutará la sincronización con Google Sheets en la próxima ventana de 8 h.' });
+
+  const icons = { critical: '⚠', warning: '○', info: 'ℹ' };
+  const filtered = severity ? alerts.filter(a => a.type === severity) : alerts;
+
+  document.getElementById('alertas-body').innerHTML = filtered.map(a => `
+    <div class="alert-strip ${a.type}">
+      <span class="alert-icon">${icons[a.type]}</span>
+      <div class="alert-body">
+        <div class="alert-title">${a.title}</div>
+        <div class="alert-desc">${a.desc}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('kpi-alert-count').textContent = alerts.filter(a => a.type !== 'info').length;
+}
+
+function filterAlertas() {
+  renderAlertas(document.getElementById('filter-alert-severity').value);
+}
+
+/* ─── CHARTS ─── */
+function renderCharts() {
+  const ev = STATE.data.evolucion || {};
+
+  // Evolution chart
+  if (STATE.evolutionChartInstance) STATE.evolutionChartInstance.destroy();
+  const evCtx = document.getElementById('evolutionChart').getContext('2d');
+  STATE.evolutionChartInstance = new Chart(evCtx, {
+    type: STATE.evolutionChartType,
+    data: {
+      labels: ev.labels || [],
+      datasets: [
+        { label: 'Caja y Bancos', data: ev.caja || [], borderColor: '#1D9E75', backgroundColor: 'rgba(29,158,117,0.1)', borderWidth: 2, pointRadius: 3, tension: 0.4, fill: STATE.evolutionChartType === 'line' },
+        { label: 'Ventas', data: ev.ventas || [], borderColor: '#185FA5', backgroundColor: 'rgba(24,95,165,0.1)', borderWidth: 2, pointRadius: 3, tension: 0.4, borderDash: STATE.evolutionChartType === 'line' ? [4,2] : [], fill: false },
+        { label: 'Costos', data: ev.costos || [], borderColor: '#A32D2D', backgroundColor: 'rgba(163,45,45,0.1)', borderWidth: 2, pointRadius: 3, tension: 0.4, borderDash: STATE.evolutionChartType === 'line' ? [2,2] : [], fill: false },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { callback: v => '$' + (v/1_000_000).toFixed(0) + 'M', font: { size: 11 }, color: '#9BA3AF' }, grid: { color: 'rgba(0,0,0,0.04)' } },
+        x: { ticks: { font: { size: 11 }, color: '#9BA3AF' }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Distribution donut
+  if (STATE.distributionChartInstance) STATE.distributionChartInstance.destroy();
+  const ss = STATE.data.sumasSaldos || [];
+  const grupos = {};
+  ss.forEach(r => {
+    const g = r.codigo ? r.codigo[0] : '?';
+    const names = {'1':'Activo','2':'Pasivo','3':'Patrimonio','4':'Ingresos','5':'Egresos'};
+    const name = names[g] || 'Otros';
+    grupos[name] = (grupos[name] || 0) + Math.abs(r.debeAcum - r.haberAcum);
+  });
+
+  const dCtx = document.getElementById('distributionChart').getContext('2d');
+  STATE.distributionChartInstance = new Chart(dCtx, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(grupos),
+      datasets: [{ data: Object.values(grupos), backgroundColor: ['#1D9E75','#A32D2D','#185FA5','#BA7517','#5F5E5A'], borderWidth: 2, borderColor: '#ffffff' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 11 }, padding: 12, boxWidth: 10, color: '#5A6170' }
+        }
+      }
+    }
+  });
+}
+
+function toggleChartType() {
+  STATE.evolutionChartType = STATE.evolutionChartType === 'line' ? 'bar' : 'line';
+  if (STATE.data) renderCharts();
+}
+
+/* ════════════════════════════════════════════════
+   FILTROS / BÚSQUEDA
+════════════════════════════════════════════════ */
+function filterTable(tbodyId, query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('#' + tbodyId + ' tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function filterTopTable(query) { filterTable('top-accounts-body', query); }
+
+/* ════════════════════════════════════════════════
+   EXPORT CSV
+════════════════════════════════════════════════ */
+function exportSectionCSV(tbodyId, filename) {
+  const rows = [];
+  const thead = document.querySelector('#' + tbodyId).closest('table')?.querySelector('thead');
+  if (thead) rows.push([...thead.querySelectorAll('th')].map(th => th.textContent.trim()).join(','));
+  document.querySelectorAll('#' + tbodyId + ' tr').forEach(row => {
+    if (row.style.display === 'none') return;
+    const cells = [...row.querySelectorAll('td')].map(td => '"' + td.textContent.trim().replace(/"/g,'""') + '"');
+    if (cells.length) rows.push(cells.join(','));
+  });
+  const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename + '_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+function exportCSV() {
+  exportSectionCSV('ss-body', 'sumas_saldos');
+}
+
+/* ════════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════════ */
+function showToast(msg, type) {
+  const toast = document.createElement('div');
+  const colors = { ok:'var(--corona-green-dark)', warn:'var(--accent-amber)', err:'var(--accent-red)' };
+  toast.style.cssText = `
+    position:fixed; bottom:24px; right:24px; z-index:9999;
+    background:var(--surface); border:1px solid var(--border);
+    border-left:3px solid ${colors[type]||colors.ok};
+    border-radius:10px; padding:12px 18px;
+    font-size:13px; color:var(--text-primary);
+    box-shadow:0 4px 16px rgba(0,0,0,0.12);
+    animation:fadeIn 0.2s ease;
+    max-width:320px;
+  `;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3500);
+}
+
+/* ════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════ */
+(function init() {
+  document.getElementById('uuid').textContent = crypto.randomUUID().slice(0,8).toUpperCase();
+  document.getElementById('date-footer').textContent = new Date().toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  document.getElementById('badge-period').textContent = 'Conectando...';
+
+  // Fechas por defecto al mes actual
+  var now = new Date();
+  var y = now.getFullYear();
+  var m = String(now.getMonth() + 1).padStart(2, '0');
+  var lastDay = new Date(y, now.getMonth() + 1, 0).getDate();
+  document.getElementById('startDate').value = y + '-' + m + '-01';
+  document.getElementById('endDate').value = y + '-' + m + '-' + String(lastDay).padStart(2, '0');
+
+  // Auto-cargar desde Node-RED (fallback a demo)
+  loadFromNodeRED();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+[
+    {
+        "id": "sync_tab_v2_0001",
+        "type": "tab",
+        "label": "SYNC - SumasSaldos a Google Sheets v2",
+        "disabled": false,
+        "info": "=== SYNC: SUMAS Y SALDOS → GOOGLE SHEETS (v2 DIRECTO) ===\n\nFLUJO:\n  Inject (manual o schedule) → MSSQL SumasSaldos → Transformar → GSheet Append\n\nARQUITECTURA (v2):\n  Node-RED consulta SQL Server CORONA (on-prem) y escribe DIRECTO en Google Sheets\n  Sin dependencia de n8n. Usa node-red-contrib-google-sheets.\n\nREQUISITOS:\n  1. Instalar: npm install node-red-contrib-google-sheets\n  2. Service Account de Google con Sheets API habilitada\n  3. Google Sheet compartida con la service account (Editor)\n  4. Configurar nodo gauth con el JSON de credenciales\n  5. Configurar nodo GSheet con el Sheet ID y rango\n\nFRECUENCIA:\n  Diaria 06:00 AM (hora servidor). Ejecutar manual para prueba.\n\nVERSION: 2.0.0 — 2026-06-10"
+    },
+    {
+        "id": "sync_inject_v2_0002",
+        "type": "inject",
+        "z": "sync_tab_v2_0001",
+        "name": "▶ Ejecutar sync ahora",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "6b9b42d2f9dd383b"
+            ]
+        ]
+    },
+    {
+        "id": "sync_schedule_v2_0007",
+        "type": "inject",
+        "z": "sync_tab_v2_0001",
+        "name": "⏰ Schedule diario 06:00",
+        "props": [],
+        "repeat": "",
+        "crontab": "0 6 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 180,
+        "wires": [
+            [
+                "6b9b42d2f9dd383b"
+            ]
+        ]
+    },
+    {
+        "id": "sync_fn_transform_v2_0005",
+        "type": "function",
+        "z": "sync_tab_v2_0001",
+        "name": "Transformar → 2D array para GSheet",
+        "func": "// ===============================================\n// Transformar rows MSSQL → 2D array para GSheet\n// ===============================================\n// El nodo GSheet espera msg.payload como array de arrays:\n//   [[\"col1\",\"col2\",...], [\"val1\",\"val2\",...], ...]\n// No incluimos cabecera — la sheet ya tiene headers congelados\n\nvar rows = msg.payload;\nvar sync_uuid = msg.sync_uuid || 'N/A';\nvar startDate = msg.startDate || '';\nvar endDate = msg.endDate || '';\nvar timestamp = new Date().toISOString();\nvar periodo = startDate + '-' + endDate;\n\n// Guardar metadata para el nodo de resultado\nmsg._syncInfo = {\n  sync_uuid: sync_uuid,\n  periodo: periodo,\n  timestamp: timestamp\n};\n\nif (!rows || !Array.isArray(rows) || rows.length === 0) {\n  node.warn('[Sync-SS-v2] Sin datos para sync. Se omite escritura.');\n  msg._syncInfo.empty = true;\n  msg.payload = null;  // null → no se escribe nada\n  return msg;\n}\n\n// Construir array 2D: cada fila es un array de 9 columnas\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i];\n  var debe = parseFloat(r.DEBE_PERIODO) || 0;\n  var haber = parseFloat(r.HABER_PERIODO) || 0;\n  var saldo = debe - haber;\n\n  data.push([\n    r.CODIGO || '',                          // A: CODIGO\n    r.CUENTA || '',                          // B: CUENTA\n    r.NRubro || '',                          // C: RUBRO\n    debe,                                     // D: DEBE_PERIODO\n    haber,                                    // E: HABER_PERIODO\n    saldo,                                    // F: SALDO_PERIODO\n    periodo,                                  // G: PERIODO\n    timestamp,                                // H: FECHA_SYNC\n    sync_uuid                                 // I: SYNC_UUID\n  ]);\n}\n\n// Formato 2D array → GSheet lo detecta automáticamente\nmsg.payload = data;\n\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-SS-v2] ' + data.length + ' filas preparadas para Google Sheets. UUID=' + sync_uuid);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 890,
+        "y": 120,
+        "wires": [
+            [
+                "sync_gsheet_v2_0006"
+            ]
+        ]
+    },
+    {
+        "id": "sync_gsheet_v2_0006",
+        "type": "GSheet",
+        "z": "sync_tab_v2_0001",
+        "creds": "sync_gauth_v2_0009",
+        "method": "append",
+        "sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+        "cells": "SumasSaldos!A2:I175",
+        "flatten": false,
+        "name": "Append a SumasSaldos",
+        "x": 1090,
+        "y": 40,
+        "wires": [
+            [
+                "sync_fn_result_v2_0008"
+            ]
+        ]
+    },
+    {
+        "id": "sync_fn_result_v2_0008",
+        "type": "function",
+        "z": "sync_tab_v2_0001",
+        "name": "Resultado sync",
+        "func": "// ===============================================\n// Procesar resultado del sync a Google Sheets\n// ===============================================\nvar info = msg._syncInfo || {};\n\nif (info.empty) {\n  node.warn('[Sync-SS-v2] Sync omitido: sin datos en el periodo ' + (info.periodo || '?'));\n  return msg;\n}\n\n// El GSheet node devuelve en msg.payload la respuesta de la API\n// Si hay error, msg.error tendrá el mensaje\nif (msg.error) {\n  node.error('[Sync-SS-v2] ERROR al escribir en Google Sheets: ' + msg.error);\n  return msg;\n}\n\nvar updatedRange = '';\nif (msg.payload && msg.payload.updates) {\n  updatedRange = msg.payload.updates.updatedRange || '';\n}\n\nnode.warn('[Sync-SS-v2] ✅ Sync exitoso a Google Sheets');\nnode.warn('[Sync-SS-v2]    UUID: ' + (info.sync_uuid || '?'));\nnode.warn('[Sync-SS-v2]    Periodo: ' + (info.periodo || '?'));\nnode.warn('[Sync-SS-v2]    Filas: ' + (info.rowCount || 0));\nnode.warn('[Sync-SS-v2]    Rango: ' + updatedRange);\n\n// Pasar metadata para nodos siguientes si se agregaran\nmsg._syncResult = {\n  success: true,\n  uuid: info.sync_uuid,\n  periodo: info.periodo,\n  rows: info.rowCount,\n  range: updatedRange,\n  timestamp: info.timestamp\n};\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1280,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6503d387dcfa73c8",
+        "type": "MSSQL",
+        "z": "sync_tab_v2_0001",
+        "mssqlCN": "6814eb4bb7e82ddb",
+        "name": "Coneccion Calipso",
+        "outField": "payload",
+        "returnType": "0",
+        "throwErrors": 1,
+        "query": "-- Sumas y Saldos: mes actual con GETDATE() (fallback si queryOpt no funciona)\n-- La query real se inyecta via msg.payload desde el function node\nSELECT TOP 1000\n   V_EZI_CUENTAS.CODIGO,\n   V_EZI_CUENTAS.DESCRIPCION AS CUENTA,\n   V_EZI_CUENTAS.CRubro,\n   V_EZI_CUENTAS.NRubro,\n   SUM(V_VALOR_.IMPORTE) AS DEBE_PERIODO,\n   SUM(V_VALOR_1.IMPORTE) AS HABER_PERIODO,\n   SUM(V_VALOR_.IMPORTE) - SUM(V_VALOR_1.IMPORTE) AS SALDO_PERIODO\nFROM V_TRCONTABLE_\nINNER JOIN V_ITEMCONTABLE_ ON V_TRCONTABLE_.ITEMSTRANSACCION_ID = V_ITEMCONTABLE_.BO_PLACE_ID\nINNER JOIN V_VALOR_ ON V_ITEMCONTABLE_.DEBE_ID = V_VALOR_.ID\nINNER JOIN V_VALOR_ AS V_VALOR_1 ON V_ITEMCONTABLE_.HABER_ID = V_VALOR_1.ID\nINNER JOIN V_EZI_CUENTAS ON V_ITEMCONTABLE_.REFERENCIA_ID = V_EZI_CUENTAS.ID\nWHERE V_EZI_CUENTAS.CODIGO BETWEEN '0' AND '9'\n   AND V_TRCONTABLE_.ESTADO = 'C'\nGROUP BY\n     V_EZI_CUENTAS.CODIGO,\n     V_EZI_CUENTAS.DESCRIPCION,\n     V_EZI_CUENTAS.CRubro,\n     V_EZI_CUENTAS.NRubro\nORDER BY V_EZI_CUENTAS.CODIGO",
+        "modeOpt": "",
+        "modeOptType": "query",
+        "queryOpt": "payload",
+        "queryOptType": "msg",
+        "paramsOpt": "queryParams",
+        "paramsOptType": "none",
+        "rows": "rows",
+        "rowsType": "msg",
+        "parseMustache": false,
+        "params": [],
+        "x": 610,
+        "y": 120,
+        "wires": [
+            [
+                "sync_fn_transform_v2_0005",
+                "01b9ca95680a7cf2"
+            ]
+        ]
+    },
+    {
+        "id": "6b9b42d2f9dd383b",
+        "type": "function",
+        "z": "sync_tab_v2_0001",
+        "name": "Sumas y Saldos",
+        "func": "const fechaInicio = global.get('zafra_inicio_dmY') || '18/05/2026';\n\nlet Consuslta = `\n -- Compatible SQL Server 2008 R2\n  DECLARE @startDate VARCHAR(8) = CONVERT(VARCHAR(8), DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0), 112);\n  DECLARE @endDate VARCHAR(8) = CONVERT(VARCHAR(8), DATEADD(DAY, -1, DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) + 1, 0)), 112);\n\n  SELECT TOP 1000\n     V_EZI_CUENTAS.CODIGO,\n     V_EZI_CUENTAS.DESCRIPCION AS CUENTA,\n     V_EZI_CUENTAS.CRubro,\n     V_EZI_CUENTAS.NRubro,\n     SUM(V_VALOR_.IMPORTE) AS DEBE_PERIODO,\n     SUM(V_VALOR_1.IMPORTE) AS HABER_PERIODO,\n     SUM(V_VALOR_.IMPORTE) - SUM(V_VALOR_1.IMPORTE) AS SALDO_PERIODO\n  FROM V_TRCONTABLE_\n  INNER JOIN V_ITEMCONTABLE_ ON V_TRCONTABLE_.ITEMSTRANSACCION_ID = V_ITEMCONTABLE_.BO_PLACE_ID\n  INNER JOIN V_VALOR_ ON V_ITEMCONTABLE_.DEBE_ID = V_VALOR_.ID\n  INNER JOIN V_VALOR_ AS V_VALOR_1 ON V_ITEMCONTABLE_.HABER_ID = V_VALOR_1.ID\n  INNER JOIN V_EZI_CUENTAS ON V_ITEMCONTABLE_.REFERENCIA_ID = V_EZI_CUENTAS.ID\n  WHERE SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) >= '20250201'\n    AND SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) <= '20260228'\n    AND V_EZI_CUENTAS.CODIGO BETWEEN '0' AND '9'\n    AND V_TRCONTABLE_.ESTADO = 'C'\n  GROUP BY\n       V_EZI_CUENTAS.CODIGO,\n       V_EZI_CUENTAS.DESCRIPCION,\n       V_EZI_CUENTAS.CRubro,\n       V_EZI_CUENTAS.NRubro\n  ORDER BY V_EZI_CUENTAS.CODIGO;\n`;\n\nmsg.payload = Consuslta;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 120,
+        "wires": [
+            [
+                "6503d387dcfa73c8"
+            ]
+        ]
+    },
+    {
+        "id": "01b9ca95680a7cf2",
+        "type": "debug",
+        "z": "sync_tab_v2_0001",
+        "name": "debug 127",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 830,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "sync_gauth_v2_0009",
+        "type": "gauth",
+        "name": "node-red-sheets-sync@sync-calipso-corona.iam.gserviceaccount.com"
+    },
+    {
+        "id": "6814eb4bb7e82ddb",
+        "type": "MSSQL-CN",
+        "tdsVersion": "7_3_B",
+        "name": "Calipso",
+        "server": "192.168.0.177",
+        "port": "1433",
+        "encyption": false,
+        "trustServerCertificate": false,
+        "database": "CORONA",
+        "useUTC": true,
+        "connectTimeout": "25000",
+        "requestTimeout": "25000",
+        "cancelTimeout": "80000",
+        "pool": "5",
+        "parseJSON": false,
+        "enableArithAbort": true,
+        "readOnlyIntent": false
+    }
+]

@@ -1,0 +1,38 @@
+# Node
+node_modules/
+npm-debug.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets & credenciales
+*.key.json
+credentials*.json
+service_account*.json
+.env
+.env.*
+
+# Archivos grandes / binarios
+*.exe
+*.zip
+*.tar.gz
+
+# Backups
+*~
+*.bak
+~$*
+
+# VSCode
+.vscode/
+
+# Excel tmp
+~$*.xlsx
+
+# User uploads temp
+coronaweb/recibos_sueldo/views/*.pdf
