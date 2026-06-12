@@ -36,3 +36,5 @@ service_account*.json
 
 # User uploads temp
 coronaweb/recibos_sueldo/views/*.pdf
+key-*.json
+*.key.json
