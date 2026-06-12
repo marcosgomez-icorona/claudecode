@@ -8,13 +8,23 @@
     "UserPromptSubmit": [
       {
         "matcher": "",
-        "command": "bash /home/soporte/.claude/hooks/pre-message.sh"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/soporte/.claude/hooks/pre-message.sh"
+          }
+        ]
       }
     ],
     "Stop": [
       {
         "matcher": "",
-        "command": "bash /home/soporte/.claude/hooks/post-message.sh"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/soporte/.claude/hooks/post-message.sh"
+          }
+        ]
       }
     ]
   }
