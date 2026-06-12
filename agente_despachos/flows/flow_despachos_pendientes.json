@@ -1,34 +1,34 @@
 [
   {
-    "id": "dp_tab_0001",
+    "id": "tab_despachos",
     "type": "tab",
-    "label": "Despachos Pendientes - Facturación",
+    "label": "Despachos Pendientes",
     "disabled": false,
-    "info": "=== DESPACHOS PENDIENTES DE FACTURACIÓN ===\n\nENDPOINTS:\n  GET  /api/despachos/pendientes?days=30   → Lista remitos sin facturar (recientes)\n  GET  /api/despachos/pendientes/:remito    → Detalle completo de un remito\n  POST /api/despachos/pendientes/:remito/facturar  → Vincular factura (requiere aprobación)\n  GET  /api/despachos/resumen?days=30      → KPIs y resumen\n  GET  /api/despachos/health               → Health check\n  GET  /despachos-pendientes                → Frontend HTML\n\nFUENTES:\n  CORONA.dbo.pr_ezi_remitos\n  CORONA.dbo.pr_ezi_remitos_items\n\nFLUJO:\n  1. Valida parámetros\n  2. Consulta SQL Server\n  3. Transforma al formato del frontend\n  4. Responde JSON\n\nCONFIGURACIÓN:\n  - Ajustar credenciales en el nodo MSSQL-CN \"dp_mssqlcn_0002\"\n  - Las credenciales se guardan cifradas en credentials.json"
+    "info": "=== DESPACHOS PENDIENTES DE FACTURACIÓN ===\n\nENDPOINTS:\n  GET  /api/despachos/health\n  GET  /api/despachos/pendientes?days=30\n  GET  /api/despachos/pendientes/:remito\n  POST /api/despachos/pendientes/:remito/facturar\n  GET  /api/despachos/resumen?days=30\n  GET  /despachos-pendientes\n\nFUENTES: CORONA.dbo.pr_ezi_remitos + pr_ezi_remitos_items\nPATRÓN: queries en msg.payload, throwErrors=1 + Catch node"
   },
   {
-    "id": "dp_mssqlcn_0002",
+    "id": "6814eb4bb7e82ddb",
     "type": "MSSQL-CN",
-    "tdsVersion": "7_3_A",
-    "name": "Calipso CORONA (Despachos)",
+    "tdsVersion": "7_3_B",
+    "name": "Calipso",
     "server": "192.168.0.177",
     "port": "1433",
     "encyption": false,
     "trustServerCertificate": false,
     "database": "CORONA",
-    "useUTC": false,
-    "connectTimeout": "15000",
-    "requestTimeout": "30000",
-    "cancelTimeout": "5000",
+    "useUTC": true,
+    "connectTimeout": "25000",
+    "requestTimeout": "25000",
+    "cancelTimeout": "80000",
     "pool": "5",
     "parseJSON": false,
     "enableArithAbort": true,
-    "readOnlyIntent": true
+    "readOnlyIntent": false
   },
   {
-    "id": "dp_http_health",
+    "id": "http_health",
     "type": "http in",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "GET /api/despachos/health",
     "url": "/api/despachos/health",
     "method": "get",
@@ -38,85 +38,88 @@
     "y": 80,
     "wires": [
       [
-        "dp_health_resp"
+        "fn_health_query"
       ]
     ]
   },
   {
-    "id": "dp_health_resp",
+    "id": "fn_health_query",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "Health OK",
-    "func": "// Health + test SQL\nmsg.query = \"SELECT @@SERVERNAME AS server_name, DB_NAME() AS db_name, SCHEMA_NAME() AS schema_name, SYSTEM_USER AS login_user, GETDATE() AS server_time;\";\nmsg.topic = msg.query;\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "1. Query health",
+    "func": "msg.payload = \"SELECT @@SERVERNAME AS server_name, DB_NAME() AS db_name, SCHEMA_NAME() AS schema_name, SYSTEM_USER AS login_user, GETDATE() AS server_time;\";\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 350,
+    "x": 310,
     "y": 80,
     "wires": [
       [
-        "dp_mssql_health_test"
+        "mssql_health"
       ]
     ]
   },
   {
-    "id": "dp_mssql_health_test",
+    "id": "mssql_health",
     "type": "MSSQL",
-    "z": "dp_tab_0001",
-    "mssqlCN": "dp_mssqlcn_0002",
-    "name": "SQL Test",
+    "z": "tab_despachos",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "MSSQL Health",
     "outField": "payload",
-    "returnType": 0,
-    "throwErrors": 0,
-    "query": "",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT 1 AS placeholder",
     "modeOpt": "",
     "modeOptType": "query",
-    "queryOpt": "",
-    "queryOptType": "edit",
-    "x": 560,
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "msg",
+    "rows": "",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 530,
     "y": 80,
     "wires": [
       [
-        "dp_health_trn"
-      ],
-      [
-        "dp_http_err_400"
+        "fn_health_format"
       ]
     ]
   },
   {
-    "id": "dp_health_trn",
+    "id": "fn_health_format",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "Format health + SQL info",
-    "func": "var sqlInfo = (msg.payload || [])[0] || {};\nmsg.payload = {\n  status: 'ok',\n  service: 'despachos-pendientes',\n  timestamp: new Date().toISOString(),\n  version: '0.1.0',\n  sql: {\n    server: sqlInfo.server_name || 'n/a',\n    database: sqlInfo.db_name || 'n/a',\n    user: sqlInfo.login_user || 'n/a',\n    serverTime: sqlInfo.server_time || 'n/a'\n  }\n};\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "2. Format health",
+    "func": "var sqlInfo = (msg.payload || [])[0] || {};\nmsg.payload = {\n  status: 'ok',\n  service: 'despachos-pendientes',\n  timestamp: new Date().toISOString(),\n  version: '0.2.0',\n  sql: {\n    server: sqlInfo.server_name || 'n/a',\n    database: sqlInfo.db_name || 'n/a',\n    user: sqlInfo.login_user || 'n/a',\n    serverTime: sqlInfo.server_time || 'n/a'\n  }\n};\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 770,
+    "x": 740,
     "y": 80,
     "wires": [
       [
-        "dp_http_resp_common"
+        "http_resp_health"
       ]
     ]
   },
   {
-    "id": "dp_http_resp_common",
+    "id": "http_resp_health",
     "type": "http response",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "Response",
     "statusCode": "",
     "headers": {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*"
     },
-    "x": 980,
+    "x": 960,
     "y": 80,
     "wires": []
   },
   {
-    "id": "dp_http_pendientes",
+    "id": "http_pendientes",
     "type": "http in",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "GET /api/despachos/pendientes",
     "url": "/api/despachos/pendientes",
     "method": "get",
@@ -126,71 +129,74 @@
     "y": 180,
     "wires": [
       [
-        "dp_fn_val_pendientes"
+        "fn_pendientes_query"
       ]
     ]
   },
   {
-    "id": "dp_fn_val_pendientes",
+    "id": "fn_pendientes_query",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "1. Validar params",
-    "func": "var days = parseInt(msg.req.query.days) || 30;\nif (days < 1) days = 1;\nif (days > 365) days = 365;\n\nvar uuid = (\n  Date.now().toString(36).toUpperCase().slice(-4) +\n  Math.random().toString(36).substring(2, 6).toUpperCase() +\n  Math.random().toString(36).substring(2, 6).toUpperCase()\n);\n\nmsg._trace = { uuid: uuid, days: days };\n\nmsg.query = \"SELECT pr.remito, pr.fecha, pr.razonsocial AS cliente, pr.cuit, \" +\n  \"pr.domicilio, pr.localidad, pr.provincia, \" +\n  \"pr.transportista, pr.chofer, pr.patente, pr.chasis, \" +\n  \"pr.numero_pesada AS guia, pr.usuario, pr.creado, pr.observaciones, \" +\n  \"pr.destino, pi.descripcion AS producto, pi.cantidad, \" +\n  \"pi.unidamedida2 AS unidad, pi.cantidad2, pi.precio, pi.orden \" +\n  \"FROM pr_ezi_remitos pr \" +\n  \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \" +\n  \"WHERE pr.factura IS NULL \" +\n  \"AND pr.fecha >= DATEADD(DAY, -\" + days + \", GETDATE()) \" +\n  \"ORDER BY pr.fecha DESC, pr.remito, pi.orden\";\n\nmsg.topic = msg.query;\n\nnode.warn('[Despachos] ' + uuid + ' days=' + days);\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "1. Validar + query",
+    "func": "var days = parseInt(msg.req.query.days) || 30;\nif (days < 1) days = 1;\nif (days > 365) days = 365;\n\nvar uuid = Date.now().toString(36).toUpperCase().slice(-4) +\n  Math.random().toString(36).substring(2, 6).toUpperCase() +\n  Math.random().toString(36).substring(2, 6).toUpperCase();\n\nmsg._trace = { uuid: uuid, days: days };\n\nmsg.payload = \"SELECT pr.remito, pr.fecha, pr.razonsocial AS cliente, pr.cuit, \" +\n  \"pr.domicilio, pr.localidad, pr.provincia, \" +\n  \"pr.transportista, pr.chofer, pr.patente, pr.chasis, \" +\n  \"pr.numero_pesada AS guia, pr.usuario, pr.creado, pr.observaciones, \" +\n  \"pr.destino, pi.descripcion AS producto, pi.cantidad, \" +\n  \"pi.unidamedida2 AS unidad, pi.cantidad2, pi.precio, pi.orden \" +\n  \"FROM pr_ezi_remitos pr \" +\n  \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \" +\n  \"WHERE pr.factura IS NULL \" +\n  \"AND pr.fecha >= DATEADD(DAY, -\" + days + \", GETDATE()) \" +\n  \"ORDER BY pr.fecha DESC, pr.remito, pi.orden\";\n\nnode.warn('[Despachos] ' + uuid + ' days=' + days);\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 350,
+    "x": 330,
     "y": 180,
     "wires": [
       [
-        "dp_mssql_pendientes"
+        "mssql_pendientes"
       ]
     ]
   },
   {
-    "id": "dp_mssql_pendientes",
+    "id": "mssql_pendientes",
     "type": "MSSQL",
-    "z": "dp_tab_0001",
-    "mssqlCN": "dp_mssqlcn_0002",
-    "name": "2. Consulta remitos sin factura",
+    "z": "tab_despachos",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "MSSQL Pendientes",
     "outField": "payload",
-    "returnType": 0,
-    "throwErrors": 0,
-    "query": "",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT 1 AS placeholder",
     "modeOpt": "",
     "modeOptType": "query",
-    "queryOpt": "",
-    "queryOptType": "edit",
-    "x": 560,
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "msg",
+    "rows": "",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 540,
     "y": 180,
     "wires": [
       [
-        "dp_fn_trn_pendientes"
-      ],
-      [
-        "dp_http_err_400"
+        "fn_pendientes_transform"
       ]
     ]
   },
   {
-    "id": "dp_fn_trn_pendientes",
+    "id": "fn_pendientes_transform",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "3. Transformar formato",
-    "func": "var rows = msg.payload || [];\nvar uuid = msg._trace ? msg._trace.uuid : 'N/A';\nvar days = msg._trace ? msg._trace.days : 30;\n\n// Agrupar items por remito\nvar remitos = {};\nvar clientesSet = {};\n\nrows.forEach(function(row) {\n  var key = row.remito;\n  if (!remitos[key]) {\n    remitos[key] = {\n      remito: row.remito,\n      fecha: row.fecha,\n      cliente: row.cliente,\n      cuit: row.cuit,\n      domicilio: row.domicilio,\n      localidad: row.localidad,\n      provincia: row.provincia,\n      transportista: row.transportista ? row.transportista.trim() : '',\n      chofer: row.chofer ? row.chofer.trim() : '',\n      patente: row.patente ? row.patente.trim() : '',\n      chasis: row.chasis ? row.chasis.trim() : '',\n      guia: row.guia,\n      usuario: row.usuario,\n      creado: row.creado,\n      observaciones: row.observaciones,\n      destino: row.destino,\n      items: [],\n      totalItems: 0,\n      totalImporte: 0\n    };\n  }\n  \n  remitos[key].items.push({\n    orden: row.orden,\n    producto: row.producto,\n    cantidad: row.cantidad,\n    unidad: row.unidad,\n    cantidad2: row.cantidad2,\n    precio: row.precio,\n    total: (row.cantidad || 0) * (row.precio || 0)\n  });\n  \n  remitos[key].totalItems++;\n  remitos[key].totalImporte += (row.cantidad || 0) * (row.precio || 0);\n  clientesSet[row.cliente] = true;\n});\n\n// Calcular resumen\nvar data = Object.keys(remitos).map(function(key) {\n  var r = remitos[key];\n  var firstItem = r.items[0] || {};\n  return {\n    remito: r.remito,\n    fecha: r.fecha,\n    cliente: r.cliente,\n    cuit: r.cuit,\n    destino: r.localidad ? r.localidad + (r.provincia ? ', ' + r.provincia : '') : '-',\n    producto: firstItem.producto,\n    cantidad: firstItem.cantidad,\n    unidad: firstItem.unidad,\n    cantidad2: firstItem.cantidad2,\n    precio: firstItem.precio,\n    totalItem: firstItem.total,\n    totalImporte: r.totalImporte,\n    itemsCount: r.totalItems,\n    transportista: r.transportista,\n    chofer: r.chofer,\n    patente: r.patente,\n    chasis: r.chasis,\n    guia: r.guia,\n    observaciones: r.observaciones\n  };\n});\n\n// Resumen\nvar totalBolsas = 0, totalToneladas = 0, totalImporte = 0;\nvar prodCounts = {};\ndata.forEach(function(item) {\n  totalImporte += item.totalImporte || 0;\n  if (item.unidad === 'Bolsa' || item.unidad === 'Bolsa(s)') totalBolsas += item.cantidad || 0;\n  if (item.unidad === 'Tonelada' || item.unidad === 'TN') totalToneladas += item.cantidad2 || 0;\n  prodCounts[item.producto] = (prodCounts[item.producto] || 0) + 1;\n});\n\nmsg.payload = {\n  metadata: {\n    runUuid: uuid,\n    timestamp: new Date().toISOString(),\n    source: 'CORONA.pr_ezi_remitos',\n    filterDays: days\n  },\n  resumen: {\n    totalRemitos: data.length,\n    totalClientes: Object.keys(clientesSet).length,\n    totalBolsas: totalBolsas,\n    totalToneladas: totalToneladas,\n    totalImporte: totalImporte,\n    productos: prodCounts\n  },\n  data: data\n};\n\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "2. Transformar + resumen",
+    "func": "var rows = msg.payload || [];\nvar uuid = msg._trace ? msg._trace.uuid : 'N/A';\nvar days = msg._trace ? msg._trace.days : 30;\n\nvar remitos = {};\nvar clientesSet = {};\n\nrows.forEach(function(row) {\n  var key = row.remito;\n  if (!remitos[key]) {\n    remitos[key] = {\n      remito: row.remito, fecha: row.fecha, cliente: row.cliente, cuit: row.cuit,\n      domicilio: row.domicilio, localidad: row.localidad, provincia: row.provincia,\n      transportista: row.transportista ? row.transportista.trim() : '',\n      chofer: row.chofer ? row.chofer.trim() : '',\n      patente: row.patente ? row.patente.trim() : '',\n      chasis: row.chasis ? row.chasis.trim() : '',\n      guia: row.guia, usuario: row.usuario, creado: row.creado,\n      observaciones: row.observaciones, destino: row.destino,\n      items: [], totalItems: 0, totalImporte: 0\n    };\n  }\n  remitos[key].items.push({\n    orden: row.orden, producto: row.producto, cantidad: row.cantidad,\n    unidad: row.unidad, cantidad2: row.cantidad2, precio: row.precio,\n    total: (row.cantidad || 0) * (row.precio || 0)\n  });\n  remitos[key].totalItems++;\n  remitos[key].totalImporte += (row.cantidad || 0) * (row.precio || 0);\n  clientesSet[row.cliente] = true;\n});\n\nvar data = Object.keys(remitos).map(function(key) {\n  var r = remitos[key];\n  var firstItem = r.items[0] || {};\n  return {\n    remito: r.remito, fecha: r.fecha, cliente: r.cliente, cuit: r.cuit,\n    destino: r.localidad ? r.localidad + (r.provincia ? ', ' + r.provincia : '') : '-',\n    producto: firstItem.producto, cantidad: firstItem.cantidad, unidad: firstItem.unidad,\n    cantidad2: firstItem.cantidad2, precio: firstItem.precio, totalItem: firstItem.total,\n    totalImporte: r.totalImporte, itemsCount: r.totalItems,\n    transportista: r.transportista, chofer: r.chofer, patente: r.patente,\n    chasis: r.chasis, guia: r.guia, observaciones: r.observaciones\n  };\n});\n\nvar totalBolsas = 0, totalToneladas = 0, totalImporte = 0;\nvar prodCounts = {};\ndata.forEach(function(item) {\n  totalImporte += item.totalImporte || 0;\n  if (item.unidad === 'Bolsa' || item.unidad === 'Bolsa(s)') totalBolsas += item.cantidad || 0;\n  if (item.unidad === 'Tonelada' || item.unidad === 'TN') totalToneladas += item.cantidad2 || 0;\n  prodCounts[item.producto] = (prodCounts[item.producto] || 0) + 1;\n});\n\nmsg.payload = {\n  metadata: { runUuid: uuid, timestamp: new Date().toISOString(), source: 'CORONA.pr_ezi_remitos', filterDays: days },\n  resumen: {\n    totalRemitos: data.length, totalClientes: Object.keys(clientesSet).length,\n    totalBolsas: totalBolsas, totalToneladas: totalToneladas, totalImporte: totalImporte,\n    productos: prodCounts\n  },\n  data: data\n};\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 780,
+    "x": 750,
     "y": 180,
     "wires": [
       [
-        "dp_http_resp_pendientes"
+        "http_resp_pendientes"
       ]
     ]
   },
   {
-    "id": "dp_http_resp_pendientes",
+    "id": "http_resp_pendientes",
     "type": "http response",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "Response",
     "statusCode": "",
     "headers": {
@@ -202,9 +208,9 @@
     "wires": []
   },
   {
-    "id": "dp_http_detalle",
+    "id": "http_detalle",
     "type": "http in",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "GET /api/despachos/pendientes/:remito",
     "url": "/api/despachos/pendientes/:remito",
     "method": "get",
@@ -214,71 +220,74 @@
     "y": 300,
     "wires": [
       [
-        "dp_fn_val_detalle"
+        "fn_detalle_query"
       ]
     ]
   },
   {
-    "id": "dp_fn_val_detalle",
+    "id": "fn_detalle_query",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "1. Validar parámetro remito",
-    "func": "var remito = msg.req.params.remito;\nif (!remito) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'Falta parámetro remito' };\n  return msg;\n}\n\nmsg._trace = { remito: remito };\nmsg.query = \"SELECT pr.*, pi.descripcion AS producto, pi.cantidad, \" +\n  \"pi.unidamedida2 AS unidad, pi.cantidad2, pi.precio, pi.orden \" +\n  \"FROM pr_ezi_remitos pr \" +\n  \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \" +\n  \"WHERE pr.remito = '\" + remito.replace(/'/g, \"''\") + \"'\";\nmsg.topic = msg.query;\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "1. Validar remito",
+    "func": "var remito = msg.req.params.remito;\nif (!remito) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'Falta parámetro remito' };\n  return msg;\n}\nmsg._trace = { remito: remito };\nmsg.payload = \"SELECT pr.*, pi.descripcion AS producto, pi.cantidad, \" +\n  \"pi.unidamedida2 AS unidad, pi.cantidad2, pi.precio, pi.orden \" +\n  \"FROM pr_ezi_remitos pr \" +\n  \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \" +\n  \"WHERE pr.remito = '\" + remito.replace(/'/g, \"''\") + \"'\";\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 370,
+    "x": 350,
     "y": 300,
     "wires": [
       [
-        "dp_mssql_detalle"
+        "mssql_detalle"
       ]
     ]
   },
   {
-    "id": "dp_mssql_detalle",
+    "id": "mssql_detalle",
     "type": "MSSQL",
-    "z": "dp_tab_0001",
-    "mssqlCN": "dp_mssqlcn_0002",
-    "name": "2. Consultar remito + items",
+    "z": "tab_despachos",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "MSSQL Detalle",
     "outField": "payload",
-    "returnType": 0,
-    "throwErrors": 0,
-    "query": "",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT 1 AS placeholder",
     "modeOpt": "",
     "modeOptType": "query",
-    "queryOpt": "",
-    "queryOptType": "edit",
-    "x": 580,
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "msg",
+    "rows": "",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 560,
     "y": 300,
     "wires": [
       [
-        "dp_fn_trn_detalle"
-      ],
-      [
-        "dp_http_err_400"
+        "fn_detalle_transform"
       ]
     ]
   },
   {
-    "id": "dp_fn_trn_detalle",
+    "id": "fn_detalle_transform",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "3. Ensamblar detalle",
-    "func": "var rows = msg.payload || [];\nif (!rows.length) {\n  msg.statusCode = 404;\n  msg.payload = { error: 'Remito no encontrado' };\n  return msg;\n}\n\nvar first = rows[0];\nvar detalle = {\n  remito: first.remito,\n  fecha: first.fecha,\n  cliente: first.razonsocial,\n  cuit: first.cuit,\n  domicilio: first.domicilio,\n  localidad: first.localidad,\n  provincia: first.provincia,\n  destino: first.destino,\n  transportista: first.transportista ? first.transportista.trim() : '',\n  chofer: first.chofer ? first.chofer.trim() : '',\n  dniChofer: first.dniChofer || first.dni || '',\n  patente: first.patente ? first.patente.trim() : '',\n  chasis: first.chasis ? first.chasis.trim() : '',\n  guia: first.numero_pesada,\n  usuario: first.usuario,\n  creado: first.creado,\n  observaciones: first.observaciones,\n  factura: first.factura,\n  items: [],\n  totalImporte: 0\n};\n\nrows.forEach(function(row) {\n  var total = (row.cantidad || 0) * (row.precio || 0);\n  detalle.items.push({\n    orden: row.orden,\n    producto: row.producto,\n    cantidad: row.cantidad,\n    unidad: row.unidad,\n    cantidad2: row.cantidad2,\n    precio: row.precio,\n    total: total\n  });\n  detalle.totalImporte += total;\n});\n\nmsg.payload = detalle;\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "2. Ensamblar detalle",
+    "func": "var rows = msg.payload || [];\nif (!rows.length) {\n  msg.statusCode = 404;\n  msg.payload = { error: 'Remito no encontrado' };\n  return msg;\n}\nvar first = rows[0];\nvar detalle = {\n  remito: first.remito, fecha: first.fecha, cliente: first.razonsocial, cuit: first.cuit,\n  domicilio: first.domicilio, localidad: first.localidad, provincia: first.provincia,\n  destino: first.destino,\n  transportista: first.transportista ? first.transportista.trim() : '',\n  chofer: first.chofer ? first.chofer.trim() : '',\n  dniChofer: first.dniChofer || first.dni || '',\n  patente: first.patente ? first.patente.trim() : '',\n  chasis: first.chasis ? first.chasis.trim() : '',\n  guia: first.numero_pesada, usuario: first.usuario, creado: first.creado,\n  observaciones: first.observaciones, factura: first.factura,\n  items: [], totalImporte: 0\n};\nrows.forEach(function(row) {\n  var total = (row.cantidad || 0) * (row.precio || 0);\n  detalle.items.push({\n    orden: row.orden, producto: row.producto, cantidad: row.cantidad,\n    unidad: row.unidad, cantidad2: row.cantidad2, precio: row.precio, total: total\n  });\n  detalle.totalImporte += total;\n});\nmsg.payload = detalle;\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 790,
+    "x": 770,
     "y": 300,
     "wires": [
       [
-        "dp_http_resp_detalle"
+        "http_resp_detalle"
       ]
     ]
   },
   {
-    "id": "dp_http_resp_detalle",
+    "id": "http_resp_detalle",
     "type": "http response",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "Response",
     "statusCode": "",
     "headers": {
@@ -290,9 +299,9 @@
     "wires": []
   },
   {
-    "id": "dp_http_facturar",
+    "id": "http_facturar",
     "type": "http in",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "POST /api/despachos/pendientes/:remito/facturar",
     "url": "/api/despachos/pendientes/:remito/facturar",
     "method": "post",
@@ -302,71 +311,74 @@
     "y": 420,
     "wires": [
       [
-        "dp_fn_val_facturar"
+        "fn_facturar_query"
       ]
     ]
   },
   {
-    "id": "dp_fn_val_facturar",
+    "id": "fn_facturar_query",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "1. Validar y autorizar",
-    "func": "var remito = msg.req.params.remito;\nvar factura = msg.req.body ? msg.req.body.factura : null;\n\nif (!remito) {\n  msg.statusCode = 400;\n  msg.payload = { success: false, error: 'Falta parámetro remito' };\n  return msg;\n}\n\nif (!factura || factura.trim() === '') {\n  msg.statusCode = 400;\n  msg.payload = { success: false, error: 'Falta número de factura' };\n  return msg;\n}\n\nmsg._trace = { remito: remito, factura: factura.trim() };\n// TODO: migrar a SP pr_ezi_vincular_factura para cumplir regla de middleware ERP\nmsg.query = \"UPDATE pr_ezi_remitos SET factura = '\" +\n  factura.trim().replace(/'/g, \"''\") +\n  \"' WHERE remito = '\" + remito.replace(/'/g, \"''\") +\n  \"' AND factura IS NULL\";\nmsg.topic = msg.query;\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "1. Validar y armar UPDATE",
+    "func": "var remito = msg.req.params.remito;\nvar factura = msg.req.body ? msg.req.body.factura : null;\n\nif (!remito) {\n  msg.statusCode = 400;\n  msg.payload = { success: false, error: 'Falta parámetro remito' };\n  return msg;\n}\nif (!factura || factura.trim() === '') {\n  msg.statusCode = 400;\n  msg.payload = { success: false, error: 'Falta número de factura' };\n  return msg;\n}\n\nmsg._trace = { remito: remito, factura: factura.trim() };\n// TODO: migrar a SP pr_ezi_vincular_factura para cumplir regla de middleware ERP\nmsg.payload = \"UPDATE pr_ezi_remitos SET factura = '\" +\n  factura.trim().replace(/'/g, \"''\") +\n  \"' WHERE remito = '\" + remito.replace(/'/g, \"''\") +\n  \"' AND factura IS NULL\";\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 370,
+    "x": 380,
     "y": 420,
     "wires": [
       [
-        "dp_mssql_facturar"
+        "mssql_facturar"
       ]
     ]
   },
   {
-    "id": "dp_mssql_facturar",
+    "id": "mssql_facturar",
     "type": "MSSQL",
-    "z": "dp_tab_0001",
-    "mssqlCN": "dp_mssqlcn_0002",
-    "name": "2. Actualizar factura",
+    "z": "tab_despachos",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "MSSQL Facturar",
     "outField": "payload",
-    "returnType": 0,
-    "throwErrors": 0,
-    "query": "",
+    "returnType": "2",
+    "throwErrors": 1,
+    "query": "SELECT 1 AS placeholder",
     "modeOpt": "",
     "modeOptType": "query",
-    "queryOpt": "",
-    "queryOptType": "edit",
-    "x": 580,
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "msg",
+    "rows": "",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 600,
     "y": 420,
     "wires": [
       [
-        "dp_fn_trn_facturar"
-      ],
-      [
-        "dp_http_err_400"
+        "fn_facturar_result"
       ]
     ]
   },
   {
-    "id": "dp_fn_trn_facturar",
+    "id": "fn_facturar_result",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "3. Resultado",
-    "func": "var info = msg.info || {};\nvar rowsAffected = info.rowsAffected || 0;\n\nif (rowsAffected > 0) {\n  node.warn('[Despachos] Factura ' + msg._trace.factura + ' vinculada a remito ' + msg._trace.remito);\n  msg.payload = { success: true, remito: msg._trace.remito, factura: msg._trace.factura };\n} else {\n  msg.statusCode = 409;\n  msg.payload = { success: false, error: 'El remito ya tiene factura o no existe' };\n}\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "2. Resultado",
+    "func": "var rowsAffected = 0;\nif (msg.payload && msg.payload.rowsAffected) {\n  rowsAffected = Array.isArray(msg.payload.rowsAffected) ? msg.payload.rowsAffected[0] : msg.payload.rowsAffected;\n} else if (Array.isArray(msg.payload)) {\n  rowsAffected = msg.payload.length;\n}\n\nif (rowsAffected > 0) {\n  node.warn('[Despachos] Factura ' + msg._trace.factura + ' vinculada a remito ' + msg._trace.remito);\n  msg.payload = { success: true, remito: msg._trace.remito, factura: msg._trace.factura };\n} else {\n  msg.statusCode = 409;\n  msg.payload = { success: false, error: 'El remito ya tiene factura o no existe' };\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 790,
     "y": 420,
     "wires": [
       [
-        "dp_http_resp_facturar"
+        "http_resp_facturar"
       ]
     ]
   },
   {
-    "id": "dp_http_resp_facturar",
+    "id": "http_resp_facturar",
     "type": "http response",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "Response",
     "statusCode": "",
     "headers": {
@@ -378,9 +390,9 @@
     "wires": []
   },
   {
-    "id": "dp_http_resumen",
+    "id": "http_resumen",
     "type": "http in",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "GET /api/despachos/resumen",
     "url": "/api/despachos/resumen",
     "method": "get",
@@ -390,126 +402,132 @@
     "y": 540,
     "wires": [
       [
-        "dp_fn_val_resumen"
+        "fn_resumen_query1"
       ]
     ]
   },
   {
-    "id": "dp_fn_val_resumen",
+    "id": "fn_resumen_query1",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "1. Param resumen",
-    "func": "var days = parseInt(msg.req.query.days) || 30;\nif (days < 1) days = 1;\nif (days > 365) days = 365;\n\nmsg._trace = { days: days };\n\nmsg.query = \"SELECT \" +\n  \"COUNT(DISTINCT pr.remito) AS totalRemitos, \" +\n  \"COUNT(DISTINCT pr.razonsocial) AS totalClientes, \" +\n  \"SUM(CASE WHEN pi.unidamedida2 = 'Bolsa' OR pi.unidamedida2 = 'Bolsa(s)' THEN pi.cantidad ELSE 0 END) AS totalBolsas, \" +\n  \"SUM(CASE WHEN pi.unidamedida2 = 'Tonelada' OR pi.unidamedida2 = 'TN' THEN pi.cantidad2 ELSE 0 END) AS totalToneladas, \" +\n  \"SUM(pi.cantidad * pi.precio) AS totalImporte, \" +\n  \"COUNT(DISTINCT pi.descripcion) AS totalProductos \" +\n  \"FROM pr_ezi_remitos pr \" +\n  \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \" +\n  \"WHERE pr.factura IS NULL \" +\n  \"AND pr.fecha >= DATEADD(DAY, -\" + days + \", GETDATE())\";\n\nmsg.topic = msg.query;\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "1. Query KPIs",
+    "func": "var days = parseInt(msg.req.query.days) || 30;\nif (days < 1) days = 1;\nif (days > 365) days = 365;\nmsg._trace = { days: days };\n\nmsg.payload = \"SELECT \" +\n  \"COUNT(DISTINCT pr.remito) AS totalRemitos, \" +\n  \"COUNT(DISTINCT pr.razonsocial) AS totalClientes, \" +\n  \"SUM(CASE WHEN pi.unidamedida2 = 'Bolsa' OR pi.unidamedida2 = 'Bolsa(s)' THEN pi.cantidad ELSE 0 END) AS totalBolsas, \" +\n  \"SUM(CASE WHEN pi.unidamedida2 = 'Tonelada' OR pi.unidamedida2 = 'TN' THEN pi.cantidad2 ELSE 0 END) AS totalToneladas, \" +\n  \"SUM(pi.cantidad * pi.precio) AS totalImporte, \" +\n  \"COUNT(DISTINCT pi.descripcion) AS totalProductos \" +\n  \"FROM pr_ezi_remitos pr \" +\n  \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \" +\n  \"WHERE pr.factura IS NULL \" +\n  \"AND pr.fecha >= DATEADD(DAY, -\" + days + \", GETDATE())\";\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 350,
+    "x": 330,
     "y": 540,
     "wires": [
       [
-        "dp_mssql_resumen"
+        "mssql_resumen_kpis"
       ]
     ]
   },
   {
-    "id": "dp_mssql_resumen",
+    "id": "mssql_resumen_kpis",
     "type": "MSSQL",
-    "z": "dp_tab_0001",
-    "mssqlCN": "dp_mssqlcn_0002",
-    "name": "2. KPIs",
+    "z": "tab_despachos",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "MSSQL KPIs",
     "outField": "payload",
-    "returnType": 0,
-    "throwErrors": 0,
-    "query": "",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT 1 AS placeholder",
     "modeOpt": "",
     "modeOptType": "query",
-    "queryOpt": "",
-    "queryOptType": "edit",
-    "x": 560,
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "msg",
+    "rows": "",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 530,
     "y": 540,
     "wires": [
       [
-        "dp_fn_trn_resumen"
-      ],
-      [
-        "dp_http_err_400"
+        "fn_resumen_query2"
       ]
     ]
   },
   {
-    "id": "dp_fn_trn_resumen",
+    "id": "fn_resumen_query2",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "3. KPIs + productos",
-    "func": "// Obtener también conteo por producto\nmsg.query = \"SELECT pi.descripcion AS producto, COUNT(DISTINCT pr.remito) AS cantidad \" +\n  \"FROM pr_ezi_remitos pr \" +\n  \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \" +\n  \"WHERE pr.factura IS NULL \" +\n  \"AND pr.fecha >= DATEADD(DAY, -\" + msg._trace.days + \", GETDATE()) \" +\n  \"GROUP BY pi.descripcion ORDER BY cantidad DESC\";\nmsg.topic = msg.query;\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "2. Query productos",
+    "func": "// Guardar resultado KPIs antes de pisar msg.payload\nmsg.payload2 = msg.payload;\n\n// Segunda consulta: conteo por producto\nmsg.payload = \"SELECT pi.descripcion AS producto, COUNT(DISTINCT pr.remito) AS cantidad \" +\n  \"FROM pr_ezi_remitos pr \" +\n  \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \" +\n  \"WHERE pr.factura IS NULL \" +\n  \"AND pr.fecha >= DATEADD(DAY, -\" + msg._trace.days + \", GETDATE()) \" +\n  \"GROUP BY pi.descripcion ORDER BY cantidad DESC\";\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 770,
+    "x": 730,
     "y": 540,
     "wires": [
       [
-        "dp_mssql_resumen_prod"
+        "mssql_resumen_prod"
       ]
     ]
   },
   {
-    "id": "dp_mssql_resumen_prod",
+    "id": "mssql_resumen_prod",
     "type": "MSSQL",
-    "z": "dp_tab_0001",
-    "mssqlCN": "dp_mssqlcn_0002",
-    "name": "2b. Productos",
-    "outField": "payload2",
-    "returnType": 0,
-    "throwErrors": 0,
-    "query": "",
+    "z": "tab_despachos",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "MSSQL Productos",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT 1 AS placeholder",
     "modeOpt": "",
     "modeOptType": "query",
-    "queryOpt": "",
-    "queryOptType": "edit",
-    "x": 770,
-    "y": 600,
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "msg",
+    "rows": "",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 930,
+    "y": 540,
     "wires": [
       [
-        "dp_fn_trn_resumen_fin"
-      ],
-      [
-        "dp_http_err_400"
+        "fn_resumen_assemble"
       ]
     ]
   },
   {
-    "id": "dp_fn_trn_resumen_fin",
+    "id": "fn_resumen_assemble",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "4. Ensamblar resumen",
-    "func": "var row = (msg.payload || [])[0] || {};\nvar productos = (msg.payload2 || []).reduce(function(acc, p) {\n  acc[p.producto] = p.cantidad;\n  return acc;\n}, {});\n\nmsg.payload = {\n  totalRemitos: row.totalRemitos || 0,\n  totalClientes: row.totalClientes || 0,\n  totalBolsas: row.totalBolsas || 0,\n  totalToneladas: row.totalToneladas || 0,\n  totalImporte: row.totalImporte || 0,\n  productos: productos\n};\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "3. Ensamblar resumen",
+    "func": "var row = (msg.payload2 || [])[0] || {};\nvar productos = (msg.payload || []).reduce(function(acc, p) {\n  acc[p.producto] = p.cantidad;\n  return acc;\n}, {});\n\nmsg.payload = {\n  totalRemitos: row.totalRemitos || 0,\n  totalClientes: row.totalClientes || 0,\n  totalBolsas: row.totalBolsas || 0,\n  totalToneladas: row.totalToneladas || 0,\n  totalImporte: row.totalImporte || 0,\n  productos: productos\n};\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 980,
-    "y": 570,
+    "x": 1130,
+    "y": 540,
     "wires": [
       [
-        "dp_http_resp_resumen"
+        "http_resp_resumen"
       ]
     ]
   },
   {
-    "id": "dp_http_resp_resumen",
+    "id": "http_resp_resumen",
     "type": "http response",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "Response",
     "statusCode": "",
     "headers": {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*"
     },
-    "x": 1170,
-    "y": 570,
+    "x": 1320,
+    "y": 540,
     "wires": []
   },
   {
-    "id": "dp_http_frontend",
+    "id": "http_frontend",
     "type": "http in",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "GET /despachos-pendientes",
     "url": "/despachos-pendientes",
     "method": "get",
@@ -519,65 +537,80 @@
     "y": 700,
     "wires": [
       [
-        "dp_fn_frontend_path"
+        "fn_frontend_html"
       ]
     ]
   },
   {
-    "id": "dp_fn_frontend_path",
+    "id": "fn_frontend_html",
     "type": "function",
-    "z": "dp_tab_0001",
-    "name": "Servir HTML vía template",
-    "func": "// Servir frontend mínimo inline - no usa require\nvar html = '<!DOCTYPE html>\\n<html lang=\"es\">\\n<head>\\n<meta charset=\"UTF-8\">\\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\\n<title>Despachos Pendientes | Ingenio La Corona</title>\\n<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\\n<style>\\n*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}\\n.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:#0f172a;color:#e2e8f0;padding:24px 0;z-index:100}\\n.sidebar-brand{padding:0 20px 20px;border-bottom:1px solid #1e293b;margin-bottom:20px}\\n.brand-title{font-size:18px;font-weight:700;color:white}\\n.brand-sub{font-size:12px;color:#94a3b8;margin-top:4px}\\n.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:#cbd5e1;text-decoration:none;font-size:14px;transition:all .2s;cursor:pointer}\\n.nav-item:hover{background:#1e293b;color:white}\\n.nav-item svg{width:18px;height:18px}\\n.main{margin-left:240px;padding:24px}\\n.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}\\n.header h1{font-size:24px;font-weight:700}\\n.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}\\n.kpi-card{background:white;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.1);text-align:center}\\n.kpi-value{font-size:28px;font-weight:700;display:block}\\n.kpi-label{font-size:12px;color:#64748b;margin-top:4px;display:block}\\n.kpi-green .kpi-value{color:#059669}\\n.kpi-blue .kpi-value{color:#2563eb}\\n.kpi-amber .kpi-value{color:#d97706}\\n.kpi-red .kpi-value{color:#dc2626}\\n.filter-bar{background:white;border-radius:12px;padding:16px 20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.1);display:flex;align-items:center;gap:12px;flex-wrap:wrap}\\n.filter-bar label{font-size:14px;font-weight:600}\\nselect,input{border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;font-size:14px;font-family:inherit}\\n.table-card{background:white;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.1);overflow:hidden}\\n.table-wrapper{overflow-x:auto}\\ntable{width:100%;border-collapse:collapse;font-size:13px}\\nth{background:#f8fafc;padding:10px 12px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;white-space:nowrap}\\ntd{padding:8px 12px;border-bottom:1px solid #f1f5f9}\\ntr:hover td{background:#f8fafc}\\n.badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600}\\n.badge-apto{background:#d1fae5;color:#065f46}\\n.badge-bloq{background:#fee2e2;color:#991b1b}\\n.badge-pend{background:#fef3c7;color:#92400e}\\n.badge-aprob{background:#dbeafe;color:#1e40af}\\n.text-end{text-align:right}\\n.loading-state{text-align:center;padding:40px;color:#64748b}\\n.spinner{width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#3b82f6;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}\\n@keyframes spin{to{transform:rotate(360deg)}}\\n.error-state{text-align:center;padding:40px;color:#dc2626}\\n.empty-state{text-align:center;padding:40px;color:#94a3b8}\\n.btn-link{background:none;border:none;color:#2563eb;cursor:pointer;font-weight:600;font-size:13px;padding:0}\\n.btn-link:hover{text-decoration:underline;color:#1d4ed8}\\n</style>\\n</head>\\n<body>\\n<aside class=\"sidebar\">\\n<div class=\"sidebar-brand\"><div class=\"brand-title\">Despachos</div><div class=\"brand-sub\">Pendientes Facturación</div></div>\\n<a class=\"nav-item\" onclick=\"cargarDatos()\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><polyline points=\"23 4 23 10 17 10\"/><path d=\"M20.49 15a9 9 0 11-2.12-9.36L23 10\"/></svg>Actualizar</a>\\n<div class=\"nav-item\" style=\"margin-top:auto;font-size:11px;color:#64748b\" id=\"fechaAct\">—</div>\\n</aside>\\n<main class=\"main\">\\n<div class=\"header\"><h1>Despachos Pendientes</h1><span style=\"background:#dbeafe;color:#1e40af;padding:6px 14px;border-radius:20px;font-weight:600;font-size:13px\">Zafra 2026</span></div>\\n<div class=\"kpi-grid\">\\n<div class=\"kpi-card kpi-green\"><div id=\"k1\"><span class=\"kpi-value\">—</span><span class=\"kpi-label\">Remitos</span></div></div>\\n<div class=\"kpi-card kpi-blue\"><div id=\"k2\"><span class=\"kpi-value\">—</span><span class=\"kpi-label\">Clientes</span></div></div>\\n<div class=\"kpi-card\"><div id=\"k3\"><span class=\"kpi-value\">—</span><span class=\"kpi-label\">Bolsas</span></div></div>\\n<div class=\"kpi-card kpi-amber\"><div id=\"k4\"><span class=\"kpi-value\">—</span><span class=\"kpi-label\">Toneladas</span></div></div>\\n<div class=\"kpi-card kpi-red\"><div id=\"k5\"><span class=\"kpi-value\">—</span><span class=\"kpi-label\">Importe Total</span></div></div>\\n</div>\\n<div class=\"filter-bar\"><label>Últimos</label><select id=\"days\" onchange=\"cargarDatos()\"><option value=\"7\">7 días</option><option value=\"15\">15 días</option><option value=\"30\" selected>30 días</option><option value=\"60\">60 días</option><option value=\"90\">90 días</option></select></div>\\n<div class=\"table-card\"><div id=\"tabla\"><div class=\"loading-state\"><div class=\"spinner\"></div><p>Cargando despachos...</p></div></div></div>\\n</main>\\n<script>\\nfunction fmtMoneda(v){if(v==null||isNaN(v))return\"-\";return\"$ \"+Number(v).toLocaleString(\"es-AR\",{minimumFractionDigits:2,maximumFractionDigits:2})}\\nfunction fmtCant(v){if(v==null||isNaN(v))return\"-\";return Number(v).toLocaleString(\"es-AR\")}\\nfunction fmtFecha(iso){if(!iso)return\"-\";var d=new Date(iso);if(isNaN(d.getTime()))return iso;return d.toLocaleDateString(\"es-AR\",{day:\"2-digit\",month:\"2-digit\",year:\"numeric\"})}\\nfunction badge(clasif){var m={\"APTO_PARA_PROGRAMAR\":{l:\"Apto\",c:\"badge-apto\"},\"BLOQUEADO\":{l:\"Bloqueado\",c:\"badge-bloq\"},\"PENDIENTE_VALIDACION\":{l:\"Pendiente\",c:\"badge-pend\"},\"REQUIERE_APROBACION_HUMANA\":{l:\"Requiere Aprobación\",c:\"badge-aprob\"}};var x=m[clasif]||m[clasif];return x?\"<span class=\\\"badge \"+x.c+\"\\\">\"+x.l+\"</span>\":\"\"}\\nasync function cargarDatos(){var days=document.getElementById(\"days\").value||30;var t=document.getElementById(\"tabla\");t.innerHTML=\"<div class=\\\"loading-state\\\"><div class=\\\"spinner\\\"></div><p>Cargando...</p></div>\";try{var controller=new AbortController();var timeout=setTimeout(function(){controller.abort();},15000);var r=await fetch(\"/api/despachos/pendientes?days=\"+days,{signal:controller.signal});clearTimeout(timeout);if(!r.ok)throw new Error(\"HTTP \"+r.status);var d=await r.json();var k=d.resumen||{};document.getElementById(\"k1\").innerHTML=\"<span class=\\\"kpi-value\\\">\"+(k.totalRemitos||0)+\"</span><span class=\\\"kpi-label\\\">Remitos</span>\";document.getElementById(\"k2\").innerHTML=\"<span class=\\\"kpi-value\\\">\"+(k.totalClientes||0)+\"</span><span class=\\\"kpi-label\\\">Clientes</span>\";document.getElementById(\"k3\").innerHTML=\"<span class=\\\"kpi-value\\\">\"+fmtCant(k.totalBolsas||0)+\"</span><span class=\\\"kpi-label\\\">Bolsas</span>\";document.getElementById(\"k4\").innerHTML=\"<span class=\\\"kpi-value\\\">\"+fmtCant(k.totalToneladas||0)+\"</span><span class=\\\"kpi-label\\\">Toneladas</span>\";document.getElementById(\"k5\").innerHTML=\"<span class=\\\"kpi-value\\\">\"+fmtMoneda(k.totalImporte||0)+\"</span><span class=\\\"kpi-label\\\">Importe Total</span>\";var data=d.data||[];if(!data.length){t.innerHTML=\"<div class=\\\"empty-state\\\"><p>No se encontraron remitos pendientes</p></div>\";return}var html=\"<div class=\\\"table-wrapper\\\"><table><thead><tr><th>Remito</th><th>Fecha</th><th>Cliente</th><th>Producto</th><th class=\\\"text-end\\\">Cantidad</th><th>Unidad</th><th class=\\\"text-end\\\">Precio</th><th class=\\\"text-end\\\">Total</th><th>Transporte</th></tr></thead><tbody>\";data.forEach(function(i){html+=\"<tr><td><button class=\\\"btn-link\\\" onclick=\\\"verDetalle(\\'\"+i.remito+\\\"\\')\\\">\"+i.remito+\"</button></td><td>\"+fmtFecha(i.fecha)+\"</td><td>\"+(i.cliente||\"-\")+\"</td><td>\"+(i.producto||\"-\")+\"</td><td class=\\\"text-end\\\">\"+fmtCant(i.cantidad)+\"</td><td>\"+(i.unidad||\"-\")+\"</td><td class=\\\"text-end\\\">\"+fmtMoneda(i.precio)+\"</td><td class=\\\"text-end\\\">\"+fmtMoneda(i.totalItem)+\"</td><td>\"+(i.transportista||\"-\").substring(0,20)+\"</td></tr>\"});html+=\"</tbody></table></div><div style=\\\"padding:12px 16px;border-top:1px solid #e2e8f0;font-size:12px;color:#64748b\\\">\"+data.length+\" remitos</div>\";t.innerHTML=html}catch(e){t.innerHTML=\"<div class=\\\"error-state\\\"><p>Error: \"+e.message+\"</p><p style=\\\"font-size:12px;color:#94a3b8\\\">Verificar que Node-RED esté corriendo y las credenciales SQL configuradas</p></div>\"}}\\nfunction verDetalle(remito){alert(\"Detalle del remito \"+remito+\"\\n(modal completo disponible con httpStatic configurado)\")}\\ndocument.getElementById(\"fechaAct\").textContent=\"Actualizado: \"+new Date().toLocaleString(\"es-AR\",{day:\"2-digit\",month:\"long\",year:\"numeric\",hour:\"2-digit\",minute:\"2-digit\"});\\ncargarDatos();\\n</script>\\n</body>\\n</html>';\nmsg.payload = html;\nmsg.statusCode = 200;\nmsg.headers = { 'Content-Type': 'text/html; charset=utf-8' };\nreturn msg;",
+    "z": "tab_despachos",
+    "name": "Servir HTML",
+    "func": "// Frontend autonómo - KPIs + tabla + filtro + modal detalle\nvar H = '<!DOCTYPE html>\\n<html lang=\"es\">\\n<head>\\n<meta charset=\"UTF-8\">\\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">\\n<title>Despachos Pendientes | La Corona</title>\\n<style>\\n*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:#f1f5f9;color:#1e293b;padding:24px}\\n.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}\\n.header h1{font-size:22px;font-weight:700}\\n.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px}\\n.kpi{background:#fff;border-radius:10px;padding:16px 20px;box-shadow:0 1px 3px rgba(0,0,0,.08);text-align:center}\\n.kpi .val{font-size:26px;font-weight:700;display:block}\\n.kpi .lbl{font-size:11px;color:#64748b;margin-top:4px;display:block}\\n.kpi.g .val{color:#059669}.kpi.b .val{color:#2563eb}.kpi.a .val{color:#d97706}.kpi.r .val{color:#dc2626}\\n.bar{background:#fff;border-radius:10px;padding:12px 18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;align-items:center;gap:12px;flex-wrap:wrap}\\n.bar label{font-size:13px;font-weight:600}select,input{border:1px solid #e2e8f0;border-radius:7px;padding:7px 10px;font-size:13px}\\n.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow:hidden}\\n.tbl-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:12px}\\nth{background:#f8fafc;padding:8px 10px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;white-space:nowrap}\\ntd{padding:7px 10px;border-bottom:1px solid #f1f5f9}tr:hover td{background:#f8fafc}\\n.btn-link{background:none;border:none;color:#2563eb;cursor:pointer;font-weight:600;font-size:12px;padding:0}\\n.btn-link:hover{text-decoration:underline}.text-end{text-align:right}\\n#status{padding:30px;text-align:center;color:#64748b}\\n.spinner{width:36px;height:36px;border:3px solid #e2e8f0;border-top-color:#3b82f6;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}\\n@keyframes spin{to{transform:rotate(360deg)}}\\n.err{color:#dc2626;background:#fee2e2;padding:16px;border-radius:8px;font-size:13px}\\n.err a{color:#2563eb}\\n#footer{padding:10px 16px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8}\\n</style>\\n</head>\\n<body>\\n<div class=\"header\"><h1>Despachos Pendientes de Facturación</h1><span style=\"background:#dbeafe;color:#1e40af;padding:5px 12px;border-radius:20px;font-weight:600;font-size:12px\">Zafra 2026</span></div>\\n<div class=\"kpis\">\\n<div class=\"kpi g\"><span class=\"val\" id=\"kv1\">—</span><span class=\"lbl\">Remitos</span></div>\\n<div class=\"kpi b\"><span class=\"val\" id=\"kv2\">—</span><span class=\"lbl\">Clientes</span></div>\\n<div class=\"kpi\"><span class=\"val\" id=\"kv3\">—</span><span class=\"lbl\">Bolsas</span></div>\\n<div class=\"kpi a\"><span class=\"val\" id=\"kv4\">—</span><span class=\"lbl\">Toneladas</span></div>\\n<div class=\"kpi r\"><span class=\"val\" id=\"kv5\">—</span><span class=\"lbl\">Importe Total</span></div>\\n</div>\\n<div class=\"bar\"><label>Últimos</label><select id=\"days\" onchange=\"cargar()\"><option value=\"7\">7 días</option><option value=\"15\">15 días</option><option value=\"30\" selected>30 días</option><option value=\"60\">60 días</option><option value=\"90\">90 días</option></select><input id=\"buscar\" type=\"text\" placeholder=\"Buscar remito, cliente, producto...\" oninput=\"filtrar()\" style=\"flex:1;min-width:180px\"></div>\\n<div class=\"card\"><div id=\"tabla\"><div id=\"status\"><div class=\"spinner\"></div><p>Cargando despachos...</p></div></div></div>\\n<script>\\nvar allData=[];\\nfunction F(n){return n!=null&&!isNaN(n)?Number(n).toLocaleString(\"es-AR\"):\"-\"}\\nfunction M(n){return n!=null&&!isNaN(n)?\"$ \"+Number(n).toLocaleString(\"es-AR\",{minimumFractionDigits:2,maximumFractionDigits:2}):\"-\"}\\nfunction D(s){if(!s)return\"-\";var d=new Date(s);return isNaN(d.getTime())?s:d.toLocaleDateString(\"es-AR\",{day:\"2-digit\",month:\"2-digit\",year:\"numeric\"})}\\nasync function cargar(){\\n  var days=document.getElementById(\"days\").value||30;\\n  var t=document.getElementById(\"tabla\");\\n  t.innerHTML=\\'<div id=\"status\"><div class=\"spinner\"></div><p>Cargando...</p></div>\\';\\n  try{\\n    var ctrl=new AbortController();\\n    var tm=setTimeout(function(){ctrl.abort()},20000);\\n    var r=await fetch(\"/api/despachos/pendientes?days=\"+days,{signal:ctrl.signal});\\n    clearTimeout(tm);\\n    if(!r.ok)throw new Error(\"HTTP \"+r.status);\\n    var d=await r.json();\\n    var k=d.resumen||{};\\n    document.getElementById(\"kv1\").textContent=k.totalRemitos||0;\\n    document.getElementById(\"kv2\").textContent=k.totalClientes||0;\\n    document.getElementById(\"kv3\").textContent=F(k.totalBolsas||0);\\n    document.getElementById(\"kv4\").textContent=F(k.totalToneladas||0);\\n    document.getElementById(\"kv5\").textContent=M(k.totalImporte||0);\\n    allData=d.data||[];\\n    if(!allData.length){t.innerHTML=\\'<div id=\"status\"><p>No se encontraron remitos pendientes</p></div>\\';return}\\n    render(allData);\\n  }catch(e){\\n    var xtra=\"\";\\n    if(e.name===\"AbortError\")xtra=\\'<p style=\"margin-top:8px;color:#b45309\">Timeout (20s): verificá credenciales MSSQL-CN en Node-RED (doble click → Security)</p>\\';\\n    else xtra=\\'<p style=\"margin-top:8px;font-size:12px\"><a href=\"/api/despachos/health\">GET /api/despachos/health</a> para diagnóstico</p>\\';\\n    t.innerHTML=\\'<div class=\"err\"><strong>Error:</strong> \\'+e.message+xtra+\\'</div>\\';\\n  }\\n}\\nfunction render(data){\\n  var h=\\'<div class=\"tbl-wrap\"><table><thead><tr><th>Remito</th><th>Fecha</th><th>Cliente</th><th>Producto</th><th class=\"text-end\">Cant</th><th>Unidad</th><th class=\"text-end\">Precio</th><th class=\"text-end\">Total</th><th>Transportista</th></tr></thead><tbody>\\';\\n  data.forEach(function(i){\\n    var rem=(i.remito||\"\").replace(/\\'/g,\"&#39;\").replace(/\"/g,\"&quot;\");\\n    h+=\"<tr><td><button class=\\\\\"btn-link\\\\\" onclick=\\\\\"verDetalle(\\'\"+rem+\"\\')\\\\\">\"+i.remito+\"</button></td><td>\"+D(i.fecha)+\"</td><td>\"+(i.cliente||\"-\")+\"</td><td>\"+(i.producto||\"-\")+\"</td><td class=\\\\\"text-end\\\\\">\"+F(i.cantidad)+\"</td><td>\"+(i.unidad||\"-\")+\"</td><td class=\\\\\"text-end\\\\\">\"+M(i.precio)+\"</td><td class=\\\\\"text-end\\\\\">\"+M(i.totalItem)+\"</td><td>\"+((i.transportista||\"-\").substring(0,25))+\"</td></tr>\";\\n  });\\n  h+=\"</tbody></table></div><div id=\\\\\"footer\\\\\">\"+data.length+\" remitos &middot; Actualizado: \"+new Date().toLocaleString(\"es-AR\")+\"</div>\";\\n  document.getElementById(\"tabla\").innerHTML=h;\\n}\\nfunction filtrar(){\\n  var q=document.getElementById(\"buscar\").value.toLowerCase().trim();\\n  if(!q){render(allData);return}\\n  var filtrados=allData.filter(function(i){\\n    return (i.remito||\"\").toLowerCase().indexOf(q)>=0 || (i.cliente||\"\").toLowerCase().indexOf(q)>=0 || (i.producto||\"\").toLowerCase().indexOf(q)>=0 || (i.cuit||\"\").toLowerCase().indexOf(q)>=0 || (i.transportista||\"\").toLowerCase().indexOf(q)>=0;\\n  });\\n  render(filtrados);\\n}\\nasync function verDetalle(remito){\\n  try{\\n    var r=await fetch(\"/api/despachos/pendientes/\"+encodeURIComponent(remito));\\n    if(!r.ok)throw new Error(\"HTTP \"+r.status);\\n    var d=await r.json();\\n    var items=d.items||[];\\n    var h=\"<div style=\\\\\"padding:20px\\\\\"><h3 style=\\\\\"margin-bottom:12px\\\\\">Remito \"+d.remito+\"</h3><p><strong>Cliente:</strong> \"+d.cliente+\" (\"+d.cuit+\")</p><p><strong>Fecha:</strong> \"+D(d.fecha)+\"</p><p><strong>Destino:</strong> \"+(d.destino||d.localidad||\"-\")+\"</p><p><strong>Transportista:</strong> \"+d.transportista+\" | Chofer: \"+d.chofer+\" | Patente: \"+d.patente+\"</p><p><strong>Guía:</strong> \"+(d.guia||\"-\")+\" | <strong>Factura:</strong> \"+(d.factura||\"Pendiente\")+\"</p><p><strong>Observaciones:</strong> \"+(d.observaciones||\"-\")+\"</p><hr style=\\\\\"margin:12px 0\\\\\"><h4>Items</h4><table style=\\\\\"margin-top:8px;width:100%;font-size:12px\\\\\"><thead><tr><th>#</th><th>Producto</th><th class=\\\\\"text-end\\\\\">Cant</th><th>Unidad</th><th class=\\\\\"text-end\\\\\">Precio</th><th class=\\\\\"text-end\\\\\">Total</th></tr></thead><tbody>\";\\n    var total=0;\\n    items.forEach(function(it){\\n      var st=(it.cantidad||0)*(it.precio||0);total+=st;\\n      h+=\"<tr><td>\"+it.orden+\"</td><td>\"+it.producto+\"</td><td class=\\\\\"text-end\\\\\">\"+F(it.cantidad)+\"</td><td>\"+it.unidad+\"</td><td class=\\\\\"text-end\\\\\">\"+M(it.precio)+\"</td><td class=\\\\\"text-end\\\\\">\"+M(st)+\"</td></tr>\";\\n    });\\n    h+=\"</tbody></table><p style=\\\\\"margin-top:8px;text-align:right;font-weight:700\\\\\">Total: \"+M(total)+\"</p><button onclick=\\\\\"this.parentElement.parentElement.remove()\\\\\" style=\\\\\"margin-top:12px;background:#e2e8f0;border:none;padding:6px 16px;border-radius:6px;cursor:pointer\\\\\">Cerrar</button></div>\";\\n    var overlay=document.createElement(\"div\");\\n    overlay.style=\"position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:999;display:flex;align-items:center;justify-content:center\";\\n    var box=document.createElement(\"div\");\\n    box.style=\"background:white;border-radius:12px;max-width:700px;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)\";\\n    box.innerHTML=h;\\n    overlay.appendChild(box);\\n    overlay.onclick=function(e){if(e.target===overlay)overlay.remove()};\\n    document.body.appendChild(overlay);\\n  }catch(e){alert(\"Error al cargar detalle: \"+e.message)}\\n}\\ncargar();\\n</script>\\n</body>\\n</html>';\nmsg.payload = H;\nmsg.statusCode = 200;\nmsg.headers = { 'Content-Type': 'text/html; charset=utf-8' };\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 370,
+    "x": 350,
     "y": 700,
     "wires": [
       [
-        "dp_http_resp_frontend"
+        "http_resp_frontend"
       ]
     ]
   },
   {
-    "id": "dp_http_resp_frontend",
+    "id": "http_resp_frontend",
     "type": "http response",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "Response HTML",
     "statusCode": "",
     "headers": {},
-    "x": 580,
+    "x": 560,
     "y": 700,
     "wires": []
   },
   {
-    "id": "dp_http_err_400",
-    "type": "function",
-    "z": "dp_tab_0001",
-    "name": "Error handler",
-    "func": "// Error handler robusto para MSSQL y otros errores\nvar errMsg = 'Error interno del servidor';\nif (msg.payload) {\n  if (typeof msg.payload === 'string') {\n    errMsg = msg.payload;\n  } else if (msg.payload.message) {\n    errMsg = msg.payload.message;\n  } else if (msg.payload.error) {\n    errMsg = msg.payload.error;\n  } else if (msg.payload.code) {\n    errMsg = 'Error SQL: ' + msg.payload.code;\n  } else {\n    errMsg = JSON.stringify(msg.payload).substring(0, 500);\n  }\n}\nif (msg.error) {\n  if (msg.error.message) errMsg = msg.error.message;\n  else if (typeof msg.error === 'string') errMsg = msg.error;\n}\nmsg.statusCode = msg.statusCode || 500;\nmsg.payload = { error: errMsg, code: msg.statusCode };\nnode.warn('[Despachos] Error ' + msg.statusCode + ': ' + errMsg);\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 350,
-    "y": 640,
+    "id": "catch_errors",
+    "type": "catch",
+    "z": "tab_despachos",
+    "name": "Catch errores SQL/flow",
+    "scope": null,
+    "uncaught": false,
+    "x": 130,
+    "y": 620,
     "wires": [
       [
-        "dp_http_resp_err"
+        "fn_error_handler"
       ]
     ]
   },
   {
-    "id": "dp_http_resp_err",
+    "id": "fn_error_handler",
+    "type": "function",
+    "z": "tab_despachos",
+    "name": "Error handler",
+    "func": "msg.statusCode = msg.statusCode || 500;\nvar errMsg = 'Error interno del servidor';\nif (msg.payload) {\n  if (typeof msg.payload === 'string') errMsg = msg.payload;\n  else if (msg.payload.message) errMsg = msg.payload.message;\n  else if (msg.payload.error) errMsg = msg.payload.error;\n  else errMsg = JSON.stringify(msg.payload).substring(0, 500);\n}\nif (msg.error && msg.error.message) errMsg = msg.error.message;\nelse if (typeof msg.error === 'string') errMsg = msg.error;\nmsg.payload = { error: errMsg, code: msg.statusCode };\nnode.warn('[Despachos] Error ' + msg.statusCode + ': ' + errMsg);\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 340,
+    "y": 620,
+    "wires": [
+      [
+        "http_resp_error"
+      ]
+    ]
+  },
+  {
+    "id": "http_resp_error",
     "type": "http response",
-    "z": "dp_tab_0001",
+    "z": "tab_despachos",
     "name": "Error Response",
     "statusCode": "",
     "headers": {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*"
     },
-    "x": 560,
-    "y": 640,
+    "x": 550,
+    "y": 620,
     "wires": []
   }
 ]

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Despachos Pendientes | La Corona</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:#f1f5f9;color:#1e293b;padding:24px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.header h1{font-size:22px;font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px}
+.kpi{background:#fff;border-radius:10px;padding:16px 20px;box-shadow:0 1px 3px rgba(0,0,0,.08);text-align:center}
+.kpi .val{font-size:26px;font-weight:700;display:block}
+.kpi .lbl{font-size:11px;color:#64748b;margin-top:4px;display:block}
+.kpi.g .val{color:#059669}.kpi.b .val{color:#2563eb}.kpi.a .val{color:#d97706}.kpi.r .val{color:#dc2626}
+.bar{background:#fff;border-radius:10px;padding:12px 18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bar label{font-size:13px;font-weight:600}select,input{border:1px solid #e2e8f0;border-radius:7px;padding:7px 10px;font-size:13px}
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow:hidden}
+.tbl-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#f8fafc;padding:8px 10px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid #f1f5f9}tr:hover td{background:#f8fafc}
+.btn-link{background:none;border:none;color:#2563eb;cursor:pointer;font-weight:600;font-size:12px;padding:0}
+.btn-link:hover{text-decoration:underline}.text-end{text-align:right}
+#status{padding:30px;text-align:center;color:#64748b}
+.spinner{width:36px;height:36px;border:3px solid #e2e8f0;border-top-color:#3b82f6;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{color:#dc2626;background:#fee2e2;padding:16px;border-radius:8px;font-size:13px}
+.err a{color:#2563eb}
+#footer{padding:10px 16px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8}
+</style>
+</head>
+<body>
+<div class="header"><h1>Despachos Pendientes de Facturación</h1><span style="background:#dbeafe;color:#1e40af;padding:5px 12px;border-radius:20px;font-weight:600;font-size:12px">Zafra 2026</span></div>
+<div class="kpis">
+<div class="kpi g"><span class="val" id="kv1">—</span><span class="lbl">Remitos</span></div>
+<div class="kpi b"><span class="val" id="kv2">—</span><span class="lbl">Clientes</span></div>
+<div class="kpi"><span class="val" id="kv3">—</span><span class="lbl">Bolsas</span></div>
+<div class="kpi a"><span class="val" id="kv4">—</span><span class="lbl">Toneladas</span></div>
+<div class="kpi r"><span class="val" id="kv5">—</span><span class="lbl">Importe Total</span></div>
+</div>
+<div class="bar"><label>Últimos</label><select id="days" onchange="cargar()"><option value="7">7 días</option><option value="15">15 días</option><option value="30" selected>30 días</option><option value="60">60 días</option><option value="90">90 días</option></select><input id="buscar" type="text" placeholder="Buscar remito, cliente, producto..." oninput="filtrar()" style="flex:1;min-width:180px"></div>
+<div class="card"><div id="tabla"><div id="status"><div class="spinner"></div><p>Cargando despachos...</p></div></div></div>
+<script>
+var allData=[];
+function F(n){return n!=null&&!isNaN(n)?Number(n).toLocaleString("es-AR"):"-"}
+function M(n){return n!=null&&!isNaN(n)?"$ "+Number(n).toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2}):"-"}
+function D(s){if(!s)return"-";var d=new Date(s);return isNaN(d.getTime())?s:d.toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric"})}
+async function cargar(){
+  var days=document.getElementById("days").value||30;
+  var t=document.getElementById("tabla");
+  t.innerHTML='<div id="status"><div class="spinner"></div><p>Cargando...</p></div>';
+  try{
+    var ctrl=new AbortController();
+    var tm=setTimeout(function(){ctrl.abort()},20000);
+    var r=await fetch("/api/despachos/pendientes?days="+days,{signal:ctrl.signal});
+    clearTimeout(tm);
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    var d=await r.json();
+    var k=d.resumen||{};
+    document.getElementById("kv1").textContent=k.totalRemitos||0;
+    document.getElementById("kv2").textContent=k.totalClientes||0;
+    document.getElementById("kv3").textContent=F(k.totalBolsas||0);
+    document.getElementById("kv4").textContent=F(k.totalToneladas||0);
+    document.getElementById("kv5").textContent=M(k.totalImporte||0);
+    allData=d.data||[];
+    if(!allData.length){t.innerHTML='<div id="status"><p>No se encontraron remitos pendientes</p></div>';return}
+    render(allData);
+  }catch(e){
+    var xtra="";
+    if(e.name==="AbortError")xtra='<p style="margin-top:8px;color:#b45309">Timeout (20s): verificá credenciales MSSQL-CN en Node-RED (doble click → Security)</p>';
+    else xtra='<p style="margin-top:8px;font-size:12px"><a href="/api/despachos/health">GET /api/despachos/health</a> para diagnóstico</p>';
+    t.innerHTML='<div class="err"><strong>Error:</strong> '+e.message+xtra+'</div>';
+  }
+}
+function render(data){
+  var h='<div class="tbl-wrap"><table><thead><tr><th>Remito</th><th>Fecha</th><th>Cliente</th><th>Producto</th><th class="text-end">Cant</th><th>Unidad</th><th class="text-end">Precio</th><th class="text-end">Total</th><th>Transportista</th></tr></thead><tbody>';
+  data.forEach(function(i){
+    var rem=(i.remito||"").replace(/'/g,"&#39;").replace(/"/g,"&quot;");
+    h+="<tr><td><button class=\"btn-link\" onclick=\"verDetalle('"+rem+"')\">"+i.remito+"</button></td><td>"+D(i.fecha)+"</td><td>"+(i.cliente||"-")+"</td><td>"+(i.producto||"-")+"</td><td class=\"text-end\">"+F(i.cantidad)+"</td><td>"+(i.unidad||"-")+"</td><td class=\"text-end\">"+M(i.precio)+"</td><td class=\"text-end\">"+M(i.totalItem)+"</td><td>"+((i.transportista||"-").substring(0,25))+"</td></tr>";
+  });
+  h+="</tbody></table></div><div id=\"footer\">"+data.length+" remitos &middot; Actualizado: "+new Date().toLocaleString("es-AR")+"</div>";
+  document.getElementById("tabla").innerHTML=h;
+}
+function filtrar(){
+  var q=document.getElementById("buscar").value.toLowerCase().trim();
+  if(!q){render(allData);return}
+  var filtrados=allData.filter(function(i){
+    return (i.remito||"").toLowerCase().indexOf(q)>=0 || (i.cliente||"").toLowerCase().indexOf(q)>=0 || (i.producto||"").toLowerCase().indexOf(q)>=0 || (i.cuit||"").toLowerCase().indexOf(q)>=0 || (i.transportista||"").toLowerCase().indexOf(q)>=0;
+  });
+  render(filtrados);
+}
+async function verDetalle(remito){
+  try{
+    var r=await fetch("/api/despachos/pendientes/"+encodeURIComponent(remito));
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    var d=await r.json();
+    var items=d.items||[];
+    var h="<div style=\"padding:20px\"><h3 style=\"margin-bottom:12px\">Remito "+d.remito+"</h3><p><strong>Cliente:</strong> "+d.cliente+" ("+d.cuit+")</p><p><strong>Fecha:</strong> "+D(d.fecha)+"</p><p><strong>Destino:</strong> "+(d.destino||d.localidad||"-")+"</p><p><strong>Transportista:</strong> "+d.transportista+" | Chofer: "+d.chofer+" | Patente: "+d.patente+"</p><p><strong>Guía:</strong> "+(d.guia||"-")+" | <strong>Factura:</strong> "+(d.factura||"Pendiente")+"</p><p><strong>Observaciones:</strong> "+(d.observaciones||"-")+"</p><hr style=\"margin:12px 0\"><h4>Items</h4><table style=\"margin-top:8px;width:100%;font-size:12px\"><thead><tr><th>#</th><th>Producto</th><th class=\"text-end\">Cant</th><th>Unidad</th><th class=\"text-end\">Precio</th><th class=\"text-end\">Total</th></tr></thead><tbody>";
+    var total=0;
+    items.forEach(function(it){
+      var st=(it.cantidad||0)*(it.precio||0);total+=st;
+      h+="<tr><td>"+it.orden+"</td><td>"+it.producto+"</td><td class=\"text-end\">"+F(it.cantidad)+"</td><td>"+it.unidad+"</td><td class=\"text-end\">"+M(it.precio)+"</td><td class=\"text-end\">"+M(st)+"</td></tr>";
+    });
+    h+="</tbody></table><p style=\"margin-top:8px;text-align:right;font-weight:700\">Total: "+M(total)+"</p><button onclick=\"this.parentElement.parentElement.remove()\" style=\"margin-top:12px;background:#e2e8f0;border:none;padding:6px 16px;border-radius:6px;cursor:pointer\">Cerrar</button></div>";
+    var overlay=document.createElement("div");
+    overlay.style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:999;display:flex;align-items:center;justify-content:center";
+    var box=document.createElement("div");
+    box.style="background:white;border-radius:12px;max-width:700px;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)";
+    box.innerHTML=h;
+    overlay.appendChild(box);
+    overlay.onclick=function(e){if(e.target===overlay)overlay.remove()};
+    document.body.appendChild(overlay);
+  }catch(e){alert("Error al cargar detalle: "+e.message)}
+}
+cargar();
+</script>
+</body>
+</html>
