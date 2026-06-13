@@ -74,6 +74,38 @@ facturasRouter.get('/pendientes', async (_req, res) => {
 });
 
 // ---------------------------------------------------------------------------
+// GET /api/facturas/resumen   (DEBE ir antes de /:id)
+// ---------------------------------------------------------------------------
+facturasRouter.get('/resumen', async (_req, res) => {
+  try {
+    const rows = await query(`
+      SELECT
+        ESTADO_PROCESO   AS estado,
+        COUNT(*)         AS cantidad,
+        SUM(TOTAL)       AS total_acumulado,
+        MIN(FECHA_CARGA) AS mas_antigua,
+        MAX(FECHA_CARGA) AS mas_reciente
+      FROM UD_EZI_STAGING_FACTURAS
+      GROUP BY ESTADO_PROCESO
+      ORDER BY
+        CASE ESTADO_PROCESO
+          WHEN 'APROBADO'    THEN 1
+          WHEN 'PENDIENTE'   THEN 2
+          WHEN 'EN_REVISION' THEN 3
+          WHEN 'PROCESADO'   THEN 4
+          WHEN 'RECHAZADO'   THEN 5
+          WHEN 'ERROR'       THEN 6
+          ELSE 7
+        END
+    `);
+    res.json(rows);
+  } catch (err) {
+    log.error(`resumen: ${err.message}`);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ---------------------------------------------------------------------------
 // GET /api/facturas/:id
 // ---------------------------------------------------------------------------
 facturasRouter.get('/:id', async (req, res) => {
@@ -237,38 +269,6 @@ facturasRouter.post('/:id/rechazar', async (req, res) => {
     res.json(result[0] || { resultado: 'OK' });
   } catch (err) {
     log.error(`rechazar ${req.params.id}: ${err.message}`);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ---------------------------------------------------------------------------
-// GET /api/resumen
-// ---------------------------------------------------------------------------
-facturasRouter.get('/resumen', async (_req, res) => {
-  try {
-    const rows = await query(`
-      SELECT
-        ESTADO_PROCESO   AS estado,
-        COUNT(*)         AS cantidad,
-        SUM(TOTAL)       AS total_acumulado,
-        MIN(FECHA_CARGA) AS mas_antigua,
-        MAX(FECHA_CARGA) AS mas_reciente
-      FROM UD_EZI_STAGING_FACTURAS
-      GROUP BY ESTADO_PROCESO
-      ORDER BY
-        CASE ESTADO_PROCESO
-          WHEN 'APROBADO'    THEN 1
-          WHEN 'PENDIENTE'   THEN 2
-          WHEN 'EN_REVISION' THEN 3
-          WHEN 'PROCESADO'   THEN 4
-          WHEN 'RECHAZADO'   THEN 5
-          WHEN 'ERROR'       THEN 6
-          ELSE 7
-        END
-    `);
-    res.json(rows);
-  } catch (err) {
-    log.error(`resumen: ${err.message}`);
     res.status(500).json({ error: err.message });
   }
 });

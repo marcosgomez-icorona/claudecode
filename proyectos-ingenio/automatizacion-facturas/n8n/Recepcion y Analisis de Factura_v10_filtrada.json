@@ -1,0 +1,857 @@
+{
+  "name": "Recepcion y Analisis de Factura v9",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "q": "has:attachment filename:pdf newer_than:30d",
+          "readStatus": "unread"
+        }
+      },
+      "id": "2c3fe1da-7b3c-4174-877d-5f1e70cf34ec",
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1696,
+        1120
+      ],
+      "wires": [
+        [
+          "ea29ef5d-9ec2-4b21-8282-675ae94b8c84",
+          "ab179d81-c5c1-497f-beeb-c649916e0a74"
+        ]
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0xWmFTReUpSV8xmK",
+          "name": "Mail Sector Compras"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $json.id }}"
+      },
+      "id": "ad8f54b7-5a41-4a1b-ad65-1a3de13c977f",
+      "name": "Marcar como leído",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1648,
+        1360
+      ],
+      "webhookId": "83b39f18-051c-4f1f-a9c6-f50f3e22b7ac",
+      "wires": [],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0xWmFTReUpSV8xmK",
+          "name": "Mail Sector Compras"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://gmail.googleapis.com/gmail/v1/users/me/messages/{{ $json.id }}?format=full",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "gmailOAuth2",
+        "options": {}
+      },
+      "id": "7fbb461b-60cb-4025-ac17-73dec5b4c3e0",
+      "name": "Obtener mensaje completo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -1472,
+        1120
+      ],
+      "wires": [
+        [
+          "a6e202d0-33e7-43e9-a876-882c25503c17"
+        ]
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0xWmFTReUpSV8xmK",
+          "name": "Mail Sector Compras"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Devuelve UN ITEM POR CADA PDF encontrado en el email\nfunction findAllPDFs(parts, depth) {\n  if (!Array.isArray(parts) || depth > 10) return [];\n  let pdfs = [];\n  for (const part of parts) {\n    const mime = (part.mimeType || '').toLowerCase();\n    const filename = (part.filename || '');\n    const hasAttach = !!(part.body && part.body.attachmentId);\n    const size = (part.body && part.body.size) || 0;\n    if (hasAttach && size > 0) {\n      const isPdf = mime.includes('pdf') || filename.toLowerCase().endsWith('.pdf');\n      if (isPdf) {\n        pdfs.push({ attachmentId: part.body.attachmentId, filename: filename || 'factura.pdf' });\n      }\n    }\n    if (part.parts) {\n      pdfs = pdfs.concat(findAllPDFs(part.parts, depth + 1));\n    }\n  }\n  return pdfs;\n}\n\nconst payload = $json.payload || {};\nconst headers = (payload.headers || []).reduce((a, h) => ({ ...a, [h.name.toLowerCase()]: h.value }), {});\nconst emailMeta = {\n  email_gmail_id:  $json.id,\n  email_from:      headers.from    || '',\n  email_subject:   headers.subject || '',\n  email_date:      $json.internalDate || new Date().toISOString(),\n  email_messageId: $json.id\n};\n\nconst pdfs = findAllPDFs(payload.parts || [], 0);\n\nif (pdfs.length === 0) {\n  const tree = JSON.stringify((payload.parts || []).map(function m(p) {\n    return { mime: p.mimeType, file: p.filename || '', hasId: !!(p.body && p.body.attachmentId), sub: (p.parts || []).map(m) };\n  }));\n  throw new Error('Sin adjuntos PDF encontrados. Arbol: ' + tree);\n}\n\nreturn pdfs.map(pdf => ({\n  json: {\n    messageId:    $json.id,\n    attachmentId: pdf.attachmentId,\n    pdf_filename: pdf.filename,\n    ...emailMeta\n  }\n}));\n"
+      },
+      "id": "d99614a1-4227-4719-a067-e8ecd00c4084",
+      "name": "Extraer metadata adjunto",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1248,
+        1120
+      ],
+      "wires": [
+        [
+          "89512c18-149a-4722-af70-8c169c5db5c8"
+        ]
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://gmail.googleapis.com/gmail/v1/users/me/messages/{{ $json.messageId }}/attachments/{{ $json.attachmentId }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "gmailOAuth2",
+        "options": {}
+      },
+      "id": "8e689b6d-0808-4f89-a8ea-c86d69062536",
+      "name": "Descargar adjunto Gmail API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -1024,
+        1120
+      ],
+      "wires": [
+        [
+          "6977cec2-0e90-4d43-964d-56f75df3cf1c"
+        ]
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0xWmFTReUpSV8xmK",
+          "name": "Mail Sector Compras"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Convierte base64url de Gmail API a $binary para Extract From File\nconst meta = $('Extraer metadata adjunto').item.json;\nconst base64url = $json.data || '';\n\nif (!base64url) throw new Error('Gmail API no devolvio datos del adjunto');\n\nconst base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');\nconst buffer = Buffer.from(base64, 'base64');\n\nconst binaryData = await this.helpers.prepareBinaryData(\n  buffer,\n  meta.pdf_filename,\n  'application/pdf'\n);\n\nreturn [{\n  json: {\n    pdf_binary_key:  'data',\n    pdf_filename:    meta.pdf_filename,\n    email_gmail_id:  meta.email_gmail_id,\n    email_from:      meta.email_from,\n    email_subject:   meta.email_subject,\n    email_date:      meta.email_date,\n    email_messageId: meta.email_messageId\n  },\n  binary: { data: binaryData }\n}];\n"
+      },
+      "id": "87a15e4a-536d-4208-9563-f74e90ac1354",
+      "name": "Preparar binario PDF",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -800,
+        1120
+      ],
+      "wires": [
+        [
+          "f2e0bf8d-8788-4785-a168-b04c3b08a55f"
+        ]
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "2fd8d052-b22e-4ce7-b811-e92c2ea5e4fb",
+      "name": "Extraer texto PDF",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        1120
+      ],
+      "wires": [
+        [
+          "f6f866d9-1171-410c-81a4-8b265a63f7f2"
+        ]
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawText = $json.text || $json.content || '';\n\nlet hash;\ntry {\n  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(rawText));\n  hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');\n} catch(e) {\n  let h = 5381;\n  for (let i = 0; i < rawText.length; i++) h = (((h << 5) + h) + rawText.charCodeAt(i)) & 0xffffffff;\n  hash = (h >>> 0).toString(16).padStart(8, '0') + rawText.length.toString(16);\n}\n\nreturn [{ json: {\n  pdf_text:        rawText,\n  pdf_filename:    $json.pdf_filename,\n  pdf_hash:        hash,\n  email_gmail_id:  $json.email_gmail_id,\n  email_from:      $json.email_from,\n  email_subject:   $json.email_subject,\n  email_date:      $json.email_date,\n  email_messageId: $json.email_messageId,\n  fuente:          'EMAIL_GMAIL_N8N'\n}}];\n"
+      },
+      "id": "35fdb75b-a781-4e43-85b1-19cc29e7a0fc",
+      "name": "Preparar payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -352,
+        1120
+      ],
+      "wires": [
+        [
+          "b1c2d3e4-f5a6-7890-abcd-ef1234567890"
+        ]
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// -- NODO 8: Preparar prompt OpenAI --\nconst input = $input.first().json;\nconst t = input.pdf_text || '';\n\n// Truncar antes de la segunda copia del comprobante\nconst firstCopy = t.search(/\\n\\s*(?:DUPLICADO|TRIPLICADO)\\b/i);\nconst texto = firstCopy > 100 ? t.substring(0, firstCopy) : t;\n\nconst schemaEjemplo = JSON.stringify({\n  letra: 'A',\n  tipo_comprobante: 'FACTURA_COMPRA',\n  numero_completo: 'XXXX-XXXXXXXX',\n  fecha_emision: 'YYYY-MM-DD',\n  fecha_vencimiento: null,\n  fecha_vto_cae: 'YYYY-MM-DD',\n  cae: '12345678901234',\n  emisor_cuit: '30715543172',\n  emisor_razon_social: 'Nombre S.A.',\n  receptor_cuit: '30715098551',\n  moneda: 'ARS',\n  cotizacion_usd: null,\n  neto_gravado: 375100.00,\n  iva_21: 78771.00,\n  iva_105: 0,\n  percepciones: 0,\n  otros_impuestos: 0,\n  total: 453871.00,\n  referencia: '00038495',\n  nro_remito: '00002-00003546',\n  items: [\n    {\n      linea: 1,\n      descripcion: 'TRANSCRIBIR EL TEXTO COMPLETO DEL PRODUCTO O SERVICIO, concatenando todas las lineas del item sin truncar ni resumir',\n      cantidad: 1.00,\n      unidad: 'u',\n      precio_unitario: 128800.00,\n      alicuota_iva: 21,\n      subtotal: 128800.00\n    }\n  ],\n  confianza_parseo: 'ALTA',\n  notas_parseo: null\n}, null, 2);\n\nconst promptLines = [\n  'Sos un experto en facturacion electronica AFIP Argentina (CAE, comprobantes, items, impuestos).',\n  'Analiza el texto extraido de un PDF de factura de proveedor y devuelve UNICAMENTE un objeto JSON valido.',\n  'Sin explicaciones, sin markdown, solo el JSON puro.',\n  '',\n  'REGLAS OBLIGATORIAS:',\n  '- fechas en formato YYYY-MM-DD (nunca DD/MM/YYYY)',\n  '- importes como numeros decimales sin simbolo de moneda ni separadores de miles',\n  '- CUIT: 11 digitos sin guiones ni espacios (ej: 30715543172)',\n  '- numero_completo: formato XXXX-XXXXXXXX con guion (ej: 0001-00003359)',\n  '- fecha_emision: buscar campos \"Fecha de Emision\", \"FECHA:\", \"Fecha Desde\" o equivalente. Si solo existe \"Fecha Desde\" usarla como fecha_emision.',\n  '- fecha_vencimiento: buscar campos \"Vencimiento\", \"Fecha de Vencimiento\", \"Fecha Hasta\" (periodo de servicio). null si no aparece.',\n  '- fecha_vto_cae: buscar \"Fecha Vto. de CAE\", \"Vto. CAE\", \"Vencimiento CAE\" o equivalente.',\n  '- referencia: solo el numero de OC sin prefijo textual (si dice \"OC00038495\" devolver \"00038495\")',\n  '- nro_remito: formato completo con guion si lo tiene',\n  '- tipo_comprobante: \"FACTURA_COMPRA\" para facturas, \"NC_COMPRA\" notas de credito, \"ND_COMPRA\" notas de debito',\n  '- confianza_parseo: ALTA si encontraste todos los campos criticos (emisor_cuit, numero_completo, fecha_emision, total, cae); MEDIA si falta alguno no critico; BAJA si faltan campos criticos',\n  '- items.descripcion: transcribir el TEXTO COMPLETO del producto o servicio sin truncar ni resumir. Si ocupa multiples lineas concatenarlas todas en un unico string.',\n  '- Si un campo no aparece en el texto devolver null (no omitir el campo)',\n  '',\n  'SCHEMA JSON DE SALIDA (respetar exactamente los nombres de campo):',\n  schemaEjemplo\n];\n\nconst system_prompt = promptLines.join('\\n');\n\nreturn [{\n  json: {\n    system_prompt:   system_prompt,\n    user_message:    texto.substring(0, 12000),\n    pdf_filename:    input.pdf_filename,\n    pdf_hash:        input.pdf_hash,\n    email_gmail_id:  input.email_gmail_id,\n    email_from:      input.email_from,\n    email_subject:   input.email_subject,\n    email_date:      input.email_date,\n    email_messageId: input.email_messageId,\n    fuente:          input.fuente || 'EMAIL_GMAIL_N8N',\n    pdf_text:        input.pdf_text\n  }\n}];\n"
+      },
+      "id": "5c153489-e4b6-4ba2-ab0e-77b0e0009298",
+      "name": "Preparar prompt OpenAI",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        1120
+      ],
+      "wires": [
+        [
+          "c2d3e4f5-a6b7-8901-bcde-f12345678901"
+        ]
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// -- NODO 10: Normalizar campos OpenAI -> staging_facturas --\nconst prevNode = $('Preparar prompt OpenAI').item.json;\n\n// Extraer el contenido JSON de la respuesta del AI Agent\nlet rawContent = '';\nif (typeof $json.output === 'string' && $json.output.trim().startsWith('{')) {\n  rawContent = $json.output;\n} else if ($json.message && $json.message.content) {\n  rawContent = $json.message.content;\n} else if ($json.choices && $json.choices[0] && $json.choices[0].message) {\n  rawContent = $json.choices[0].message.content;\n} else if (typeof $json.output === 'string') {\n  rawContent = $json.output;\n} else if (typeof $json.content === 'string') {\n  rawContent = $json.content;\n} else {\n  rawContent = JSON.stringify($json);\n}\n\n// Parsear JSON de OpenAI (strip markdown si viene envuelto)\nlet parsed;\ntry {\n  const clean = rawContent.replace(/^```json\\s*/i, '').replace(/```\\s*$/, '').trim();\n  parsed = JSON.parse(clean);\n} catch(e) {\n  const m = rawContent.match(/\\{[\\s\\S]+\\}/);\n  if (m) {\n    try { parsed = JSON.parse(m[0]); } catch(e2) {\n      throw new Error('No se pudo parsear JSON de OpenAI: ' + e.message + ' | Raw: ' + rawContent.substring(0, 500));\n    }\n  } else {\n    throw new Error('Respuesta OpenAI no contiene JSON valido: ' + rawContent.substring(0, 300));\n  }\n}\n\n\n// Normalizar fecha: acepta YYYY-MM-DD o DD/MM/YYYY → devuelve YYYY-MM-DD o null\nfunction parseDate(d) {\n  if (!d) return null;\n  const s = String(d).trim();\n  if (/^\\d{4}-\\d{2}-\\d{2}$/.test(s)) return s;                          // YYYY-MM-DD\n  const a = s.match(/^(\\d{2})[\\/\\-](\\d{2})[\\/\\-](\\d{4})$/);\n  if (a) return `${a[3]}-${a[2]}-${a[1]}`;                                 // DD/MM/YYYY o DD-MM-YYYY\n  const b = s.match(/^(\\d{4})[\\/\\-](\\d{2})[\\/\\-](\\d{2})/);\n  if (b) return `${b[1]}-${b[2]}-${b[3]}`;                                 // YYYY/MM/DD\n  return null;\n}\n\n// Helpers SQL\nconst esc = s => s ? String(s).replace(/'/g, \"''\") : null;\nconst str = (s, nullable = true) => (s !== null && s !== undefined && s !== '') ? `'${esc(s)}'` : (nullable ? 'NULL' : \"''\");\nconst numF = n => (n !== null && n !== undefined && !isNaN(n)) ? parseFloat(n) : 0;\n\n// Mapeo de campos\nconst letra         = parsed.letra || 'A';\nconst tipo_operacion = (() => {\n  const tc = (parsed.tipo_comprobante || '').toUpperCase();\n  if (tc.includes('NC') || tc.includes('CREDITO')) return 'NC_COMPRA';\n  if (tc.includes('ND') || tc.includes('DEBITO'))  return 'ND_COMPRA';\n  return 'FACTURA_COMPRA';\n})();\n\nconst nro_documento     = parsed.numero_completo    || null;\nconst fecha_emision     = parseDate(parsed.fecha_emision);\nconst fecha_vto_cae     = parseDate(parsed.fecha_vto_cae);\nconst fecha_vencimiento = parseDate(parsed.fecha_vencimiento);\nconst cuit              = parsed.emisor_cuit         || null;\nconst cuit_receptor     = parsed.receptor_cuit       || null;\nconst razon_social      = parsed.emisor_razon_social || null;\nconst moneda            = parsed.moneda || 'ARS';\nconst es_dolar          = (moneda === 'USD') ? 1 : 0;\nconst cotizacion_usd    = parsed.cotizacion_usd      || null;\nconst cotizacion_origen = es_dolar ? (cotizacion_usd ? 'FACTURA' : 'BNA_PENDIENTE') : 'PESOS';\nconst neto              = numF(parsed.neto_gravado);\nconst iva_21            = numF(parsed.iva_21);\nconst iva_105           = numF(parsed.iva_105);\nconst percepciones      = numF(parsed.percepciones);\nconst otros_impuestos   = numF(parsed.otros_impuestos);\nconst total             = numF(parsed.total);\nconst cae               = parsed.cae       || null;\nconst referencia        = parsed.referencia || null;\nconst nro_remito        = parsed.nro_remito || null;\n\nconst confianza_label = parsed.confianza_parseo || 'MEDIA';\nconst confianza_num   = confianza_label === 'ALTA' ? 100 : (confianza_label === 'MEDIA' ? 70 : 30);\n\nconst items      = Array.isArray(parsed.items) ? parsed.items : [];\nconst items_json = JSON.stringify(items);\n\n// Generar staging_id\nconst staging_id = (() => {\n  try { return crypto.randomUUID(); } catch(e) {\n    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {\n      const r = Math.random() * 16 | 0;\n      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);\n    });\n  }\n})();\n\n// GUIDs produccion\nconst monedaId       = es_dolar ? '76C69768-3DAE-11D5-B059-004854841C8A' : '76C69765-3DAE-11D5-B059-004854841C8A';\nconst cotizacion_val = cotizacion_usd || 1;\n\nconst sql_query = `INSERT INTO UD_EZI_STAGING_FACTURAS (\n  id, tipo_operacion, estado_proceso, fecha_carga, usuario_carga, origen,\n  tipotransaccion_id, numerodocumento, letra, fecha_emision, fecha_vencimiento,\n  proveedor_id, proveedor_codigo, proveedor_cuit, proveedor_nombre,\n  neto, iva_21, iva_105, percepciones, otros_impuestos, total,\n  moneda_id, cotizacion, cae, fecha_vto_cae, compania_id,\n  pdf_filename, pdf_hash, email_origen, email_asunto, items_json,\n  referencia, nro_remito,\n  es_dolar, cotizacion_origen, cotizacion_aviso\n) VALUES (\n  '${esc(staging_id)}','${esc(tipo_operacion)}','PENDIENTE',CONVERT(varchar(8), GETDATE(), 112) + REPLACE(REPLACE(REPLACE(CONVERT(varchar(12), GETDATE(), 114),':',''),'.',''),' ',''),'n8n-openai','PDF_EMAIL',\n  '50829758-5905-11D5-86C4-0080AD403F5F',\n  ${str(nro_documento)},${str(letra)},${str(fecha_emision)},${str(fecha_vencimiento)},\n  '00000000-0000-0000-0000-000000000000','PENDIENTE',\n  ${str(cuit)},${str(razon_social)},\n  ${numF(neto)},${numF(iva_21)},${numF(iva_105)},${numF(percepciones)},${numF(otros_impuestos)},${numF(total)},\n  '${monedaId}',${cotizacion_val},\n  ${str(cae)},${str(fecha_vto_cae)},\n  'FC20C32D-3EFA-11D5-86AD-0080AD403F5F',\n  ${str(prevNode.pdf_filename)},${str(prevNode.pdf_hash)},${str(prevNode.email_from)},${str(prevNode.email_subject)},${str(items_json)},\n  ${str(referencia)},${str(nro_remito)},\n  ${es_dolar || 0},${str(cotizacion_origen)},NULL\n)`;\n\nreturn [{ json: {\n  staging_id,\n  tipo_operacion,\n  cuit,\n  cuit_receptor,\n  razon_social,\n  letra,\n  nro_documento,\n  fecha_emision,\n  fecha_vencimiento,\n  fecha_vto_cae,\n  cae,\n  neto,\n  iva_21,\n  iva_105,\n  percepciones,\n  otros_impuestos,\n  total,\n  es_dolar,\n  cotizacion_usd,\n  cotizacion_val,\n  cotizacion_origen,\n  referencia,\n  nro_remito,\n  items_json,\n  items_count:            items.length,\n  confianza_parseo:       confianza_num,\n  confianza_parseo_label: confianza_label,\n  notas_parseo:           parsed.notas_parseo || null,\n  sql_query,\n  pdf_filename:    prevNode.pdf_filename,\n  pdf_hash:        prevNode.pdf_hash,\n  email_from:      prevNode.email_from,\n  email_subject:   prevNode.email_subject,\n  email_date:      prevNode.email_date,\n  email_gmail_id:  prevNode.email_gmail_id,\n  fuente:          prevNode.fuente || 'EMAIL_GMAIL_N8N',\n  pdf_text:        prevNode.pdf_text,\n  openai_raw:      rawContent.substring(0, 500)\n}}];\n"
+      },
+      "id": "481248f8-069d-41f0-b932-3a9456cc28bb",
+      "name": "Normalizar campos OpenAI",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        1120
+      ],
+      "wires": [
+        [
+          "fa213b4c-0001-4a01-8001-000000000001"
+        ]
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-receptor-01",
+              "leftValue": "={{ $json.cuit_receptor }}",
+              "rightValue": "30715098551",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c5920fc4-e7f1-48d5-b769-3e8d3603dc55",
+      "name": "Filtrar receptor Ingenio",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        544,
+        1120
+      ],
+      "wires": [
+        [
+          "fa213b4c-0002-4a02-8002-000000000002"
+        ],
+        []
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-bna-01",
+              "leftValue": "={{ $json.cotizacion_origen }}",
+              "rightValue": "BNA_PENDIENTE",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5231f883-2b5c-41eb-be39-8dd3b78fa238",
+      "name": "¿Necesita cotización BNA?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        768,
+        1120
+      ],
+      "wires": [
+        [
+          "fa213b4c-0003-4a03-8003-000000000003"
+        ],
+        [
+          "43a7663c-c719-4780-be47-52a40ca63908"
+        ]
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.bcra.gob.ar/estadisticas/v2.0/datosvariable/4/{{ $json.fecha_emision }}/{{ $json.fecha_emision }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "b7a4cb37-8af6-4b98-aeaf-a65a251128a2",
+      "name": "Obtener TC BNA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        992,
+        912
+      ],
+      "wires": [
+        [
+          "fa213b4c-0004-4a04-8004-000000000004"
+        ]
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Combina la respuesta del BCRA con los datos de la factura\nconst invoice = $('¿Necesita cotización BNA?').item.json;\nconst bcraResp = $input.first().json;\n\n// Normalizar fecha: acepta YYYY-MM-DD o DD/MM/YYYY → devuelve YYYY-MM-DD o null\nfunction parseDate(d) {\n  if (!d) return null;\n  const s = String(d).trim();\n  if (/^\\d{4}-\\d{2}-\\d{2}$/.test(s)) return s;\n  const a = s.match(/^(\\d{2})[\\/\\-](\\d{2})[\\/\\-](\\d{4})$/);\n  if (a) return `${a[3]}-${a[2]}-${a[1]}`;\n  const b = s.match(/^(\\d{4})[\\/\\-](\\d{2})[\\/\\-](\\d{2})/);\n  if (b) return `${b[1]}-${b[2]}-${b[3]}`;\n  return null;\n}\n\n\nconst results = bcraResp.results || [];\nlet cotizacion_usd    = null;\nlet cotizacion_origen = 'PESOS';\nlet cotizacion_aviso  = null;\n\nif (results.length > 0) {\n  cotizacion_usd    = results[0].valor;\n  cotizacion_origen = 'BNA';\n  cotizacion_aviso  = 'Cotizacion no encontrada en la factura. TC BNA del ' + results[0].fecha + ': $ ' + cotizacion_usd + ' por USD. Verificar con el proveedor.';\n} else {\n  cotizacion_origen = 'PESOS';\n  cotizacion_aviso  = 'No se encontro cotizacion en la factura ni en BNA para la fecha ' + invoice.fecha_emision + '. Verificar manualmente.';\n}\n\nconst esc = s => s ? String(s).replace(/'/g, \"''\") : null;\nconst str = (s, nullable = true) => (s !== null && s !== undefined && s !== '') ? `'${esc(s)}'` : (nullable ? 'NULL' : \"''\");\nconst numF = n => (n !== null && n !== undefined && !isNaN(n)) ? parseFloat(n) : 0;\n\nconst j = Object.assign({}, invoice, { cotizacion_usd, cotizacion_origen, cotizacion_aviso });\nconst confianza_label = j.confianza_parseo_label || (j.confianza_parseo >= 80 ? 'ALTA' : j.confianza_parseo >= 50 ? 'MEDIA' : 'BAJA');\nconst monedaId        = j.es_dolar ? '76C69768-3DAE-11D5-B059-004854841C8A' : '76C69765-3DAE-11D5-B059-004854841C8A';\nconst cotizacion_val  = cotizacion_usd || 1;\n\nconst sql_query = `INSERT INTO UD_EZI_STAGING_FACTURAS (\n  id, tipo_operacion, estado_proceso, fecha_carga, usuario_carga, origen,\n  tipotransaccion_id, numerodocumento, letra, fecha_emision, fecha_vencimiento,\n  proveedor_id, proveedor_codigo, proveedor_cuit, proveedor_nombre,\n  neto, iva_21, iva_105, percepciones, otros_impuestos, total,\n  moneda_id, cotizacion, cae, fecha_vto_cae, compania_id,\n  pdf_filename, pdf_hash, email_origen, email_asunto, items_json,\n  referencia, nro_remito,\n  es_dolar, cotizacion_origen, cotizacion_aviso\n) VALUES (\n  '${esc(j.staging_id)}','${esc(j.tipo_operacion)}','PENDIENTE',CONVERT(varchar(8), GETDATE(), 112) + REPLACE(REPLACE(REPLACE(CONVERT(varchar(12), GETDATE(), 114),':',''),'.',''),' ',''),'n8n-openai','PDF_EMAIL',\n  '50829758-5905-11D5-86C4-0080AD403F5F',\n  ${str(j.nro_documento)},${str(j.letra)},${str(j.fecha_emision)},${str(j.fecha_vencimiento)},\n  '00000000-0000-0000-0000-000000000000','PENDIENTE',\n  ${str(j.cuit)},${str(j.razon_social)},\n  ${numF(j.neto)},${numF(j.iva_21)},${numF(j.iva_105)},${numF(j.percepciones)},${numF(j.otros_impuestos)},${numF(j.total)},\n  '${monedaId}',${cotizacion_val},\n  ${str(j.cae)},${str(j.fecha_vto_cae)},\n  'FC20C32D-3EFA-11D5-86AD-0080AD403F5F',\n  ${str(j.pdf_filename)},${str(j.pdf_hash)},${str(j.email_from)},${str(j.email_subject)},${str(j.items_json)},\n  ${str(j.referencia)},${str(j.nro_remito)},\n  ${j.es_dolar || 0},${str(cotizacion_origen)},${str(cotizacion_aviso)}\n)`;\n\nreturn [{ json: Object.assign({}, j, { sql_query, cotizacion_val }) }];\n"
+      },
+      "id": "841661f1-47e6-4be3-b86c-bfe58094a703",
+      "name": "Aplicar TC BNA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1216,
+        912
+      ],
+      "wires": [
+        [
+          "43a7663c-c719-4780-be47-52a40ca63908"
+        ]
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-confianza-01",
+              "leftValue": "={{ $json.confianza_parseo }}",
+              "rightValue": 80,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5141c710-04c6-484c-9809-91207cf29667",
+      "name": "Confianza >= 80%",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        1120
+      ],
+      "wires": [
+        [
+          "fa213b4c-0010-4a10-8010-000000000010"
+        ],
+        [
+          "2ccd245b-d659-4860-9de7-d75ef679b412"
+        ]
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ingcorona.ddns.net:4040/recepcion/factura",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "2ca35d05-e1fd-4b5d-92b4-35197a6654c0",
+      "name": "POST a Node-RED",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1664,
+        1040
+      ],
+      "wires": []
+    },
+    {
+      "parameters": {
+        "fromEmail": "sectorcompras@ingeniolacorona.com",
+        "toEmail": "pdietrich@ingeniolacorona.com",
+        "subject": "=PDF con baja confianza ({{ $json.confianza_parseo_label }}) — revision manual requerida",
+        "emailFormat": "html",
+        "html": "=<html><body style='font-family:Arial,sans-serif;padding:20px'><h3 style='color:#856404'>PDF descartado: confianza insuficiente (OpenAI)</h3><p><strong>Archivo:</strong> {{ $json.pdf_filename }}</p><p><strong>Email:</strong> {{ $json.email_from }}</p><p><strong>Confianza:</strong> {{ $json.confianza_parseo_label }} (score: {{ $json.confianza_parseo }})</p><p><strong>Notas OpenAI:</strong> {{ $json.notas_parseo || 'Sin notas' }}</p><p><strong>CUIT emisor:</strong> {{ $json.cuit }}</p><p><strong>Numero doc:</strong> {{ $json.nro_documento }}</p><p><strong>Total:</strong> {{ $json.total }}</p></body></html>",
+        "options": {}
+      },
+      "id": "eb23233d-9488-46e2-b07f-1bcdaf0ec277",
+      "name": "Alerta parseo BAJA",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        1264
+      ],
+      "webhookId": "6bc8a609-82c3-48fb-afa8-70710af73bc5",
+      "wires": [],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.user_message }}",
+        "options": {
+          "systemMessage": "={{ $json.system_prompt }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        16,
+        1376
+      ],
+      "id": "dd128c0d-ba57-41de-bc5f-ee032b7f7989",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o",
+          "cachedResultName": "gpt-4o"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -16,
+        1552
+      ],
+      "id": "f7df9341-df96-4bae-9c57-d43f31a2dc98",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "AW8cy5YrfmIqEUw5",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-tipo-01",
+              "leftValue": "={{ $json.tipo_operacion }}",
+              "rightValue": "FACTURA_COMPRA",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "cond-tipo-02",
+              "leftValue": "={{ $json.tipo_operacion }}",
+              "rightValue": "FACTURA_SERVICIO",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        }
+      },
+      "id": "5a00292c-2b7e-4e07-bc2c-edf9105311c2",
+      "name": "Filtrar tipo comprobante",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        544,
+        1000
+      ],
+      "wires": [
+        [],
+        []
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Descartado: no es FACTURA_COMPRA ni FACTURA_SERVICIO\n// El email ya fue marcado como leído por el nodo 'Marcar como leído'\nreturn null;"
+      },
+      "id": "b3c35b07-708c-4411-b5ba-72ee6d7d8306",
+      "name": "Descartado (tipo no válido)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        768,
+        1000
+      ],
+      "wires": []
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=http://192.168.0.23:1880/api/facturas/check?hash={{ $json.pdf_hash }}&doc={{ $json.nro_documento }}&cuit={{ $json.cuit }}",
+        "sendBody": false,
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "460de815-4185-4777-bd22-64d383f52c53",
+      "name": "Verificar duplicado staging",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1664,
+        960
+      ],
+      "wires": [
+        []
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cond-dup-01",
+              "leftValue": "={{ $json.existe }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "45f37348-e77c-42e8-96d4-378fccb9aba3",
+      "name": "¿Ya existe en staging?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1888,
+        960
+      ],
+      "wires": [
+        [],
+        []
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Descartado: la factura ya existe en staging\n// Email ya marcado como leído\nreturn null;"
+      },
+      "id": "f5453578-596f-4464-b1f6-1191d001e146",
+      "name": "Descartado (duplicado)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2112,
+        960
+      ],
+      "wires": []
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Marcar como leído",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Obtener mensaje completo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener mensaje completo": {
+      "main": [
+        [
+          {
+            "node": "Extraer metadata adjunto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer metadata adjunto": {
+      "main": [
+        [
+          {
+            "node": "Descargar adjunto Gmail API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar adjunto Gmail API": {
+      "main": [
+        [
+          {
+            "node": "Preparar binario PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar binario PDF": {
+      "main": [
+        [
+          {
+            "node": "Extraer texto PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer texto PDF": {
+      "main": [
+        [
+          {
+            "node": "Preparar payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar payload": {
+      "main": [
+        [
+          {
+            "node": "Preparar prompt OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar prompt OpenAI": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar campos OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Filtrar tipo comprobante",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar receptor Ingenio": {
+      "main": [
+        [
+          {
+            "node": "¿Necesita cotización BNA?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Necesita cotización BNA?": {
+      "main": [
+        [
+          {
+            "node": "Obtener TC BNA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Confianza >= 80%",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener TC BNA": {
+      "main": [
+        [
+          {
+            "node": "Aplicar TC BNA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aplicar TC BNA": {
+      "main": [
+        [
+          {
+            "node": "Confianza >= 80%",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confianza >= 80%": {
+      "main": [
+        [
+          {
+            "node": "Verificar duplicado staging",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alerta parseo BAJA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Normalizar campos OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar tipo comprobante": {
+      "main": [
+        [
+          {
+            "node": "Filtrar receptor Ingenio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Descartado (tipo no válido)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar duplicado staging": {
+      "main": [
+        [
+          {
+            "node": "¿Ya existe en staging?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Ya existe en staging?": {
+      "main": [
+        [
+          {
+            "node": "Descartado (duplicado)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "POST a Node-RED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a530c792-48aa-4ac2-8133-93be86a0e820",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "aeaf24ef62f6d73e5d6668370655f44afe6421a4a222f225af5a0fc6fd350d07"
+  },
+  "id": "g0xeMgRNcPosSRXs",
+  "tags": []
+}
