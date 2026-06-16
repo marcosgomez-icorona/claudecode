@@ -995,6 +995,7 @@
               <tr>
                 <th>Código</th>
                 <th>Cuenta</th>
+                <th class="num">Saldo Inicial</th>
                 <th class="num">Debe Acum.</th>
                 <th class="num">Haber Acum.</th>
                 <th class="num">Saldo Debe</th>
@@ -1004,7 +1005,7 @@
               </tr>
             </thead>
             <tbody id="ss-body">
-              <tr><td colspan="8"><div class="empty-state">
+              <tr><td colspan="9"><div class="empty-state">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
                 <h3>Sin datos</h3><p>Cargue datos para ver el balance</p>
               </div></td></tr>
@@ -1380,6 +1381,28 @@
       <div class="modal-body" style="padding:0;">
         <div id="movimientos-loading" style="text-align:center;padding:40px;">Consultando movimientos...</div>
         <div id="movimientos-content" style="display:none;">
+          <!-- BARRA DE FILTROS -->
+          <div id="movimientos-filtros" style="padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface-2);">
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+              <div class="param-group">
+                <div class="param-label">Fecha</div>
+                <input type="text" class="param-input" id="filtro-fecha" oninput="filtrarMovimientos()" placeholder="YYYYMMDD" style="width:105px; font-family:var(--font-mono); font-size:11px;" />
+              </div>
+              <div class="param-group">
+                <div class="param-label">Asiento</div>
+                <input type="text" class="param-input" id="filtro-asiento" oninput="filtrarMovimientos()" placeholder="A-00142..." style="width:115px; font-family:var(--font-mono); font-size:11px;" />
+              </div>
+              <div class="param-group">
+                <div class="param-label">Descripción</div>
+                <input type="text" class="param-input" id="filtro-descripcion" oninput="filtrarMovimientos()" placeholder="Buscar..." style="width:200px;" />
+              </div>
+              <div class="param-group">
+                <div class="param-label">Proveedor</div>
+                <input type="text" class="param-input" id="filtro-proveedor" oninput="filtrarMovimientos()" placeholder="Buscar..." style="width:180px;" />
+              </div>
+              <button class="panel-tool-btn" onclick="limpiarFiltrosMovimientos()" style="height:34px; align-self:flex-end; white-space:nowrap;">Limpiar filtros</button>
+            </div>
+          </div>
           <table class="data-table" style="margin:0;font-size:12px;">
             <thead><tr>
               <th>Fecha</th><th>Asiento</th><th>Descripción</th><th>Proveedor</th>
@@ -1442,20 +1465,20 @@ let STATE = {
 ════════════════════════════════════════════════ */
 const MOCK = {
   sumasSaldos: [
-    { codigo: '1.1.01', cuenta: 'Caja y Bancos',     debeAcum: 45200000, haberAcum: 12300000, variacion: 8.2,   estado: 'ok' },
-    { codigo: '1.1.02', cuenta: 'Cuentas a Cobrar',  debeAcum: 38700000, haberAcum:  9100000, variacion: 14.5,  estado: 'ok' },
-    { codigo: '1.2.01', cuenta: 'Bienes de Cambio',  debeAcum: 67400000, haberAcum: 18200000, variacion: -5.1,  estado: 'warn' },
-    { codigo: '1.3.01', cuenta: 'Bienes de Uso',     debeAcum: 185000000,haberAcum: 42000000, variacion: 2.1,   estado: 'ok' },
-    { codigo: '2.1.01', cuenta: 'Proveedores',       debeAcum:  8900000, haberAcum: 47300000, variacion: 38.7,  estado: 'crit' },
-    { codigo: '2.1.02', cuenta: 'Deudas Fiscales',   debeAcum:  3200000, haberAcum: 11800000, variacion: 22.3,  estado: 'warn' },
-    { codigo: '2.2.01', cuenta: 'Préstamos L/P',     debeAcum:  1500000, haberAcum: 28000000, variacion: -3.2,  estado: 'ok' },
-    { codigo: '3.1.01', cuenta: 'Capital Social',    debeAcum:       0,  haberAcum: 95000000, variacion: 0,     estado: 'ok' },
-    { codigo: '4.1.01', cuenta: 'Ventas Azúcar',     debeAcum: 12000000, haberAcum: 143000000,variacion: 18.9,  estado: 'ok' },
-    { codigo: '4.1.02', cuenta: 'Ventas Alcohol',    debeAcum:  5400000, haberAcum: 67800000, variacion: 31.2,  estado: 'crit' },
-    { codigo: '5.1.01', cuenta: 'Costo Producción',  debeAcum: 98700000, haberAcum: 14200000, variacion: 7.3,   estado: 'ok' },
-    { codigo: '5.2.01', cuenta: 'Gs. Comercializ.',  debeAcum: 18300000, haberAcum:  2100000, variacion: 11.1,  estado: 'ok' },
-    { codigo: '5.3.01', cuenta: 'Gs. Administración',debeAcum: 24100000, haberAcum:  3800000, variacion: 5.6,   estado: 'ok' },
-    { codigo: '5.4.01', cuenta: 'Gs. Financieros',   debeAcum:  9800000, haberAcum:   900000, variacion: 47.8,  estado: 'crit' },
+    { codigo: '1.1.01', cuenta: 'Caja y Bancos',     saldoInicial: 32900000, debeAcum: 45200000, haberAcum: 12300000, variacion: 8.2,   estado: 'ok' },
+    { codigo: '1.1.02', cuenta: 'Cuentas a Cobrar',  saldoInicial: 29600000, debeAcum: 38700000, haberAcum:  9100000, variacion: 14.5,  estado: 'ok' },
+    { codigo: '1.2.01', cuenta: 'Bienes de Cambio',  saldoInicial: 49200000, debeAcum: 67400000, haberAcum: 18200000, variacion: -5.1,  estado: 'warn' },
+    { codigo: '1.3.01', cuenta: 'Bienes de Uso',     saldoInicial: 143000000,debeAcum: 185000000,haberAcum: 42000000, variacion: 2.1,   estado: 'ok' },
+    { codigo: '2.1.01', cuenta: 'Proveedores',       saldoInicial: -38400000,debeAcum:  8900000, haberAcum: 47300000, variacion: 38.7,  estado: 'crit' },
+    { codigo: '2.1.02', cuenta: 'Deudas Fiscales',   saldoInicial: -8600000, debeAcum:  3200000, haberAcum: 11800000, variacion: 22.3,  estado: 'warn' },
+    { codigo: '2.2.01', cuenta: 'Préstamos L/P',     saldoInicial: -26500000,debeAcum:  1500000, haberAcum: 28000000, variacion: -3.2,  estado: 'ok' },
+    { codigo: '3.1.01', cuenta: 'Capital Social',    saldoInicial: -95000000,debeAcum:       0,  haberAcum: 95000000, variacion: 0,     estado: 'ok' },
+    { codigo: '4.1.01', cuenta: 'Ventas Azúcar',     saldoInicial: -131000000,debeAcum: 12000000, haberAcum: 143000000,variacion: 18.9,  estado: 'ok' },
+    { codigo: '4.1.02', cuenta: 'Ventas Alcohol',    saldoInicial: -62400000,debeAcum:  5400000, haberAcum: 67800000, variacion: 31.2,  estado: 'crit' },
+    { codigo: '5.1.01', cuenta: 'Costo Producción',  saldoInicial: 84500000, debeAcum: 98700000, haberAcum: 14200000, variacion: 7.3,   estado: 'ok' },
+    { codigo: '5.2.01', cuenta: 'Gs. Comercializ.',  saldoInicial: 16200000, debeAcum: 18300000, haberAcum:  2100000, variacion: 11.1,  estado: 'ok' },
+    { codigo: '5.3.01', cuenta: 'Gs. Administración',saldoInicial: 20300000, debeAcum: 24100000, haberAcum:  3800000, variacion: 5.6,   estado: 'ok' },
+    { codigo: '5.4.01', cuenta: 'Gs. Financieros',   saldoInicial: 8900000,  debeAcum:  9800000, haberAcum:   900000, variacion: 47.8,  estado: 'crit' },
   ],
   mayor: [
     { fecha:'2026-06-02', asiento:'A-00142', descripcion:'Cobro fact. 0001-00482 - Azúcar',      debe:12500000, haber:0,        cuenta:'1.1.01' },
@@ -1570,7 +1593,10 @@ function verMovimientos(codigo, cuenta) {
   document.getElementById('modal-title').textContent = 'Movimientos: ' + codigo + ' - ' + (cuenta || '');
   document.getElementById('movimientos-loading').style.display = '';
   document.getElementById('movimientos-content').style.display = 'none';
+  document.getElementById('movimientos-filtros').style.display = 'none';
   document.getElementById('movimientos-error').style.display = 'none';
+  // Limpiar filtros anteriores
+  limpiarFiltrosMovimientos();
   modal.show();
   var url = (CONFIG.nodeRedUrl || '').replace('/api/sumas-saldos', '/api/sumas-saldos/movimientos') + '?codigo=' + encodeURIComponent(codigo.trim());
   if (!CONFIG.nodeRedUrl) { url = CONFIG.dbUrl.replace('/query', '/movimientos') + '?codigo=' + encodeURIComponent(codigo.trim()); }
@@ -1584,6 +1610,7 @@ function verMovimientos(codigo, cuenta) {
         return;
       }
       document.getElementById('movimientos-content').style.display = '';
+      document.getElementById('movimientos-filtros').style.display = '';
       var tbody = document.getElementById('movimientos-body');
       tbody.innerHTML = '';
       data.movimientos.forEach(function(m){
@@ -1607,6 +1634,49 @@ function verMovimientos(codigo, cuenta) {
       document.getElementById('movimientos-error').style.display = '';
       document.getElementById('movimientos-error').textContent = 'Error: ' + err.message;
     });
+}
+
+/* ════════════════════════════════════════════════
+   FILTROS EN MODAL DE MOVIMIENTOS
+════════════════════════════════════════════════ */
+function filtrarMovimientos() {
+  var fecha = (document.getElementById('filtro-fecha').value || '').toLowerCase().trim();
+  var asiento = (document.getElementById('filtro-asiento').value || '').toLowerCase().trim();
+  var descripcion = (document.getElementById('filtro-descripcion').value || '').toLowerCase().trim();
+  var proveedor = (document.getElementById('filtro-proveedor').value || '').toLowerCase().trim();
+
+  var rows = document.querySelectorAll('#movimientos-body tr');
+  var visible = 0;
+  rows.forEach(function(row){
+    var text = row.textContent.toLowerCase();
+    var match = true;
+    if (fecha && text.indexOf(fecha) === -1) match = false;
+    if (asiento && text.indexOf(asiento) === -1) match = false;
+    if (descripcion && text.indexOf(descripcion) === -1) match = false;
+    if (proveedor && text.indexOf(proveedor) === -1) match = false;
+    row.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+
+  var countEl = document.getElementById('mov-count');
+  var algunFiltro = fecha || asiento || descripcion || proveedor;
+  if (countEl && algunFiltro) {
+    countEl.textContent = visible + ' (filtrado)';
+    countEl.style.color = 'var(--accent-blue)';
+  } else if (countEl) {
+    countEl.style.color = '';
+  }
+}
+
+function limpiarFiltrosMovimientos() {
+  document.getElementById('filtro-fecha').value = '';
+  document.getElementById('filtro-asiento').value = '';
+  document.getElementById('filtro-descripcion').value = '';
+  document.getElementById('filtro-proveedor').value = '';
+  var rows = document.querySelectorAll('#movimientos-body tr');
+  rows.forEach(function(row){ row.style.display = ''; });
+  var countEl = document.getElementById('mov-count');
+  if (countEl) countEl.style.color = '';
 }
 
 /* ════════════════════════════════════════════════
@@ -1661,7 +1731,7 @@ async function loadFromNodeRED() {
   // Estados de carga
   document.getElementById('upload-label').textContent = 'Consultando...';
   document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3>Consultando Calipso... 🔄</h3><p>Esperando respuesta del servidor</p></div></td></tr>';
-  document.getElementById('ss-body').innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3>Consultando...</h3></div></td></tr>';
+  document.getElementById('ss-body').innerHTML = '<tr><td colspan="9"><div class="empty-state"><h3>Consultando...</h3></div></td></tr>';
   document.getElementById('kpi-saldo-total').textContent = '···';
   document.getElementById('kpi-crit-count').textContent = '···';
   document.getElementById('kpi-alert-count').textContent = '···';
@@ -1673,7 +1743,7 @@ async function loadFromNodeRED() {
       console.warn('Node-RED error:', err);
       document.getElementById('upload-label').textContent = 'Error Node-RED';
       document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3 style="color:var(--accent-red);">⚠ Error de conexión</h3><p>' + (err.error || 'No se pudo conectar con Node-RED') + '</p><p style="font-size:11px;margin-top:8px;">Verificá que Node-RED esté corriendo en 192.168.0.23:1880</p></div></td></tr>';
-      document.getElementById('ss-body').innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3 style="color:var(--accent-red);">Sin datos</h3></div></td></tr>';
+      document.getElementById('ss-body').innerHTML = '<tr><td colspan="9"><div class="empty-state"><h3 style="color:var(--accent-red);">Sin datos</h3></div></td></tr>';
       document.getElementById('kpi-saldo-total').textContent = '—';
       document.getElementById('kpi-crit-count').textContent = '—';
       document.getElementById('kpi-alert-count').textContent = '—';
@@ -1781,6 +1851,7 @@ function mapCSVToState(rows) {
   const parsed = rows.map(r => ({
     codigo:     find(r,'codigo','code','cta'),
     cuenta:     find(r,'cuenta','nombre','name','description'),
+    saldoInicial: parseFloat(find(r,'saldoinicial','inicial','sdoini')) || 0,
     debeAcum:   parseFloat(find(r,'debe','debeacum','debito')) || 0,
     haberAcum:  parseFloat(find(r,'haber','haberacum','credito')) || 0,
     variacion:  parseFloat(find(r,'variacion','var','change')) || 0,
@@ -1881,6 +1952,7 @@ function renderSumasSaldos() {
     <tr>
       <td class="code"><a href="#" onclick="verMovimientos(\'' + r.codigo + '\',\'' + r.cuenta + '\');return false;" style="color:var(--accent-blue);text-decoration:none;">${r.codigo}</a></td>
       <td>${r.cuenta}</td>
+      <td class="num" style="color:${(r.saldoInicial || 0) >= 0 ? 'var(--text-primary)' : 'var(--accent-red)'}">${fmtMoney(r.saldoInicial)}</td>
       <td class="num">${fmtMoney(r.debeAcum)}</td>
       <td class="num">${fmtMoney(r.haberAcum)}</td>
       <td class="num">${fmtMoney(Math.max(0, r.debeAcum - r.haberAcum))}</td>
@@ -1904,18 +1976,46 @@ function renderMayor(cuenta) {
   const items = STATE.data.mayor || [];
   const filtered = cuenta ? items.filter(r => r.cuenta === cuenta) : items;
   const tbody = document.getElementById('mayor-body');
-  let saldoAcc = 0;
-  tbody.innerHTML = filtered.map(r => {
+
+  // Obtener saldo inicial desde STATE.data.sumasSaldos
+  var saldoInicial = 0;
+  if (cuenta && STATE.data.sumasSaldos) {
+    var match = STATE.data.sumasSaldos.find(function(r){ return r.codigo === cuenta; });
+    if (match) saldoInicial = match.saldoInicial || 0;
+  }
+
+  // Fecha de inicio formateada
+  var sd = document.getElementById('startDate').value || '20260601';
+  var startDateFormatted = sd.replace(/-/g, '');
+  var fechaFormateada = fmtDate(startDateFormatted);
+
+  var html = '';
+
+  // Primera fila: Saldo Inicial (destacada)
+  html += '<tr style="background:var(--corona-green-light);">' +
+    '<td class="code" style="color:var(--text-muted);">—</td>' +
+    '<td class="code" style="color:var(--text-muted);">—</td>' +
+    '<td><em style="color:var(--corona-green-dark);">Saldo Inicial al ' + fechaFormateada + '</em></td>' +
+    '<td class="num">—</td>' +
+    '<td class="num">—</td>' +
+    '<td class="num"><strong style="color:' + (saldoInicial >= 0 ? 'var(--corona-green-dark)' : 'var(--accent-red)') + '">' + fmtMoney(saldoInicial) + '</strong></td>' +
+    '</tr>';
+
+  // Movimientos con saldo acumulado desde el inicial
+  var saldoAcc = saldoInicial;
+  html += filtered.map(function(r){
     saldoAcc += (r.debe || 0) - (r.haber || 0);
-    return `<tr>
-      <td class="code">${fmtDate(r.fecha)}</td>
-      <td class="code">${r.asiento}</td>
-      <td>${r.descripcion}</td>
-      <td class="num">${r.debe ? fmtMoney(r.debe) : '—'}</td>
-      <td class="num">${r.haber ? fmtMoney(r.haber) : '—'}</td>
-      <td class="num"><strong style="color:${saldoAcc>=0?'var(--corona-green-dark)':'var(--accent-red)'}">${fmtMoney(saldoAcc)}</strong></td>
-    </tr>`;
+    return '<tr>' +
+      '<td class="code">' + fmtDate(r.fecha) + '</td>' +
+      '<td class="code">' + (r.asiento || '') + '</td>' +
+      '<td>' + (r.descripcion || '') + '</td>' +
+      '<td class="num">' + (r.debe ? fmtMoney(r.debe) : '—') + '</td>' +
+      '<td class="num">' + (r.haber ? fmtMoney(r.haber) : '—') + '</td>' +
+      '<td class="num"><strong style="color:' + (saldoAcc >= 0 ? 'var(--corona-green-dark)' : 'var(--accent-red)') + '">' + fmtMoney(saldoAcc) + '</strong></td>' +
+      '</tr>';
   }).join('');
+
+  tbody.innerHTML = html || '<tr><td colspan="6"><div class="empty-state"><h3>Sin movimientos</h3></div></td></tr>';
 
   // Populate select
   const sel = document.getElementById('select-cuenta');
