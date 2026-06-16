@@ -69,3 +69,23 @@ Referencia metodológica: Asistente de Propuesta de Pago (funcional).
 
 ## Priorización
 Alto impacto en: ahorro de tiempo · reducción de errores · trazabilidad · mantenibilidad · compatibilidad · escalabilidad hacia agentes.
+
+## Regla de prioridad sobre contexto
+
+Usa el máximo contexto relevante disponible para responder con profundidad técnica y coherencia. No ahorres tokens si eso reduce la calidad de la solución.
+
+### Compactado automático previo a `/clear`
+
+Cuando el contexto de una sesión larga empiece a saturarse, o cuando el usuario indique que va a ejecutar `/clear`, hacé SIEMPRE un **compactado técnico de continuidad** antes de sugerir o ejecutar el clear. El compactado se graba en `/mnt/c/claudecode/.claude/continuidad/` como un archivo Markdown fechado (`continuidad_YYYY-MM-DD.md`).
+
+**Contenido mínimo del compactado:**
+- Decisiones técnicas tomadas en la sesión (qué, por qué, qué se descartó)
+- Archivos modificados o creados (paths, no contenido completo)
+- Próximos pasos inmediatos (3-5 bullets) con referencias a archivos/vistas/endpoints
+- Deuda técnica o riesgos identificados pendientes
+- Links a memories relevantes si aplica
+
+**Reglas:**
+- El compactado se escribe a disco — no solo se narra en chat
+- Si el usuario ejecuta `/clear` por comando local y no tuviste oportunidad de compactar, avisale apenas retome la sesión que no se hizo compactado y ofrecé hacerlo con lo que recuerdes
+- Un solo archivo por sesión, se sobrescribe si ya existe uno del mismo día
