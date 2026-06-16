@@ -1,0 +1,624 @@
+[
+    {
+        "id": "7196670c40d6f36b",
+        "type": "http in",
+        "z": "04ba753f2016138f",
+        "name": "GET /api/despachos/health",
+        "url": "/api/despachos/health",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "d0a280907f8e6dc3"
+            ]
+        ]
+    },
+    {
+        "id": "e6c1e8ea53a85f1e",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "Format health + SQL info",
+        "func": "var sqlInfo = (msg.payload || [])[0] || {};\nmsg.payload = {\n  status: 'ok',\n  service: 'despachos-pendientes',\n  timestamp: new Date().toISOString(),\n  version: '0.1.0',\n  sql: {\n    server: sqlInfo.server_name || 'n/a',\n    database: sqlInfo.db_name || 'n/a',\n    user: sqlInfo.login_user || 'n/a',\n    serverTime: sqlInfo.server_time || 'n/a'\n  }\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 770,
+        "y": 80,
+        "wires": [
+            [
+                "ae04d17fe631d2a3"
+            ]
+        ]
+    },
+    {
+        "id": "ae04d17fe631d2a3",
+        "type": "http response",
+        "z": "04ba753f2016138f",
+        "name": "Response",
+        "statusCode": "",
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        },
+        "x": 980,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "97920f8f8b5f1a76",
+        "type": "http in",
+        "z": "04ba753f2016138f",
+        "name": "GET /api/despachos/pendientes",
+        "url": "/api/despachos/pendientes",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 180,
+        "wires": [
+            [
+                "34dd3d1e852436b0"
+            ]
+        ]
+    },
+    {
+        "id": "621f5b010ca15992",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "3. Transformar formato",
+        "func": "var rows = msg.payload || [];\nvar uuid = msg._trace ? msg._trace.uuid : 'N/A';\nvar days = msg._trace ? msg._trace.days : 30;\n\n// Agrupar items por remito\nvar remitos = {};\nvar clientesSet = {};\n\nrows.forEach(function(row) {\n  var key = row.remito;\n  if (!remitos[key]) {\n    remitos[key] = {\n      remito: row.remito,\n      fecha: row.fecha,\n      cliente: row.cliente,\n      cuit: row.cuit,\n      domicilio: row.domicilio,\n      localidad: row.localidad,\n      provincia: row.provincia,\n      transportista: row.transportista ? row.transportista.trim() : '',\n      chofer: row.chofer ? row.chofer.trim() : '',\n      patente: row.patente ? row.patente.trim() : '',\n      chasis: row.chasis ? row.chasis.trim() : '',\n      guia: row.guia,\n      usuario: row.usuario,\n      creado: row.creado,\n      observaciones: row.observaciones,\n      destino: row.destino,\n      items: [],\n      totalItems: 0,\n      totalImporte: 0\n    };\n  }\n  \n  remitos[key].items.push({\n    orden: row.orden,\n    producto: row.producto,\n    cantidad: row.cantidad,\n    unidad: row.unidad,\n    cantidad2: row.cantidad2,\n    precio: row.precio,\n    total: (row.cantidad || 0) * (row.precio || 0)\n  });\n  \n  remitos[key].totalItems++;\n  remitos[key].totalImporte += (row.cantidad || 0) * (row.precio || 0);\n  clientesSet[row.cliente] = true;\n});\n\n// Calcular resumen\nvar data = Object.keys(remitos).map(function(key) {\n  var r = remitos[key];\n  var firstItem = r.items[0] || {};\n  return {\n    remito: r.remito,\n    fecha: r.fecha,\n    cliente: r.cliente,\n    cuit: r.cuit,\n    destino: r.localidad ? r.localidad + (r.provincia ? ', ' + r.provincia : '') : '-',\n    producto: firstItem.producto,\n    cantidad: firstItem.cantidad,\n    unidad: firstItem.unidad,\n    cantidad2: firstItem.cantidad2,\n    precio: firstItem.precio,\n    totalItem: firstItem.total,\n    totalImporte: r.totalImporte,\n    itemsCount: r.totalItems,\n    transportista: r.transportista,\n    chofer: r.chofer,\n    patente: r.patente,\n    chasis: r.chasis,\n    guia: r.guia,\n    observaciones: r.observaciones\n  };\n});\n\n// Resumen\nvar totalBolsas = 0, totalToneladas = 0, totalImporte = 0;\nvar prodCounts = {};\ndata.forEach(function(item) {\n  totalImporte += item.totalImporte || 0;\n  if (item.unidad === 'Bolsa' || item.unidad === 'Bolsa(s)') totalBolsas += item.cantidad || 0;\n  if (item.unidad === 'Tonelada' || item.unidad === 'TN') totalToneladas += item.cantidad2 || 0;\n  prodCounts[item.producto] = (prodCounts[item.producto] || 0) + 1;\n});\n\nmsg.payload = {\n  metadata: {\n    runUuid: uuid,\n    timestamp: new Date().toISOString(),\n    source: 'CORONA.pr_ezi_remitos',\n    filterDays: days\n  },\n  resumen: {\n    totalRemitos: data.length,\n    totalClientes: Object.keys(clientesSet).length,\n    totalBolsas: totalBolsas,\n    totalToneladas: totalToneladas,\n    totalImporte: totalImporte,\n    productos: prodCounts\n  },\n  data: data\n};\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 780,
+        "y": 180,
+        "wires": [
+            [
+                "11c22daa961f6293"
+            ]
+        ]
+    },
+    {
+        "id": "11c22daa961f6293",
+        "type": "http response",
+        "z": "04ba753f2016138f",
+        "name": "Response",
+        "statusCode": "",
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        },
+        "x": 980,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "1b93e36219fb97e7",
+        "type": "http in",
+        "z": "04ba753f2016138f",
+        "name": "GET /api/despachos/pendientes/:remito",
+        "url": "/api/despachos/pendientes/:remito",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 300,
+        "wires": [
+            [
+                "d185107af474806d"
+            ]
+        ]
+    },
+    {
+        "id": "e2c72421cbee4219",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "3. Ensamblar detalle",
+        "func": "var rows = msg.payload || [];\nif (!rows.length) {\n  msg.statusCode = 404;\n  msg.payload = { error: 'Remito no encontrado' };\n  return msg;\n}\n\nvar first = rows[0];\nvar detalle = {\n  remito: first.remito,\n  fecha: first.fecha,\n  cliente: first.razonsocial,\n  cuit: first.cuit,\n  domicilio: first.domicilio,\n  localidad: first.localidad,\n  provincia: first.provincia,\n  destino: first.destino,\n  transportista: first.transportista ? first.transportista.trim() : '',\n  chofer: first.chofer ? first.chofer.trim() : '',\n  dniChofer: first.dniChofer || first.dni || '',\n  patente: first.patente ? first.patente.trim() : '',\n  chasis: first.chasis ? first.chasis.trim() : '',\n  guia: first.numero_pesada,\n  usuario: first.usuario,\n  creado: first.creado,\n  observaciones: first.observaciones,\n  factura: first.factura,\n  items: [],\n  totalImporte: 0\n};\n\nrows.forEach(function(row) {\n  var total = (row.cantidad || 0) * (row.precio || 0);\n  detalle.items.push({\n    orden: row.orden,\n    producto: row.producto,\n    cantidad: row.cantidad,\n    unidad: row.unidad,\n    cantidad2: row.cantidad2,\n    precio: row.precio,\n    total: total\n  });\n  detalle.totalImporte += total;\n});\n\nmsg.payload = detalle;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 790,
+        "y": 300,
+        "wires": [
+            [
+                "2e4bc782dd037ed3"
+            ]
+        ]
+    },
+    {
+        "id": "2e4bc782dd037ed3",
+        "type": "http response",
+        "z": "04ba753f2016138f",
+        "name": "Response",
+        "statusCode": "",
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        },
+        "x": 980,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "dda2fa7d7c1dae65",
+        "type": "http in",
+        "z": "04ba753f2016138f",
+        "name": "POST /api/despachos/pendientes/:remito/facturar",
+        "url": "/api/despachos/pendientes/:remito/facturar",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 420,
+        "wires": [
+            [
+                "187962d2f97efae0"
+            ]
+        ]
+    },
+    {
+        "id": "187962d2f97efae0",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "1. Validar y autorizar",
+        "func": "var remito = msg.req.params.remito;\nvar factura = msg.req.body ? msg.req.body.factura : null;\n\nif (!remito) {\n  msg.statusCode = 400;\n  msg.payload = { success: false, error: 'Falta parámetro remito' };\n  return msg;\n}\n\nif (!factura || factura.trim() === '') {\n  msg.statusCode = 400;\n  msg.payload = { success: false, error: 'Falta número de factura' };\n  return msg;\n}\n\nmsg._trace = { remito: remito, factura: factura.trim() };\n// TODO: migrar a SP pr_ezi_vincular_factura para cumplir regla de middleware ERP\nmsg.payload = \"UPDATE pr_ezi_remitos SET factura = '\" +\n  factura.trim().replace(/'/g, \"''\") +\n  \"' WHERE remito = '\" + remito.replace(/'/g, \"''\") +\n  \"' AND factura IS NULL\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 440,
+        "y": 420,
+        "wires": [
+            [
+                "85fd77a021724d6e"
+            ]
+        ]
+    },
+    {
+        "id": "b40c9a75ee302994",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "3. Resultado",
+        "func": "var rowsAffected = 0;\nif (msg.payload && msg.payload.rowsAffected) {\n  rowsAffected = Array.isArray(msg.payload.rowsAffected) ? msg.payload.rowsAffected[0] : msg.payload.rowsAffected;\n} else if (Array.isArray(msg.payload)) {\n  rowsAffected = msg.payload.length;\n}\n\nif (rowsAffected > 0) {\n  node.warn('[Despachos] Factura ' + msg._trace.factura + ' vinculada a remito ' + msg._trace.remito);\n  msg.payload = { success: true, remito: msg._trace.remito, factura: msg._trace.factura };\n} else {\n  msg.statusCode = 409;\n  msg.payload = { success: false, error: 'El remito ya tiene factura o no existe' };\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 790,
+        "y": 420,
+        "wires": [
+            [
+                "fc06eb4ebfdc08c4"
+            ]
+        ]
+    },
+    {
+        "id": "fc06eb4ebfdc08c4",
+        "type": "http response",
+        "z": "04ba753f2016138f",
+        "name": "Response",
+        "statusCode": "",
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        },
+        "x": 980,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "dfe5769aba4d904b",
+        "type": "http in",
+        "z": "04ba753f2016138f",
+        "name": "GET /api/despachos/resumen",
+        "url": "/api/despachos/resumen",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 540,
+        "wires": [
+            [
+                "6ea1f3e27ae8479d"
+            ]
+        ]
+    },
+    {
+        "id": "6ea1f3e27ae8479d",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "1. Param resumen",
+        "func": "var days = parseInt(msg.req.query.days) || 30;\nif (days < 1) days = 1;\nif (days > 365) days = 365;\n\nmsg._trace = { days: days };\n\nmsg.payload = \"SELECT \" +\n  \"COUNT(DISTINCT pr.remito) AS totalRemitos, \" +\n  \"COUNT(DISTINCT pr.razonsocial) AS totalClientes, \" +\n  \"SUM(CASE WHEN pi.unidamedida2 = 'Bolsa' OR pi.unidamedida2 = 'Bolsa(s)' THEN pi.cantidad ELSE 0 END) AS totalBolsas, \" +\n  \"SUM(CASE WHEN pi.unidamedida2 = 'Tonelada' OR pi.unidamedida2 = 'TN' THEN pi.cantidad2 ELSE 0 END) AS totalToneladas, \" +\n  \"SUM(pi.cantidad * pi.precio) AS totalImporte, \" +\n  \"COUNT(DISTINCT pi.descripcion) AS totalProductos \" +\n  \"FROM pr_ezi_remitos pr \" +\n  \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \" +\n  \"WHERE pr.factura IS NULL \" +\n  \"AND pr.fecha >= DATEADD(DAY, -\" + days + \", GETDATE())\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 540,
+        "wires": [
+            [
+                "b088f30f6eed3946"
+            ]
+        ]
+    },
+    {
+        "id": "67a4c302cb3333bd",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "3. KPIs + productos",
+        "func": "// Guardar el resultado de la consulta anterior (totales) antes de pisar payload\nmsg.payload2 = msg.payload;\n\n// Armar la segunda consulta: conteo por producto\nmsg.payload = \"SELECT pi.descripcion AS producto, COUNT(DISTINCT pr.remito) AS cantidad \" +\n  \"FROM pr_ezi_remitos pr \" +\n  \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \" +\n  \"WHERE pr.factura IS NULL \" +\n  \"AND pr.fecha >= DATEADD(DAY, -\" + msg._trace.days + \", GETDATE()) \" +\n  \"GROUP BY pi.descripcion ORDER BY cantidad DESC\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 770,
+        "y": 540,
+        "wires": [
+            [
+                "afc7afd5609b2c0e"
+            ]
+        ]
+    },
+    {
+        "id": "208a0d528ded4e4e",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "4. Ensamblar resumen",
+        "func": "var row = (msg.payload2 || [])[0] || {};\nvar productos = (msg.payload || []).reduce(function(acc, p) {\n  acc[p.producto] = p.cantidad;\n  return acc;\n}, {});\n\nmsg.payload = {\n  totalRemitos: row.totalRemitos || 0,\n  totalClientes: row.totalClientes || 0,\n  totalBolsas: row.totalBolsas || 0,\n  totalToneladas: row.totalToneladas || 0,\n  totalImporte: row.totalImporte || 0,\n  productos: productos\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 980,
+        "y": 540,
+        "wires": [
+            [
+                "97cb5fe1d61e94af"
+            ]
+        ]
+    },
+    {
+        "id": "97cb5fe1d61e94af",
+        "type": "http response",
+        "z": "04ba753f2016138f",
+        "name": "Response",
+        "statusCode": "",
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        },
+        "x": 1170,
+        "y": 570,
+        "wires": []
+    },
+    {
+        "id": "9892a3acf67cf4ba",
+        "type": "http in",
+        "z": "04ba753f2016138f",
+        "name": "GET /despachos-pendientes",
+        "url": "/despachos-pendientes",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 700,
+        "wires": [
+            [
+                "049249f3870dc77f"
+            ]
+        ]
+    },
+    {
+        "id": "049249f3870dc77f",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "Servir HTML vía template",
+        "func": "var html = '<!DOCTYPE html>\\n<html lang=\"es\">\\n<head>\\n<meta charset=\"UTF-8\">\\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\\n<title>Despachos Pendientes</title>\\n<style>\\n*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}\\nbody{padding:20px;background:#f1f5f9;color:#1e293b}\\nh1{margin-bottom:16px}\\ntable{width:100%;border-collapse:collapse;background:white;box-shadow:0 1px 3px rgba(0,0,0,.1)}\\nth,td{border:1px solid #e2e8f0;padding:8px 10px;font-size:13px;text-align:left}\\nth{background:#f8fafc}\\ntr:hover td{background:#f8fafc}\\n.text-end{text-align:right}\\n#status{margin-bottom:12px;font-size:13px;color:#64748b}\\n.error{color:#dc2626;white-space:pre-wrap;background:#fee2e2;padding:10px;border-radius:6px}\\n</style>\\n</head>\\n<body>\\n<h1>Despachos Pendientes</h1>\\n<div id=\"status\">Cargando despachos...</div>\\n<div id=\"contenido\"></div>\\n<script>\\nasync function cargarDatos(){\\n  var status=document.getElementById(\"status\");\\n  var cont=document.getElementById(\"contenido\");\\n  status.textContent=\"Cargando despachos...\";\\n  cont.innerHTML=\"\";\\n  try{\\n    var r=await fetch(\"/api/despachos/pendientes\");\\n    var text=await r.text();\\n    if(!r.ok){\\n      status.innerHTML=\"<div class=\\\\\"error\\\\\">HTTP \"+r.status+\"\\\\n\"+text+\"</div>\";\\n      return;\\n    }\\n    var d=JSON.parse(text);\\n    var data=d.data||[];\\n    if(!data.length){\\n      status.textContent=\"No se encontraron remitos pendientes\";\\n      return;\\n    }\\n    status.textContent=data.length+\" remitos pendientes\";\\n    var html=\"<table><thead><tr><th>Remito</th><th>Fecha</th><th>Cliente</th><th>Producto</th><th class=\\\\\"text-end\\\\\">Cantidad</th><th>Unidad</th><th class=\\\\\"text-end\\\\\">Precio</th><th class=\\\\\"text-end\\\\\">Total</th><th>Transportista</th></tr></thead><tbody>\";\\n    data.forEach(function(i){\\n      html+=\"<tr><td>\"+(i.remito||\"\")+\"</td><td>\"+(i.fecha||\"\")+\"</td><td>\"+(i.cliente||\"\")+\"</td><td>\"+(i.producto||\"\")+\"</td><td class=\\\\\"text-end\\\\\">\"+(i.cantidad!=null?i.cantidad:\"\")+\"</td><td>\"+(i.unidad||\"\")+\"</td><td class=\\\\\"text-end\\\\\">\"+(i.precio!=null?i.precio:\"\")+\"</td><td class=\\\\\"text-end\\\\\">\"+(i.totalItem!=null?i.totalItem:\"\")+\"</td><td>\"+(i.transportista||\"\")+\"</td></tr>\";\\n    });\\n    html+=\"</tbody></table>\";\\n    cont.innerHTML=html;\\n  }catch(e){\\n    status.innerHTML=\"<div class=\\\\\"error\\\\\">Error JS: \"+e.message+\"</div>\";\\n  }\\n}\\ncargarDatos();\\n</script>\\n</body>\\n</html>';\nmsg.payload = html;\nmsg.statusCode = 200;\nmsg.headers = { 'Content-Type': 'text/html; charset=utf-8' };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 370,
+        "y": 700,
+        "wires": [
+            [
+                "dcd56ed0bc854a29"
+            ]
+        ]
+    },
+    {
+        "id": "dcd56ed0bc854a29",
+        "type": "http response",
+        "z": "04ba753f2016138f",
+        "name": "Response HTML",
+        "statusCode": "",
+        "headers": {},
+        "x": 580,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "f9c1e2a3b4d5e6f7",
+        "type": "catch",
+        "z": "04ba753f2016138f",
+        "name": "Catch errores SQL/flow",
+        "scope": null,
+        "uncaught": false,
+        "x": 150,
+        "y": 640,
+        "wires": [
+            [
+                "83762909d817da4c"
+            ]
+        ]
+    },
+    {
+        "id": "83762909d817da4c",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "Error handler",
+        "func": "msg.statusCode = msg.statusCode || 500;\nvar errMsg = (msg.payload && msg.payload.error) ? msg.payload.error : (msg.error && msg.error.message) ? msg.error.message : 'Error interno del servidor';\nmsg.payload = {\n  error: errMsg,\n  code: msg.statusCode\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 640,
+        "wires": [
+            [
+                "6135e1d738772b95"
+            ]
+        ]
+    },
+    {
+        "id": "6135e1d738772b95",
+        "type": "http response",
+        "z": "04ba753f2016138f",
+        "name": "Error Response",
+        "statusCode": "",
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        },
+        "x": 560,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "34dd3d1e852436b0",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "1. Despachos pendientes",
+        "func": "// Preparar fechas, UUID y ambas queries\nvar now = new Date();\nvar y = now.getFullYear();\nvar m = String(now.getMonth() + 1).padStart(2, '0');\nvar lastDay = new Date(y, now.getMonth() + 1, 0).getDate();\n\nvar sQuery = `SELECT TOP 50\tpr.remito, pr.fecha, pr.razonsocial AS cliente, pr.cuit, pr.domicilio, pr.localidad, pr.provincia,\n              pr.transportista, pr.chofer, pr.patente, pr.chasis,pr.numero_pesada AS guia, pr.usuario, pr.creado, pr.observaciones,\n              pr.destino, pi.descripcion AS producto, pi.cantidad,pi.unidamedida2 AS unidad, pi.cantidad2, pi.precio, pi.orden\n              FROM pr_ezi_remitos pr \n              INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito\n              WHERE pr.factura IS NULL\n              ORDER BY pr.fecha DESC, pr.remito DESC, pi.orden DESC;\n`;\n// ` `;\n\n\n\n\n// msg1 → wire[0] = SumasSaldos\nmsg.payload = sQuery;\n\nreturn [msg];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 180,
+        "wires": [
+            [
+                "b6ca19b4ef99cdbf"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b6ca19b4ef99cdbf",
+        "type": "MSSQL",
+        "z": "04ba753f2016138f",
+        "mssqlCN": "6814eb4bb7e82ddb",
+        "name": "MSSQL",
+        "outField": "payload",
+        "returnType": "0",
+        "throwErrors": 1,
+        "query": "SELECT 1 AS placeholder",
+        "modeOpt": "",
+        "modeOptType": "query",
+        "queryOpt": "payload",
+        "queryOptType": "msg",
+        "paramsOpt": "queryParams",
+        "paramsOptType": "msg",
+        "rows": "",
+        "rowsType": "msg",
+        "parseMustache": true,
+        "params": [],
+        "x": 580,
+        "y": 180,
+        "wires": [
+            [
+                "621f5b010ca15992"
+            ]
+        ]
+    },
+    {
+        "id": "8361a825ddcedfcd",
+        "type": "MSSQL",
+        "z": "04ba753f2016138f",
+        "mssqlCN": "6814eb4bb7e82ddb",
+        "name": "MSSQL",
+        "outField": "payload",
+        "returnType": "0",
+        "throwErrors": 1,
+        "query": "SELECT 1 AS placeholder",
+        "modeOpt": "",
+        "modeOptType": "query",
+        "queryOpt": "payload",
+        "queryOptType": "msg",
+        "paramsOpt": "queryParams",
+        "paramsOptType": "msg",
+        "rows": "",
+        "rowsType": "msg",
+        "parseMustache": true,
+        "params": [],
+        "x": 560,
+        "y": 80,
+        "wires": [
+            [
+                "e6c1e8ea53a85f1e"
+            ]
+        ]
+    },
+    {
+        "id": "0c7dd2e855814ad6",
+        "type": "MSSQL",
+        "z": "04ba753f2016138f",
+        "mssqlCN": "6814eb4bb7e82ddb",
+        "name": "MSSQL",
+        "outField": "payload",
+        "returnType": "0",
+        "throwErrors": 1,
+        "query": "SELECT 1 AS placeholder",
+        "modeOpt": "",
+        "modeOptType": "query",
+        "queryOpt": "payload",
+        "queryOptType": "msg",
+        "paramsOpt": "queryParams",
+        "paramsOptType": "msg",
+        "rows": "",
+        "rowsType": "msg",
+        "parseMustache": true,
+        "params": [],
+        "x": 580,
+        "y": 300,
+        "wires": [
+            [
+                "e2c72421cbee4219"
+            ]
+        ]
+    },
+    {
+        "id": "85fd77a021724d6e",
+        "type": "MSSQL",
+        "z": "04ba753f2016138f",
+        "mssqlCN": "6814eb4bb7e82ddb",
+        "name": "MSSQL",
+        "outField": "payload",
+        "returnType": "2",
+        "throwErrors": 1,
+        "query": "SELECT 1 AS placeholder",
+        "modeOpt": "",
+        "modeOptType": "query",
+        "queryOpt": "payload",
+        "queryOptType": "msg",
+        "paramsOpt": "queryParams",
+        "paramsOptType": "msg",
+        "rows": "",
+        "rowsType": "msg",
+        "parseMustache": true,
+        "params": [],
+        "x": 620,
+        "y": 420,
+        "wires": [
+            [
+                "b40c9a75ee302994"
+            ]
+        ]
+    },
+    {
+        "id": "b088f30f6eed3946",
+        "type": "MSSQL",
+        "z": "04ba753f2016138f",
+        "mssqlCN": "6814eb4bb7e82ddb",
+        "name": "MSSQL",
+        "outField": "payload",
+        "returnType": "0",
+        "throwErrors": 1,
+        "query": "SELECT 1 AS placeholder",
+        "modeOpt": "",
+        "modeOptType": "query",
+        "queryOpt": "payload",
+        "queryOptType": "msg",
+        "paramsOpt": "queryParams",
+        "paramsOptType": "msg",
+        "rows": "",
+        "rowsType": "msg",
+        "parseMustache": true,
+        "params": [],
+        "x": 560,
+        "y": 540,
+        "wires": [
+            [
+                "67a4c302cb3333bd"
+            ]
+        ]
+    },
+    {
+        "id": "d185107af474806d",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "remitos",
+        "func": "// Preparar fechas, UUID y ambas queries\nvar remito = msg.req.params.remito;\nvar now = new Date();\nvar y = now.getFullYear();\nvar m = String(now.getMonth() + 1).padStart(2, '0');\nvar lastDay = new Date(y, now.getMonth() + 1, 0).getDate();\n\nvar sQuery = `SELECT pr.*, pi.descripcion AS producto, pi.cantidad,pi.unidamedida2 AS unidad, pi.cantidad2, pi.precio, pi.orden \n              FROM pr_ezi_remitos pr\n              INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito\n              WHERE pr.remito = '`+ remito.replace(/'/g, \"''\") + `'`;\n\nmsg.payload = sQuery;\n\nreturn [msg];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 300,
+        "wires": [
+            [
+                "0c7dd2e855814ad6"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "afc7afd5609b2c0e",
+        "type": "MSSQL",
+        "z": "04ba753f2016138f",
+        "mssqlCN": "6814eb4bb7e82ddb",
+        "name": "MSSQL",
+        "outField": "payload",
+        "returnType": "0",
+        "throwErrors": 1,
+        "query": "SELECT 1 AS placeholder",
+        "modeOpt": "",
+        "modeOptType": "query",
+        "queryOpt": "payload",
+        "queryOptType": "msg",
+        "paramsOpt": "queryParams",
+        "paramsOptType": "msg",
+        "rows": "",
+        "rowsType": "msg",
+        "parseMustache": true,
+        "params": [],
+        "x": 860,
+        "y": 600,
+        "wires": [
+            [
+                "208a0d528ded4e4e"
+            ]
+        ]
+    },
+    {
+        "id": "d0a280907f8e6dc3",
+        "type": "function",
+        "z": "04ba753f2016138f",
+        "name": "Healt",
+        "func": "// Preparar fechas, UUID y ambas queries\nvar now = new Date();\nvar y = now.getFullYear();\nvar m = String(now.getMonth() + 1).padStart(2, '0');\nvar lastDay = new Date(y, now.getMonth() + 1, 0).getDate();\n\nvar sQuery = `SELECT @@SERVERNAME AS server_name, DB_NAME() AS db_name, SCHEMA_NAME() AS schema_name,\n                 SYSTEM_USER AS login_user, GETDATE() AS server_time;\n`;\n// ` `;\n\n\n\n\n// msg1 → wire[0] = SumasSaldos\nmsg.payload = sQuery;\n\nreturn [msg];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 40,
+        "wires": [
+            [
+                "8361a825ddcedfcd"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "6814eb4bb7e82ddb",
+        "type": "MSSQL-CN",
+        "tdsVersion": "7_3_B",
+        "name": "Calipso",
+        "server": "192.168.0.177",
+        "port": "1433",
+        "encyption": false,
+        "trustServerCertificate": false,
+        "database": "CORONA",
+        "useUTC": true,
+        "connectTimeout": "25000",
+        "requestTimeout": "25000",
+        "cancelTimeout": "80000",
+        "pool": "5",
+        "parseJSON": false,
+        "enableArithAbort": true,
+        "readOnlyIntent": false
+    }
+]

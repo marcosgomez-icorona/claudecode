@@ -13,6 +13,9 @@
         "filters": {
           "q": "has:attachment filename:pdf newer_than:30d",
           "readStatus": "unread"
+        },
+        "options": {
+          "maxResults": 30
         }
       },
       "id": "2c3fe1da-7b3c-4174-877d-5f1e70cf34ec",
