@@ -166,12 +166,12 @@
 
       <div class="card-section">
         <div class="card-header-custom"><span>Evolución Mensual</span></div>
-        <div style="padding:16px;"><canvas id="evolucion-chart" height="220"></canvas></div>
+        <div style="padding:16px;"><canvas id="evolutionChart" height="220"></canvas></div>
       </div>
 
       <div class="card-section">
         <div class="card-header-custom"><span>Distribución por Rubro</span></div>
-        <div style="padding:16px;"><canvas id="distribution-chart" height="200"></canvas></div>
+        <div style="padding:16px;"><canvas id="distributionChart" height="200"></canvas></div>
       </div>
     </div>
 
@@ -247,7 +247,14 @@
 
     <div id="section-alertas" class="section-view">
       <div class="card-section">
-        <div class="card-header-custom"><span>Alertas y Recomendaciones</span></div>
+        <div class="card-header-custom"><span>Alertas y Recomendaciones</span>
+          <select class="param-input" id="filter-alert-severity" onchange="filterAlertas(this.value)" style="width:150px;font-size:12px;">
+            <option value="">Todas</option>
+            <option value="critical">Críticas</option>
+            <option value="warning">Advertencias</option>
+            <option value="info">Informativas</option>
+          </select>
+        </div>
         <div id="alertas-body"></div>
       </div>
     </div>

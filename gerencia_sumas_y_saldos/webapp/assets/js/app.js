@@ -192,7 +192,12 @@ function getFilteredData() {
    INIT
 ════════════════════════════════════════════════ */
 (async function init() {
-  document.getElementById('uuid').textContent = crypto.randomUUID().slice(0,8).toUpperCase();
+  // UUID con fallback para navegadores que no soportan crypto.randomUUID()
+  try {
+    document.getElementById('uuid').textContent = crypto.randomUUID().slice(0,8).toUpperCase();
+  } catch(e) {
+    document.getElementById('uuid').textContent = Math.random().toString(36).substring(2,10).toUpperCase();
+  }
   document.getElementById('date-footer').textContent = new Date().toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
   document.getElementById('badge-period').textContent = 'Conectando...';
 

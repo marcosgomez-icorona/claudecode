@@ -113,11 +113,12 @@ async function loadFromAPI() {
     }
   } catch (e) {
     console.warn('loadFromAPI: ambos endpoints fallaron —', e.message);
-    document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3 style="color:var(--accent-red);">⚠ Sin conexión</h3><p>No se pudo conectar con Node-RED (primary ni fallback).</p><p style="font-size:11px;margin-top:8px;">Cargando datos demo para visualización offline.</p></div></td></tr>';
-    document.getElementById('ss-body').innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3 style="color:var(--accent-red);">Sin datos</h3></div></td></tr>';
-    document.getElementById('kpi-saldo-total').textContent = '—';
-    document.getElementById('kpi-crit-count').textContent = '—';
-    document.getElementById('kpi-alert-count').textContent = '—';
+    var el;
+    if (el = document.getElementById('top-accounts-body')) el.innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3 style="color:var(--accent-red);">⚠ Sin conexión</h3><p>No se pudo conectar con Node-RED (primary ni fallback).</p><p style="font-size:11px;margin-top:8px;">Cargando datos demo para visualización offline.</p></div></td></tr>';
+    if (el = document.getElementById('ss-body')) el.innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3 style="color:var(--accent-red);">Sin datos</h3></div></td></tr>';
+    if (el = document.getElementById('kpi-saldo-total')) el.textContent = '—';
+    if (el = document.getElementById('kpi-crit-count')) el.textContent = '—';
+    if (el = document.getElementById('kpi-alert-count')) el.textContent = '—';
     showToast('Sin conexión. Cargando datos demo.', 'err');
     loadMockData();
   }
