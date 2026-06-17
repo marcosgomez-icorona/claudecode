@@ -3,7 +3,7 @@
 const CONFIG = {
   criticalThreshold: 10_000_000,
   variationThreshold: 30,
-  startDate: '20260601',
+  startDate: '20250101',
   endDate: '20260630',
   currency: 'ARS',
   locale: 'es-AR',
