@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conciliación Bancaria | Bioenergía La Corona</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Config de backends (Cloud/LAN failover) -->
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    :root {
+      --corona-green: #1D9E75; --corona-green-dark: #0F6E56; --corona-green-light: #E1F5EE;
+      --accent-blue: #185FA5; --accent-red: #A32D2D; --accent-red-light: #FCEBEB;
+      --accent-amber: #BA7517; --accent-amber-light: #FAEEDA;
+      --surface: #FFFFFF; --surface-2: #F7F8FA; --surface-3: #F0F2F5;
+      --text-primary: #1A1D23; --text-secondary: #5A6170; --text-muted: #9BA3AF;
+      --border: rgba(0,0,0,0.08); --border-strong: rgba(0,0,0,0.15);
+      --font-sans: 'Inter', system-ui, sans-serif; --font-mono: 'JetBrains Mono', monospace;
+      --radius: 10px; --radius-lg: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); background: var(--surface-3); color: var(--text-primary); font-size: 14px; }
+    .app { display: flex; min-height: 100vh; }
+    .sidebar { width: 240px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
+    .sidebar-brand { padding: 20px; border-bottom: 1px solid var(--border); }
+    .brand-name { font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 10px; }
+    .brand-logo { width: 32px; height: 32px; background: var(--corona-green); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; }
+    .brand-sub { font-size: 11px; color: var(--text-muted); margin-left: 42px; }
+    .nav-section { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; padding: 16px 20px 6px; letter-spacing: .8px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 20px; color: var(--text-secondary); text-decoration: none; font-size: 13px; border-left: 2px solid transparent; cursor: pointer; }
+    .nav-item:hover { color: var(--corona-green-dark); background: var(--corona-green-light); }
+    .nav-item.active { color: var(--corona-green-dark); background: var(--corona-green-light); border-left-color: var(--corona-green); font-weight: 500; }
+    .sidebar-footer { margin-top: auto; padding: 16px 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted); }
+    .main { margin-left: 240px; flex: 1; display: flex; flex-direction: column; }
+    .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .topbar h1 { font-size: 16px; font-weight: 600; }
+    .topbar p { font-size: 12px; color: var(--text-muted); }
+    .badge-period { background: var(--corona-green-light); color: var(--corona-green-dark); font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 20px; font-family: var(--font-mono); }
+    .backend-indicator {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--surface-3);
+      color: var(--text-muted);
+    }
+    .btn { padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; }
+    .btn-primary { background: var(--corona-green); color: #fff; }
+    .btn-primary:hover { background: var(--corona-green-dark); }
+    .content { padding: 24px 28px; flex:1; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; position: relative; overflow: hidden; }
+    .kpi-card::before { content: ''; position: absolute; top:0; left:0; right:0; height:3px; }
+    .kpi-card.green::before { background: var(--corona-green); }
+    .kpi-card.amber::before { background: var(--accent-amber); }
+    .kpi-card.red::before { background: var(--accent-red); }
+    .kpi-card.blue::before { background: var(--accent-blue); }
+    .kpi-label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+    .kpi-value { font-size: 24px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+    .kpi-value.mono { font-family: var(--font-mono); font-size: 17px; }
+    .kpi-delta { font-size: 11px; color: var(--text-muted); }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 20px; overflow: hidden; }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+    .panel-title { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .panel-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--corona-green); }
+    .panel-body { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th { background: var(--surface-2); color: var(--text-muted); font-size: 10px; font-weight: 600; text-transform: uppercase; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    thead th.num { text-align: right; }
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:hover { background: var(--surface-2); }
+    tbody td { padding: 10px 14px; vertical-align: middle; }
+    tbody td.num { text-align: right; font-family: var(--font-mono); font-size: 12px; }
+    tbody td.code { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+    .badge-crit { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--accent-red-light); color: var(--accent-red); }
+    .badge-warn { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--accent-amber-light); color: var(--accent-amber); }
+    .badge-ok { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--corona-green-light); color: var(--corona-green-dark); }
+    .badge-crit::before { content: '●'; font-size: 8px; }
+    .badge-warn::before { content: '●'; font-size: 8px; }
+    .badge-ok::before { content: '●'; font-size: 8px; }
+    .pendiente-row-critica { background: #FFF5F5; border-left: 3px solid var(--accent-red); }
+    .pendiente-row-alta { background: #FFFBF0; border-left: 3px solid var(--accent-amber); }
+    .semaforo { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13px; }
+    .semaforo-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .empty { text-align: center; padding: 48px 20px; color: var(--text-muted); }
+    .empty h3 { font-size: 14px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
+    .empty p { font-size: 12px; }
+    .chart-wrap { padding: 20px; height: 260px; }
+    .section-view { display: none; }
+    .section-view.active { display: block; }
+    @media print { .sidebar { display: none; } .main { margin-left: 0; } }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-name"><span class="brand-logo">BLC</span>Bioenergía La Corona</div>
+      <div class="brand-sub">Tesorería · Conciliación</div>
+    </div>
+    <div class="nav-section">Conciliación</div>
+    <a class="nav-item active" onclick="showSection('resumen')">📊 Resumen Ejecutivo</a>
+    <a class="nav-item" onclick="showSection('pendientes')">⚠️ Pendientes</a>
+    <a class="nav-item" onclick="showSection('detalle')">🏦 Detalle Galicia</a>
+    <div class="nav-section">Reportes</div>
+    <a class="nav-item" onclick="showSection('gastos')">💰 Gastos Bancarios</a>
+    <div class="nav-section">Visualización</div>
+    <a class="nav-item" onclick="showSection('graficos')">📈 Gráficos</a>
+    <div class="sidebar-footer">
+      <div>Conciliación Bancaria v1.0</div>
+      <div style="margin-top:4px;">Bioenergía La Corona S.A.</div>
+    </div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <h1 id="section-title">Resumen Ejecutivo</h1>
+        <p id="section-desc">Conciliación Bancaria — Febrero 2026 | Banco Galicia</p>
+      </div>
+      <div class="topbar-actions">
+        <span <span class="backend-indicator" id="backend-indicator">🔴 Offline</span>
+        class="badge-period" id="period-badge">Feb 2026</span>
+        <button class="btn btn-primary" onclick="refreshAll()">🔄 Actualizar</button>
+      </div>
+    </div>
+    <div class="content">
+      <div id="section-resumen" class="section-view active">
+        <div class="kpi-grid" id="resumen-kpis"></div>
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title"><span class="dot"></span>Resumen por Banco</div></div>
+          <div class="panel-body"><table><thead><tr>
+            <th>Banco</th><th>Período</th><th class="num">Total Banco</th><th class="num">Total Calipso</th><th class="num">Diferencia</th><th>Estado</th><th class="num">Pendientes</th>
+          </tr></thead><tbody id="resumen-body"><tr><td colspan="7"><div class="empty"><h3>Cargando...</h3></div></td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div id="section-pendientes" class="section-view">
+        <div class="kpi-grid" id="pendientes-kpis"></div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="dot" style="background:var(--accent-red)"></span>Pendientes de Conciliación</div>
+            <div class="panel-tools">
+              <select class="panel-tool-btn" id="filter-pend-crit" onchange="renderPendientes()" style="padding:4px 8px;border-radius:6px;">
+                <option value="">Todas las criticidades</option>
+                <option value="CRITICA">🔴 Críticas</option>
+                <option value="ALTA">🟠 Altas</option>
+                <option value="MEDIA">🟡 Medias</option>
+              </select>
+            </div>
+          </div>
+          <div class="panel-body"><table><thead><tr>
+            <th>Banco</th><th>Fecha</th><th>Descripción</th><th>Origen</th><th class="num">Importe</th><th>Tipo</th><th>Criticidad</th><th>Observación</th>
+          </tr></thead><tbody id="pendientes-body"><tr><td colspan="8"><div class="empty"><h3>Cargando...</h3></div></td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div id="section-detalle" class="section-view">
+        <div class="kpi-grid" id="detalle-kpis"></div>
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title"><span class="dot" style="background:var(--accent-blue)"></span>Detalle Galicia — Febrero 2026</div></div>
+          <div class="panel-body"><table><thead><tr>
+            <th>Fecha</th><th>Tipo</th><th>Descripción</th><th class="num">Banco</th><th class="num">Calipso</th><th class="num">Dif</th><th>Estado</th>
+          </tr></thead><tbody id="detalle-body"><tr><td colspan="7"><div class="empty"><h3>Cargando...</h3></div></td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div id="section-gastos" class="section-view">
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title"><span class="dot" style="background:var(--accent-amber)"></span>Gastos Bancarios</div></div>
+          <div class="panel-body"><table><thead><tr>
+            <th>Fecha</th><th>Descripción</th><th>Tipo</th><th class="num">Importe</th><th>Estado</th>
+          </tr></thead><tbody id="gastos-body"><tr><td colspan="5"><div class="empty"><h3>Cargando...</h3></div></td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div id="section-graficos" class="section-view">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title"><span class="dot"></span>Distribución de Estados</div></div>
+            <div class="chart-wrap"><canvas id="chartEstados"></canvas></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title"><span class="dot" style="background:var(--accent-red)"></span>Pendientes por Criticidad</div></div>
+            <div class="chart-wrap"><canvas id="chartCriticidad"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+let ACTIVE_BACKEND = null;
+let ACTIVE_BACKEND_LABEL = '';
+let STATE = { resumen: null, pendientes: null, detalle: null };
+
+async function apiFetch(endpoint) {
+  for (const backend of CONFIG.backends) {
+    try {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), backend.timeout);
+      const res = await fetch(backend.url + endpoint, { signal: controller.signal });
+      clearTimeout(id);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      ACTIVE_BACKEND = backend.url;
+      ACTIVE_BACKEND_LABEL = backend.name;
+      return data;
+    } catch (e) {
+      console.warn('[Conciliacion] Backend ' + backend.name + ' no responde:', e.message);
+    }
+  }
+  throw new Error('Todos los backends fallaron - ' + endpoint);
+}
+let CHARTS = {};
+
+function fmt$(n) { if (n == null || isNaN(n)) return '—'; return '$ ' + Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 }); }
+function fmtFecha(s) { if (!s || s.length < 8) return s || '—'; return s.substring(6,8) + '/' + s.substring(4,6) + '/' + s.substring(0,4); }
+
+function updateBackendIndicator() {
+  var el = document.getElementById('backend-indicator');
+  if (!el) return;
+  if (ACTIVE_BACKEND_LABEL === 'Cloud') {
+    el.innerHTML = '🟢 Cloud';
+    el.style.color = 'var(--corona-green-dark)';
+    el.style.background = 'var(--corona-green-light)';
+  } else if (ACTIVE_BACKEND_LABEL === 'LAN') {
+    el.innerHTML = '🟡 LAN';
+    el.style.color = 'var(--accent-amber)';
+    el.style.background = 'var(--accent-amber-light)';
+  } else {
+    el.innerHTML = '🔴 Offline';
+    el.style.color = 'var(--accent-red)';
+    el.style.background = 'var(--accent-red-light)';
+  }
+}
+
+function showError(section, error) {
+  console.error('[Conciliacion] Error en', section, error);
+  updateBackendIndicator();
+  var bodies = {
+    resumen: 'resumen-body',
+    pendientes: 'pendientes-body',
+    detalle: 'detalle-body',
+    gastos: 'gastos-body'
+  };
+  var id = bodies[section];
+  if (id) {
+    document.getElementById(id).innerHTML =
+      '<tr><td colspan="8"><div class="empty"><h3>⚠ Sin conexión</h3>' +
+      '<p>No se pudo conectar a ningún backend Node-RED. Verificá que al menos uno esté activo.</p>' +
+      '<button class="btn btn-primary" onclick="refreshAll()">Reintentar</button></div></td></tr>';
+  }
+}
+
+async function refreshAll() {
+  ACTIVE_BACKEND = null;
+  ACTIVE_BACKEND_LABEL = '';
+  updateBackendIndicator();
+  showSection(STATE._current || 'resumen');
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section-view').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+  var t = document.getElementById('section-' + id);
+  if (t) t.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(e => { if (e.getAttribute('onclick') && e.getAttribute('onclick').includes("'" + id + "'")) e.classList.add('active'); });
+  STATE._current = id;
+  var titles = { resumen: ['Resumen Ejecutivo', 'Conciliación Bancaria — Febrero 2026 | Banco Galicia'], pendientes: ['Pendientes de Conciliación', 'Ítems sin conciliar — Requieren acción'], detalle: ['Detalle Galicia', 'Cruce banco vs Calipso — Febrero 2026'], gastos: ['Gastos Bancarios', 'Gastos e impuestos detectados en el extracto'], graficos: ['Gráficos', 'Visualización de datos de conciliación'] };
+  var tInfo = titles[id] || [id, ''];
+  document.getElementById('section-title').textContent = tInfo[0];
+  document.getElementById('section-desc').textContent = tInfo[1];
+  if (id === 'resumen') cargarResumen();
+  else if (id === 'pendientes') cargarPendientes();
+  else if (id === 'detalle') cargarDetalle();
+  else if (id === 'gastos') cargarGastos();
+  else if (id === 'graficos') cargarGraficos();
+}
+
+async function cargarResumen() {
+  try {
+    var d = await apiFetch('/api/conciliacion/resumen');
+    STATE.resumen = d;
+    var row = (d.data||[])[0] || {};
+    var semaforo = row.semaforo || 'SIN_DATOS';
+    var semaColor = semaforo === 'VERDE' ? 'var(--corona-green)' : semaforo === 'AMARILLO' ? 'var(--accent-amber)' : 'var(--accent-red)';
+    var semaText = semaforo === 'VERDE' ? 'CUADRADO' : semaforo === 'AMARILLO' ? 'TIMING' : 'PENDIENTE';
+    document.getElementById('resumen-kpis').innerHTML = `
+      <div class="kpi-card green"><div class="kpi-label">Total Banco</div><div class="kpi-value mono">${fmt$(row.totalBanco)}</div><div class="kpi-delta">Extracto Feb 2026</div></div>
+      <div class="kpi-card blue"><div class="kpi-label">Total Calipso</div><div class="kpi-value mono">${fmt$(row.totalCalipso)}</div><div class="kpi-delta">Depurado (sin reversiones)</div></div>
+      <div class="kpi-card ${row.diferencia === 0 ? 'green' : 'red'}"><div class="kpi-label">Diferencia</div><div class="kpi-value mono">${fmt$(row.diferencia)}</div><div class="kpi-delta">${row.diferencia === 0 ? '✅ Cuadrado' : '⚠ Requiere revisión'}</div></div>
+      <div class="kpi-card ${row.pendientes > 0 ? 'red' : 'green'}"><div class="kpi-label">Pendientes</div><div class="kpi-value">${row.pendientes || 0}</div><div class="kpi-delta">Ítems sin conciliar</div></div>
+      <div class="kpi-card ${semaforo === 'VERDE' ? 'green' : semaforo === 'AMARILLO' ? 'amber' : 'red'}"><div class="kpi-label">Estado</div><div class="kpi-value" style="font-size:18px;"><span class="semaforo"><span class="semaforo-dot" style="background:${semaColor}"></span>${semaText}</span></div><div class="kpi-delta">${semaforo === 'VERDE' ? '✅ Conciliación exitosa' : '⚠ Acción requerida'}</div></div>`;
+    document.getElementById('resumen-body').innerHTML = (d.data||[]).map(r => `<tr>
+      <td><strong>${r.banco}</strong></td><td class="code">${r.periodo}</td>
+      <td class="num">${fmt$(r.totalBanco)}</td><td class="num">${fmt$(r.totalCalipso)}</td>
+      <td class="num"><strong style="color:${r.diferencia===0?'var(--corona-green-dark)':'var(--accent-red)'}">${fmt$(r.diferencia)}</strong></td>
+      <td><span class="badge-${r.semaforo==='VERDE'?'ok':r.semaforo==='AMARILLO'?'warn':'crit'}">${r.semaforo}</span></td>
+      <td class="num">${r.pendientes}</td></tr>`).join('');
+  } catch(e) {
+    showError('resumen', e);
+  }
+}
+
+async function cargarPendientes() {
+  try {
+    var d = await apiFetch('/api/conciliacion/pendientes');
+    STATE.pendientes = d;
+    document.getElementById('pendientes-kpis').innerHTML = `
+      <div class="kpi-card red"><div class="kpi-label">🔴 Críticas</div><div class="kpi-value">${d.criticas||0}</div><div class="kpi-delta">> $10M o gastos sin registrar</div></div>
+      <div class="kpi-card amber"><div class="kpi-label">🟠 Altas</div><div class="kpi-value">${d.altas||0}</div><div class="kpi-delta">> $1M</div></div>
+      <div class="kpi-card blue"><div class="kpi-label">🟡 Medias</div><div class="kpi-value">${d.medias||0}</div><div class="kpi-delta">Resto de pendientes</div></div>
+      <div class="kpi-card ${d.total > 0 ? 'red' : 'green'}"><div class="kpi-label">Total Pendientes</div><div class="kpi-value">${d.total||0}</div><div class="kpi-delta">${d.total === 0 ? '✅ Todo conciliado' : '⚠ Requieren acción'}</div></div>`;
+    renderPendientes();
+  } catch(e) {
+    showError('pendientes', e);
+  }
+}
+
+function renderPendientes() {
+  var d = STATE.pendientes;
+  if (!d) return;
+  var filtro = document.getElementById('filter-pend-crit')?.value || '';
+  var data = filtro ? (d.data||[]).filter(r => r.criticidad === filtro) : (d.data||[]);
+  document.getElementById('pendientes-body').innerHTML = data.length ? data.map(r => {
+    var rowClass = r.criticidad === 'CRITICA' ? 'pendiente-row-critica' : r.criticidad === 'ALTA' ? 'pendiente-row-alta' : '';
+    var badgeClass = r.criticidad === 'CRITICA' ? 'badge-crit' : r.criticidad === 'ALTA' ? 'badge-warn' : 'badge-ok';
+    return `<tr class="${rowClass}">
+      <td><strong>${r.banco}</strong></td><td class="code">${fmtFecha(r.fecha)}</td>
+      <td>${r.descripcion}</td><td>${r.origen}</td>
+      <td class="num"><strong>${fmt$(r.importe)}</strong></td><td>${r.tipo}</td>
+      <td><span class="${badgeClass}">${r.criticidad}</span></td><td style="font-size:11px;color:var(--text-secondary);">${r.observacion||''}</td>
+    </tr>`;
+  }).join('') : '<tr><td colspan="8"><div class="empty"><h3>Sin pendientes</h3><p>Todos los movimientos están conciliados ✅</p></div></td></tr>';
+}
+
+async function cargarDetalle() {
+  try {
+    var d = await apiFetch('/api/conciliacion/detalle');
+    STATE.detalle = d;
+    document.getElementById('detalle-kpis').innerHTML = `
+      <div class="kpi-card green"><div class="kpi-label">Conciliados</div><div class="kpi-value">${d.conciliados||0}</div></div>
+      <div class="kpi-card red"><div class="kpi-label">Solo Banco</div><div class="kpi-value">${d.soloBanco||0}</div></div>
+      <div class="kpi-card amber"><div class="kpi-label">Solo Calipso</div><div class="kpi-value">${d.soloCalipso||0}</div></div>
+      <div class="kpi-card blue"><div class="kpi-label">Timing</div><div class="kpi-value">${d.timing||0}</div></div>`;
+    document.getElementById('detalle-body').innerHTML = (d.data||[]).slice(0, 500).map(r => `<tr>
+      <td class="code">${fmtFecha(r.fecha)}</td><td>${r.tipo}</td><td>${r.descripcion}</td>
+      <td class="num">${r.banco ? fmt$(r.banco) : '—'}</td><td class="num">${r.calipso ? fmt$(r.calipso) : '—'}</td>
+      <td class="num"><strong style="color:${r.dif > 100 ? 'var(--accent-red)' : 'var(--text-muted)'}">${fmt$(r.dif)}</strong></td>
+      <td><span class="badge-${r.estado==='CONCILIADO'?'ok':r.estado==='TIMING'?'warn':'crit'}">${r.estado}</span></td>
+    </tr>`).join('');
+  } catch(e) {
+    showError('detalle', e);
+  }
+}
+
+async function cargarGastos() {
+  try {
+    var d = await apiFetch('/api/conciliacion/detalle');
+    var gastos = (d.data||[]).filter(r => (r.tipo||'').toLowerCase().indexOf('gasto') >= 0 || (r.tipo||'').toLowerCase().indexOf('impuesto') >= 0 || (r.descripcion||'').toLowerCase().indexOf('iva') >= 0 || (r.descripcion||'').toLowerCase().indexOf('iibb') >= 0 || (r.descripcion||'').toLowerCase().indexOf('comision') >= 0);
+    document.getElementById('gastos-body').innerHTML = gastos.length ? gastos.map(r => `<tr>
+      <td class="code">${fmtFecha(r.fecha)}</td><td>${r.descripcion}</td><td>${r.tipo}</td>
+      <td class="num"><strong>${fmt$(Math.abs(r.banco||r.calipso||0))}</strong></td>
+      <td><span class="badge-${r.estado==='CONCILIADO'?'ok':'crit'}">${r.estado}</span></td>
+    </tr>`).join('') : '<tr><td colspan="5"><div class="empty"><h3>Sin gastos detectados</h3></div></td></tr>';
+  } catch(e) {
+    showError('gastos', e);
+  }
+}
+
+async function cargarGraficos() {
+  if (!STATE.detalle) {
+    try { STATE.detalle = await apiFetch('/api/conciliacion/detalle'); } catch(e) { showError('graficos', e); return; }
+  }
+  var d = STATE.detalle;
+  if (!d) return;
+  // Chart 1: Estados
+  if (CHARTS.estados) CHARTS.estados.destroy();
+  var ctx1 = document.getElementById('chartEstados').getContext('2d');
+  CHARTS.estados = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Conciliado','Solo Banco','Solo Calipso','Timing'], datasets: [{ data: [d.conciliados||0, d.soloBanco||0, d.soloCalipso||0, d.timing||0], backgroundColor: ['#1D9E75','#A32D2D','#BA7517','#185FA5'], borderWidth: 2, borderColor: '#fff' }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10 } } } } });
+  // Chart 2: Criticidad
+  if (!STATE.pendientes) {
+    try { STATE.pendientes = await apiFetch('/api/conciliacion/pendientes'); } catch(e) { showError('graficos', e); return; }
+  }
+  var pd = STATE.pendientes || {};
+  if (CHARTS.criticidad) CHARTS.criticidad.destroy();
+  var ctx2 = document.getElementById('chartCriticidad').getContext('2d');
+  CHARTS.criticidad = new Chart(ctx2, { type: 'bar', data: { labels: ['Críticas','Altas','Medias'], datasets: [{ data: [pd.criticas||0, pd.altas||0, pd.medias||0], backgroundColor: ['#A32D2D','#BA7517','#185FA5'], borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } } });
+}
+
+document.addEventListener('DOMContentLoaded', function() { showSection('resumen'); });
+</script>
+</body>
+</html>
