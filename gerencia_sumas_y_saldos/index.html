@@ -1449,10 +1449,15 @@ const CONFIG = {
   endDate: '20260630',
   currency: 'ARS',
   locale: 'es-AR',
-  dbUrl: 'http://192.168.0.23:3000/query',
-  // Node-RED endpoint
-  nodeRedUrl: (window.location.origin || 'http://192.168.0.23:1880') + '/api/sumas-saldos',
-  useNodeRed: true
+
+  // Endpoints Node-RED con fallback
+  API_PRIMARY:   'http://ingcorona.ddns.net:4040',
+  API_FALLBACK:  'http://192.168.0.23:1880',
+  API_TIMEOUT_MS: 15000,
+  endpoints: {
+    sumasSaldos:   '/api/sumas-saldos',
+    movimientos:   '/api/sumas-saldos/movimientos',
+  },
 };
 
 /* ════════════════════════════════════════════════
