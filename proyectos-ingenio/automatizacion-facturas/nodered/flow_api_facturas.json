@@ -916,5 +916,128 @@
     "x": 780,
     "y": 1020,
     "wires": [["api_constancias_resp"]]
+  },
+  {
+    "id": "a7f3c9d12e4b5f08",
+    "type": "http in",
+    "z": "86bcda5b2e8a7b12",
+    "name": "POST recepcion factura",
+    "url": "/api/recepcion/factura",
+    "method": "post",
+    "upload": false,
+    "x": 120,
+    "y": 1080,
+    "wires": [
+      [
+        "b8e4d0f23a5c6e19"
+      ]
+    ]
+  },
+  {
+    "id": "b8e4d0f23a5c6e19",
+    "type": "function",
+    "z": "86bcda5b2e8a7b12",
+    "name": "Validar payload + check dup",
+    "func": "const b = msg.req.body || {};\n\n// Guardar para stages siguientes\nmsg._factura = b;\n\n// Validar campos obligatorios\nconst required = ['staging_id', 'proveedor_cuit', 'proveedor_nombre', 'numerodocumento', 'fecha_emision', 'total'];\nconst missing = required.filter(f => b[f] === undefined || b[f] === null || b[f] === '');\nif (missing.length > 0) {\n    msg.statusCode = 400;\n    msg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\n    msg.payload = JSON.stringify({ok: false, error: 'Campos requeridos faltantes: ' + missing.join(', ')});\n    return [null, null, msg];\n}\n\n// Preparar query de check duplicado\n// Duplicado si: mismo hash, o mismo documento+cuit\nconst hash = b.pdf_hash ? `'${String(b.pdf_hash).replace(/'/g, \"''\")}'` : 'NULL';\nconst doc  = b.numerodocumento ? `'${String(b.numerodocumento).replace(/'/g, \"''\")}'` : 'NULL';\nconst cuit = b.proveedor_cuit ? `'${String(b.proveedor_cuit).replace(/'/g, \"''\")}'` : 'NULL';\n\nmsg.topic = 'SELECT id FROM staging_facturas WHERE ' +\n    `(pdf_hash = ${hash} AND ${hash} !== 'NULL')` +\n    ` OR (numerodocumento = ${doc} AND proveedor_cuit = ${cuit} AND ${doc} !== 'NULL')` +\n    ' LIMIT 1';\nmsg.payload = [];\nreturn [msg, null, null];\n",
+    "outputs": 3,
+    "x": 340,
+    "y": 1080,
+    "wires": [
+      [
+        "c9f5e1a34b6d7f20"
+      ],
+      [],
+      [
+        "a3d9c5e78f0b1d64"
+      ]
+    ]
+  },
+  {
+    "id": "c9f5e1a34b6d7f20",
+    "type": "mysql",
+    "z": "86bcda5b2e8a7b12",
+    "mydb": "mysql-api-config",
+    "name": "Check duplicado en staging",
+    "x": 560,
+    "y": 1080,
+    "wires": [
+      [
+        "d0a6f2b45c7e8a31"
+      ]
+    ]
+  },
+  {
+    "id": "d0a6f2b45c7e8a31",
+    "type": "function",
+    "z": "86bcda5b2e8a7b12",
+    "name": "Insertar o responder dup",
+    "func": "const dup = msg.payload || [];\nif (dup.length > 0) {\n    // Ya existe -> 409\n    msg.res = msg._res;\n    msg.statusCode = 409;\n    msg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\n    msg.payload = JSON.stringify({\n        ok: false,\n        error: 'Factura duplicada',\n        existente_id: dup[0].id\n    });\n    return [null, msg];\n}\n\n// No existe -> preparar INSERT\nconst f = msg._factura;\nconst esc = s => s ? String(s).replace(/'/g, \"''\") : null;\nconst str = (s) => esc(s) !== null ? `'${esc(s)}'` : 'NULL';\nconst num = (n) => (n !== null && n !== undefined && !isNaN(Number(n))) ? parseFloat(n) : 0;\nconst bool = (b) => (b === true || b === 1 || b === '1' || b === 1) ? 1 : 0;\n\nmsg.topic = `INSERT INTO staging_facturas (\n    id, tipo_operacion, estado_proceso, fecha_carga, usuario_carga, origen,\n    numerodocumento, letra, fecha_emision, fecha_vencimiento,\n    proveedor_cuit, proveedor_nombre, proveedor_codigo,\n    neto, iva_21, iva_105, percepciones, otros_impuestos, total,\n    es_dolar, cotizacion, cotizacion_origen, cotizacion_aviso,\n    cae, fecha_vto_cae, referencia, nro_remito,\n    pdf_filename, pdf_hash, email_origen, email_asunto,\n    items_json, confianza_parseo, notas_parseo\n) VALUES (\n    ${str(f.staging_id)}, ${str(f.tipo_operacion)}, 'PENDIENTE', NOW(), 'n8n', ${str(f.fuente)},\n    ${str(f.numerodocumento)}, ${str(f.letra)}, ${str(f.fecha_emision)}, ${str(f.fecha_vencimiento)},\n    ${str(f.proveedor_cuit)}, ${str(f.proveedor_nombre)}, ${str(f.proveedor_codigo)},\n    ${num(f.neto)}, ${num(f.iva_21)}, ${num(f.iva_105)}, ${num(f.percepciones)}, ${num(f.otros_impuestos)}, ${num(f.total)},\n    ${bool(f.es_dolar)}, ${num(f.cotizacion)}, ${str(f.cotizacion_origen)}, ${str(f.cotizacion_aviso)},\n    ${str(f.cae)}, ${str(f.fecha_vto_cae)}, ${str(f.referencia)}, ${str(f.nro_remito)},\n    ${str(f.pdf_filename)}, ${str(f.pdf_hash)}, ${str(f.email_origen)}, ${str(f.email_asunto)},\n    ${str(f.items_json)}, ${str(f.confianza_parseo_label)}, ${str(f.notas_parseo)}\n)`;\nreturn [msg, null];\n",
+    "outputs": 2,
+    "x": 780,
+    "y": 1080,
+    "wires": [
+      [
+        "e1b7a3c56d8f9b42"
+      ],
+      [
+        "a3d9c5e78f0b1d64"
+      ]
+    ]
+  },
+  {
+    "id": "e1b7a3c56d8f9b42",
+    "type": "function",
+    "z": "86bcda5b2e8a7b12",
+    "name": "Preparar INSERT items",
+    "func": "const f = msg._factura;\nlet items = [];\ntry { items = JSON.parse(f.items_json || '[]'); } catch(e) { items = []; }\n\nif (!items || items.length === 0) {\n    // Sin items -> responder OK directo\n    msg.res = msg._res;\n    msg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\n    msg.payload = JSON.stringify({ ok: true, id: f.staging_id, items_inserted: 0 });\n    return [null, msg];\n}\n\nconst esc = s => s ? String(s).replace(/'/g, \"''\") : '';\nconst values = items.map(it => {\n    const desc = esc(it.descripcion || '');\n    const cant = it.cantidad != null ? parseFloat(it.cantidad) : 'NULL';\n    const uni  = esc(it.unidad || 'u');\n    const pu   = it.precio_unitario != null ? parseFloat(it.precio_unitario) : 'NULL';\n    const aliq = it.alicuota_iva != null ? parseInt(it.alicuota_iva) : 'NULL';\n    const sub  = it.subtotal != null ? parseFloat(it.subtotal) : 'NULL';\n    const lin  = parseInt(it.linea) || 1;\n    return `('${esc(f.staging_id)}', ${lin}, '${desc}', ${cant}, '${uni}', ${pu}, ${aliq}, ${sub})`;\n}).join(',\\n');\n\nmsg.topic = `INSERT INTO staging_facturas_items (factura_id, linea, descripcion, cantidad, unidad, precio_unitario, alicuota_iva, subtotal) VALUES\\n${values}`;\nreturn [msg, null];\n",
+    "outputs": 2,
+    "x": 1000,
+    "y": 1080,
+    "wires": [
+      [
+        "f2c8b4d67e9a0c53"
+      ],
+      [
+        "b4e8c6d78f0a1e75"
+      ]
+    ]
+  },
+  {
+    "id": "f2c8b4d67e9a0c53",
+    "type": "mysql",
+    "z": "86bcda5b2e8a7b12",
+    "mydb": "mysql-api-config",
+    "name": "INSERT items",
+    "x": 1220,
+    "y": 1080,
+    "wires": [
+      [
+        "b4e8c6d78f0a1e75"
+      ]
+    ]
+  },
+  {
+    "id": "b4e8c6d78f0a1e75",
+    "type": "function",
+    "z": "86bcda5b2e8a7b12",
+    "name": "Responder OK items",
+    "func": "// Formatea respuesta 200 OK despues de insertar items\n// (o cuando no habia items que insertar)\nmsg.res = msg._res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nconst id = (msg._factura && msg._factura.staging_id) || 'unknown';\nconst inserted = (msg.payload && msg.payload.affectedRows) ? msg.payload.affectedRows : 0;\nmsg.payload = JSON.stringify({ ok: true, id, items_inserted: inserted });\nreturn msg;\n",
+    "outputs": 1,
+    "x": 1400,
+    "y": 1080,
+    "wires": [
+      [
+        "a3d9c5e78f0b1d64"
+      ]
+    ]
+  },
+  {
+    "id": "a3d9c5e78f0b1d64",
+    "type": "http response",
+    "z": "86bcda5b2e8a7b12",
+    "name": "Responder 200 OK / 409 / 400",
+    "x": 1600,
+    "y": 1080,
+    "wires": []
   }
 ]
