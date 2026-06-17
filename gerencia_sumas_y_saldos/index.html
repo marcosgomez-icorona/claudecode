@@ -1461,6 +1461,83 @@ const CONFIG = {
 };
 
 /* ════════════════════════════════════════════════
+   API HELPER — fetch con timeout y fallback
+════════════════════════════════════════════════ */
+
+const API_SOURCE = { current: null };
+
+function updateApiStatus(source, errorMsg) {
+  var dot = document.getElementById('api-dot');
+  var label = document.getElementById('api-label');
+  var sub = document.getElementById('api-sub-label');
+  if (!dot) return;
+
+  dot.className = 'sync-dot';
+
+  switch (source) {
+    case 'primary':
+      dot.classList.add('dot-green');
+      label.textContent = 'Online — ingcorona.ddns.net:4040';
+      label.style.color = 'var(--corona-green-dark)';
+      if (sub) sub.textContent = 'Conectado vía internet';
+      break;
+    case 'fallback':
+      dot.classList.add('dot-amber');
+      label.textContent = 'Fallback — 192.168.0.23:1880';
+      label.style.color = 'var(--accent-amber)';
+      if (sub) sub.textContent = 'Conectado vía LAN local';
+      break;
+    case 'mock':
+      dot.classList.add('dot-gray');
+      label.textContent = 'Offline — datos demo';
+      label.style.color = 'var(--text-muted)';
+      if (sub) sub.textContent = errorMsg || 'Sin conexión con Node-RED';
+      break;
+    default:
+      dot.classList.add('dot-gray');
+      label.textContent = 'Conectando...';
+      label.style.color = 'var(--text-muted)';
+      if (sub) sub.textContent = '';
+  }
+  API_SOURCE.current = source;
+}
+
+async function fetchWithFallback(endpoint, params) {
+  var urls = [
+    { url: CONFIG.API_PRIMARY + endpoint, name: 'primary' },
+    { url: CONFIG.API_FALLBACK + endpoint, name: 'fallback' },
+  ];
+
+  var lastError = null;
+  for (var i = 0; i < urls.length; i++) {
+    var u = urls[i];
+    var fullUrl = u.url + '?' + new URLSearchParams(params);
+    try {
+      var controller = new AbortController();
+      var timeout = setTimeout(function() { controller.abort(); }, CONFIG.API_TIMEOUT_MS);
+      var res = await fetch(fullUrl, { signal: controller.signal });
+      clearTimeout(timeout);
+
+      if (!res.ok) {
+        var errBody = await res.json().catch(function() { return { error: res.statusText }; });
+        throw new Error(errBody.error || res.statusText);
+      }
+
+      var data = await res.json();
+      updateApiStatus(u.name);
+      return { data: data, source: u.name };
+    } catch (e) {
+      lastError = e;
+      console.warn('fetchWithFallback: ' + u.name + ' falló — ' + e.message);
+    }
+  }
+
+  // Ambos endpoints fallaron
+  updateApiStatus('mock', lastError ? lastError.message : 'Sin conexión');
+  throw lastError || new Error('Todos los endpoints fallaron');
+}
+
+/* ════════════════════════════════════════════════
    ESTADO GLOBAL
 ════════════════════════════════════════════════ */
 let STATE = {
