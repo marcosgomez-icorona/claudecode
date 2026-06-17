@@ -121,8 +121,8 @@
         <p id="section-desc">Conciliación Bancaria — Febrero 2026 | Banco Galicia</p>
       </div>
       <div class="topbar-actions">
-        <span <span class="backend-indicator" id="backend-indicator">🔴 Offline</span>
-        class="badge-period" id="period-badge">Feb 2026</span>
+        <span class="backend-indicator" id="backend-indicator">🔴 Offline</span>
+        <span class="badge-period" id="period-badge">Feb 2026</span>
         <button class="btn btn-primary" onclick="refreshAll()">🔄 Actualizar</button>
       </div>
     </div>
@@ -368,23 +368,32 @@ async function cargarGastos() {
 }
 
 async function cargarGraficos() {
-  if (!STATE.detalle) {
-    try { STATE.detalle = await apiFetch('/api/conciliacion/detalle'); } catch(e) { showError('graficos', e); return; }
+  try {
+    if (!STATE.detalle) {
+      STATE.detalle = await apiFetch('/api/conciliacion/detalle');
+    }
+    var d = STATE.detalle;
+    if (!d) return;
+    // Chart 1: Estados
+    if (CHARTS.estados) CHARTS.estados.destroy();
+    var ctx1 = document.getElementById('chartEstados').getContext('2d');
+    CHARTS.estados = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Conciliado','Solo Banco','Solo Calipso','Timing'], datasets: [{ data: [d.conciliados||0, d.soloBanco||0, d.soloCalipso||0, d.timing||0], backgroundColor: ['#1D9E75','#A32D2D','#BA7517','#185FA5'], borderWidth: 2, borderColor: '#fff' }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10 } } } } });
+    // Chart 2: Criticidad
+    if (!STATE.pendientes) {
+      STATE.pendientes = await apiFetch('/api/conciliacion/pendientes');
+    }
+    var pd = STATE.pendientes || {};
+    if (CHARTS.criticidad) CHARTS.criticidad.destroy();
+    var ctx2 = document.getElementById('chartCriticidad').getContext('2d');
+    CHARTS.criticidad = new Chart(ctx2, { type: 'bar', data: { labels: ['Críticas','Altas','Medias'], datasets: [{ data: [pd.criticas||0, pd.altas||0, pd.medias||0], backgroundColor: ['#A32D2D','#BA7517','#185FA5'], borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } } });
+  } catch(e) {
+    console.error('[Conciliacion] Error en graficos:', e);
+    updateBackendIndicator();
+    var chartWraps = document.querySelectorAll('#section-graficos .chart-wrap');
+    for (var i = 0; i < chartWraps.length; i++) {
+      chartWraps[i].innerHTML = '<div class="empty"><h3>⚠ Error al cargar</h3><p>No se pudieron cargar los datos para los gráficos.</p></div>';
+    }
   }
-  var d = STATE.detalle;
-  if (!d) return;
-  // Chart 1: Estados
-  if (CHARTS.estados) CHARTS.estados.destroy();
-  var ctx1 = document.getElementById('chartEstados').getContext('2d');
-  CHARTS.estados = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Conciliado','Solo Banco','Solo Calipso','Timing'], datasets: [{ data: [d.conciliados||0, d.soloBanco||0, d.soloCalipso||0, d.timing||0], backgroundColor: ['#1D9E75','#A32D2D','#BA7517','#185FA5'], borderWidth: 2, borderColor: '#fff' }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10 } } } } });
-  // Chart 2: Criticidad
-  if (!STATE.pendientes) {
-    try { STATE.pendientes = await apiFetch('/api/conciliacion/pendientes'); } catch(e) { showError('graficos', e); return; }
-  }
-  var pd = STATE.pendientes || {};
-  if (CHARTS.criticidad) CHARTS.criticidad.destroy();
-  var ctx2 = document.getElementById('chartCriticidad').getContext('2d');
-  CHARTS.criticidad = new Chart(ctx2, { type: 'bar', data: { labels: ['Críticas','Altas','Medias'], datasets: [{ data: [pd.criticas||0, pd.altas||0, pd.medias||0], backgroundColor: ['#A32D2D','#BA7517','#185FA5'], borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } } });
 }
 
 document.addEventListener('DOMContentLoaded', function() { showSection('resumen'); });
