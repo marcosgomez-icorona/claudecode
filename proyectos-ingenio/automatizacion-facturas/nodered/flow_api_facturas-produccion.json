@@ -1,0 +1,17 @@
+[
+    {
+        "id": "c877d3533e3abe8d",
+        "type": "function",
+        "z": "ee5c78c81f8f7307",
+        "name": "Query pendientes",
+        "func": "msg._req = msg.req;\nmsg._res = msg.res;\nmsg.payload = `SELECT\\n    s.ID, s.TIPO_OPERACION, s.ESTADO_PROCESO, s.FECHA_CARGA,\\n    s.NUMERODOCUMENTO, s.LETRA, s.FECHA_EMISION, s.FECHA_VENCIMIENTO,\\n    s.PROVEEDOR_CUIT, s.PROVEEDOR_NOMBRE, s.PROVEEDOR_CODIGO,\\n    s.NETO, s.IVA_21, s.IVA_105, s.TOTAL,\\n    s.COTIZACION, s.CAE, s.REFERENCIA, s.PDF_FILENAME, s.EMAIL_ORIGEN,\\n    m.NOMBRE AS MONEDA,\\n    CASE WHEN s.CAE IS NULL OR s.CAE = '' THEN 'SIN_CAE'\\n         WHEN s.FECHA_VTO_CAE < CONVERT(varchar(8), GETDATE(), 112) THEN 'CAE_VENCIDO'\\n         ELSE 'CAE_OK' END AS ESTADO_CAE,\\n    DATEDIFF(DAY, CONVERT(datetime, SUBSTRING(s.FECHA_CARGA,1,8), 112), GETDATE()) AS DIAS_EN_COLA\\nFROM UD_EZI_STAGING_FACTURAS s\\nLEFT JOIN MONEDA m ON m.ID = s.MONEDA_ID\\nWHERE s.ESTADO_PROCESO IN ('PENDIENTE', 'EN_REVISION')\\nORDER BY s.FECHA_CARGA ASC`;\\nreturn msg;",
+        "outputs": 1,
+        "x": 460,
+        "y": 140,
+        "wires": [
+            [
+                "7c5bdf036e05b3f3"
+            ]
+        ]
+    }
+]
