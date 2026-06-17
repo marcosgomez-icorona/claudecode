@@ -1684,14 +1684,12 @@ function verMovimientos(codigo, cuenta) {
   document.getElementById('movimientos-content').style.display = 'none';
   document.getElementById('movimientos-filtros').style.display = 'none';
   document.getElementById('movimientos-error').style.display = 'none';
-  // Limpiar filtros anteriores
   limpiarFiltrosMovimientos();
   modal.show();
-  var url = (CONFIG.nodeRedUrl || '').replace('/api/sumas-saldos', '/api/sumas-saldos/movimientos') + '?codigo=' + encodeURIComponent(codigo.trim());
-  if (!CONFIG.nodeRedUrl) { url = CONFIG.dbUrl.replace('/query', '/movimientos') + '?codigo=' + encodeURIComponent(codigo.trim()); }
-  fetch(url)
-    .then(function(r){ return r.json(); })
-    .then(function(data){
+
+  fetchWithFallback(CONFIG.endpoints.movimientos, { codigo: codigo.trim() })
+    .then(function(result){
+      var data = result.data;
       document.getElementById('movimientos-loading').style.display = 'none';
       if (!data.success || !data.movimientos || data.movimientos.length === 0) {
         document.getElementById('movimientos-error').style.display = '';
@@ -1724,7 +1722,6 @@ function verMovimientos(codigo, cuenta) {
       document.getElementById('movimientos-error').textContent = 'Error: ' + err.message;
     });
 }
-
 /* ════════════════════════════════════════════════
    FILTROS EN MODAL DE MOVIMIENTOS
 ════════════════════════════════════════════════ */
