@@ -1882,17 +1882,8 @@ function handleDrop(e) {
 }
 
 function processData() {
-  // Si hay conexión Node-RED activa, usarla
-  if (CONFIG.useNodeRed) {
-    loadFromAPI();
-    return;
-  }
-  const fileInput = document.getElementById('fileInput');
-  if (!fileInput.files[0]) {
-    loadMockData();
-    return;
-  }
-  parseCSV(fileInput.files[0]);
+  // Siempre intentar API primero
+  loadFromAPI();
 }
 
 function parseCSV(file) {
