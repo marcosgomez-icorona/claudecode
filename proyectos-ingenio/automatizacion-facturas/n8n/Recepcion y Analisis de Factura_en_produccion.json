@@ -525,41 +525,19 @@
     },
     {
       "parameters": {
-        "url": "=http://192.168.0.23:1880/api/facturas/check?hash={{ $json.pdf_hash }}&doc={{ $json.nro_documento }}&cuit={{ $json.cuit }}",
-        "options": {
-          "timeout": 10000
-        }
-      },
-      "id": "760969eb-9054-422d-86e5-9a376bfd6601",
-      "name": "Verificar duplicado staging",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [
-        4272,
-        1920
-      ],
-      "wires": [
-        [
-          "53d144bb-65c2-40b5-bd4f-6cc76de92228"
-        ]
-      ]
-    },
-    {
-      "parameters": {
         "conditions": {
           "options": {
             "caseSensitive": true,
-            "leftValue": "",
             "typeValidation": "strict",
-            "version": 1
+            "version": 2
           },
           "conditions": [
             {
-              "id": "cond-dup-01",
-              "leftValue": "={{ $json.existe }}",
-              "rightValue": true,
+              "id": "cond-dup-http-01",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 409,
               "operator": {
-                "type": "boolean",
+                "type": "number",
                 "operation": "equals"
               }
             }
@@ -602,12 +580,17 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://192.168.0.23:1880/recepcion/factura",
+        "url": "http://192.168.0.23:1880/facturas/api/recepcion/factura",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={{ $json }}",
         "options": {
-          "timeout": 30000
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
         }
       },
       "id": "01470f05-029f-4c4c-b7e0-6ef455adfd10",
@@ -938,17 +921,6 @@
         ]
       ]
     },
-    "Verificar duplicado staging": {
-      "main": [
-        [
-          {
-            "node": "¿Ya existe en staging?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "¿Ya existe en staging?": {
       "main": [
         [
@@ -958,20 +930,14 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Preparar payload limpio",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Confianza >= 50%": {
       "main": [
         [
           {
-            "node": "Verificar duplicado staging",
+            "node": "POST a Node-RED",
             "type": "main",
             "index": 0
           }
@@ -990,6 +956,17 @@
         [
           {
             "node": "POST a Node-RED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST a Node-RED": {
+      "main": [
+        [
+          {
+            "node": "¿Ya existe en staging?",
             "type": "main",
             "index": 0
           }
