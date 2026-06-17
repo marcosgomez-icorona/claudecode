@@ -1,0 +1,80 @@
+/* MOCK — Datos de demostración */
+
+const MOCK = {
+  sumasSaldos: [
+    { codigo: '1.1.01', cuenta: 'Caja y Bancos',     saldoInicial: 32900000, debeAcum: 45200000, haberAcum: 12300000, variacion: 8.2,   estado: 'ok', unidad: 'Gestión Comercial Azucar' },
+    { codigo: '1.1.02', cuenta: 'Cuentas a Cobrar',  saldoInicial: 29600000, debeAcum: 38700000, haberAcum:  9100000, variacion: 14.5,  estado: 'ok', unidad: 'Gestión Comercial Azucar' },
+    { codigo: '1.2.01', cuenta: 'Bienes de Cambio',  saldoInicial: 49200000, debeAcum: 67400000, haberAcum: 18200000, variacion: -5.1,  estado: 'warn', unidad: 'Gestión Comercial Azucar' },
+    { codigo: '1.3.01', cuenta: 'Bienes de Uso',     saldoInicial: 143000000,debeAcum: 185000000,haberAcum: 42000000, variacion: 2.1,   estado: 'ok', unidad: 'Servicios' },
+    { codigo: '2.1.01', cuenta: 'Proveedores',       saldoInicial: -38400000,debeAcum:  8900000, haberAcum: 47300000, variacion: 38.7,  estado: 'crit', unidad: 'Gestión Comercial Alcohol' },
+    { codigo: '2.1.02', cuenta: 'Deudas Fiscales',   saldoInicial: -8600000, debeAcum:  3200000, haberAcum: 11800000, variacion: 22.3,  estado: 'warn', unidad: 'Servicios' },
+    { codigo: '2.2.01', cuenta: 'Préstamos L/P',     saldoInicial: -26500000,debeAcum:  1500000, haberAcum: 28000000, variacion: -3.2,  estado: 'ok',   unidad: 'Servicios' },
+    { codigo: '3.1.01', cuenta: 'Capital Social',    saldoInicial: -95000000,debeAcum:       0,  haberAcum: 95000000, variacion: 0,     estado: 'ok',   unidad: 'Gestión Comercial Azucar' },
+    { codigo: '4.1.01', cuenta: 'Ventas Azúcar',     saldoInicial: -131000000,debeAcum: 12000000, haberAcum: 143000000,variacion: 18.9,  estado: 'ok',   unidad: 'Gestión Comercial Azucar' },
+    { codigo: '4.1.02', cuenta: 'Ventas Alcohol',    saldoInicial: -62400000,debeAcum:  5400000, haberAcum: 67800000, variacion: 31.2,  estado: 'crit', unidad: 'Gestión Comercial Alcohol' },
+    { codigo: '5.1.01', cuenta: 'Costo Producción',  saldoInicial: 84500000, debeAcum: 98700000, haberAcum: 14200000, variacion: 7.3,   estado: 'ok',   unidad: 'Servicios' },
+    { codigo: '5.2.01', cuenta: 'Gs. Comercializ.',  saldoInicial: 16200000, debeAcum: 18300000, haberAcum:  2100000, variacion: 11.1,  estado: 'ok',   unidad: 'Gestión Comercial Alcohol' },
+    { codigo: '5.3.01', cuenta: 'Gs. Administración',saldoInicial: 20300000, debeAcum: 24100000, haberAcum:  3800000, variacion: 5.6,   estado: 'ok',   unidad: 'Servicios' },
+    { codigo: '5.4.01', cuenta: 'Gs. Financieros',   saldoInicial: 8900000,  debeAcum:  9800000, haberAcum:   900000, variacion: 47.8,  estado: 'crit', unidad: 'Gestión Comercial Azucar' },
+  ],
+  mayor: [
+    { fecha:'2026-06-02', asiento:'A-00142', descripcion:'Cobro fact. 0001-00482 - Azúcar',      debe:12500000, haber:0,        cuenta:'1.1.01' },
+    { fecha:'2026-06-03', asiento:'A-00143', descripcion:'Pago prov. "Química del Norte"',        debe:0,        haber:4320000,  cuenta:'1.1.01' },
+    { fecha:'2026-06-05', asiento:'A-00144', descripcion:'Depósito bancario Cta 001-234567',      debe:8700000,  haber:0,        cuenta:'1.1.01' },
+    { fecha:'2026-06-08', asiento:'A-00145', descripcion:'Pago cuota préstamo BNA',               debe:0,        haber:2800000,  cuenta:'1.1.01' },
+    { fecha:'2026-06-10', asiento:'A-00146', descripcion:'Cobro anticipo cliente "La Esperanza"', debe:5100000,  haber:0,        cuenta:'1.1.01' },
+  ],
+  libroDiario: [
+    { fecha:'2026-06-02', asiento:'A-00142', descripcion:'Cobro factura azúcar', ctaDebe:'1.1.01 Caja y Bancos', ctaHaber:'1.1.02 Ctas a Cobrar', importe:12500000, ref:'FAC-0001-00482' },
+    { fecha:'2026-06-03', asiento:'A-00143', descripcion:'Pago proveedor insumos', ctaDebe:'2.1.01 Proveedores', ctaHaber:'1.1.01 Caja y Bancos', importe:4320000,  ref:'OC-2026-0089' },
+    { fecha:'2026-06-05', asiento:'A-00144', descripcion:'Depósito bancario',     ctaDebe:'1.1.01 Caja y Bancos', ctaHaber:'1.1.01 Banco Cta.Cte', importe:8700000,  ref:'DEP-00231' },
+    { fecha:'2026-06-08', asiento:'A-00145', descripcion:'Cuota préstamo BNA',    ctaDebe:'2.2.01 Préstamos L/P', ctaHaber:'1.1.01 Caja y Bancos', importe:2800000,  ref:'PREST-BNA-004' },
+    { fecha:'2026-06-10', asiento:'A-00146', descripcion:'Anticipo cliente',      ctaDebe:'1.1.01 Caja y Bancos', ctaHaber:'2.3.01 Anticips.',      importe:5100000,  ref:'ANT-0012' },
+  ],
+  imputaciones: [
+    { fecha:'2026-06-02', tipo:'VENTA',  comp:'FAC-A 0001-00482', ente:'La Esperanza S.A.',       cc:'VENTAS', neto:10330579, iva:2169421, total:12500000, estado:'ok' },
+    { fecha:'2026-06-03', tipo:'COMPRA', comp:'FAC-B 0002-00197', ente:'Química del Norte S.R.L.', cc:'PRODUCCION', neto:3570248, iva:749752, total:4320000, estado:'ok' },
+    { fecha:'2026-06-05', tipo:'GASTO',  comp:'REC-0001-00031',   ente:'Servicios Tecnológicos',   cc:'ADMIN', neto:1900000, iva:0, total:1900000, estado:'warn' },
+    { fecha:'2026-06-08', tipo:'COMPRA', comp:'FAC-A 0001-00511', ente:'Agroquímicos del NOA',     cc:'PRODUCCION', neto:6900826, iva:1449174, total:8350000, estado:'ok' },
+    { fecha:'2026-06-10', tipo:'AJUSTE', comp:'NC-0001-00008',    ente:'Devolución insumo',         cc:'PRODUCCION', neto:-350000, iva:-73500, total:-423500, estado:'warn' },
+  ],
+  egresos: [
+    { fecha:'2026-06-03', nro:'EV-00741', beneficiario:'Química del Norte S.R.L.', concepto:'Pago factura B 0002-00197', medio:'Transf. BNA', importe:4320000, estado:'ok' },
+    { fecha:'2026-06-05', nro:'EV-00742', beneficiario:'Servicios Tecnológicos',   concepto:'Servicios mes junio',         medio:'Transf. BBVA', importe:1900000, estado:'ok' },
+    { fecha:'2026-06-08', nro:'EV-00743', beneficiario:'Agroquímicos del NOA',     concepto:'Anticipo OC-0124',            medio:'Cheque',       importe:4175000, estado:'warn' },
+    { fecha:'2026-06-09', nro:'EV-00744', beneficiario:'BNA - Cuota préstamo',     concepto:'Cuota 12/24',                 medio:'Débito auto.', importe:2800000, estado:'ok' },
+    { fecha:'2026-06-10', nro:'EV-00745', beneficiario:'AFIP - Anticipos IIGG',    concepto:'Anticipo impuesto jun-26',    medio:'Transf. BNA',  importe:3500000, estado:'crit' },
+  ],
+  ingresos: [
+    { fecha:'2026-06-02', nro:'IV-00318', origen:'La Esperanza S.A.',         concepto:'Cobro fact. 0001-00482', medio:'Transf. Banco',  importe:12500000, estado:'ok' },
+    { fecha:'2026-06-06', nro:'IV-00319', origen:'Azucarera del Centro S.A.', concepto:'Cobro fact. 0001-00471', medio:'Transf. Banco',  importe:8300000,  estado:'ok' },
+    { fecha:'2026-06-10', nro:'IV-00320', origen:'La Esperanza S.A.',         concepto:'Anticipo zafra 2026',    medio:'Transf. Banco',  importe:5100000,  estado:'ok' },
+  ],
+  proveedoresSaldos: [
+    { cuit:'30-71234567-8', proveedor:'Química del Norte S.R.L.', categoria:'Insumos',          saldo:8400000, vencido:0,       aVencer:8400000,  ultimoMov:'2026-06-03', estado:'ok'   },
+    { cuit:'30-68901234-5', proveedor:'Agroquímicos del NOA',     categoria:'Agroquímicos',      saldo:16700000,vencido:4320000, aVencer:12380000, ultimoMov:'2026-06-08', estado:'crit' },
+    { cuit:'20-34512678-9', proveedor:'Transporte Regional S.A.', categoria:'Logística',         saldo:3200000, vencido:3200000, aVencer:0,        ultimoMov:'2026-05-28', estado:'crit' },
+    { cuit:'30-71890123-1', proveedor:'Talleres Metalúrgicos JM', categoria:'Mantenimiento',     saldo:1800000, vencido:0,       aVencer:1800000,  ultimoMov:'2026-06-01', estado:'ok'   },
+    { cuit:'20-22345678-2', proveedor:'Servicios Tecnológicos',   categoria:'IT/Sistemas',       saldo:1900000, vencido:0,       aVencer:1900000,  ultimoMov:'2026-06-05', estado:'warn' },
+    { cuit:'30-77654321-4', proveedor:'Repuestos Industriales SH',categoria:'Repuestos',         saldo:5400000, vencido:2100000, aVencer:3300000,  ultimoMov:'2026-06-07', estado:'warn' },
+  ],
+  proveedoresPendientes: [
+    { proveedor:'Agroquímicos del NOA',     comp:'FAC-A 0001-00488', fecha:'2026-05-10', venc:'2026-06-09', dias:1,   importe:4320000,  estado:'VENCIDO'  },
+    { proveedor:'Transporte Regional S.A.', comp:'FAC-B 0001-00201', fecha:'2026-05-01', venc:'2026-05-31', dias:10,  importe:3200000,  estado:'VENCIDO'  },
+    { proveedor:'Repuestos Industriales SH',comp:'FAC-A 0002-00112', fecha:'2026-05-15', venc:'2026-06-14', dias:-4,  importe:2100000,  estado:'A_VENCER' },
+    { proveedor:'Química del Norte S.R.L.', comp:'FAC-B 0002-00197', fecha:'2026-06-03', venc:'2026-07-03', dias:-23, importe:8400000,  estado:'VIGENTE'  },
+    { proveedor:'Servicios Tecnológicos',   comp:'REC-0001-00031',   fecha:'2026-06-05', venc:'2026-07-05', dias:-25, importe:1900000,  estado:'VIGENTE'  },
+    { proveedor:'Repuestos Industriales SH',comp:'FAC-A 0002-00118', fecha:'2026-06-07', venc:'2026-06-14', dias:-4,  importe:3300000,  estado:'A_VENCER' },
+  ],
+  interempresas: [
+    { desde:'Ingenio La Corona', hacia:'Destilería Corona S.A.',  concepto:'Transfer. alcohol desnaturalizado', importe:14300000, fecha:'2026-06-04', tipo:'salida' },
+    { desde:'Destilería Corona S.A.', hacia:'Ingenio La Corona',  concepto:'Liquidación ventas Junio',          importe:22700000, fecha:'2026-06-09', tipo:'entrada' },
+    { desde:'Ingenio La Corona', hacia:'Finca Las Palmas S.A.',   concepto:'Adelanto campaña cañazo',           importe:5800000,  fecha:'2026-06-10', tipo:'salida' },
+  ],
+  evolucion: {
+    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+    caja:     [32100000, 29800000, 35600000, 41200000, 43800000, 45200000],
+    ventas:   [98000000, 91000000, 115000000, 124000000, 139000000, 143000000],
+    costos:   [74000000, 71000000, 88000000, 93000000, 97000000, 98700000],
+  }
+};

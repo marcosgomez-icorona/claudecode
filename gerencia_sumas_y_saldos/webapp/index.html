@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sumas y Saldos — Gerencia Administrativa | Ingenio La Corona</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-mark">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="brand-name">La Corona</span>
+    </div>
+    <div class="brand-sub">Sumas y Saldos</div>
+  </div>
+
+  <div class="sidebar-section-label">Dashboard</div>
+  <a class="nav-item-custom active" onclick="showSection('resumen')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Resumen Gerencial
+  </a>
+
+  <div class="sidebar-section-label">Contabilidad</div>
+  <a class="nav-item-custom" onclick="showSection('sumasSaldos')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+    Sumas y Saldos
+  </a>
+  <a class="nav-item-custom" onclick="showSection('detalleCuenta')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Mayor por Cuenta
+  </a>
+  <a class="nav-item-custom" onclick="showSection('libroDiario')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    Libro Diario
+  </a>
+  <a class="nav-item-custom" onclick="showSection('imputaciones')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/></svg>
+    Imputaciones
+  </a>
+
+  <div class="sidebar-section-label">Tesorería</div>
+  <a class="nav-item-custom" onclick="showSection('ev')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+    Egresos de Valores
+  </a>
+  <a class="nav-item-custom" onclick="showSection('iv')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13 8 3 18"/></svg>
+    Ingresos de Valores
+  </a>
+
+  <div class="sidebar-section-label">Proveedores</div>
+  <a class="nav-item-custom" onclick="showSection('proveedoresSaldos')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+    Saldos de Proveedores
+  </a>
+  <a class="nav-item-custom" onclick="showSection('proveedoresPendientes')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Pendientes
+  </a>
+
+  <div class="sidebar-section-label">Control</div>
+  <a class="nav-item-custom" onclick="showSection('interempresas')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+    Interempresas
+  </a>
+  <a class="nav-item-custom" onclick="showSection('alertas')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    Alertas
+  </a>
+
+  <div class="sidebar-footer">
+    <div class="sync-indicator">
+      <div class="sync-dot dot-green" id="api-dot"></div>
+      <span id="api-label">Conectando...</span>
+    </div>
+    <div class="sync-indicator" style="margin-top:4px;">
+      <span id="api-sub-label" style="color:var(--text-muted);font-size:10px;"></span>
+    </div>
+    <div style="margin-top:6px;">v1.0.0 — Zafra 2026</div>
+  </div>
+</aside>
+
+<!-- ═══════ MAIN CONTENT ═══════ -->
+<div id="main-content">
+
+  <!-- TOPBAR -->
+  <header id="topbar">
+    <div class="topbar-title">
+      <h1 id="topbar-section-title">Resumen Gerencial</h1>
+      <p id="topbar-section-desc">Dashboard ejecutivo — datos consolidados</p>
+    </div>
+    <div class="topbar-actions">
+      <span class="badge-period" id="badge-period">Conectando...</span>
+      <button class="btn-icon" onclick="loadFromAPI()" title="Actualizar datos">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  <div class="page-content">
+
+    <!-- PARAM BAR -->
+    <div class="param-bar">
+      <div class="param-group">
+        <div class="param-label">Umbral crítico ($)</div>
+        <input type="number" class="param-input narrow" id="criticalThreshold" value="10000000" min="0" step="1000000" />
+      </div>
+
+      <div class="param-group">
+        <div class="param-label">Variación % alerta</div>
+        <input type="number" class="param-input narrow" id="variationThreshold" value="30" min="0" max="100" step="0.5" />
+      </div>
+
+      <div class="param-group">
+        <div class="param-label">Fecha inicio</div>
+        <input type="date" class="param-input" id="startDate" style="width:155px;font-family:var(--font-mono);font-size:12px;" />
+      </div>
+
+      <div class="param-group">
+        <div class="param-label">Fecha fin</div>
+        <input type="date" class="param-input" id="endDate" style="width:155px;font-family:var(--font-mono);font-size:12px;" />
+      </div>
+
+      <div class="param-group">
+        <div class="param-label">Empresa / Unidad</div>
+        <select class="param-input" id="filter-empresa" onchange="filterByEmpresa()" style="width:180px;font-size:12px;">
+          <option value="">Todas las empresas</option>
+        </select>
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button class="btn-primary-custom" style="background:var(--corona-green);" onclick="loadFromAPI()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          Consultar / Actualizar
+        </button>
+        <button class="btn-primary-custom" style="background:var(--accent-blue);" onclick="loadMockData()">
+          Cargar Demo
+        </button>
+      </div>
+    </div>
+
+    <!-- SECTIONS -->
+    <div id="section-resumen" class="section-view active">
+      <div class="kpi-grid" id="kpi-grid">
+        <div class="kpi-card green"><div class="kpi-label">Saldo Total</div><div class="kpi-value" id="kpi-saldo-total">···</div><div class="kpi-desc" id="kpi-saldo-delta">Saldo neto acumulado</div></div>
+        <div class="kpi-card red"><div class="kpi-label">Cuentas Críticas</div><div class="kpi-value" id="kpi-crit-count">···</div><div class="kpi-desc" id="kpi-crit-desc">Umbral: $10.000.000</div></div>
+        <div class="kpi-card amber"><div class="kpi-label">Alertas Activas</div><div class="kpi-value" id="kpi-alert-count">···</div><div class="kpi-desc" id="kpi-alert-desc">0 críticas, 0 advertencias</div></div>
+        <div class="kpi-card blue"><div class="kpi-label">Variación Media</div><div class="kpi-value" id="kpi-avg-var">···</div><div class="kpi-desc" id="kpi-var-desc">Variación media absoluta</div></div>
+        <div class="kpi-card blue"><div class="kpi-label">Egresos</div><div class="kpi-value" id="kpi-egresos">···</div><div class="kpi-desc" id="kpi-ev-total"><span id="kpi-ev-count">0</span> operaciones</div></div>
+        <div class="kpi-card blue"><div class="kpi-label">Ingresos</div><div class="kpi-value" id="kpi-ingresos">···</div><div class="kpi-desc" id="kpi-iv-total"><span id="kpi-iv-count">0</span> operaciones</div></div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-header-custom"><span>Top Cuentas por Saldo</span><input type="text" class="search-input" placeholder="Buscar cuenta..." oninput="filterTopTable(this.value)" style="width:200px;" /></div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>Código</th><th>Cuenta</th><th class="num">Debe</th><th class="num">Haber</th><th class="num">Saldo</th><th>Variación</th><th>Estado</th></tr></thead><tbody id="top-accounts-body"></tbody></table></div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-header-custom"><span>Evolución Mensual</span></div>
+        <div style="padding:16px;"><canvas id="evolucion-chart" height="220"></canvas></div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-header-custom"><span>Distribución por Rubro</span></div>
+        <div style="padding:16px;"><canvas id="distribution-chart" height="200"></canvas></div>
+      </div>
+    </div>
+
+    <div id="section-sumasSaldos" class="section-view">
+      <div class="card-section">
+        <div class="card-header-custom">
+          <span>Sumas y Saldos</span>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input type="text" class="search-input" placeholder="Buscar cuenta..." oninput="filterTable('ss-body', this.value)" style="width:200px;" />
+            <button class="panel-tool-btn" onclick="exportCSV()">Exportar CSV</button>
+          </div>
+        </div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>Código</th><th>Cuenta</th><th class="num">Saldo Inicial</th><th class="num">Debe Acum.</th><th class="num">Haber Acum.</th><th class="num">Saldo Deudor</th><th class="num">Saldo Acreedor</th><th>Variación</th><th>Estado</th></tr></thead><tbody id="ss-body"></tbody></table></div>
+        <div class="table-footer-custom"><strong>Totales:</strong> Debe: <span id="total-debe">$0</span> &middot; Haber: <span id="total-haber">$0</span> &middot; Diferencia: <span id="total-diff">$0</span></div>
+      </div>
+    </div>
+
+    <div id="section-detalleCuenta" class="section-view">
+      <div class="card-section">
+        <div class="card-header-custom"><span>Mayor por Cuenta</span><div><select id="select-cuenta" class="param-input" onchange="filterMayor(this.value)" style="width:200px;"><option value="">Todas las cuentas</option></select></div></div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>Fecha</th><th>Asiento</th><th>Descripción</th><th class="num">Debe</th><th class="num">Haber</th><th class="num">Saldo</th></tr></thead><tbody id="mayor-body"></tbody></table></div>
+      </div>
+    </div>
+
+    <div id="section-libroDiario" class="section-view">
+      <div class="card-section">
+        <div class="card-header-custom"><span>Libro Diario</span></div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>Fecha</th><th>Asiento</th><th>Descripción</th><th>Cta Debe</th><th>Cta Haber</th><th class="num">Importe</th><th>Ref.</th></tr></thead><tbody id="ld-body"></tbody></table></div>
+      </div>
+    </div>
+
+    <div id="section-imputaciones" class="section-view">
+      <div class="card-section">
+        <div class="card-header-custom"><span>Imputaciones</span><div><select class="param-input" id="filter-imputacion-tipo" onchange="filterImputaciones()" style="width:150px;"><option value="">Todas</option><option value="VENTA">Ventas</option><option value="COMPRA">Compras</option><option value="GASTO">Gastos</option><option value="AJUSTE">Ajustes</option></select></div></div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>Fecha</th><th>Tipo</th><th>Comprobante</th><th>Ente</th><th>CC</th><th class="num">Neto</th><th class="num">IVA</th><th class="num">Total</th><th>Estado</th></tr></thead><tbody id="imput-body"></tbody></table></div>
+      </div>
+    </div>
+
+    <div id="section-ev" class="section-view">
+      <div class="card-section">
+        <div class="card-header-custom"><span>Egresos de Valores</span></div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>Fecha</th><th>Nro</th><th>Beneficiario</th><th>Concepto</th><th>Medio</th><th class="num">Importe</th><th>Estado</th></tr></thead><tbody id="ev-body"></tbody></table></div>
+      </div>
+    </div>
+
+    <div id="section-iv" class="section-view">
+      <div class="card-section">
+        <div class="card-header-custom"><span>Ingresos de Valores</span></div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>Fecha</th><th>Nro</th><th>Origen</th><th>Concepto</th><th>Medio</th><th class="num">Importe</th><th>Estado</th></tr></thead><tbody id="iv-body"></tbody></table></div>
+      </div>
+    </div>
+
+    <div id="section-proveedoresSaldos" class="section-view">
+      <div class="card-section">
+        <div class="card-header-custom"><span>Saldos de Proveedores</span></div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>CUIT</th><th>Proveedor</th><th>Categoría</th><th class="num">Saldo</th><th class="num">Vencido</th><th class="num">A Vencer</th><th>Último Mov.</th><th>Estado</th></tr></thead><tbody id="prov-saldos-body"></tbody></table></div>
+      </div>
+    </div>
+
+    <div id="section-proveedoresPendientes" class="section-view">
+      <div class="card-section">
+        <div class="card-header-custom"><span>Pendientes de Proveedores</span><div><select class="param-input" id="filter-pend-estado" onchange="filterPendientes()" style="width:150px;"><option value="">Todos</option><option value="VIGENTE">Vigentes</option><option value="A_VENCER">A vencer</option><option value="VENCIDO">Vencidos</option></select></div></div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>Proveedor</th><th>Comp.</th><th>Fecha</th><th>Venc.</th><th>Días</th><th class="num">Importe</th><th>Estado</th></tr></thead><tbody id="prov-pend-body"></tbody></table></div>
+      </div>
+    </div>
+
+    <div id="section-interempresas" class="section-view">
+      <div class="card-section">
+        <div class="card-header-custom"><span>Movimientos Interempresas</span></div>
+        <div class="flow-columns" id="inter-body"></div>
+      </div>
+    </div>
+
+    <div id="section-alertas" class="section-view">
+      <div class="card-section">
+        <div class="card-header-custom"><span>Alertas y Recomendaciones</span></div>
+        <div id="alertas-body"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MOVIMIENTOS MODAL -->
+<div class="modal fade" id="movimientosModal" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title">Movimientos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div id="movimientos-filtros" style="display:none; padding:12px 16px; border-bottom:1px solid var(--border); background:var(--surface-2);">
+        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+          <div class="param-group"><div class="param-label">Fecha</div><input type="text" class="param-input" id="filtro-fecha" oninput="filtrarMovimientos()" placeholder="YYYYMMDD" style="width:110px; font-family:var(--font-mono); font-size:11px;" /></div>
+          <div class="param-group"><div class="param-label">Asiento</div><input type="text" class="param-input" id="filtro-asiento" oninput="filtrarMovimientos()" placeholder="A-00142" style="width:120px; font-family:var(--font-mono); font-size:11px;" /></div>
+          <div class="param-group"><div class="param-label">Descripción</div><input type="text" class="param-input" id="filtro-descripcion" oninput="filtrarMovimientos()" placeholder="Buscar en descripción..." style="width:200px;" /></div>
+          <div class="param-group"><div class="param-label">Proveedor</div><input type="text" class="param-input" id="filtro-proveedor" oninput="filtrarMovimientos()" placeholder="Buscar proveedor..." style="width:180px;" /></div>
+          <button class="panel-tool-btn" onclick="limpiarFiltrosMovimientos()" style="height:34px; align-self:flex-end;">Limpiar filtros</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div id="movimientos-loading" style="text-align:center; padding:40px;">Cargando movimientos... 🔄</div>
+        <div id="movimientos-content" style="display:none;">
+          <div style="display:flex; gap:16px; margin-bottom:12px; font-size:12px; color:var(--text-secondary); flex-wrap:wrap;">
+            <span>Registros: <strong id="mov-count">0</strong></span>
+            <span>Total Débe: <strong id="mov-total-debe">$0</strong></span>
+            <span>Total Haber: <strong id="mov-total-haber">$0</strong></span>
+            <span>Saldo: <strong id="mov-saldo">$0</strong></span>
+          </div>
+          <div class="table-container"><table class="table-custom"><thead><tr><th>Fecha</th><th>Asiento</th><th>Descripción</th><th>Proveedor</th><th class="num">Debe</th><th class="num">Haber</th><th class="num">Saldo</th></tr></thead><tbody id="movimientos-body"></tbody></table></div>
+        </div>
+        <div id="movimientos-error" style="display:none; text-align:center; padding:20px; color:var(--accent-red);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="position:fixed; bottom:8px; right:12px; font-size:10px; color:var(--text-muted); z-index:999;">
+  UUID: <span id="uuid"></span> &middot; <span id="date-footer"></span>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/format.js"></script>
+<script src="assets/js/mock.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>
