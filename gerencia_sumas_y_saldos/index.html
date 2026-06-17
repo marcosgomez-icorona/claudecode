@@ -1805,57 +1805,50 @@ function showSection(id) {
 }
 
 /* ════════════════════════════════════════════════
-   CARGAR DESDE NODE-RED
+   CARGAR DESDE API (con fallback)
 ════════════════════════════════════════════════ */
-async function loadFromNodeRED() {
+async function loadFromAPI() {
   var sd = document.getElementById('startDate').value;
   var ed = document.getElementById('endDate').value;
-  // Convertir de YYYY-MM-DD a YYYYMMDD para la API
   sd = sd ? sd.replace(/-/g, '') : CONFIG.startDate;
   ed = ed ? ed.replace(/-/g, '') : CONFIG.endDate;
   var ct = document.getElementById('criticalThreshold').value || CONFIG.criticalThreshold;
 
-  var url = CONFIG.nodeRedUrl + '?startDate=' + sd + '&endDate=' + ed + '&criticalThreshold=' + ct;
-
   // Estados de carga
   document.getElementById('upload-label').textContent = 'Consultando...';
-  document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3>Consultando Calipso... 🔄</h3><p>Esperando respuesta del servidor</p></div></td></tr>';
+  document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3>Consultando... 🔄</h3><p>Esperando respuesta del servidor</p></div></td></tr>';
   document.getElementById('ss-body').innerHTML = '<tr><td colspan="9"><div class="empty-state"><h3>Consultando...</h3></div></td></tr>';
   document.getElementById('kpi-saldo-total').textContent = '···';
   document.getElementById('kpi-crit-count').textContent = '···';
   document.getElementById('kpi-alert-count').textContent = '···';
+  updateApiStatus(null);
 
   try {
-    var res = await fetch(url);
-    if (!res.ok) {
-      var err = await res.json().catch(function(){ return { error: res.statusText }; });
-      console.warn('Node-RED error:', err);
-      document.getElementById('upload-label').textContent = 'Error Node-RED';
-      document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3 style="color:var(--accent-red);">⚠ Error de conexión</h3><p>' + (err.error || 'No se pudo conectar con Node-RED') + '</p><p style="font-size:11px;margin-top:8px;">Verificá que Node-RED esté corriendo en 192.168.0.23:1880</p></div></td></tr>';
-      document.getElementById('ss-body').innerHTML = '<tr><td colspan="9"><div class="empty-state"><h3 style="color:var(--accent-red);">Sin datos</h3></div></td></tr>';
-      document.getElementById('kpi-saldo-total').textContent = '—';
-      document.getElementById('kpi-crit-count').textContent = '—';
-      document.getElementById('kpi-alert-count').textContent = '—';
-      showToast('Node-RED: ' + (err.error || res.statusText) + '. Cargando demo.', 'warn');
-      loadMockData();
-      return;
-    }
-    var data = await res.json();
-    STATE.data = data;
+    var result = await fetchWithFallback(CONFIG.endpoints.sumasSaldos, {
+      startDate: sd,
+      endDate: ed,
+      criticalThreshold: ct
+    });
+    STATE.data = result.data;
     renderAll();
-    var total = data._metadata?.totalCuentas || data.sumasSaldos?.length || 0;
-    document.getElementById('upload-label').textContent = 'Node-RED: ' + total + ' cuentas';
+    var total = result.data._metadata?.totalCuentas || result.data.sumasSaldos?.length || 0;
+    var label = result.source === 'primary' ? 'ingcorona.ddns.net' : '192.168.0.23';
+    document.getElementById('upload-label').textContent = label + ': ' + total + ' cuentas';
     document.getElementById('kpi-saldo-delta').textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-AR');
-    showToast('Datos desde Calipso vía Node-RED (' + total + ' cuentas)', 'ok');
+    if (result.source === 'fallback') {
+      showToast('Conectado vía fallback LAN (' + total + ' cuentas)', 'warn');
+    } else {
+      showToast('Datos desde ' + label + ' (' + total + ' cuentas)', 'ok');
+    }
   } catch (e) {
-    console.warn('Node-RED fetch failed:', e.message);
+    console.warn('loadFromAPI: ambos endpoints fallaron —', e.message);
     document.getElementById('upload-label').textContent = 'Sin conexión';
-    document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3 style="color:var(--accent-red);">⚠ Sin conexión con Node-RED</h3><p>' + e.message + '</p><p style="font-size:11px;margin-top:8px;">Verificá que Node-RED esté funcionando en 192.168.0.23:1880</p></div></td></tr>';
+    document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3 style="color:var(--accent-red);">⚠ Sin conexión</h3><p>No se pudo conectar con Node-RED (primary ni fallback).</p><p style="font-size:11px;margin-top:8px;">Cargando datos demo para visualización offline.</p></div></td></tr>';
     document.getElementById('ss-body').innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3 style="color:var(--accent-red);">Sin datos</h3></div></td></tr>';
     document.getElementById('kpi-saldo-total').textContent = '—';
     document.getElementById('kpi-crit-count').textContent = '—';
     document.getElementById('kpi-alert-count').textContent = '—';
-    showToast('No se pudo conectar con Node-RED. Cargando demo.', 'warn');
+    showToast('Sin conexión. Cargando datos demo.', 'err');
     loadMockData();
   }
 }
@@ -1894,7 +1887,7 @@ function handleDrop(e) {
 function processData() {
   // Si hay conexión Node-RED activa, usarla
   if (CONFIG.useNodeRed) {
-    loadFromNodeRED();
+    loadFromAPI();
     return;
   }
   const fileInput = document.getElementById('fileInput');
@@ -2420,7 +2413,7 @@ function showToast(msg, type) {
   document.getElementById('endDate').value = y + '-' + m + '-' + String(lastDay).padStart(2, '0');
 
   // Auto-cargar desde Node-RED (fallback a demo)
-  loadFromNodeRED();
+  loadFromAPI();
 })();
 </script>
 
