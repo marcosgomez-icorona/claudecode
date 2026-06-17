@@ -258,36 +258,6 @@
       flex: 1;
     }
 
-    /* ─── UPLOAD ZONE ─── */
-    #upload-zone {
-      border: 2px dashed var(--border-strong);
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      text-align: center;
-      background: var(--surface);
-      transition: all 0.2s;
-      cursor: pointer;
-      margin-bottom: 24px;
-    }
-
-    #upload-zone:hover, #upload-zone.dragging {
-      border-color: var(--corona-green);
-      background: var(--corona-green-light);
-    }
-
-    #upload-zone.has-file {
-      border-style: solid;
-      border-color: var(--corona-green);
-      background: var(--corona-green-light);
-    }
-
-    .upload-icon {
-      width: 40px;
-      height: 40px;
-      margin: 0 auto 12px;
-      color: var(--corona-green);
-    }
-
     /* ─── PARAM BAR ─── */
     .param-bar {
       background: var(--surface);
@@ -833,21 +803,6 @@
 
     <!-- ─── PARAM BAR (siempre visible) ─── -->
     <div class="param-bar">
-      <div class="param-group" style="flex:1; min-width:200px;">
-        <div class="param-label">Archivo CSV (Calipso)</div>
-        <div style="display:flex; gap:8px; align-items:center;">
-          <input type="file" id="fileInput" accept=".csv" style="display:none;" onchange="handleFileChange(this)"/>
-          <div id="upload-zone" onclick="document.getElementById('fileInput').click()"
-               ondragover="event.preventDefault(); this.classList.add('dragging')"
-               ondragleave="this.classList.remove('dragging')"
-               ondrop="handleDrop(event)"
-               style="border:2px dashed var(--border-strong); border-radius:8px; padding:8px 16px; cursor:pointer; display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted); background:var(--surface-2); transition:all 0.2s; flex:1;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            <span id="upload-label">Soltar CSV aquí o hacer clic</span>
-          </div>
-        </div>
-      </div>
-
       <div class="param-group">
         <div class="param-label">Umbral crítico ($)</div>
         <input type="number" class="param-input narrow" id="criticalThreshold" value="10000000" min="0" step="1000000" />
@@ -869,12 +824,9 @@
       </div>
 
       <div style="display:flex; gap:8px;">
-        <button class="btn-primary-custom" onclick="processData()">
-          Procesar CSV
-        </button>
         <button class="btn-primary-custom" style="background:var(--corona-green);" onclick="loadFromAPI()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
-          Consultar Node-RED
+          Consultar / Actualizar
         </button>
         <button class="btn-primary-custom" style="background:var(--accent-blue);" onclick="loadMockData()">
           Cargar Demo
@@ -1436,7 +1388,6 @@
 <!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <script>
 /* ════════════════════════════════════════════════
@@ -1812,7 +1763,6 @@ async function loadFromAPI() {
   var ct = document.getElementById('criticalThreshold').value || CONFIG.criticalThreshold;
 
   // Estados de carga
-  document.getElementById('upload-label').textContent = 'Consultando...';
   document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3>Consultando... 🔄</h3><p>Esperando respuesta del servidor</p></div></td></tr>';
   document.getElementById('ss-body').innerHTML = '<tr><td colspan="9"><div class="empty-state"><h3>Consultando...</h3></div></td></tr>';
   document.getElementById('kpi-saldo-total').textContent = '···';
@@ -1830,7 +1780,6 @@ async function loadFromAPI() {
     renderAll();
     var total = result.data._metadata?.totalCuentas || result.data.sumasSaldos?.length || 0;
     var label = result.source === 'primary' ? 'ingcorona.ddns.net' : '192.168.0.23';
-    document.getElementById('upload-label').textContent = label + ': ' + total + ' cuentas';
     document.getElementById('kpi-saldo-delta').textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-AR');
     if (result.source === 'fallback') {
       showToast('Conectado vía fallback LAN (' + total + ' cuentas)', 'warn');
@@ -1839,7 +1788,6 @@ async function loadFromAPI() {
     }
   } catch (e) {
     console.warn('loadFromAPI: ambos endpoints fallaron —', e.message);
-    document.getElementById('upload-label').textContent = 'Sin conexión';
     document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3 style="color:var(--accent-red);">⚠ Sin conexión</h3><p>No se pudo conectar con Node-RED (primary ni fallback).</p><p style="font-size:11px;margin-top:8px;">Cargando datos demo para visualización offline.</p></div></td></tr>';
     document.getElementById('ss-body').innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3 style="color:var(--accent-red);">Sin datos</h3></div></td></tr>';
     document.getElementById('kpi-saldo-total').textContent = '—';
@@ -1856,88 +1804,15 @@ async function loadFromAPI() {
 function loadMockData() {
   STATE.data = MOCK;
   renderAll();
-  document.getElementById('upload-label').textContent = 'Datos demo';
   showToast('Datos demo cargados correctamente', 'ok');
 }
 
 /* ════════════════════════════════════════════════
-   PROCESAR CSV
+   CARGAR DATOS
 ════════════════════════════════════════════════ */
-function handleFileChange(input) {
-  if (!input.files[0]) return;
-  const name = input.files[0].name;
-  document.getElementById('upload-label').textContent = name;
-  document.getElementById('upload-zone').classList.add('has-file');
-}
-
-function handleDrop(e) {
-  e.preventDefault();
-  document.getElementById('upload-zone').classList.remove('dragging');
-  const file = e.dataTransfer.files[0];
-  if (file && file.name.endsWith('.csv')) {
-    document.getElementById('upload-label').textContent = file.name;
-    document.getElementById('upload-zone').classList.add('has-file');
-    parseCSV(file);
-  }
-}
-
 function processData() {
   // Siempre intentar API primero
   loadFromAPI();
-}
-
-function parseCSV(file) {
-  Papa.parse(file, {
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results) {
-      if (!results.data || results.data.length === 0) {
-        showToast('El CSV no tiene datos válidos', 'warn');
-        loadMockData();
-        return;
-      }
-      const mapped = mapCSVToState(results.data);
-      STATE.data = mapped;
-      renderAll();
-      showToast(`CSV cargado: ${results.data.length} registros`, 'ok');
-    },
-    error: function() {
-      showToast('Error al leer el CSV. Cargando datos demo.', 'warn');
-      loadMockData();
-    }
-  });
-}
-
-function mapCSVToState(rows) {
-  // Mapeo flexible: busca columnas comunes del export Calipso
-  const find = (row, ...keys) => {
-    for (const k of keys) {
-      const col = Object.keys(row).find(c => c.toLowerCase().replace(/\s/g,'').includes(k.toLowerCase()));
-      if (col) return row[col];
-    }
-    return '';
-  };
-
-  const parsed = rows.map(r => ({
-    codigo:     find(r,'codigo','code','cta'),
-    cuenta:     find(r,'cuenta','nombre','name','description'),
-    saldoInicial: parseFloat(find(r,'saldoinicial','inicial','sdoini')) || 0,
-    debeAcum:   parseFloat(find(r,'debe','debeacum','debito')) || 0,
-    haberAcum:  parseFloat(find(r,'haber','haberacum','credito')) || 0,
-    variacion:  parseFloat(find(r,'variacion','var','change')) || 0,
-    estado:     'ok'
-  }));
-
-  // Aplicar reglas de estado
-  const crit = parseFloat(document.getElementById('criticalThreshold').value) || CONFIG.criticalThreshold;
-  const varThr = parseFloat(document.getElementById('variationThreshold').value) || CONFIG.variationThreshold;
-  parsed.forEach(r => {
-    const saldo = Math.abs(r.debeAcum - r.haberAcum);
-    if (saldo >= crit || Math.abs(r.variacion) >= varThr) r.estado = 'crit';
-    else if (Math.abs(r.variacion) >= varThr * 0.6) r.estado = 'warn';
-  });
-
-  return { sumasSaldos: parsed, mayor: [], libroDiario: [], imputaciones: [], egresos: [], ingresos: [], proveedoresSaldos: [], proveedoresPendientes: [], interempresas: [], evolucion: MOCK.evolucion };
 }
 
 /* ════════════════════════════════════════════════
@@ -2399,6 +2274,12 @@ function showToast(msg, type) {
   var lastDay = new Date(y, now.getMonth() + 1, 0).getDate();
   document.getElementById('startDate').value = y + '-' + m + '-01';
   document.getElementById('endDate').value = y + '-' + m + '-' + String(lastDay).padStart(2, '0');
+
+  // Detectar si se abrió como archivo local (file://) — CORS no funciona
+  if (window.location.protocol === 'file:') {
+    console.warn('index.html abierto como file:// — CORS puede bloquear fetch a Node-RED');
+    showToast('Para conectar con Node-RED, serví este archivo con un servidor HTTP local (Live Server, python -m http.server)', 'warn');
+  }
 
   // Auto-cargar desde API (con fallback automático a demo)
   await loadFromAPI();
