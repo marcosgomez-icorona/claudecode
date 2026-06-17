@@ -32,31 +32,33 @@ function updateParams() {
 
 /* ─── KPIs ─── */
 function renderKPIs() {
-  const ss = (STATE.filteredData ? STATE.filteredData.sumasSaldos : STATE.data.sumasSaldos) || [];
-  const saldoTotal = ss.reduce((acc, r) => acc + (r.debeAcum - r.haberAcum), 0);
-  const critCount = ss.filter(r => r.estado === 'crit').length;
-  const alertCount = ss.filter(r => r.estado !== 'ok').length;
-  const avgVar = ss.length ? ss.reduce((a,r) => a + Math.abs(r.variacion), 0) / ss.length : 0;
+  try {
+    const ss = (STATE.filteredData ? STATE.filteredData.sumasSaldos : STATE.data.sumasSaldos) || [];
+    const saldoTotal = ss.reduce((acc, r) => acc + (r.debeAcum - r.haberAcum), 0);
+    const critCount = ss.filter(r => r.estado === 'crit').length;
+    const alertCount = ss.filter(r => r.estado !== 'ok').length;
+    const avgVar = ss.length ? ss.reduce((a,r) => a + Math.abs(r.variacion), 0) / ss.length : 0;
 
-  const ev = STATE.data.egresos || [];
-  const iv = STATE.data.ingresos || [];
-  const totalEg = ev.reduce((a,r) => a + (r.importe || 0), 0);
-  const totalIv = iv.reduce((a,r) => a + (r.importe || 0), 0);
+    const ev = STATE.data.egresos || [];
+    const iv = STATE.data.ingresos || [];
+    const totalEg = ev.reduce((a,r) => a + (r.importe || 0), 0);
+    const totalIv = iv.reduce((a,r) => a + (r.importe || 0), 0);
 
-  document.getElementById('kpi-saldo-total').textContent = fmtMoney(saldoTotal);
-  document.getElementById('kpi-saldo-delta').textContent = 'Saldo neto acumulado';
-  document.getElementById('kpi-crit-count').textContent = critCount;
-  document.getElementById('kpi-crit-desc').textContent = `Umbral: ${fmtMoney(CONFIG.criticalThreshold)}`;
-  document.getElementById('kpi-alert-count').textContent = alertCount;
-  document.getElementById('kpi-alert-desc').textContent = `${critCount} críticas, ${alertCount - critCount} advertencias`;
-  document.getElementById('kpi-avg-var').textContent = fmtPct(avgVar);
-  document.getElementById('kpi-var-desc').textContent = 'Variación media absoluta';
-  document.getElementById('kpi-egresos').textContent = fmtMoney(totalEg);
-  document.getElementById('kpi-ingresos').textContent = fmtMoney(totalIv);
-  document.getElementById('kpi-ev-total').textContent = fmtMoney(totalEg);
-  document.getElementById('kpi-ev-count').textContent = ev.length;
-  document.getElementById('kpi-iv-total').textContent = fmtMoney(totalIv);
-  document.getElementById('kpi-iv-count').textContent = iv.length;
+    if ($('kpi-saldo-total')) $('kpi-saldo-total').textContent = fmtMoney(saldoTotal);
+    if ($('kpi-saldo-delta')) $('kpi-saldo-delta').textContent = 'Saldo neto acumulado';
+    if ($('kpi-crit-count')) $('kpi-crit-count').textContent = critCount;
+    if ($('kpi-crit-desc')) $('kpi-crit-desc').textContent = `Umbral: ${fmtMoney(CONFIG.criticalThreshold)}`;
+    if ($('kpi-alert-count')) $('kpi-alert-count').textContent = alertCount;
+    if ($('kpi-alert-desc')) $('kpi-alert-desc').textContent = `${critCount} críticas, ${alertCount - critCount} advertencias`;
+    if ($('kpi-avg-var')) $('kpi-avg-var').textContent = fmtPct(avgVar);
+    if ($('kpi-var-desc')) $('kpi-var-desc').textContent = 'Variación media absoluta';
+    if ($('kpi-egresos')) $('kpi-egresos').textContent = fmtMoney(totalEg);
+    if ($('kpi-ingresos')) $('kpi-ingresos').textContent = fmtMoney(totalIv);
+    if ($('kpi-ev-total')) $('kpi-ev-total').textContent = fmtMoney(totalEg);
+    if ($('kpi-ev-count')) $('kpi-ev-count').textContent = ev.length;
+    if ($('kpi-iv-total')) $('kpi-iv-total').textContent = fmtMoney(totalIv);
+    if ($('kpi-iv-count')) $('kpi-iv-count').textContent = iv.length;
+  } catch (e) { console.warn('renderKPIs:', e.message); }
 }
 
 /* ─── TOP ACCOUNTS TABLE ─── */

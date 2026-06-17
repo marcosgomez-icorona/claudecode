@@ -1,5 +1,8 @@
 /* FORMAT — Formateo de moneda, fechas, badges, filtros, export, toast */
 
+// Helper seguro: retorna elemento o null sin lanzar error
+function $(id) { return document.getElementById(id); }
+
 /* ════════════════════════════════════════════════
    FORMATEO
 ════════════════════════════════════════════════ */
