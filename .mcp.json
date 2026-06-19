@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "notebooklm": {
+      "command": "notebooklm-mcp",
+      "args": ["--transport", "stdio"],
+      "description": "Google NotebookLM vía MCP — base de conocimiento aumentada con Gemini. 35 herramientas: notebooks, fuentes, consultas con citas, audio/video/presentaciones, batch, pipelines.",
+      "env": {}
+    }
+  }
+}

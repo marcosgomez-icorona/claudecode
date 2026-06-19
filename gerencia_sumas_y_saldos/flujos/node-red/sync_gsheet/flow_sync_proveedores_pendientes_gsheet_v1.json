@@ -1,0 +1,201 @@
+[
+	{
+		"id": "sync_pp_tab",
+		"type": "tab",
+		"label": "SYNC - Proveedores Pendientes a GSheet",
+		"disabled": false,
+		"info": "=== SYNC: SYNC - Proveedores Pendientes a GSheet → GOOGLE SHEETS ===\n\nFLUJO:\n  Inject → MSSQL → Transformar → GSheet Clear → Restore → GSheet Append → Resultado\n\nTAB: ProveedoresPendientes\nCOLUMNAS: PROVEEDOR|COMPROBANTE|FECHA|VENCIMIENTO|DIAS|IMPORTE|ESTADO|UNIDAD_NEGOCIO|SYNC_UUID\nFRECUENCIA: Diaria 06:30 AM\nVERSION: 1.0.0 — 2026-06-18"
+	},
+	{
+		"id": "sync_pp_inject",
+		"type": "inject",
+		"z": "sync_pp_tab",
+		"name": "▶ Ejecutar sync ahora",
+		"props": [],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"x": 130,
+		"y": 120,
+		"wires": [
+			[
+				"sync_pp_prep"
+			]
+		]
+	},
+	{
+		"id": "sync_pp_sched",
+		"type": "inject",
+		"z": "sync_pp_tab",
+		"name": "⏰ Schedule diario 06:30",
+		"props": [],
+		"repeat": "",
+		"crontab": "30 6 * * *",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"x": 130,
+		"y": 180,
+		"wires": [
+			[
+				"sync_pp_prep"
+			]
+		]
+	},
+	{
+		"id": "sync_pp_prep",
+		"type": "function",
+		"z": "sync_pp_tab",
+		"name": "1. Preparar query",
+		"func": "var sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nmsg.sync_uuid = sync_uuid;\n\nvar q = \"\"\n+ \"SELECT TOP 300\\n\"\n+ \"    COD_CLIENTE AS CODIGO,\\n\"\n+ \"    NOM_CLIENTE AS PROVEEDOR,\\n\"\n+ \"    DESCRIPCION AS COMPROBANTE,\\n\"\n+ \"    SUBSTRING(FECHAEMISION, 1, 8) AS FECHA,\\n\"\n+ \"    SUBSTRING(FECHAVENCIMIENTO, 1, 8) AS VENCIMIENTO,\\n\"\n+ \"    ISNULL(SALDO, 0) AS IMPORTE,\\n\"\n+ \"    ISNULL(UN, '') AS UNIDAD_NEGOCIO\\n\"\n+ \"FROM V_EZI_PROV_FAC_PEND\\n\"\n+ \"WHERE SALDO > 0\\n\"\n+ \"ORDER BY VENCIMIENTO ASC;\\n\";\n\nmsg.payload = q;\nnode.warn('[Sync-PP] Preparando sync ' + sync_uuid);\nreturn msg;",
+		"outputs": 1,
+		"timeout": 0,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 400,
+		"y": 120,
+		"wires": [
+			[
+				"sync_pp_mssql"
+			]
+		]
+	},
+	{
+		"id": "sync_pp_mssql",
+		"type": "MSSQL",
+		"z": "sync_pp_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: SYNC - Proveedores Pendientes a GSheet",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 610,
+		"y": 120,
+		"wires": [
+			[
+				"sync_pp_transform"
+			]
+		]
+	},
+	{
+		"id": "sync_pp_transform",
+		"type": "function",
+		"z": "sync_pp_tab",
+		"name": "2. Transformar → 2D array",
+		"func": "var rows = msg.payload;\nvar sync_uuid = msg.sync_uuid || 'N/A';\nvar timestamp = new Date().toISOString();\nmsg._syncInfo = { sync_uuid: sync_uuid, timestamp: timestamp };\nif (!rows || !Array.isArray(rows) || rows.length === 0) {\n  node.warn('[Sync-PP] Sin datos.'); msg._syncInfo.empty = true; msg.payload = null; return msg;\n}\n// Calcular DIAS para cada documento\nvar now = new Date();\nvar today = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');\n\n// Columnas A-I: PROVEEDOR|COMPROBANTE|FECHA|VENCIMIENTO|DIAS|IMPORTE|ESTADO|UNIDAD_NEGOCIO|SYNC_UUID\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i]; if (!r) continue;\n  var venc = (r.VENCIMIENTO || '').toString().trim();\n  var importe = parseFloat(r.IMPORTE) || 0; if (importe === 0) continue;\n\n  var dias = 0;\n  if (venc.length >= 8) {\n    var vYear = parseInt(venc.substring(0,4), 10);\n    var vMonth = parseInt(venc.substring(4,6), 10) - 1;\n    var vDay = parseInt(venc.substring(6,8), 10);\n    var vDate = new Date(vYear, vMonth, vDay);\n    var tDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());\n    dias = Math.floor((tDate - vDate) / (1000 * 60 * 60 * 24));\n  }\n  var estado = dias > 0 ? 'VENCIDO' : (dias >= -7 ? 'A_VENCER' : 'VIGENTE');\n\n  data.push([\n    (r.PROVEEDOR || '').toString().trim(),\n    (r.COMPROBANTE || '').toString().trim(),\n    (r.FECHA || '').toString().trim(),\n    venc,\n    dias,\n    importe,\n    estado,\n    (r.UNIDAD_NEGOCIO || '').toString().trim(),\n    sync_uuid\n  ]);\n}\n// Ordenar: vencidos primero\ndata.sort(function(a,b){ return (b[4]||0) - (a[4]||0); });\n\nmsg._sheetData = data; msg.payload = data;\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-PP] ' + data.length + ' pendientes. UUID=' + sync_uuid);\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 830,
+		"y": 120,
+		"wires": [
+			[
+				"sync_pp_clear"
+			]
+		]
+	},
+	{
+		"id": "sync_pp_restore",
+		"type": "function",
+		"z": "sync_pp_tab",
+		"name": "2b. Restaurar payload post-Clear",
+		"func": "// El GSheet Clear sobreescribe msg.payload con la respuesta de la API\n// Restaurar el array 2D desde _sheetData para que el Append funcione\nif (msg._sheetData) {\n  msg.payload = msg._sheetData;\n}\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1070,
+		"y": 40,
+		"wires": [
+			[
+				"sync_pp_append"
+			]
+		]
+	},
+	{
+		"id": "sync_pp_clear",
+		"type": "GSheet",
+		"z": "sync_pp_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "ProveedoresPendientes!A2:Z",
+		"flatten": false,
+		"name": "Clear ProveedoresPendientes",
+		"x": 1070,
+		"y": 80,
+		"wires": [
+			[
+				"sync_pp_restore"
+			]
+		]
+	},
+	{
+		"id": "sync_pp_append",
+		"type": "GSheet",
+		"z": "sync_pp_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "ProveedoresPendientes!A2:Z",
+		"flatten": false,
+		"name": "Append a ProveedoresPendientes",
+		"x": 1070,
+		"y": 160,
+		"wires": [
+			[
+				"sync_pp_result"
+			]
+		]
+	},
+	{
+		"id": "sync_pp_result",
+		"type": "function",
+		"z": "sync_pp_tab",
+		"name": "3. Resultado sync",
+		"func": "var info = msg._syncInfo || {};\nif (info.empty) {\n  node.warn('[Sync-pp] Sync omitido: sin datos');\n  return msg;\n}\nif (msg.error) {\n  node.error('[Sync-pp] ERROR: ' + msg.error);\n  return msg;\n}\nvar updatedRange = '';\nif (msg.payload && msg.payload.updates) updatedRange = msg.payload.updates.updatedRange || '';\nnode.warn('[Sync-pp] ✅ Sync exitoso — ' + (info.rowCount || 0) + ' filas → ProveedoresPendientes');\nnode.warn('[Sync-pp]    UUID: ' + (info.sync_uuid || '?') + ' | Rango: ' + updatedRange);\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1280,
+		"y": 120,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "sync_gauth_mov_0009",
+		"type": "gauth",
+		"name": "node-red-sheets-sync@sync-calipso-corona.iam.gserviceaccount.com"
+	},
+	{
+		"id": "6814eb4bb7e82ddb",
+		"type": "MSSQL-CN",
+		"tdsVersion": "7_3_B",
+		"name": "Calipso",
+		"server": "192.168.0.177",
+		"port": "1433",
+		"encyption": false,
+		"trustServerCertificate": false,
+		"database": "CORONA",
+		"useUTC": true,
+		"connectTimeout": "25000",
+		"requestTimeout": "25000",
+		"cancelTimeout": "80000",
+		"pool": "5",
+		"parseJSON": false,
+		"enableArithAbort": true,
+		"readOnlyIntent": false
+	}
+]

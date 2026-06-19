@@ -1,413 +1,577 @@
 [
-    {
-        "id": "92e21ab23726aa07",
-        "type": "tab",
-        "label": "CONCILIACION - Galicia",
-        "disabled": false,
-        "info": "=== CONCILIACION BANCARIA — Banco Galicia ===\n\nFLOWS:\n  1. Sync Calipso: MSSQL → Sheet Galicia_Calipso\n  2. Sync Extracto: Manual/subida → Sheet Galicia_Banco\n  3. Conciliacion: Cruzar Banco vs Calipso → Pendientes + Resultados\n  4. Dashboard: Leer Sheets → JSON + HTML\n\nSHEET TABS REQUERIDOS:\n  Galicia_Banco: FECHA|DESCRIPCION|DEBITOS|CREDITOS|GRUPO|CONCEPTO|TIPO|IMPORTE_NETO|SALDO\n  Galicia_Calipso: FECHA|ASIENTO|DETALLE|DEBE|HABER|NETO|ES_REVERSION|CUENTA\n  Conciliacion: FECHA|TIPO|DESCRIPCION|BANCO|CALIPSO|DIF|ESTADO|CRITICIDAD\n  Resumen: BANCO|PERIODO|TOTAL_BANCO|TOTAL_CALIPSO|DIFERENCIA|TIMING|ESTADO|PENDIENTES\n  Pendientes: BANCO|FECHA|DESCRIPCION|IMPORTE|TIPO|ORIGEN|CRITICIDAD|OBSERVACION\n\nVERSION: 1.0.0 — Junio 2026"
-    },
-    {
-        "id": "5b558c929db0b7e8",
-        "type": "GSheet",
-        "z": "92e21ab23726aa07",
-        "creds": "conc_gauth",
-        "method": "get",
-        "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
-        "cells": "Galicia_Calipso!A2:H",
-        "flatten": false,
-        "name": "Leer Calipso existente",
-        "x": 1020,
-        "y": 80,
-        "wires": [
-            [
-                "c584328a1d6c8e42"
-            ]
-        ]
-    },
-    {
-        "id": "a9efa0e4c4f02391",
-        "type": "inject",
-        "z": "92e21ab23726aa07",
-        "name": "▶ Sync Calipso (Feb 2026)",
-        "props": [],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 130,
-        "y": 80,
-        "wires": [
-            [
-                "01b93aab2881c8f7"
-            ]
-        ]
-    },
-    {
-        "id": "01b93aab2881c8f7",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "Query Calipso Galicia Feb26",
-        "func": "// Banco Galicia: cuenta 01.01.01.02.04, Febrero 2026\nvar query = 'SELECT ' +\n  ' SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION,1,8) AS FECHA,' +\n  ' V_TRCONTABLE_.NUMERODOCUMENTO AS ASIENTO,' +\n  ' V_TRCONTABLE_.DETALLE,' +\n  ' V_VALOR_.IMPORTE AS DEBE,' +\n  ' V_VALOR_1.IMPORTE AS HABER,' +\n  ' V_TRCONTABLE_.NOMBREDESTINATARIO AS PROVEEDOR' +\n' FROM V_TRCONTABLE_' +\n' INNER JOIN V_ITEMCONTABLE_ ON V_TRCONTABLE_.ITEMSTRANSACCION_ID = V_ITEMCONTABLE_.BO_PLACE_ID' +\n' INNER JOIN V_VALOR_ ON V_ITEMCONTABLE_.DEBE_ID = V_VALOR_.ID' +\n' INNER JOIN V_VALOR_ AS V_VALOR_1 ON V_ITEMCONTABLE_.HABER_ID = V_VALOR_1.ID' +\n' INNER JOIN V_EZI_CUENTAS ON V_ITEMCONTABLE_.REFERENCIA_ID = V_EZI_CUENTAS.ID' +\n\" WHERE V_EZI_CUENTAS.CODIGO = '01.01.01.02.04 - Banco Galicia'\" +\n  \" AND SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION,1,6) = '202602'\" +\n  \" AND V_TRCONTABLE_.ESTADO = 'C'\" +\n' ORDER BY V_TRCONTABLE_.FECHAAPLICACION ASC';\n\nmsg.payload = query;\nmsg._periodo = '2026-02';\nmsg._cuenta = '01.01.01.02.04';\nmsg._banco = 'Galicia';\nnode.warn('[Conciliacion] Consultando Calipso Galicia Feb 2026...');\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 340,
-        "y": 80,
-        "wires": [
-            [
-                "bdfb5117cf18f619"
-            ]
-        ]
-    },
-    {
-        "id": "bdfb5117cf18f619",
-        "type": "MSSQL",
-        "z": "92e21ab23726aa07",
-        "mssqlCN": "6814eb4bb7e82ddb",
-        "name": "MSSQL Calipso",
-        "outField": "payload",
-        "returnType": "0",
-        "throwErrors": 1,
-        "query": "SELECT 1 AS placeholder",
-        "modeOpt": "",
-        "modeOptType": "query",
-        "queryOpt": "payload",
-        "queryOptType": "msg",
-        "x": 560,
-        "y": 80,
-        "wires": [
-            [
-                "a29313431b7ccbe6"
-            ]
-        ]
-    },
-    {
-        "id": "a29313431b7ccbe6",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "Depurar Calipso (reversiones + 2D)",
-        "func": "var rows = msg.payload;\nvar periodo = msg._periodo || '2026-02';\nvar cuenta = msg._cuenta || '01.01.01.02.04';\n\nif (!rows || !Array.isArray(rows) || rows.length === 0) {\n  node.warn('[Conciliacion] Calipso sin datos');\n  msg._empty = true;\n  return msg;\n}\n\n// 1. Marcar reversiones\nvar reversiones = {};\nfor (var i = 0; i < rows.length; i++) {\n  var det = (rows[i].DETALLE || '').toString();\n  var match = det.match(/Reversi[oó]n Nro\\.?\\s*(\\d+)/i);\n  if (match) {\n    var nroRev = match[1];\n    if (!reversiones[nroRev]) reversiones[nroRev] = [];\n    reversiones[nroRev].push(i);\n    rows[i]._esReversion = true;\n  } else {\n    rows[i]._esReversion = false;\n  }\n}\n\n// Contar pares de reversión\nvar paresEliminados = 0;\nvar keys = Object.keys(reversiones);\nfor (var k = 0; k < keys.length; k++) {\n  if (reversiones[keys[k]].length >= 2) paresEliminados++;\n}\n\n// 2. Construir array 2D (sin filas de reversión)\nvar data = [];\nfor (var j = 0; j < rows.length; j++) {\n  var r = rows[j];\n  // Saltar filas que son parte de un par de reversión\n  var revKey = null;\n  var det2 = (r.DETALLE || '').toString();\n  var match2 = det2.match(/Reversi[oó]n Nro\\.?\\s*(\\d+)/i);\n  if (match2 && reversiones[match2[1]] && reversiones[match2[1]].length >= 2) continue;\n  \n  var debe = parseFloat(r.DEBE) || 0;\n  var haber = parseFloat(r.HABER) || 0;\n  var neto = debe - haber;\n  \n  data.push([\n    r.FECHA || '',\n    r.ASIENTO || '',\n    (r.DETALLE || '').substring(0, 250),\n    debe,\n    haber,\n    neto,\n    r._esReversion ? 'SI' : 'NO',\n    cuenta\n  ]);\n}\n\nmsg._newRows = data;\nmsg._paresEliminados = paresEliminados;\nmsg._totalRows = rows.length;\nmsg._depurados = data.length;\n\nnode.warn('[Conciliacion] Calipso: ' + rows.length + ' filas, ' + paresEliminados + ' pares revertidos, ' + data.length + ' depuradas');\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 790,
-        "y": 80,
-        "wires": [
-            [
-                "5b558c929db0b7e8"
-            ]
-        ]
-    },
-    {
-        "id": "c584328a1d6c8e42",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "Dedup Calipso",
-        "func": "var newRows = msg._newRows || [];\nvar existing = msg.payload || [];\n\nif (msg._empty || newRows.length === 0) {\n  msg.payload = null;\n  return msg;\n}\n\n// Clave: FECHA|ASIENTO (col 0 + 1)\nvar existingKeys = new Set();\nif (Array.isArray(existing)) {\n  for (var i = 0; i < existing.length; i++) {\n    var row = existing[i];\n    if (Array.isArray(row) && row.length >= 2) {\n      existingKeys.add(String(row[0] || '').trim() + '|' + String(row[1] || '').trim());\n    }\n  }\n}\n\nvar filtered = [];\nfor (var j = 0; j < newRows.length; j++) {\n  var key = String(newRows[j][0] || '').trim() + '|' + String(newRows[j][1] || '').trim();\n  if (!existingKeys.has(key)) filtered.push(newRows[j]);\n}\n\nmsg._calipsoNew = filtered.length;\nmsg._calipsoSkip = newRows.length - filtered.length;\n\nif (filtered.length === 0) {\n  msg.payload = null;\n} else {\n  msg.payload = filtered;\n}\n\nnode.warn('[Conciliacion] Calipso dedup: ' + newRows.length + ' nuevas, ' + (newRows.length - filtered.length) + ' ya existen, ' + filtered.length + ' a escribir');\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1250,
-        "y": 80,
-        "wires": [
-            [
-                "9d43546ebd24b1c3"
-            ]
-        ]
-    },
-    {
-        "id": "9d43546ebd24b1c3",
-        "type": "GSheet",
-        "z": "92e21ab23726aa07",
-        "creds": "conc_gauth",
-        "method": "append",
-        "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
-        "cells": "Galicia_Calipso!A2:H",
-        "flatten": false,
-        "name": "Append Calipso",
-        "x": 1480,
-        "y": 80,
-        "wires": [
-            [
-                "0874c5c2a10385a1"
-            ]
-        ]
-    },
-    {
-        "id": "0874c5c2a10385a1",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "Resultado Calipso",
-        "func": "var range = (msg.payload && msg.payload.updates) ? msg.payload.updates.updatedRange : '';\nnode.warn('[Conciliacion] Calipso OK: ' + (msg._calipsoNew || 0) + ' filas nuevas → ' + range);\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1700,
-        "y": 80,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "1650a8f9469e9213",
-        "type": "inject",
-        "z": "92e21ab23726aa07",
-        "name": "▶ Ejecutar Conciliación",
-        "props": [],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 130,
-        "y": 340,
-        "wires": [
-            [
-                "356cae71bcbfa379"
-            ]
-        ]
-    },
-    {
-        "id": "356cae71bcbfa379",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "Iniciar Conciliación",
-        "func": "msg._periodo = '2026-02';\nmsg._banco = 'Galicia';\nnode.warn('[Conciliacion] Iniciando cruce Galicia Feb 2026...');\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 340,
-        "y": 340,
-        "wires": [
-            [
-                "57bed439bb9c1d97"
-            ]
-        ]
-    },
-    {
-        "id": "57bed439bb9c1d97",
-        "type": "GSheet",
-        "z": "92e21ab23726aa07",
-        "creds": "conc_gauth",
-        "method": "get",
-        "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
-        "cells": "Galicia_Banco!A2:I",
-        "flatten": false,
-        "name": "Leer Extracto Banco",
-        "x": 520,
-        "y": 300,
-        "wires": [
-            [
-                "349af9bfd404019e"
-            ]
-        ]
-    },
-    {
-        "id": "b7ef60a7575f5d31",
-        "type": "GSheet",
-        "z": "92e21ab23726aa07",
-        "creds": "conc_gauth",
-        "method": "get",
-        "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
-        "cells": "Galicia_Calipso!A2:H",
-        "flatten": false,
-        "name": "Leer Calipso",
-        "x": 560,
-        "y": 380,
-        "wires": [
-            [
-                "7fe98c4564a6f421"
-            ]
-        ]
-    },
-    {
-        "id": "7fe98c4564a6f421",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "CRUCE: Banco vs Calipso + PENDIENTES",
-        "func": "// ============================================================\n// NODO: Conciliacion - Cruce Banco vs Calipso\n// VERSION CORREGIDA - Fixes aplicados:\n//   1. Eliminada \"var flow = flow\" innecesaria\n//   2. Comparacion de fechas con Date real (no parseInt)\n//   3. Bucles con let para evitar colision de scope\n//   4. Periodo derivado dinamicamente de los datos\n//   5. Tolerancia de importe ajustada por monto\n//   6. Return unificado a 3 salidas\n// ============================================================\n\nvar banco = flow.get('conc_banco_rows') || [];\nvar calipso = msg.payload || [];\n\nnode.warn('[Conciliacion] CRUCE: ' + banco.length + ' banco vs ' + calipso.length + ' calipso');\n\n// === UTILIDAD: diferencia real en dias entre fechas YYYYMMDD ===\nfunction fechaDiff(f1, f2) {\n  if (!f1 || !f2 || f1.length < 8 || f2.length < 8) return 999;\n  var a = new Date(f1.slice(0, 4) + '-' + f1.slice(4, 6) + '-' + f1.slice(6, 8));\n  var b = new Date(f2.slice(0, 4) + '-' + f2.slice(4, 6) + '-' + f2.slice(6, 8));\n  if (isNaN(a) || isNaN(b)) return 999;\n  return Math.abs((a - b) / 86400000);\n}\n\n// === CLASIFICACION DEL EXTRACTO BANCARIO ===\nvar TIPO_MAP = {\n  '000912': 'Cheques/ECheqs', '000914': 'Gestion Cheque',\n  '000909': 'Servicio Pago Proveedores', '000916': 'FIMA',\n  '000083': 'Debito Automatico', '000908': 'Haberes',\n  '000910': 'Prestamo', '000901': 'Gasto/Impuesto',\n  '000808': 'Gasto/Impuesto', '000814': 'Gasto/Impuesto',\n  '000833': 'Acreditacion Canje', '000903': 'Rechazo Debito',\n  '000915': 'Deposito Efectivo', '000917': 'COMEX',\n  '000907': 'Transferencia'\n};\n\nvar SUBTIPO_907 = {\n  '907255': 'Pago AFIP', '917203': 'MEP',\n  '917193': 'Cobro Cash Prov (YPF)', '917180': 'COMEX',\n  '907269': 'Pago Proveedor', '907232': 'Pago Proveedor',\n  '907297': 'Transf Propia CP', '907268': 'Transf Propia CP',\n  '917152': 'Transf Cta Propia', '917151': 'Transf Terceros'\n};\n\n// Clasificar movimientos del banco\nvar bancoClasif = [];\nfor (let i = 0; i < banco.length; i++) {\n  var b = banco[i];\n  if (!Array.isArray(b) || b.length < 7) continue;\n\n  var grupo = String(b[4] || '').trim();\n  var concepto = String(b[5] || '').trim();\n  var desc = String(b[1] || '').trim();\n\n  var tipo = TIPO_MAP[grupo] || 'Otros';\n\n  // Sub-clasificar 000907\n  if (grupo === '000907' && SUBTIPO_907[concepto]) tipo = SUBTIPO_907[concepto];\n\n  // Sub-clasificar FIMA\n  if (grupo === '000916') {\n    tipo = desc.toLowerCase().indexOf('suscripcion') >= 0 ? 'FIMA Suscripcion' : 'FIMA Rescate';\n  }\n\n  var esGasto = (['000901', '000808', '000814'].indexOf(grupo) >= 0) ||\n    (grupo === '000907' && ['907171', '907173'].indexOf(concepto) >= 0);\n\n  var debito = parseFloat(b[2]) || 0;\n  var credito = parseFloat(b[3]) || 0;\n  var importeNeto = credito - debito; // positivo=ingreso, negativo=egreso\n\n  bancoClasif.push({\n    fecha: String(b[0] || '').trim(),\n    descripcion: desc,\n    tipo: tipo,\n    grupo: grupo,\n    concepto: concepto,\n    importe: importeNeto,\n    debito: debito,\n    credito: credito,\n    esGasto: esGasto,\n    saldo: parseFloat(b[8]) || 0\n  });\n}\n\n// === CRUCE: Banco vs Calipso ===\nvar resultados = [];\nvar pendientes = [];\nvar calipsoUsados = {};\nvar totalBanco = 0;\nvar totalCalipso = 0;\n\nfor (let bi = 0; bi < bancoClasif.length; bi++) {\n  var bm = bancoClasif[bi];\n  var mejorMatch = null;\n  var mejorDif = Infinity;\n  var mejorIdx = -1;\n\n  for (let ci = 0; ci < calipso.length; ci++) {\n    if (calipsoUsados[ci]) continue;\n    var cm = calipso[ci];\n    if (!Array.isArray(cm) || cm.length < 6) continue;\n\n    var calFecha = String(cm[0] || '').trim();\n    var calNeto = parseFloat(cm[5]) || 0;\n\n    // FIX: comparacion de fechas con dias reales\n    if (bm.fecha && calFecha) {\n      if (fechaDiff(bm.fecha, calFecha) > 3) continue;\n    }\n\n    // FIX: tolerancia ajustada por monto\n    var difImporte = Math.abs(bm.importe - calNeto);\n    var tolerancia = Math.abs(bm.importe) > 5000\n      ? Math.abs(bm.importe) * 0.01\n      : 10;\n\n    if (difImporte < tolerancia && difImporte < mejorDif) {\n      mejorDif = difImporte;\n      mejorMatch = cm;\n      mejorIdx = ci;\n    }\n  }\n\n  if (mejorMatch && mejorIdx >= 0) {\n    calipsoUsados[mejorIdx] = true;\n    var calImporte = parseFloat(mejorMatch[5]) || 0;\n    var dif = Math.abs(bm.importe - calImporte);\n    resultados.push({\n      fecha: bm.fecha,\n      tipo: bm.tipo,\n      descripcion: bm.descripcion,\n      banco: bm.importe,\n      calipso: calImporte,\n      dif: dif,\n      estado: dif < 100 ? 'CONCILIADO' : 'TIMING',\n      criticidad: 'OK'\n    });\n    totalBanco += bm.importe;\n    totalCalipso += calImporte;\n\n  } else {\n    // NO encontrado en Calipso → PENDIENTE\n    var crit = 'MEDIA';\n    if (Math.abs(bm.importe) > 10000000) crit = 'CRITICA';\n    else if (Math.abs(bm.importe) > 1000000) crit = 'ALTA';\n    else if (bm.esGasto) crit = 'ALTA';\n\n    resultados.push({\n      fecha: bm.fecha,\n      tipo: bm.tipo,\n      descripcion: bm.descripcion,\n      banco: bm.importe,\n      calipso: 0,\n      dif: Math.abs(bm.importe),\n      estado: 'SOLO_BANCO',\n      criticidad: crit\n    });\n    pendientes.push({\n      banco: 'Galicia',\n      fecha: bm.fecha,\n      descripcion: bm.descripcion,\n      importe: Math.abs(bm.importe),\n      tipo: bm.tipo,\n      origen: 'BANCO',\n      criticidad: crit,\n      observacion: bm.esGasto\n        ? 'GASTO BANCARIO - Verificar registro en Calipso'\n        : 'No encontrado en Calipso'\n    });\n    totalBanco += bm.importe;\n  }\n}\n\n// Items en Calipso NO conciliados (SOLO_CALIPSO)\nfor (let ci2 = 0; ci2 < calipso.length; ci2++) {\n  if (calipsoUsados[ci2]) continue;\n  var cm2 = calipso[ci2];\n  if (!Array.isArray(cm2) || cm2.length < 6) continue;\n\n  var calNeto2 = parseFloat(cm2[5]) || 0;\n  if (isNaN(calNeto2)) calNeto2 = 0;           // FIX: defensa contra NaN\n  if (Math.abs(calNeto2) < 0.01) continue;\n\n  var crit2 = 'MEDIA';\n  if (Math.abs(calNeto2) > 10000000) crit2 = 'CRITICA';\n  else if (Math.abs(calNeto2) > 1000000) crit2 = 'ALTA';\n\n  resultados.push({\n    fecha: String(cm2[0] || '').trim(),\n    tipo: 'Mov Calipso',\n    descripcion: String(cm2[2] || '').trim().substring(0, 100),\n    banco: 0,\n    calipso: calNeto2,\n    dif: Math.abs(calNeto2),\n    estado: 'SOLO_CALIPSO',\n    criticidad: crit2\n  });\n  pendientes.push({\n    banco: 'Galicia',\n    fecha: String(cm2[0] || '').trim(),\n    descripcion: String(cm2[2] || '').trim().substring(0, 150),\n    importe: Math.abs(calNeto2),\n    tipo: 'Mov Calipso',\n    origen: 'CALIPSO',\n    criticidad: crit2,\n    observacion: 'Registrado en Calipso pero no en extracto bancario - Posible TIMING'\n  });\n  totalCalipso += calNeto2;\n}\n\nvar totalDiferencia = totalBanco - totalCalipso;\n\n// Ordenar pendientes por criticidad\nvar critOrder = { 'CRITICA': 0, 'ALTA': 1, 'MEDIA': 2, 'OK': 3 };\npendientes.sort(function (a, b) {\n  return (critOrder[a.criticidad] || 3) - (critOrder[b.criticidad] || 3);\n});\n\n// === PREPARAR RESULTADOS PARA SHEETS ===\n// Conciliacion: FECHA|TIPO|DESCRIPCION|BANCO|CALIPSO|DIF|ESTADO|CRITICIDAD\nvar conciliacion2D = [];\nfor (let ri = 0; ri < resultados.length; ri++) {\n  var r = resultados[ri];\n  conciliacion2D.push([\n    r.fecha, r.tipo, r.descripcion.substring(0, 200),\n    r.banco, r.calipso, r.dif, r.estado, r.criticidad\n  ]);\n}\n\n// Pendientes: BANCO|FECHA|DESCRIPCION|IMPORTE|TIPO|ORIGEN|CRITICIDAD|OBSERVACION\nvar pendientes2D = [];\nfor (let pi = 0; pi < pendientes.length; pi++) {\n  var p = pendientes[pi];\n  pendientes2D.push([\n    p.banco, p.fecha, p.descripcion.substring(0, 200),\n    p.importe, p.tipo, p.origen, p.criticidad, p.observacion\n  ]);\n}\n\n// FIX: periodo derivado dinamicamente del primer movimiento de banco\nvar periodo = bancoClasif.length\n  ? bancoClasif[0].fecha.replace(/^(\\d{4})(\\d{2})\\d{2}$/, '$1-$2')\n  : '????-??';\n\nvar estadoResumen = Math.abs(totalDiferencia) < 100\n  ? 'CUADRADO'\n  : (Math.abs(totalDiferencia) < 500000 ? 'TIMING' : 'PENDIENTE');\nvar semaforo = estadoResumen === 'CUADRADO'\n  ? 'VERDE'\n  : (estadoResumen === 'TIMING' ? 'AMARILLO' : 'ROJO');\n\nvar resumen2D = [[\n  'Galicia', periodo, totalBanco, totalCalipso,\n  totalDiferencia, 0, semaforo, pendientes.length\n]];\n\n// Guardar en context para que los nodos GSheet los lean\nflow.set('conc_resultados', conciliacion2D);\nflow.set('conc_pendientes', pendientes2D);\nflow.set('conc_resumen', resumen2D);\nflow.set('conc_stats', {\n  totalResultados: resultados.length,\n  conciliados: resultados.filter(function (x) { return x.estado === 'CONCILIADO'; }).length,\n  soloBanco: resultados.filter(function (x) { return x.estado === 'SOLO_BANCO'; }).length,\n  soloCalipso: resultados.filter(function (x) { return x.estado === 'SOLO_CALIPSO'; }).length,\n  timing: resultados.filter(function (x) { return x.estado === 'TIMING'; }).length,\n  pendientes: pendientes.length,\n  criticas: pendientes.filter(function (x) { return x.criticidad === 'CRITICA'; }).length,\n  altas: pendientes.filter(function (x) { return x.criticidad === 'ALTA'; }).length,\n  diferencia: totalDiferencia,\n  semaforo: semaforo\n});\n\nnode.warn('[Conciliacion] CRUCE COMPLETO: ' + resultados.length + ' items, ' +\n  pendientes.length + ' PENDIENTES (' +\n  pendientes.filter(function (x) { return x.criticidad === 'CRITICA'; }).length + ' CRITICAS, ' +\n  pendientes.filter(function (x) { return x.criticidad === 'ALTA'; }).length + ' ALTAS)');\nnode.warn('[Conciliacion] Semaforo: ' + semaforo + ' | Dif: $' + totalDiferencia.toFixed(2));\n\nmsg._conciliacionLista = true;\n\n// FIX: return unificado con 3 salidas (consistente con el return del final original)\nreturn [msg, null, null];",
-        "outputs": 3,
-        "timeout": "",
-        "noerr": 4,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 710,
-        "y": 480,
-        "wires": [
-            [
-                "68c3035ce23bb311"
-            ],
-            [
-                "4751ca7639e00994"
-            ],
-            [
-                "06b899b63f6110de"
-            ]
-        ]
-    },
-    {
-        "id": "68c3035ce23bb311",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "Prep Conciliacion",
-        "func": "// FIX 1: Eliminada \"var flow = flow\" — innecesaria y confusa.\n// FIX 2: Validacion con Array.isArray en lugar de solo truthy check.\n\nvar data = flow.get('conc_resultados');\n\nif (Array.isArray(data) && data.length > 0) {\n  msg.payload    = data;\n  msg._sheetType = 'conciliacion';\n  return msg;\n}\n\nnode.warn('[Conciliacion] conc_resultados vacio o no es array — nodo no dispara.');\nreturn null;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1050,
-        "y": 300,
-        "wires": [
-            [
-                "e106c2fee4486106"
-            ]
-        ]
-    },
-    {
-        "id": "4751ca7639e00994",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "Prep Pendientes",
-        "func": "var flow = flow;\nvar data = flow.get('conc_pendientes');\nif (data && data.length > 0) {\n  msg.payload = data;\n  msg._sheetType = 'pendientes';\n  return msg;\n}\nreturn null;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1050,
-        "y": 360,
-        "wires": [
-            [
-                "6c41a11e8fb05c80"
-            ]
-        ]
-    },
-    {
-        "id": "06b899b63f6110de",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "Prep Resumen",
-        "func": "var flow = flow;\nvar data = flow.get('conc_resumen');\nif (data && data.length > 0) {\n  msg.payload = data;\n  msg._sheetType = 'resumen';\n  return msg;\n}\nreturn null;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1050,
-        "y": 420,
-        "wires": [
-            [
-                "2f3fcd2d11518072"
-            ]
-        ]
-    },
-    {
-        "id": "e106c2fee4486106",
-        "type": "GSheet",
-        "z": "92e21ab23726aa07",
-        "creds": "conc_gauth",
-        "method": "append",
-        "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
-        "cells": "Conciliacion!A2:H",
-        "flatten": false,
-        "name": "Append Conciliacion",
-        "x": 1300,
-        "y": 300,
-        "wires": [
-            [
-                "f0952d950c19b8d1"
-            ]
-        ]
-    },
-    {
-        "id": "6c41a11e8fb05c80",
-        "type": "GSheet",
-        "z": "92e21ab23726aa07",
-        "creds": "conc_gauth",
-        "method": "append",
-        "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
-        "cells": "Pendientes!A2:H",
-        "flatten": false,
-        "name": "Append Pendientes",
-        "x": 1300,
-        "y": 360,
-        "wires": [
-            [
-                "f0952d950c19b8d1"
-            ]
-        ]
-    },
-    {
-        "id": "2f3fcd2d11518072",
-        "type": "GSheet",
-        "z": "92e21ab23726aa07",
-        "creds": "conc_gauth",
-        "method": "append",
-        "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
-        "cells": "Resumen!A2:H",
-        "flatten": false,
-        "name": "Append Resumen",
-        "x": 1300,
-        "y": 420,
-        "wires": [
-            [
-                "f0952d950c19b8d1"
-            ]
-        ]
-    },
-    {
-        "id": "f0952d950c19b8d1",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "Resultado Final",
-        "func": "// FIX 1: Eliminada \"var flow = flow\" — innecesaria y confusa.\n// FIX 2: Validacion con typeof para asegurar que stats es un objeto real.\n// FIX 3: toFixed(2) protegido contra diferencia undefined/null/NaN.\n// FIX 4: Warn si stats no existe, para no perder trazabilidad.\n\nvar stats = flow.get('conc_stats');\n\nif (stats && typeof stats === 'object') {\n  var dif = typeof stats.diferencia === 'number' && !isNaN(stats.diferencia)\n    ? stats.diferencia.toFixed(2)\n    : '???';\n\n  node.warn('[Conciliacion] ═══════════════════════');\n  node.warn('[Conciliacion] RESUMEN FINAL:');\n  node.warn('[Conciliacion]   Conciliados:  ' + (stats.conciliados  || 0));\n  node.warn('[Conciliacion]   Solo Banco:   ' + (stats.soloBanco    || 0));\n  node.warn('[Conciliacion]   Solo Calipso: ' + (stats.soloCalipso  || 0));\n  node.warn('[Conciliacion]   Timing:       ' + (stats.timing       || 0));\n  node.warn('[Conciliacion]   PENDIENTES:   ' + (stats.pendientes   || 0) +\n    ' (' + (stats.criticas || 0) + ' CRITICAS, ' + (stats.altas || 0) + ' ALTAS)');\n  node.warn('[Conciliacion]   Semaforo:     ' + (stats.semaforo     || 'N/A'));\n  node.warn('[Conciliacion]   Diferencia:   $' + dif);\n  node.warn('[Conciliacion] ═══════════════════════');\n} else {\n  node.warn('[Conciliacion] conc_stats no disponible — el nodo de cruce aun no ejecuto.');\n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1520,
-        "y": 360,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "349af9bfd404019e",
-        "type": "function",
-        "z": "92e21ab23726aa07",
-        "name": "Store Banco → trigger Calipso",
-        "func": "// FIX 1: Eliminada \"var flow = flow\" — innecesaria y confusa.\n// FIX 2: Validacion defensiva: solo guardar si payload es un array valido.\n// FIX 3: Warn con conteo real despues de guardar, no antes.\n \nvar filas = Array.isArray(msg.payload) ? msg.payload : [];\n \nflow.set('conc_banco_rows', filas);\n \nnode.warn('[Conciliacion] Banco: ' + filas.length + ' filas guardadas. Disparando lectura Calipso...');\n \nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 790,
-        "y": 300,
-        "wires": [
-            [
-                "b7ef60a7575f5d31"
-            ]
-        ]
-    },
-    {
-        "id": "conc_gauth",
-        "type": "gauth",
-        "name": "node-red-sheets-sync@sync-calipso-corona.iam.gserviceaccount.com"
-    },
-    {
-        "id": "6814eb4bb7e82ddb",
-        "type": "MSSQL-CN",
-        "tdsVersion": "7_3_B",
-        "name": "Calipso",
-        "server": "192.168.0.177",
-        "port": "1433",
-        "encyption": false,
-        "trustServerCertificate": false,
-        "database": "CORONA",
-        "useUTC": true,
-        "connectTimeout": "25000",
-        "requestTimeout": "25000",
-        "cancelTimeout": "80000",
-        "pool": "5",
-        "parseJSON": false,
-        "enableArithAbort": true,
-        "readOnlyIntent": false
-    }
+  {
+    "id": "92e21ab23726aa07",
+    "type": "tab",
+    "label": "CONCILIACION - Galicia",
+    "disabled": false,
+    "info": "=== CONCILIACION BANCARIA \u2014 Banco Galicia ===\n\nFLOWS:\n  1. Sync Calipso: MSSQL \u2192 Sheet Galicia_Calipso\n  2. Sync Extracto: Manual/subida \u2192 Sheet Galicia_Banco\n  3. Conciliacion: Cruzar Banco vs Calipso \u2192 Pendientes + Resultados\n  4. Dashboard: Leer Sheets \u2192 JSON + HTML\n\nSHEET TABS REQUERIDOS:\n  Galicia_Banco: FECHA|DESCRIPCION|DEBITOS|CREDITOS|GRUPO|CONCEPTO|TIPO|IMPORTE_NETO|SALDO\n  Galicia_Calipso: FECHA|ASIENTO|DETALLE|DEBE|HABER|NETO|ES_REVERSION|CUENTA\n  Conciliacion: FECHA|TIPO|DESCRIPCION|BANCO|CALIPSO|DIF|ESTADO|CRITICIDAD\n  Resumen: BANCO|PERIODO|TOTAL_BANCO|TOTAL_CALIPSO|DIFERENCIA|TIMING|ESTADO|PENDIENTES\n  Pendientes: BANCO|FECHA|DESCRIPCION|IMPORTE|TIPO|ORIGEN|CRITICIDAD|OBSERVACION\n\nVERSION: 1.0.0 \u2014 Junio 2026"
+  },
+  {
+    "id": "5b558c929db0b7e8",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "get",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Galicia_Calipso!A2:H",
+    "flatten": false,
+    "name": "Leer Calipso existente",
+    "x": 1020,
+    "y": 80,
+    "wires": [
+      [
+        "c584328a1d6c8e42"
+      ]
+    ]
+  },
+  {
+    "id": "a9efa0e4c4f02391",
+    "type": "inject",
+    "z": "92e21ab23726aa07",
+    "name": "\u25b6 Sync Calipso",
+    "props": [
+      {
+        "p": "_periodo",
+        "v": "2026-02",
+        "vt": "str"
+      },
+      {
+        "p": "_banco",
+        "v": "Galicia",
+        "vt": "str"
+      },
+      {
+        "p": "_cuenta",
+        "v": "01.01.01.02.04",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 130,
+    "y": 80,
+    "wires": [
+      [
+        "01b93aab2881c8f7"
+      ]
+    ]
+  },
+  {
+    "id": "01b93aab2881c8f7",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Query Calipso Galicia",
+    "func": "// Query Calipso mejorado \u2014 busca por c\u00f3digo de cuenta Y por detalle\n// Captura movimientos donde el banco se menciona en el detalle aunque la\n// cuenta contable sea distinta (ej: transferencias intermedias).\n// LEFT JOIN en valores para no perder items con DEBE o HABER faltante.\n\nvar periodo = (msg._periodo || '2026-02').replace('-', '');\nvar cuenta = msg._cuenta || '01.01.01.02.04';\nvar banco = msg._banco || 'Galicia';\n\n// Extraer prefijo de cuenta para LIKE (ej: \"01.01.01.02.04\" \u2192 \"01.01.01.02.04%\")\nvar cuentaPrefix = cuenta.split(' - ')[0] + '%';\n\nvar query = 'SELECT DISTINCT ' +\n  ' SUBSTRING(t.FECHAAPLICACION,1,8) AS FECHA,' +\n  ' t.NUMERODOCUMENTO AS ASIENTO,' +\n  ' t.DETALLE,' +\n  ' COALESCE(v1.IMPORTE, 0) AS DEBE,' +\n  ' COALESCE(v2.IMPORTE, 0) AS HABER,' +\n  ' t.NOMBREDESTINATARIO AS PROVEEDOR' +\n' FROM V_TRCONTABLE_ t' +\n' INNER JOIN V_ITEMCONTABLE_ ic ON t.ITEMSTRANSACCION_ID = ic.BO_PLACE_ID' +\n' LEFT JOIN V_VALOR_ v1 ON ic.DEBE_ID = v1.ID' +\n' LEFT JOIN V_VALOR_ v2 ON ic.HABER_ID = v2.ID' +\n' INNER JOIN V_EZI_CUENTAS ec ON ic.REFERENCIA_ID = ec.ID' +\n\" WHERE (ec.CODIGO LIKE '\" + cuentaPrefix + \"'\" +\n  \" OR t.DETALLE LIKE '%\" + banco + \"%'\" +\n  \" OR t.DETALLE LIKE '%Banco%')\" +\n  \" AND SUBSTRING(t.FECHAAPLICACION,1,6) = '\" + periodo + \"'\" +\n  \" AND t.ESTADO = 'C'\" +\n' ORDER BY t.FECHAAPLICACION ASC';\n\nmsg.payload = query;\nmsg._periodo = periodo;\nmsg._cuenta = cuenta;\nmsg._banco = banco;\nnode.warn('[Conciliacion] Consultando Calipso ' + banco + ' periodo ' + periodo + ' (query mejorado)...');\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 340,
+    "y": 80,
+    "wires": [
+      [
+        "bdfb5117cf18f619"
+      ]
+    ]
+  },
+  {
+    "id": "bdfb5117cf18f619",
+    "type": "MSSQL",
+    "z": "92e21ab23726aa07",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "MSSQL Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT 1 AS placeholder",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "x": 560,
+    "y": 80,
+    "wires": [
+      [
+        "a29313431b7ccbe6"
+      ]
+    ]
+  },
+  {
+    "id": "a29313431b7ccbe6",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Depurar Calipso (reversiones + 2D)",
+    "func": "var rows = msg.payload;\nvar periodo = msg._periodo || '2026-02';  // \u2190 editar en inject\nvar cuenta = msg._cuenta || '01.01.01.02.04';\n\nif (!rows || !Array.isArray(rows) || rows.length === 0) {\n  node.warn('[Conciliacion] Calipso sin datos');\n  msg._empty = true;\n  return msg;\n}\n\n// 1. Marcar reversiones\nvar reversiones = {};\nfor (var i = 0; i < rows.length; i++) {\n  var det = (rows[i].DETALLE || '').toString();\n  var match = det.match(/Reversi[o\u00f3]n Nro\\.?\\s*(\\d+)/i);\n  if (match) {\n    var nroRev = match[1];\n    if (!reversiones[nroRev]) reversiones[nroRev] = [];\n    reversiones[nroRev].push(i);\n    rows[i]._esReversion = true;\n  } else {\n    rows[i]._esReversion = false;\n  }\n}\n\n// Contar pares de reversi\u00f3n\nvar paresEliminados = 0;\nvar keys = Object.keys(reversiones);\nfor (var k = 0; k < keys.length; k++) {\n  if (reversiones[keys[k]].length >= 2) paresEliminados++;\n}\n\n// 2. Construir array 2D (sin filas de reversi\u00f3n)\nvar data = [];\nfor (var j = 0; j < rows.length; j++) {\n  var r = rows[j];\n  // Saltar filas que son parte de un par de reversi\u00f3n\n  var revKey = null;\n  var det2 = (r.DETALLE || '').toString();\n  var match2 = det2.match(/Reversi[o\u00f3]n Nro\\.?\\s*(\\d+)/i);\n  if (match2 && reversiones[match2[1]] && reversiones[match2[1]].length >= 2) continue;\n  \n  var debe = parseFloat(r.DEBE) || 0;\n  var haber = parseFloat(r.HABER) || 0;\n  var neto = debe - haber;\n  \n  data.push([\n    r.FECHA || '',\n    r.ASIENTO || '',\n    (r.DETALLE || '').substring(0, 250),\n    debe,\n    haber,\n    neto,\n    r._esReversion ? 'SI' : 'NO',\n    cuenta\n  ]);\n}\n\nmsg._newRows = data;\nmsg._paresEliminados = paresEliminados;\nmsg._totalRows = rows.length;\nmsg._depurados = data.length;\n\nnode.warn('[Conciliacion] Calipso: ' + rows.length + ' filas, ' + paresEliminados + ' pares revertidos, ' + data.length + ' depuradas');\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 790,
+    "y": 80,
+    "wires": [
+      [
+        "5b558c929db0b7e8"
+      ]
+    ]
+  },
+  {
+    "id": "c584328a1d6c8e42",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Dedup Calipso",
+    "func": "var newRows = msg._newRows || [];\nvar existing = msg.payload || [];\n\nif (msg._empty || newRows.length === 0) {\n  msg.payload = null;\n  return msg;\n}\n\n// Clave: FECHA|ASIENTO (col 0 + 1)\nvar existingKeys = new Set();\nif (Array.isArray(existing)) {\n  for (var i = 0; i < existing.length; i++) {\n    var row = existing[i];\n    if (Array.isArray(row) && row.length >= 2) {\n      existingKeys.add(String(row[0] || '').trim() + '|' + String(row[1] || '').trim());\n    }\n  }\n}\n\nvar filtered = [];\nfor (var j = 0; j < newRows.length; j++) {\n  var key = String(newRows[j][0] || '').trim() + '|' + String(newRows[j][1] || '').trim();\n  if (!existingKeys.has(key)) filtered.push(newRows[j]);\n}\n\nmsg._calipsoNew = filtered.length;\nmsg._calipsoSkip = newRows.length - filtered.length;\n\nif (filtered.length === 0) {\n  msg.payload = null;\n} else {\n  msg.payload = filtered;\n}\n\nnode.warn('[Conciliacion] Calipso dedup: ' + newRows.length + ' nuevas, ' + (newRows.length - filtered.length) + ' ya existen, ' + filtered.length + ' a escribir');\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1250,
+    "y": 80,
+    "wires": [
+      [
+        "9d43546ebd24b1c3"
+      ]
+    ]
+  },
+  {
+    "id": "9d43546ebd24b1c3",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "append",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Galicia_Calipso!A2:H",
+    "flatten": false,
+    "name": "Append Calipso",
+    "x": 1480,
+    "y": 80,
+    "wires": [
+      [
+        "0874c5c2a10385a1"
+      ]
+    ]
+  },
+  {
+    "id": "0874c5c2a10385a1",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Resultado Calipso",
+    "func": "var range = (msg.payload && msg.payload.updates) ? msg.payload.updates.updatedRange : '';\nnode.warn('[Conciliacion] Calipso OK: ' + (msg._calipsoNew || 0) + ' filas nuevas \u2192 ' + range);\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1700,
+    "y": 80,
+    "wires": [
+      [
+        "356cae71bcbfa379"
+      ]
+    ]
+  },
+  {
+    "id": "1650a8f9469e9213",
+    "type": "inject",
+    "z": "92e21ab23726aa07",
+    "name": "\u25b6 Ejecutar Conciliaci\u00f3n",
+    "props": [
+      {
+        "p": "_periodo",
+        "v": "2026-02",
+        "vt": "str"
+      },
+      {
+        "p": "_banco",
+        "v": "Galicia",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 130,
+    "y": 340,
+    "wires": [
+      [
+        "356cae71bcbfa379"
+      ]
+    ]
+  },
+  {
+    "id": "356cae71bcbfa379",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Iniciar Conciliaci\u00f3n",
+    "func": "// Periodo desde inject (editarlo all\u00ed) o default\nmsg._periodo = msg._periodo || '2026-02';\nmsg._banco = msg._banco || 'Galicia';\nnode.warn('[Conciliacion] Iniciando cruce ' + msg._banco + ' ' + msg._periodo + '...');\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 340,
+    "y": 340,
+    "wires": [
+      [
+        "57bed439bb9c1d97"
+      ]
+    ]
+  },
+  {
+    "id": "57bed439bb9c1d97",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "get",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Galicia_Banco!A2:I",
+    "flatten": false,
+    "name": "Leer Extracto Banco",
+    "x": 520,
+    "y": 300,
+    "wires": [
+      [
+        "349af9bfd404019e"
+      ]
+    ]
+  },
+  {
+    "id": "b7ef60a7575f5d31",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "get",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Galicia_Calipso!A2:H",
+    "flatten": false,
+    "name": "Leer Calipso",
+    "x": 560,
+    "y": 380,
+    "wires": [
+      [
+        "7fe98c4564a6f421"
+      ]
+    ]
+  },
+  {
+    "id": "7fe98c4564a6f421",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "CRUCE: Banco vs Calipso + PENDIENTES",
+    "func": "// ============================================================\n// NODO: Conciliacion - Cruce Banco vs Calipso V2\n// MEJORAS:\n//   1. Matching multi-criterio en 4 niveles de precision\n//   2. Deteccion de pares MEP (compra + venta)\n//   3. Trazabilidad: calidad de match en resultados\n//   4. Periodo derivado dinamicamente de datos bancarios\n// ============================================================\n\nvar banco = flow.get('conc_banco_rows') || [];\nvar calipso = msg.payload || [];\n\nnode.warn('[Conciliacion] CRUCE V2: ' + banco.length + ' banco vs ' + calipso.length + ' calipso');\n\n// === UTILIDADES ===\nfunction fechaDiff(f1, f2) {\n  if (!f1 || !f2 || f1.length < 8 || f2.length < 8) return 999;\n  var a = new Date(f1.slice(0, 4) + '-' + f1.slice(4, 6) + '-' + f1.slice(6, 8));\n  var b = new Date(f2.slice(0, 4) + '-' + f2.slice(4, 6) + '-' + f2.slice(6, 8));\n  if (isNaN(a) || isNaN(b)) return 999;\n  return Math.abs((a - b) / 86400000);\n}\n\nfunction mismSigno(a, b) {\n  return (a >= 0 && b >= 0) || (a < 0 && b < 0);\n}\n\n// === CLASIFICACION DEL EXTRACTO BANCARIO ===\nvar TIPO_MAP = {\n  '000912': 'Cheques/ECheqs', '000914': 'Gestion Cheque',\n  '000909': 'Servicio Pago Proveedores', '000916': 'FIMA',\n  '000083': 'Debito Automatico', '000908': 'Haberes',\n  '000910': 'Prestamo', '000901': 'Gasto/Impuesto',\n  '000808': 'Gasto/Impuesto', '000814': 'Gasto/Impuesto',\n  '000833': 'Acreditacion Canje', '000903': 'Rechazo Debito',\n  '000915': 'Deposito Efectivo', '000917': 'COMEX',\n  '000907': 'Transferencia'\n};\n\nvar SUBTIPO_907 = {\n  '907255': 'Pago AFIP', '917203': 'MEP',\n  '917193': 'Cobro Cash Prov (YPF)', '917180': 'COMEX',\n  '907269': 'Pago Proveedor', '907232': 'Pago Proveedor',\n  '907297': 'Transf Propia CP', '907268': 'Transf Propia CP',\n  '917152': 'Transf Cta Propia', '917151': 'Transf Terceros'\n};\n\n// Clasificar movimientos del banco (formato enriquecido)\nvar bancoClasif = [];\nfor (var i = 0; i < banco.length; i++) {\n  var b = banco[i];\n\n  var grupo = String(b.grupo || '').trim();\n  var concepto = String(b.concepto || '').trim();\n  var desc = String(b.descripcion || '').trim();\n\n  var tipo = TIPO_MAP[grupo] || 'Otros';\n\n  if (grupo === '000907' && SUBTIPO_907[concepto]) tipo = SUBTIPO_907[concepto];\n\n  if (grupo === '000916') {\n    tipo = desc.toLowerCase().indexOf('suscripcion') >= 0 ? 'FIMA Suscripcion' : 'FIMA Rescate';\n  }\n\n  var esGasto = (['000901', '000808', '000814'].indexOf(grupo) >= 0) ||\n    (grupo === '000907' && ['907171', '907173'].indexOf(concepto) >= 0);\n\n  var importeNeto = b.importeNeto || 0;\n\n  bancoClasif.push({\n    fecha: String(b.fecha || '').trim(),\n    descripcion: desc,\n    tipo: tipo,\n    grupo: grupo,\n    concepto: concepto,\n    importe: importeNeto,\n    debito: b.debito || 0,\n    credito: b.credito || 0,\n    esGasto: esGasto,\n    saldo: b.saldo || 0,\n    nroComprobante: String(b.nroComprobante || '').trim()\n  });\n}\n\n// === MATCHING MULTI-CRITERIO (4 NIVELES) ===\nvar resultados = [];\nvar pendientes = [];\nvar calipsoUsados = {};\nvar totalBanco = 0;\nvar totalCalipso = 0;\n\n// Nivel 1: Match por Nro Comprobante (banco) vs ASIENTO (Calipso)\n// Nivel 2: Importe EXACTO + misma fecha\n// Nivel 3: Importe +/- 1% + fecha +/- 1 dia\n// Nivel 4: Importe +/- 1% + fecha +/- 3 dias\n\nfunction matchScore(bancoItem, calipsoRow, nivel) {\n  var calFecha = String(calipsoRow[0] || '').trim();\n  var calAsiento = String(calipsoRow[1] || '').trim();\n  var calNeto = parseFloat(calipsoRow[5]) || 0;\n\n  // Mismo signo: deben ser ambos positivos o ambos negativos\n  // (banco: positivo=ingreso/credito, negativo=egreso/debito)\n  if (!mismSigno(bancoItem.importe, calNeto)) return false;\n\n  var diffDias = fechaDiff(bancoItem.fecha, calFecha);\n\n  switch (nivel) {\n    case 1: // Nro Comprobante\n      return bancoItem.nroComprobante &&\n             bancoItem.nroComprobante.length > 0 &&\n             bancoItem.nroComprobante === calAsiento;\n\n    case 2: // Importe EXACTO + misma fecha\n      return Math.abs(bancoItem.importe - calNeto) < 0.01 && diffDias === 0;\n\n    case 3: // Importe +/- 1% + fecha +/- 1 dia\n      var diffImp = Math.abs(bancoItem.importe - calNeto);\n      var tolerancia = Math.abs(bancoItem.importe) * 0.01;\n      return diffImp < tolerancia && diffDias <= 1;\n\n    case 4: // Importe +/- 1% + fecha +/- 3 dias (fallback)\n      var diffImp4 = Math.abs(bancoItem.importe - calNeto);\n      var tolerancia4 = Math.abs(bancoItem.importe) > 5000\n        ? Math.abs(bancoItem.importe) * 0.01\n        : 10;\n      return diffImp4 < tolerancia4 && diffDias <= 3;\n\n    default:\n      return false;\n  }\n}\n\n// Procesar cada movimiento bancario contra Calipso\nfor (var bi = 0; bi < bancoClasif.length; bi++) {\n  var bm = bancoClasif[bi];\n  var mejorMatch = null;\n  var mejorNivel = 0;\n  var mejorIdx = -1;\n  var mejorDif = Infinity;\n  var calAsientoMatch = '';\n\n  // Buscar en los 4 niveles (de mas preciso a menos)\n  for (var nivel = 1; nivel <= 4; nivel++) {\n    if (mejorMatch) break; // Ya encontro match en nivel anterior\n\n    for (var ci = 0; ci < calipso.length; ci++) {\n      if (calipsoUsados[ci]) continue;\n      var cm = calipso[ci];\n      if (!Array.isArray(cm) || cm.length < 6) continue;\n\n      if (matchScore(bm, cm, nivel)) {\n        var calNeto = parseFloat(cm[5]) || 0;\n        var dif = Math.abs(bm.importe - calNeto);\n        if (dif < mejorDif) {\n          mejorDif = dif;\n          mejorMatch = cm;\n          mejorIdx = ci;\n          mejorNivel = nivel;\n          calAsientoMatch = String(cm[1] || '').trim();\n        }\n      }\n    }\n  }\n\n  if (mejorMatch && mejorIdx >= 0) {\n    calipsoUsados[mejorIdx] = true;\n    var calImporte = parseFloat(mejorMatch[5]) || 0;\n    var dif2 = Math.abs(bm.importe - calImporte);\n    var nivelLabel = 'N' + mejorNivel;\n    var estadoMatch = (mejorNivel <= 2) ? 'CONCILIADO' : 'TIMING';\n\n    resultados.push({\n      fecha: bm.fecha,\n      tipo: bm.tipo,\n      descripcion: bm.descripcion,\n      banco: bm.importe,\n      calipso: calImporte,\n      dif: dif2,\n      estado: estadoMatch,\n      criticidad: 'OK',\n      calidad: nivelLabel,\n      asiento: calAsientoMatch\n    });\n    totalBanco += bm.importe;\n    totalCalipso += calImporte;\n\n  } else {\n    // NO encontrado en Calipso \u2192 PENDIENTE / SOLO_BANCO\n    var crit = 'MEDIA';\n    if (Math.abs(bm.importe) > 10000000) crit = 'CRITICA';\n    else if (Math.abs(bm.importe) > 1000000) crit = 'ALTA';\n    else if (bm.esGasto) crit = 'ALTA';\n\n    resultados.push({\n      fecha: bm.fecha,\n      tipo: bm.tipo,\n      descripcion: bm.descripcion,\n      banco: bm.importe,\n      calipso: 0,\n      dif: Math.abs(bm.importe),\n      estado: 'SOLO_BANCO',\n      criticidad: crit,\n      calidad: 'SIN_MATCH',\n      asiento: ''\n    });\n    pendientes.push({\n      banco: 'Galicia',\n      fecha: bm.fecha,\n      descripcion: bm.descripcion,\n      importe: Math.abs(bm.importe),\n      tipo: bm.tipo,\n      origen: 'BANCO',\n      criticidad: crit,\n      nroComprobante: bm.nroComprobante,\n      observacion: bm.esGasto\n        ? 'GASTO BANCARIO - Verificar registro en Calipso'\n        : 'No encontrado en Calipso (ningun nivel de match)'\n    });\n    totalBanco += bm.importe;\n  }\n}\n\n// Items en Calipso NO conciliados (SOLO_CALIPSO)\nfor (var ci2 = 0; ci2 < calipso.length; ci2++) {\n  if (calipsoUsados[ci2]) continue;\n  var cm2 = calipso[ci2];\n  if (!Array.isArray(cm2) || cm2.length < 6) continue;\n\n  var calNeto2 = parseFloat(cm2[5]) || 0;\n  if (isNaN(calNeto2)) calNeto2 = 0;\n  if (Math.abs(calNeto2) < 0.01) continue;\n\n  var crit2 = 'MEDIA';\n  if (Math.abs(calNeto2) > 10000000) crit2 = 'CRITICA';\n  else if (Math.abs(calNeto2) > 1000000) crit2 = 'ALTA';\n\n  resultados.push({\n    fecha: String(cm2[0] || '').trim(),\n    tipo: 'Mov Calipso',\n    descripcion: String(cm2[2] || '').trim().substring(0, 100),\n    banco: 0,\n    calipso: calNeto2,\n    dif: Math.abs(calNeto2),\n    estado: 'SOLO_CALIPSO',\n    criticidad: crit2,\n    calidad: '',\n    asiento: String(cm2[1] || '').trim()\n  });\n  pendientes.push({\n    banco: 'Galicia',\n    fecha: String(cm2[0] || '').trim(),\n    descripcion: String(cm2[2] || '').trim().substring(0, 150),\n    importe: Math.abs(calNeto2),\n    tipo: 'Mov Calipso',\n    origen: 'CALIPSO',\n    criticidad: crit2,\n    nroComprobante: '',\n    observacion: 'Registrado en Calipso pero no en extracto bancario - Posible TIMING'\n  });\n  totalCalipso += calNeto2;\n}\n\n// === DETECCION DE PARES MEP ===\n// Buscar pares compra+venta MEP del mismo importe aproximado\nvar paresMEP = [];\nfor (var pi = 0; pi < pendientes.length; pi++) {\n  var p1 = pendientes[pi];\n  if (p1.tipo !== 'MEP') continue;\n  if (p1.criticidad === 'OK') continue; // ya emparejado\n\n  for (var pj = pi + 1; pj < pendientes.length; pj++) {\n    var p2 = pendientes[pj];\n    if (p2.tipo !== 'MEP') continue;\n    if (p2.criticidad === 'OK') continue;\n\n    var difMEP = Math.abs(p1.importe - p2.importe);\n    var maxImp = Math.max(p1.importe, p2.importe);\n    if (maxImp > 0 && (difMEP / maxImp) < 0.02) {\n      // Es un par MEP\n      p1.criticidad = 'OK';\n      p1.observacion = 'Par MEP identificado - Timing normal (clearing)';\n      p2.criticidad = 'OK';\n      p2.observacion = 'Par MEP identificado - Timing normal (clearing)';\n      paresMEP.push({ a: 'Venta MEP', b: 'Compra MEP', importe: p1.importe });\n    }\n  }\n}\n\nif (paresMEP.length > 0) {\n  node.warn('[Conciliacion] PARES MEP detectados: ' + paresMEP.length);\n}\n\nvar totalDiferencia = totalBanco - totalCalipso;\n\n// Ordenar pendientes por criticidad (CRITICA primero)\nvar critOrder = { 'CRITICA': 0, 'ALTA': 1, 'MEDIA': 2, 'OK': 3 };\npendientes.sort(function (a, b) {\n  return (critOrder[a.criticidad] || 3) - (critOrder[b.criticidad] || 3);\n});\n\n// === PREPARAR RESULTADOS PARA SHEETS ===\n// Conciliacion: FECHA|TIPO|DESCRIPCION|BANCO|CALIPSO|DIF|ESTADO|CRITICIDAD|CALIDAD|ASIENTO\nvar conciliacion2D = [];\nfor (var ri = 0; ri < resultados.length; ri++) {\n  var r = resultados[ri];\n  conciliacion2D.push([\n    r.fecha, r.tipo, r.descripcion.substring(0, 200),\n    r.banco, r.calipso, r.dif, r.estado, r.criticidad,\n    r.calidad || '', r.asiento || ''\n  ]);\n}\n\n// Pendientes: BANCO|FECHA|DESCRIPCION|IMPORTE|TIPO|ORIGEN|CRITICIDAD|OBSERVACION|NROCOMP\nvar pendientes2D = [];\nfor (var pi2 = 0; pi2 < pendientes.length; pi2++) {\n  var p = pendientes[pi2];\n  pendientes2D.push([\n    p.banco, p.fecha, p.descripcion.substring(0, 200),\n    p.importe, p.tipo, p.origen, p.criticidad, p.observacion,\n    p.nroComprobante || ''\n  ]);\n}\n\n// Resumen: BANCO|PERIODO|TOTAL_BANCO|TOTAL_CALIPSO|DIFERENCIA|N_CONCILIADOS|SEMAFORO|PENDIENTES\nvar periodo = bancoClasif.length\n  ? bancoClasif[0].fecha.replace(/^(\\d{4})(\\d{2})\\d{2}$/, '$1-$2')\n  : '????-??';\n\n// Contar solo pendientes REALES (criticidad != OK y origen != CALIPSO)\nvar pendientesReales = pendientes.filter(function(p) {\n  return p.criticidad !== 'OK';\n}).length;\n\nvar estadoResumen = Math.abs(totalDiferencia) < 100\n  ? 'CUADRADO'\n  : (Math.abs(totalDiferencia) < 500000 ? 'TIMING' : 'PENDIENTE');\nvar semaforo = estadoResumen === 'CUADRADO'\n  ? 'VERDE'\n  : (estadoResumen === 'TIMING' ? 'AMARILLO' : 'ROJO');\n\nvar resumen2D = [[\n  'Galicia',\n  periodo,\n  totalBanco,\n  totalCalipso,\n  totalDiferencia,\n  resultados.filter(function(x) { return x.estado === 'CONCILIADO'; }).length,\n  semaforo,\n  pendientesReales\n]];\n\n// Guardar en context\nflow.set('conc_resultados', conciliacion2D);\nflow.set('conc_pendientes', pendientes2D);\nflow.set('conc_resumen', resumen2D);\n\nvar stats = {\n  totalResultados: resultados.length,\n  conciliados: resultados.filter(function(x) { return x.estado === 'CONCILIADO'; }).length,\n  soloBanco: resultados.filter(function(x) { return x.estado === 'SOLO_BANCO'; }).length,\n  soloCalipso: resultados.filter(function(x) { return x.estado === 'SOLO_CALIPSO'; }).length,\n  timing: resultados.filter(function(x) { return x.estado === 'TIMING'; }).length,\n  pendientes: pendientesReales,\n  criticas: pendientes.filter(function(x) { return x.criticidad === 'CRITICA'; }).length,\n  altas: pendientes.filter(function(x) { return x.criticidad === 'ALTA'; }).length,\n  diferencia: totalDiferencia,\n  semaforo: semaforo,\n  paresMEP: paresMEP.length,\n  calNiveles: {\n    n1: resultados.filter(function(x) { return x.calidad === 'N1'; }).length,\n    n2: resultados.filter(function(x) { return x.calidad === 'N2'; }).length,\n    n3: resultados.filter(function(x) { return x.calidad === 'N3'; }).length,\n    n4: resultados.filter(function(x) { return x.calidad === 'N4'; }).length,\n    sinMatch: resultados.filter(function(x) { return x.calidad === 'SIN_MATCH'; }).length\n  }\n};\n\nflow.set('conc_stats', stats);\n\nnode.warn('[Conciliacion] CRUCE V2 COMPLETO:');\nnode.warn('[Conciliacion]   Niveles: N1=' + stats.calNiveles.n1 +\n  ' N2=' + stats.calNiveles.n2 +\n  ' N3=' + stats.calNiveles.n3 +\n  ' N4=' + stats.calNiveles.n4 +\n  ' SIN=' + stats.calNiveles.sinMatch);\nnode.warn('[Conciliacion]   Pendientes: ' + pendientesReales +\n  ' (' + stats.criticas + ' CRIT, ' + stats.altas + ' ALT)');\nnode.warn('[Conciliacion]   MEP pairs: ' + paresMEP.length);\nnode.warn('[Conciliacion]   Semaforo: ' + semaforo + ' | Dif: $' +\n  (typeof totalDiferencia === 'number' && !isNaN(totalDiferencia)\n    ? totalDiferencia.toFixed(2) : '???'));\n\nmsg._conciliacionLista = true;\nreturn [msg, null, null];",
+    "outputs": 3,
+    "timeout": "",
+    "noerr": 4,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 710,
+    "y": 480,
+    "wires": [
+      [
+        "68c3035ce23bb311"
+      ],
+      [
+        "4751ca7639e00994"
+      ],
+      [
+        "06b899b63f6110de"
+      ]
+    ]
+  },
+  {
+    "id": "68c3035ce23bb311",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Prep Conciliacion",
+    "func": "// FIX 1: Eliminada \"var flow = flow\" \u2014 innecesaria y confusa.\n// FIX 2: Validacion con Array.isArray en lugar de solo truthy check.\n\nvar data = flow.get('conc_resultados');\n\nif (Array.isArray(data) && data.length > 0) {\n  msg.payload    = data;\n  msg._sheetType = 'conciliacion';\n  return msg;\n}\n\nnode.warn('[Conciliacion] conc_resultados vacio o no es array \u2014 nodo no dispara.');\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1050,
+    "y": 300,
+    "wires": [
+      [
+        "a1b2c3d4e5f60001"
+      ]
+    ]
+  },
+  {
+    "id": "4751ca7639e00994",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Prep Pendientes",
+    "func": "var flow = flow;\nvar data = flow.get('conc_pendientes');\nif (data && data.length > 0) {\n  msg.payload = data;\n  msg._sheetType = 'pendientes';\n  return msg;\n}\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1050,
+    "y": 360,
+    "wires": [
+      [
+        "a1b2c3d4e5f60002"
+      ]
+    ]
+  },
+  {
+    "id": "06b899b63f6110de",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Prep Resumen",
+    "func": "var flow = flow;\nvar data = flow.get('conc_resumen');\nif (data && data.length > 0) {\n  msg.payload = data;\n  msg._sheetType = 'resumen';\n  return msg;\n}\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1050,
+    "y": 420,
+    "wires": [
+      [
+        "a1b2c3d4e5f60003"
+      ]
+    ]
+  },
+  {
+    "id": "e106c2fee4486106",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "append",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Conciliacion!A2:J",
+    "flatten": false,
+    "name": "Append Conciliacion",
+    "x": 1400,
+    "y": 300,
+    "wires": [
+      [
+        "f0952d950c19b8d1"
+      ]
+    ]
+  },
+  {
+    "id": "6c41a11e8fb05c80",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "append",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Pendientes!A2:I",
+    "flatten": false,
+    "name": "Append Pendientes",
+    "x": 1400,
+    "y": 360,
+    "wires": [
+      [
+        "f0952d950c19b8d1"
+      ]
+    ]
+  },
+  {
+    "id": "2f3fcd2d11518072",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "append",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Resumen!A2:H",
+    "flatten": false,
+    "name": "Append Resumen",
+    "x": 1400,
+    "y": 420,
+    "wires": [
+      [
+        "f0952d950c19b8d1"
+      ]
+    ]
+  },
+  {
+    "id": "f0952d950c19b8d1",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Resultado Final",
+    "func": "// FIX 1: Eliminada \"var flow = flow\" \u2014 innecesaria y confusa.\n// FIX 2: Validacion con typeof para asegurar que stats es un objeto real.\n// FIX 3: toFixed(2) protegido contra diferencia undefined/null/NaN.\n// FIX 4: Warn si stats no existe, para no perder trazabilidad.\n\nvar stats = flow.get('conc_stats');\n\nif (stats && typeof stats === 'object') {\n  var dif = typeof stats.diferencia === 'number' && !isNaN(stats.diferencia)\n    ? stats.diferencia.toFixed(2)\n    : '???';\n\n  node.warn('[Conciliacion] \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550');\n  node.warn('[Conciliacion] RESUMEN FINAL:');\n  node.warn('[Conciliacion]   Conciliados:  ' + (stats.conciliados  || 0));\n  node.warn('[Conciliacion]   Solo Banco:   ' + (stats.soloBanco    || 0));\n  node.warn('[Conciliacion]   Solo Calipso: ' + (stats.soloCalipso  || 0));\n  node.warn('[Conciliacion]   Timing:       ' + (stats.timing       || 0));\n  node.warn('[Conciliacion]   PENDIENTES:   ' + (stats.pendientes   || 0) +\n    ' (' + (stats.criticas || 0) + ' CRITICAS, ' + (stats.altas || 0) + ' ALTAS)');\n  node.warn('[Conciliacion]   Semaforo:     ' + (stats.semaforo     || 'N/A'));\n  node.warn('[Conciliacion]   Diferencia:   $' + dif);\n  node.warn('[Conciliacion] \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550');\n} else {\n  node.warn('[Conciliacion] conc_stats no disponible \u2014 el nodo de cruce aun no ejecuto.');\n}\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1600,
+    "y": 360,
+    "wires": [
+      [
+        "log_func_0000001"
+      ]
+    ]
+  },
+  {
+    "id": "349af9bfd404019e",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Store Banco \u2192 trigger Calipso",
+    "func": "// Guardar filas del banco con nro comprobante\nvar filas = Array.isArray(msg.payload) ? msg.payload : [];\n\n// Enriquecer con nroComprobante (columna H, \u00edndice 7)\nvar enriquecidas = [];\nfor (var i = 0; i < filas.length; i++) {\n  var f = filas[i];\n  enriquecidas.push({\n    fecha: String(f[0] || '').trim(),\n    descripcion: String(f[1] || '').trim(),\n    debito: parseFloat(f[2]) || 0,\n    credito: parseFloat(f[3]) || 0,\n    grupo: String(f[4] || '').trim(),\n    concepto: String(f[5] || '').trim(),\n    nroComprobante: String(f[7] || '').trim(),   // Columna H\n    saldo: parseFloat(f[8]) || 0,\n    importeNeto: (parseFloat(f[3]) || 0) - (parseFloat(f[2]) || 0)\n  });\n}\n\nflow.set('conc_banco_rows', enriquecidas);\n\nnode.warn('[Conciliacion] Banco: ' + enriquecidas.length + ' filas guardadas (enriquecidas). Disparando lectura Calipso...');\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 790,
+    "y": 300,
+    "wires": [
+      [
+        "b7ef60a7575f5d31"
+      ]
+    ]
+  },
+  {
+    "id": "conc_gauth",
+    "type": "gauth",
+    "name": "node-red-sheets-sync@sync-calipso-corona.iam.gserviceaccount.com"
+  },
+  {
+    "id": "6814eb4bb7e82ddb",
+    "type": "MSSQL-CN",
+    "tdsVersion": "7_3_B",
+    "name": "Calipso",
+    "server": "192.168.0.177",
+    "port": "1433",
+    "encyption": false,
+    "trustServerCertificate": false,
+    "database": "CORONA",
+    "useUTC": true,
+    "connectTimeout": "25000",
+    "requestTimeout": "25000",
+    "cancelTimeout": "80000",
+    "pool": "5",
+    "parseJSON": false,
+    "enableArithAbort": true,
+    "readOnlyIntent": false
+  },
+  {
+    "id": "a1b2c3d4e5f60001",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "clear",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Conciliacion!A2:J",
+    "flatten": false,
+    "name": "Clear Conciliacion",
+    "x": 1180,
+    "y": 300,
+    "wires": [
+      [
+        "e106c2fee4486106"
+      ]
+    ]
+  },
+  {
+    "id": "a1b2c3d4e5f60002",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "clear",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Pendientes!A2:I",
+    "flatten": false,
+    "name": "Clear Pendientes",
+    "x": 1180,
+    "y": 360,
+    "wires": [
+      [
+        "6c41a11e8fb05c80"
+      ]
+    ]
+  },
+  {
+    "id": "a1b2c3d4e5f60003",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "clear",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Resumen!A2:H",
+    "flatten": false,
+    "name": "Clear Resumen",
+    "x": 1180,
+    "y": 420,
+    "wires": [
+      [
+        "2f3fcd2d11518072"
+      ]
+    ]
+  },
+  {
+    "id": "cron_sync_0000001",
+    "type": "inject",
+    "z": "92e21ab23726aa07",
+    "name": "\u23f0 Automatico (5am lun-vie)",
+    "props": [
+      {
+        "p": "_periodo",
+        "v": "",
+        "vt": "str"
+      },
+      {
+        "p": "_banco",
+        "v": "Galicia",
+        "vt": "str"
+      },
+      {
+        "p": "_cuenta",
+        "v": "01.01.01.02.04",
+        "vt": "str"
+      }
+    ],
+    "repeat": "cron",
+    "crontab": "0 5 * * 1-5",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 130,
+    "y": 140,
+    "wires": [
+      [
+        "derive_period_001"
+      ]
+    ]
+  },
+  {
+    "id": "derive_period_001",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Derivar periodo automatico",
+    "func": "// Si _periodo viene vacio (desde el scheduler), derivar mes actual\nif (!msg._periodo || msg._periodo === '') {\n  var ahora = new Date();\n  var mes = ahora.getMonth() + 1;\n  var anio = ahora.getFullYear();\n  // Si estamos en los primeros 5 dias del mes, conciliar el mes anterior\n  if (ahora.getDate() <= 5) {\n    mes -= 1;\n    if (mes === 0) { mes = 12; anio -= 1; }\n  }\n  msg._periodo = anio + '-' + (mes < 10 ? '0' : '') + mes;\n  msg._periodoNum = msg._periodo.replace('-', '');\n  node.warn('[Conciliacion] Periodo auto-derivado: ' + msg._periodo);\n}\nreturn msg;",
+    "x": 240,
+    "y": 140,
+    "wires": [
+      [
+        "01b93aab2881c8f7"
+      ]
+    ]
+  },
+  {
+    "id": "log_func_0000001",
+    "type": "function",
+    "z": "92e21ab23726aa07",
+    "name": "Registrar Ejecucion",
+    "func": "// Crear entrada de historial con stats de la ejecucion\nvar stats = flow.get('conc_stats');\n\nif (stats && typeof stats === 'object') {\n  var ahora = new Date();\n  var fechaHora = ahora.getFullYear() + '-' +\n    ('0' + (ahora.getMonth()+1)).slice(-2) + '-' +\n    ('0' + ahora.getDate()).slice(-2) + ' ' +\n    ('0' + ahora.getHours()).slice(-2) + ':' +\n    ('0' + ahora.getMinutes()).slice(-2) + ':' +\n    ('0' + ahora.getSeconds()).slice(-2);\n\n  var logEntry = [\n    fechaHora,\n    'Galicia',\n    flow.get('conc_resumen') && flow.get('conc_resumen')[0]\n      ? flow.get('conc_resumen')[0][1] : '????-??',\n    stats.conciliados || 0,\n    stats.soloBanco || 0,\n    stats.soloCalipso || 0,\n    stats.timing || 0,\n    stats.pendientes || 0,\n    stats.criticas || 0,\n    stats.altas || 0,\n    typeof stats.diferencia === 'number' ? stats.diferencia : 0,\n    stats.semaforo || 'N/A',\n    stats.paresMEP || 0\n  ];\n\n  msg.payload = [logEntry];\n  msg._sheetType = 'historial';\n  node.warn('[Conciliacion] Log: ' + fechaHora + ' | ' + stats.semaforo +\n    ' | Dif: $' + stats.diferencia);\n} else {\n  node.warn('[Conciliacion] Log: stats no disponible');\n  return null;\n}\n\nreturn msg;",
+    "x": 1400,
+    "y": 440,
+    "wires": [
+      [
+        "log_gsheet_appnd"
+      ]
+    ]
+  },
+  {
+    "id": "log_gsheet_appnd",
+    "type": "GSheet",
+    "z": "92e21ab23726aa07",
+    "creds": "conc_gauth",
+    "method": "append",
+    "sheet": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0",
+    "cells": "Historial!A2:M",
+    "flatten": false,
+    "name": "Append Historial",
+    "x": 1560,
+    "y": 440,
+    "wires": [
+      []
+    ]
+  }
 ]

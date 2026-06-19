@@ -80,15 +80,15 @@ async function fetchWithFallback(endpoint, params) {
    CARGAR DESDE API (con fallback)
 ════════════════════════════════════════════════ */
 async function loadFromAPI() {
-  var sd = document.getElementById('startDate').value;
   var ed = document.getElementById('endDate').value;
-  sd = sd ? sd.replace(/-/g, '') : CONFIG.startDate;
+  // Sumas y Saldos SIEMPRE desde 2025-01-01 (datos acumulados)
+  var sd = '20250101';
   ed = ed ? ed.replace(/-/g, '') : CONFIG.endDate;
   var ct = document.getElementById('criticalThreshold').value || CONFIG.criticalThreshold;
 
   // Estados de carga
   document.getElementById('top-accounts-body').innerHTML = '<tr><td colspan="7"><div class="empty-state"><h3>Consultando... 🔄</h3><p>Esperando respuesta del servidor</p></div></td></tr>';
-  document.getElementById('ss-body').innerHTML = '<tr><td colspan="9"><div class="empty-state"><h3>Consultando...</h3></div></td></tr>';
+  document.getElementById('ss-body').innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3>Consultando...</h3></div></td></tr>';
   document.getElementById('kpi-saldo-total').textContent = '···';
   document.getElementById('kpi-crit-count').textContent = '···';
   document.getElementById('kpi-alert-count').textContent = '···';
@@ -140,4 +140,35 @@ function loadMockData() {
 function processData() {
   // Siempre intentar API primero
   loadFromAPI();
+}
+
+
+/* ════════════════════════════════════════════════
+   TOTALS DE EGRESOS/INGRESOS (para KPIs)
+════════════════════════════════════════════════ */
+async function cargarTotalesEgresosIngresos() {
+  var sd = document.getElementById('startDate').value.replace(/-/g, '');
+  var ed = document.getElementById('endDate').value.replace(/-/g, '');
+  try {
+    var [egResult, ivResult] = await Promise.all([
+      fetchWithFallback(CONFIG.endpoints.egresos, { startDate: sd, endDate: ed }),
+      fetchWithFallback(CONFIG.endpoints.ingresos, { startDate: sd, endDate: ed })
+    ]);
+    STATE._egresosTotal = egResult.data.totalImporte || 0;
+    STATE._ingresosTotal = ivResult.data.totalImporte || 0;
+    STATE._egresosCount = egResult.data.total || 0;
+    STATE._ingresosCount = ivResult.data.total || 0;
+    // Actualizar KPIs
+    var elEv = document.getElementById('kpi-egresos');
+    var elIv = document.getElementById('kpi-ingresos');
+    var elEvCount = document.getElementById('kpi-ev-count');
+    var elIvCount = document.getElementById('kpi-iv-count');
+    if (elEv) elEv.textContent = fmtMoney(STATE._egresosTotal);
+    if (elIv) elIv.textContent = fmtMoney(STATE._ingresosTotal);
+    if (elEvCount) elEvCount.textContent = STATE._egresosCount;
+    if (elIvCount) elIvCount.textContent = STATE._ingresosCount;
+  } catch(e) {
+    // Silencioso: los KPIs quedan con datos demo o en 0
+    console.warn('cargarTotalesEgresosIngresos: ' + e.message);
+  }
 }

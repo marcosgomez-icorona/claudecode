@@ -1,0 +1,167 @@
+[
+  {
+    "id": "sync_tab_v3_0001",
+    "type": "tab",
+    "label": "SYNC - SumasSaldos a Google Sheets v3",
+    "disabled": false,
+    "info": "=== SYNC: SUMAS Y SALDOS → GOOGLE SHEETS (v3 SIMPLIFICADO) ===\n\nFLUJO:\n  Inject (manual o schedule) → MSSQL SumasSaldos → Transformar → GSheet Append\n\nARQUITECTURA (v3):\n  Node-RED consulta SQL Server CORONA (on-prem) y escribe DIRECTO en Google Sheets.\n  Sin cálculo de saldo inicial: datos acumulados desde 2025-01-01.\n  Usa node-red-contrib-google-sheets.\n\nCAMBIOS vs v2:\n  - Eliminado Query B (saldo inicial pre-2025)\n  - Eliminado nodo swap y merge\n  - Solo 10 columnas (A-J), sin columna K (SALDO_INICIAL)\n  - Datos desde 2025-01-01 en adelante\n\nCOLUMNAS (A-J):\n  A=CODIGO B=CUENTA C=RUBRO D=DEBE_PERIODO E=HABER_PERIODO\n  F=SALDO_PERIODO G=PERIODO H=FECHA_SYNC I=SYNC_UUID J=UNIDAD_NEGOCIO\n\nREQUISITOS:\n  1. node-red-contrib-google-sheets instalado\n  2. Service Account con Sheets API habilitada\n  3. Google Sheet compartida con la service account (Editor)\n  4. Configurar nodo gauth con el JSON de credenciales\n  5. Configurar nodo GSheet con el Sheet ID y rango\n\nFRECUENCIA:\n  Diaria 06:00 AM (hora servidor).\n\nVERSION: 3.0.0 — 2026-06-17"
+  },
+  {
+    "id": "sync_inject_v3_0002",
+    "type": "inject",
+    "z": "sync_tab_v3_0001",
+    "name": "▶ Ejecutar sync ahora",
+    "props": [],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 130,
+    "y": 120,
+    "wires": [
+      [
+        "sync_fn_prep_v3"
+      ]
+    ]
+  },
+  {
+    "id": "sync_schedule_v3_0003",
+    "type": "inject",
+    "z": "sync_tab_v3_0001",
+    "name": "⏰ Schedule diario 06:00",
+    "props": [],
+    "repeat": "",
+    "crontab": "0 6 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 130,
+    "y": 180,
+    "wires": [
+      [
+        "sync_fn_prep_v3"
+      ]
+    ]
+  },
+  {
+    "id": "sync_fn_prep_v3",
+    "type": "function",
+    "z": "sync_tab_v3_0001",
+    "name": "1. Preparar query (desde 2025-01-01)",
+    "func": "// ===============================================\n// Preparar query: Sumas y Saldos acumulados desde 2025-01-01\n// Sin cálculo de saldo inicial — solo datos del período\n// ===============================================\nvar now = new Date();\nvar y = now.getFullYear();\nvar m = String(now.getMonth() + 1).padStart(2, '0');\nvar lastDay = new Date(y, now.getMonth() + 1, 0).getDate();\nvar startDate = '20250101';\nvar endDate = y + m + String(lastDay).padStart(2, '0');\n\n// Generar UUID de sync\nvar sync_uuid = (\n  Date.now().toString(36).toUpperCase().slice(-4) +\n  Math.random().toString(36).substring(2, 6).toUpperCase() +\n  Math.random().toString(36).substring(2, 6).toUpperCase()\n);\n\nmsg.startDate = startDate;\nmsg.endDate = endDate;\nmsg.sync_uuid = sync_uuid;\n\n// Query: Sumas y Saldos acumulados desde 2025-01-01 hasta fin del mes actual\n// Incluye UNIDAD_NEGOCIO para filtro por empresa\nvar query = \"\"\n + \"SELECT TOP 1000 \\n\"\n + \"   V_EZI_CUENTAS.CODIGO,\\n\"\n + \"   V_EZI_CUENTAS.DESCRIPCION AS CUENTA,\\n\"\n + \"   V_EZI_CUENTAS.CRubro,\\n\"\n + \"   V_EZI_CUENTAS.NRubro,\\n\"\n + \"   ISNULL(SUM(V_VALOR_.IMPORTE), 0) AS DEBE_PERIODO,\\n\"\n + \"   ISNULL(SUM(V_VALOR_1.IMPORTE), 0) AS HABER_PERIODO,\\n\"\n + \"   ISNULL(SUM(V_VALOR_.IMPORTE), 0) - ISNULL(SUM(V_VALOR_1.IMPORTE), 0) AS SALDO_PERIODO,\\n\"\n + \"   ISNULL(V_UNIDADOPERATIVA_.NOMBRE, '') AS UNIDAD_NEGOCIO\\n\"\n + \"FROM V_TRCONTABLE_\\n\"\n + \"INNER JOIN V_ITEMCONTABLE_ ON V_TRCONTABLE_.ITEMSTRANSACCION_ID = V_ITEMCONTABLE_.BO_PLACE_ID\\n\"\n + \"INNER JOIN V_VALOR_ ON V_ITEMCONTABLE_.DEBE_ID = V_VALOR_.ID\\n\"\n + \"INNER JOIN V_VALOR_ AS V_VALOR_1 ON V_ITEMCONTABLE_.HABER_ID = V_VALOR_1.ID\\n\"\n + \"INNER JOIN V_EZI_CUENTAS ON V_ITEMCONTABLE_.REFERENCIA_ID = V_EZI_CUENTAS.ID\\n\"\n + \"LEFT OUTER JOIN V_UNIDADOPERATIVA_ ON V_TRCONTABLE_.UNIDADOPERATIVA_ID = V_UNIDADOPERATIVA_.ID\\n\"\n + \"WHERE SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) >= '\" + startDate + \"'\\n\"\n + \"  AND SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) <= '\" + endDate + \"'\\n\"\n + \"  AND V_EZI_CUENTAS.CODIGO BETWEEN '0' AND '9'\\n\"\n + \"  AND V_TRCONTABLE_.ESTADO = 'C'\\n\"\n + \"GROUP BY\\n\"\n + \"     V_EZI_CUENTAS.CODIGO,\\n\"\n + \"     V_EZI_CUENTAS.DESCRIPCION,\\n\"\n + \"     V_EZI_CUENTAS.CRubro,\\n\"\n + \"     V_EZI_CUENTAS.NRubro,\\n\"\n + \"     V_UNIDADOPERATIVA_.NOMBRE\\n\"\n + \"ORDER BY V_EZI_CUENTAS.CODIGO;\\n\";\n\nmsg.payload = query;\nnode.warn('[Sync-SS-v3] Preparando sync ' + sync_uuid + ' periodo ' + startDate + '-' + endDate + ' (sin saldo inicial)');\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 120,
+    "wires": [
+      [
+        "sync_mssql_periodo_v3"
+      ]
+    ]
+  },
+  {
+    "id": "sync_mssql_periodo_v3",
+    "type": "MSSQL",
+    "z": "sync_tab_v3_0001",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Sumas y Saldos (desde 2025-01-01)",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT 1 AS TEST",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 610,
+    "y": 120,
+    "wires": [
+      [
+        "sync_fn_transform_v3"
+      ]
+    ]
+  },
+  {
+    "id": "sync_fn_transform_v3",
+    "type": "function",
+    "z": "sync_tab_v3_0001",
+    "name": "2. Transformar → 2D array (10 cols A-J)",
+    "func": "// ===============================================\n// Transformar resultado MSSQL → array 2D para Google Sheets\n// 10 columnas (A-J), sin SALDO_INICIAL\n// ===============================================\nvar rows = msg.payload;\nvar sync_uuid = msg.sync_uuid || 'N/A';\nvar startDate = msg.startDate || '';\nvar endDate = msg.endDate || '';\nvar timestamp = new Date().toISOString();\nvar periodo = startDate + '-' + endDate;\n\n// Guardar metadata\nmsg._syncInfo = {\n  sync_uuid: sync_uuid,\n  periodo: periodo,\n  timestamp: timestamp\n};\n\nif (!rows || !Array.isArray(rows) || rows.length === 0) {\n  node.warn('[Sync-SS-v3] Sin datos del periodo. Se omite escritura.');\n  msg._syncInfo.empty = true;\n  msg.payload = null;\n  return msg;\n}\n\n// Construir array 2D con 10 columnas (A-J)\n// A=CODIGO B=CUENTA C=RUBRO D=DEBE_PERIODO E=HABER_PERIODO\n// F=SALDO_PERIODO G=PERIODO H=FECHA_SYNC I=SYNC_UUID J=UNIDAD_NEGOCIO\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i];\n  var codigo = r.CODIGO || '';\n  var debe = parseFloat(r.DEBE_PERIODO) || 0;\n  var haber = parseFloat(r.HABER_PERIODO) || 0;\n  var saldo = parseFloat(r.SALDO_PERIODO) || (debe - haber);\n  var unidadNegocio = (r.UNIDAD_NEGOCIO || '').toString().trim();\n\n  data.push([\n    codigo,                            // A: CODIGO\n    r.CUENTA || '',                    // B: CUENTA\n    r.NRubro || '',                    // C: RUBRO\n    debe,                              // D: DEBE_PERIODO\n    haber,                             // E: HABER_PERIODO\n    saldo,                             // F: SALDO_PERIODO\n    periodo,                           // G: PERIODO\n    timestamp,                         // H: FECHA_SYNC\n    sync_uuid,                         // I: SYNC_UUID\n    unidadNegocio                      // J: UNIDAD_NEGOCIO\n  ]);\n}\n\nmsg.payload = data;\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-SS-v3] ' + data.length + ' filas (10 cols A-J). UUID=' + sync_uuid + ' | Sin saldo inicial');\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 830,
+    "y": 120,
+    "wires": [
+      [
+        "sync_gsheet_v3_0006"
+      ]
+    ]
+  },
+  {
+    "id": "sync_gsheet_v3_0006",
+    "type": "GSheet",
+    "z": "sync_tab_v3_0001",
+    "creds": "sync_gauth_v3_0009",
+    "method": "append",
+    "sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+    "cells": "SumasSaldos!A2:J175",
+    "flatten": false,
+    "name": "Append a SumasSaldos (10 cols)",
+    "x": 1070,
+    "y": 120,
+    "wires": [
+      [
+        "sync_fn_result_v3"
+      ]
+    ]
+  },
+  {
+    "id": "sync_fn_result_v3",
+    "type": "function",
+    "z": "sync_tab_v3_0001",
+    "name": "3. Resultado sync",
+    "func": "// ===============================================\n// Procesar resultado del sync a Google Sheets\n// ===============================================\nvar info = msg._syncInfo || {};\n\nif (info.empty) {\n  node.warn('[Sync-SS-v3] Sync omitido: sin datos en el periodo ' + (info.periodo || '?'));\n  return msg;\n}\n\nif (msg.error) {\n  node.error('[Sync-SS-v3] ERROR al escribir en Google Sheets: ' + msg.error);\n  return msg;\n}\n\nvar updatedRange = '';\nif (msg.payload && msg.payload.updates) {\n  updatedRange = msg.payload.updates.updatedRange || '';\n}\n\nnode.warn('[Sync-SS-v3] ✅ Sync exitoso a Google Sheets');\nnode.warn('[Sync-SS-v3]    UUID: ' + (info.sync_uuid || '?'));\nnode.warn('[Sync-SS-v3]    Periodo: ' + (info.periodo || '?'));\nnode.warn('[Sync-SS-v3]    Filas: ' + (info.rowCount || 0));\nnode.warn('[Sync-SS-v3]    Rango: ' + updatedRange);\nnode.warn('[Sync-SS-v3]    Columnas: A-J (10 cols, sin saldo inicial)');\n\nmsg._syncResult = {\n  success: true,\n  uuid: info.sync_uuid,\n  periodo: info.periodo,\n  rows: info.rowCount,\n  range: updatedRange,\n  timestamp: info.timestamp\n};\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1280,
+    "y": 120,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "sync_gauth_v3_0009",
+    "type": "gauth",
+    "name": "node-red-sheets-sync@sync-calipso-corona.iam.gserviceaccount.com"
+  },
+  {
+    "id": "6814eb4bb7e82ddb",
+    "type": "MSSQL-CN",
+    "tdsVersion": "7_3_B",
+    "name": "Calipso",
+    "server": "192.168.0.177",
+    "port": "1433",
+    "encyption": false,
+    "trustServerCertificate": false,
+    "database": "CORONA",
+    "useUTC": true,
+    "connectTimeout": "25000",
+    "requestTimeout": "25000",
+    "cancelTimeout": "80000",
+    "pool": "5",
+    "parseJSON": false,
+    "enableArithAbort": true,
+    "readOnlyIntent": false
+  }
+]

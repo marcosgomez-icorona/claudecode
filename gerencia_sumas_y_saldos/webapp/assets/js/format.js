@@ -22,9 +22,44 @@ function fmtPct(n) {
 }
 
 function fmtDate(s) {
-  if (!s) return '—';
-  const d = new Date(s + 'T00:00:00');
-  return d.toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' });
+  if (s == null || s === '') return '—';
+  s = String(s).trim();
+  if (!s || s === '0' || s === '—') return '—';
+
+  // YYYYMMDD (8 dígitos)
+  if (/^\d{8}$/.test(s)) {
+    var dd = s.substring(6, 8), mm = s.substring(4, 6), yyyy = s.substring(0, 4);
+    return dd + '/' + mm + '/' + yyyy;
+  }
+
+  // YYYY-MM-DD o YYYY/MM/DD
+  var m1 = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+  if (m1) {
+    return String(m1[3]).padStart(2,'0') + '/' + String(m1[2]).padStart(2,'0') + '/' + m1[1];
+  }
+
+  // DD/MM/YYYY (ya formateado)
+  var m2 = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (m2) return s;
+
+  // Serial de Google Sheets (número > 40000)
+  var num = parseFloat(s);
+  if (!isNaN(num) && num > 40000 && num < 100000) {
+    // Epoch Google Sheets: 1899-12-30
+    var d = new Date((num - 25569) * 86400 * 1000);
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' });
+    }
+  }
+
+  // Last resort: intentar parse nativo
+  var d2 = new Date(s);
+  if (!isNaN(d2.getTime())) {
+    return d2.toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' });
+  }
+
+  // Nada funcionó — devolver string original
+  return s;
 }
 
 function estadoBadge(e) {

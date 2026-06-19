@@ -95,10 +95,10 @@
   <header id="topbar">
     <div class="topbar-title">
       <h1 id="topbar-section-title">Resumen Gerencial</h1>
-      <p id="topbar-section-desc">Dashboard ejecutivo — datos consolidados</p>
+      <p id="topbar-section-desc">Datos acumulados desde 01/01/2025 — filtrá por periodo y empresa</p>
     </div>
     <div class="topbar-actions">
-      <span class="badge-period" id="badge-period">Conectando...</span>
+      <span class="badge-period" id="badge-period" title="Periodo seleccionado. Datos acumulados desde enero 2025.">Cargando...</span>
       <button class="btn-icon" onclick="loadFromAPI()" title="Actualizar datos">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
       </button>
@@ -184,14 +184,35 @@
             <button class="panel-tool-btn" onclick="exportCSV()">Exportar CSV</button>
           </div>
         </div>
-        <div class="table-container"><table class="table-custom"><thead><tr><th>Código</th><th>Cuenta</th><th class="num">Saldo Inicial</th><th class="num">Debe Acum.</th><th class="num">Haber Acum.</th><th class="num">Saldo Deudor</th><th class="num">Saldo Acreedor</th><th>Variación</th><th>Estado</th></tr></thead><tbody id="ss-body"></tbody></table></div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>Código</th><th>Cuenta</th><th class="num">Debe Acum.</th><th class="num">Haber Acum.</th><th class="num">Saldo Deudor</th><th class="num">Saldo Acreedor</th><th>Variación</th><th>Estado</th></tr></thead><tbody id="ss-body"></tbody></table></div>
         <div class="table-footer-custom"><strong>Totales:</strong> Debe: <span id="total-debe">$0</span> &middot; Haber: <span id="total-haber">$0</span> &middot; Diferencia: <span id="total-diff">$0</span></div>
       </div>
     </div>
 
     <div id="section-detalleCuenta" class="section-view">
       <div class="card-section">
-        <div class="card-header-custom"><span>Mayor por Cuenta</span><div><select id="select-cuenta" class="param-input" onchange="filterMayor(this.value)" style="width:200px;"><option value="">Todas las cuentas</option></select></div></div>
+        <div class="card-header-custom">
+          <span>Mayor por Cuenta</span>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <select id="select-cuenta" class="param-input" onchange="filterMayor(this.value)" style="width:240px;font-size:12px;"><option value="">Seleccionar una cuenta...</option></select>
+          </div>
+        </div>
+        <!-- Filtros de búsqueda (mismo patrón que el modal de movimientos) -->
+        <div id="mayor-filtros" style="display:none; padding:8px 12px; border-bottom:1px solid var(--border); background:var(--surface-2);">
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+            <div class="param-group" style="margin-bottom:0;"><div class="param-label">Desde</div><input type="date" class="param-input" id="mayor-startDate" onchange="filterMayor(document.getElementById('select-cuenta').value)" style="width:140px;font-family:var(--font-mono);font-size:11px;" /></div>
+            <div class="param-group" style="margin-bottom:0;"><div class="param-label">Hasta</div><input type="date" class="param-input" id="mayor-endDate" onchange="filterMayor(document.getElementById('select-cuenta').value)" style="width:140px;font-family:var(--font-mono);font-size:11px;" /></div>
+            <div class="param-group" style="margin-bottom:0;"><div class="param-label">Asiento</div><input type="text" class="param-input" id="mayor-filtro-asiento" oninput="filtrarMayorLocal()" placeholder="A-00142" style="width:110px;font-family:var(--font-mono);font-size:11px;" /></div>
+            <div class="param-group" style="margin-bottom:0;"><div class="param-label">Descripción</div><input type="text" class="param-input" id="mayor-filtro-descripcion" oninput="filtrarMayorLocal()" placeholder="Buscar..." style="width:180px;font-size:11px;" /></div>
+            <div class="param-group" style="margin-bottom:0;"><div class="param-label">Proveedor</div><input type="text" class="param-input" id="mayor-filtro-proveedor" oninput="filtrarMayorLocal()" placeholder="Buscar..." style="width:160px;font-size:11px;" /></div>
+            <button class="panel-tool-btn" onclick="limpiarFiltrosMayor()" style="height:34px; align-self:flex-end;">Limpiar</button>
+          </div>
+          <div style="margin-top:6px; font-size:10px; color:var(--text-muted); display:flex; gap:16px;">
+            <span>Registros cargados: <strong id="mayor-total">0</strong></span>
+            <span>Mostrando: <strong id="mayor-visible">0</strong></span>
+            <span>Saldo acumulado: <strong id="mayor-saldo-total">$0</strong></span>
+          </div>
+        </div>
         <div class="table-container"><table class="table-custom"><thead><tr><th>Fecha</th><th>Asiento</th><th>Descripción</th><th class="num">Debe</th><th class="num">Haber</th><th class="num">Saldo</th></tr></thead><tbody id="mayor-body"></tbody></table></div>
       </div>
     </div>

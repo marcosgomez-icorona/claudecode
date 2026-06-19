@@ -1,21 +1,21 @@
-/* MOCK — Datos de demostración */
+/* MOCK — Datos de demostración (v3.2 sin saldo inicial) */
 
 const MOCK = {
   sumasSaldos: [
-    { codigo: '1.1.01', cuenta: 'Caja y Bancos',     saldoInicial: 32900000, debeAcum: 45200000, haberAcum: 12300000, variacion: 8.2,   estado: 'ok', unidad: 'Gestión Comercial Azucar' },
-    { codigo: '1.1.02', cuenta: 'Cuentas a Cobrar',  saldoInicial: 29600000, debeAcum: 38700000, haberAcum:  9100000, variacion: 14.5,  estado: 'ok', unidad: 'Gestión Comercial Azucar' },
-    { codigo: '1.2.01', cuenta: 'Bienes de Cambio',  saldoInicial: 49200000, debeAcum: 67400000, haberAcum: 18200000, variacion: -5.1,  estado: 'warn', unidad: 'Gestión Comercial Azucar' },
-    { codigo: '1.3.01', cuenta: 'Bienes de Uso',     saldoInicial: 143000000,debeAcum: 185000000,haberAcum: 42000000, variacion: 2.1,   estado: 'ok', unidad: 'Servicios' },
-    { codigo: '2.1.01', cuenta: 'Proveedores',       saldoInicial: -38400000,debeAcum:  8900000, haberAcum: 47300000, variacion: 38.7,  estado: 'crit', unidad: 'Gestión Comercial Alcohol' },
-    { codigo: '2.1.02', cuenta: 'Deudas Fiscales',   saldoInicial: -8600000, debeAcum:  3200000, haberAcum: 11800000, variacion: 22.3,  estado: 'warn', unidad: 'Servicios' },
-    { codigo: '2.2.01', cuenta: 'Préstamos L/P',     saldoInicial: -26500000,debeAcum:  1500000, haberAcum: 28000000, variacion: -3.2,  estado: 'ok',   unidad: 'Servicios' },
-    { codigo: '3.1.01', cuenta: 'Capital Social',    saldoInicial: -95000000,debeAcum:       0,  haberAcum: 95000000, variacion: 0,     estado: 'ok',   unidad: 'Gestión Comercial Azucar' },
-    { codigo: '4.1.01', cuenta: 'Ventas Azúcar',     saldoInicial: -131000000,debeAcum: 12000000, haberAcum: 143000000,variacion: 18.9,  estado: 'ok',   unidad: 'Gestión Comercial Azucar' },
-    { codigo: '4.1.02', cuenta: 'Ventas Alcohol',    saldoInicial: -62400000,debeAcum:  5400000, haberAcum: 67800000, variacion: 31.2,  estado: 'crit', unidad: 'Gestión Comercial Alcohol' },
-    { codigo: '5.1.01', cuenta: 'Costo Producción',  saldoInicial: 84500000, debeAcum: 98700000, haberAcum: 14200000, variacion: 7.3,   estado: 'ok',   unidad: 'Servicios' },
-    { codigo: '5.2.01', cuenta: 'Gs. Comercializ.',  saldoInicial: 16200000, debeAcum: 18300000, haberAcum:  2100000, variacion: 11.1,  estado: 'ok',   unidad: 'Gestión Comercial Alcohol' },
-    { codigo: '5.3.01', cuenta: 'Gs. Administración',saldoInicial: 20300000, debeAcum: 24100000, haberAcum:  3800000, variacion: 5.6,   estado: 'ok',   unidad: 'Servicios' },
-    { codigo: '5.4.01', cuenta: 'Gs. Financieros',   saldoInicial: 8900000,  debeAcum:  9800000, haberAcum:   900000, variacion: 47.8,  estado: 'crit', unidad: 'Gestión Comercial Azucar' },
+    { codigo: '1.1.01', cuenta: 'Caja y Bancos',     debeAcum: 45200000, haberAcum: 12300000, variacion: 8.2,   estado: 'ok',   unidad: 'Gestión Comercial Azucar' },
+    { codigo: '1.1.02', cuenta: 'Cuentas a Cobrar',  debeAcum: 38700000, haberAcum:  9100000, variacion: 14.5,  estado: 'ok',   unidad: 'Gestión Comercial Azucar' },
+    { codigo: '1.2.01', cuenta: 'Bienes de Cambio',  debeAcum: 67400000, haberAcum: 18200000, variacion: -5.1,  estado: 'warn', unidad: 'Gestión Comercial Azucar' },
+    { codigo: '1.3.01', cuenta: 'Bienes de Uso',     debeAcum: 185000000,haberAcum: 42000000, variacion: 2.1,   estado: 'ok',   unidad: 'Servicios' },
+    { codigo: '2.1.01', cuenta: 'Proveedores',       debeAcum:  8900000, haberAcum: 47300000, variacion: 38.7,  estado: 'crit', unidad: 'Gestión Comercial Alcohol' },
+    { codigo: '2.1.02', cuenta: 'Deudas Fiscales',   debeAcum:  3200000, haberAcum: 11800000, variacion: 22.3,  estado: 'warn', unidad: 'Servicios' },
+    { codigo: '2.2.01', cuenta: 'Préstamos L/P',     debeAcum:  1500000, haberAcum: 28000000, variacion: -3.2,  estado: 'ok',   unidad: 'Servicios' },
+    { codigo: '3.1.01', cuenta: 'Capital Social',    debeAcum:       0,  haberAcum: 95000000, variacion: 0,     estado: 'ok',   unidad: 'Gestión Comercial Azucar' },
+    { codigo: '4.1.01', cuenta: 'Ventas Azúcar',     debeAcum: 12000000, haberAcum: 143000000,variacion: 18.9,  estado: 'ok',   unidad: 'Gestión Comercial Azucar' },
+    { codigo: '4.1.02', cuenta: 'Ventas Alcohol',    debeAcum:  5400000, haberAcum: 67800000, variacion: 31.2,  estado: 'crit', unidad: 'Gestión Comercial Alcohol' },
+    { codigo: '5.1.01', cuenta: 'Costo Producción',  debeAcum: 98700000, haberAcum: 14200000, variacion: 7.3,   estado: 'ok',   unidad: 'Servicios' },
+    { codigo: '5.2.01', cuenta: 'Gs. Comercializ.',  debeAcum: 18300000, haberAcum:  2100000, variacion: 11.1,  estado: 'ok',   unidad: 'Gestión Comercial Alcohol' },
+    { codigo: '5.3.01', cuenta: 'Gs. Administración',debeAcum: 24100000, haberAcum:  3800000, variacion: 5.6,   estado: 'ok',   unidad: 'Servicios' },
+    { codigo: '5.4.01', cuenta: 'Gs. Financieros',   debeAcum:  9800000, haberAcum:   900000, variacion: 47.8,  estado: 'crit', unidad: 'Gestión Comercial Azucar' },
   ],
   mayor: [
     { fecha:'2026-06-02', asiento:'A-00142', descripcion:'Cobro fact. 0001-00482 - Azúcar',      debe:12500000, haber:0,        cuenta:'1.1.01' },

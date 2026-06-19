@@ -1,0 +1,201 @@
+[
+	{
+		"id": "sync_ps_tab",
+		"type": "tab",
+		"label": "SYNC - Proveedores Saldos a GSheet",
+		"disabled": false,
+		"info": "=== SYNC: SYNC - Proveedores Saldos a GSheet → GOOGLE SHEETS ===\n\nFLUJO:\n  Inject → MSSQL → Transformar → GSheet Clear → Restore → GSheet Append → Resultado\n\nTAB: ProveedoresSaldos\nCOLUMNAS: CUIT|PROVEEDOR|CATEGORIA|SALDO|VENCIDO|A_VENCER|ULTIMO_MOV|ESTADO|UNIDAD_NEGOCIO|SYNC_UUID\nFRECUENCIA: Diaria 06:30 AM\nVERSION: 1.0.0 — 2026-06-18"
+	},
+	{
+		"id": "sync_ps_inject",
+		"type": "inject",
+		"z": "sync_ps_tab",
+		"name": "▶ Ejecutar sync ahora",
+		"props": [],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"x": 130,
+		"y": 120,
+		"wires": [
+			[
+				"sync_ps_prep"
+			]
+		]
+	},
+	{
+		"id": "sync_ps_sched",
+		"type": "inject",
+		"z": "sync_ps_tab",
+		"name": "⏰ Schedule diario 06:30",
+		"props": [],
+		"repeat": "",
+		"crontab": "30 6 * * *",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"x": 130,
+		"y": 180,
+		"wires": [
+			[
+				"sync_ps_prep"
+			]
+		]
+	},
+	{
+		"id": "sync_ps_prep",
+		"type": "function",
+		"z": "sync_ps_tab",
+		"name": "1. Preparar query",
+		"func": "var sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nmsg.sync_uuid = sync_uuid;\n\nvar q = \"\"\n+ \"SELECT TOP 300\\n\"\n+ \"    CODIGO AS CUIT,\\n\"\n+ \"    NOMBREDESTINATARIO AS PROVEEDOR,\\n\"\n+ \"    '' AS CATEGORIA,\\n\"\n+ \"    ISNULL(SUM(SALDODOCUMENTO), 0) AS SALDO,\\n\"\n+ \"    0.0 AS VENCIDO,\\n\"\n+ \"    0.0 AS A_VENCER,\\n\"\n+ \"    MAX(SUBSTRING(FECHAACTUAL, 1, 8)) AS ULTIMO_MOV,\\n\"\n+ \"    ISNULL(UN, '') AS UNIDAD_NEGOCIO\\n\"\n+ \"FROM V_EZI_PROV_CTA_CTE\\n\"\n+ \"WHERE SALDODOCUMENTO <> 0\\n\"\n+ \"GROUP BY CODIGO, NOMBREDESTINATARIO, UN\\n\"\n+ \"ORDER BY SALDO ASC;\\n\";\n\nmsg.payload = q;\nnode.warn('[Sync-PS] Preparando sync ' + sync_uuid);\nreturn msg;",
+		"outputs": 1,
+		"timeout": 0,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 400,
+		"y": 120,
+		"wires": [
+			[
+				"sync_ps_mssql"
+			]
+		]
+	},
+	{
+		"id": "sync_ps_mssql",
+		"type": "MSSQL",
+		"z": "sync_ps_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: SYNC - Proveedores Saldos a GSheet",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 610,
+		"y": 120,
+		"wires": [
+			[
+				"sync_ps_transform"
+			]
+		]
+	},
+	{
+		"id": "sync_ps_transform",
+		"type": "function",
+		"z": "sync_ps_tab",
+		"name": "2. Transformar → 2D array",
+		"func": "var rows = msg.payload;\nvar sync_uuid = msg.sync_uuid || 'N/A';\nvar timestamp = new Date().toISOString();\nmsg._syncInfo = { sync_uuid: sync_uuid, timestamp: timestamp };\nif (!rows || !Array.isArray(rows) || rows.length === 0) {\n  node.warn('[Sync-PS] Sin datos.'); msg._syncInfo.empty = true; msg.payload = null; return msg;\n}\n// Columnas A-J: CUIT|PROVEEDOR|CATEGORIA|SALDO|VENCIDO|A_VENCER|ULTIMO_MOV|ESTADO|UNIDAD_NEGOCIO|SYNC_UUID\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i]; if (!r) continue;\n  var saldo = parseFloat(r.SALDO) || 0;\n  data.push([\n    (r.CUIT || '').toString().trim(),\n    (r.PROVEEDOR || '').toString().trim(),\n    (r.CATEGORIA || '').toString().trim(),\n    saldo,\n    parseFloat(r.VENCIDO) || 0,\n    parseFloat(r.A_VENCER) || 0,\n    (r.ULTIMO_MOV || '').toString().trim(),\n    saldo < 0 ? 'ok' : 'warn',\n    (r.UNIDAD_NEGOCIO || '').toString().trim(),\n    sync_uuid\n  ]);\n}\nmsg._sheetData = data; msg.payload = data;\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-PS] ' + data.length + ' proveedores. UUID=' + sync_uuid);\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 830,
+		"y": 120,
+		"wires": [
+			[
+				"sync_ps_clear"
+			]
+		]
+	},
+	{
+		"id": "sync_ps_restore",
+		"type": "function",
+		"z": "sync_ps_tab",
+		"name": "2b. Restaurar payload post-Clear",
+		"func": "// El GSheet Clear sobreescribe msg.payload con la respuesta de la API\n// Restaurar el array 2D desde _sheetData para que el Append funcione\nif (msg._sheetData) {\n  msg.payload = msg._sheetData;\n}\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1070,
+		"y": 40,
+		"wires": [
+			[
+				"sync_ps_append"
+			]
+		]
+	},
+	{
+		"id": "sync_ps_clear",
+		"type": "GSheet",
+		"z": "sync_ps_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "ProveedoresSaldos!A2:Z",
+		"flatten": false,
+		"name": "Clear ProveedoresSaldos",
+		"x": 1070,
+		"y": 80,
+		"wires": [
+			[
+				"sync_ps_restore"
+			]
+		]
+	},
+	{
+		"id": "sync_ps_append",
+		"type": "GSheet",
+		"z": "sync_ps_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "ProveedoresSaldos!A2:Z",
+		"flatten": false,
+		"name": "Append a ProveedoresSaldos",
+		"x": 1070,
+		"y": 160,
+		"wires": [
+			[
+				"sync_ps_result"
+			]
+		]
+	},
+	{
+		"id": "sync_ps_result",
+		"type": "function",
+		"z": "sync_ps_tab",
+		"name": "3. Resultado sync",
+		"func": "var info = msg._syncInfo || {};\nif (info.empty) {\n  node.warn('[Sync-ps] Sync omitido: sin datos');\n  return msg;\n}\nif (msg.error) {\n  node.error('[Sync-ps] ERROR: ' + msg.error);\n  return msg;\n}\nvar updatedRange = '';\nif (msg.payload && msg.payload.updates) updatedRange = msg.payload.updates.updatedRange || '';\nnode.warn('[Sync-ps] ✅ Sync exitoso — ' + (info.rowCount || 0) + ' filas → ProveedoresSaldos');\nnode.warn('[Sync-ps]    UUID: ' + (info.sync_uuid || '?') + ' | Rango: ' + updatedRange);\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1280,
+		"y": 120,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "sync_gauth_mov_0009",
+		"type": "gauth",
+		"name": "node-red-sheets-sync@sync-calipso-corona.iam.gserviceaccount.com"
+	},
+	{
+		"id": "6814eb4bb7e82ddb",
+		"type": "MSSQL-CN",
+		"tdsVersion": "7_3_B",
+		"name": "Calipso",
+		"server": "192.168.0.177",
+		"port": "1433",
+		"encyption": false,
+		"trustServerCertificate": false,
+		"database": "CORONA",
+		"useUTC": true,
+		"connectTimeout": "25000",
+		"requestTimeout": "25000",
+		"cancelTimeout": "80000",
+		"pool": "5",
+		"parseJSON": false,
+		"enableArithAbort": true,
+		"readOnlyIntent": false
+	}
+]

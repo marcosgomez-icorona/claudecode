@@ -201,13 +201,22 @@ function getFilteredData() {
   document.getElementById('date-footer').textContent = new Date().toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
   document.getElementById('badge-period').textContent = 'Conectando...';
 
-  // Fechas por defecto al mes actual
+  // Fechas por defecto: últimos 10 días para vista rápida
+  // Sumas y Saldos usa 2025-01-01 (override en loadFromAPI)
   var now = new Date();
   var y = now.getFullYear();
   var m = String(now.getMonth() + 1).padStart(2, '0');
   var lastDay = new Date(y, now.getMonth() + 1, 0).getDate();
-  document.getElementById('startDate').value = y + '-' + m + '-01';
+  var tenDaysAgo = new Date(now.getTime() - 10 * 86400000);
+  var sdY = tenDaysAgo.getFullYear();
+  var sdM = String(tenDaysAgo.getMonth() + 1).padStart(2, '0');
+  var sdD = String(tenDaysAgo.getDate()).padStart(2, '0');
+  document.getElementById('startDate').value = sdY + '-' + sdM + '-' + sdD;
   document.getElementById('endDate').value = y + '-' + m + '-' + String(lastDay).padStart(2, '0');
+
+  // Mostrar info del periodo
+  document.getElementById('badge-period').textContent = sdD + '/' + sdM + '/' + sdY + ' — ' +
+    String(lastDay).padStart(2,'0') + '/' + m + '/' + y;
 
   // Detectar si se abrió como archivo local (file://) — CORS no funciona
   if (window.location.protocol === 'file:') {

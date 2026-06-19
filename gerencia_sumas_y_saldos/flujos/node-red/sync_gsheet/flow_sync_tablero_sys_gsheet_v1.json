@@ -1,0 +1,1474 @@
+[
+	{
+		"id": "sync_sys_tab",
+		"type": "tab",
+		"label": "SYNC - Tablero Sys a GSheet",
+		"disabled": false,
+		"info": "=== SYNC UNIFICADO: TABLERO SYS → GOOGLE SHEETS ===\n\n9 pestañas sincronizadas en una sola ejecución.\nCada módulo usa loop SEMANAL (lunes a domingo) desde 2025-01-01 para evitar timeout.\n\nORDEN: SumasSaldos → Movimientos → LibroDiario → EgresosValores → IngresosValores → ProveedoresSaldos → ProveedoresPendientes → Imputaciones → Interempresas\n\nVERSION: 1.1.0 — 2026-06-18 (loop semanal)\n\nModulos agregados v5.2.0: Imputaciones (V_EZI_IMPUTACIONES_C), Interempresas (V_TRANSACCION grupo)"
+	},
+	{
+		"id": "sys_inject_manual",
+		"type": "inject",
+		"z": "sync_sys_tab",
+		"name": "▶ Ejecutar sync completo",
+		"props": [],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"x": 150,
+		"y": 100,
+		"wires": [
+			[
+				"sys_chain_ss_init"
+			]
+		]
+	},
+	{
+		"id": "sys_inject_sched",
+		"type": "inject",
+		"z": "sync_sys_tab",
+		"name": "⏰ Schedule diario 06:00",
+		"props": [],
+		"repeat": "",
+		"crontab": "0 6 * * *",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"x": 150,
+		"y": 160,
+		"wires": [
+			[
+				"sys_chain_ss_init"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ss_init",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "⚡ SumasSaldos: Init loop",
+		"func": "\n// Generar semanas (lunes a domingo) desde 2025-01-01 hasta hoy\nvar now = new Date();\nvar end = new Date(now.getFullYear(), now.getMonth(), now.getDate());\nvar cur = new Date(2025, 0, 1);  // 2025-01-01\n// Ajustar al lunes de esa semana\nvar dow = cur.getDay();  // 0=Dom, 1=Lun...\nvar adj = dow === 0 ? -6 : 1 - dow;\ncur.setDate(cur.getDate() + adj);\n\nvar weeks = [];\nwhile (cur <= end) {\n  var ws = new Date(cur);\n  var we = new Date(cur);\n  we.setDate(we.getDate() + 6);\n  if (we > end) we = new Date(end);\n  var sd = ws.getFullYear() + String(ws.getMonth()+1).padStart(2,'0') + String(ws.getDate()).padStart(2,'0');\n  var ed = we.getFullYear() + String(we.getMonth()+1).padStart(2,'0') + String(we.getDate()).padStart(2,'0');\n  weeks.push({ sd: sd, ed: ed, label: sd + '-' + ed });\n  cur.setDate(cur.getDate() + 7);\n}\n\nmsg._weeks = weeks;\nmsg._idx = 0;\nmsg._accum = [];\nmsg._sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nmsg._startDate = weeks.length > 0 ? weeks[0].sd : '';\nmsg._endDate = weeks.length > 0 ? weeks[weeks.length-1].ed : '';\nnode.warn('[Sync-ss] Iniciando ' + weeks.length + ' semanas (SumasSaldos)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 150,
+		"y": 220,
+		"wires": [
+			[
+				"sys_chain_ss_build"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ss_build",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "  Build query (sem {{msg._idx+1}}/{{msg._weeks.length}})",
+		"func": "var wk = msg._weeks[msg._idx];\nnode.warn('[Sync-SS] Sem ' + (msg._idx+1) + '/' + msg._weeks.length + ': ' + wk.label);\nvar q = \"\"\n+ \"SELECT \\n\"\n+ \"   V_EZI_CUENTAS.CODIGO,\\n\"\n+ \"   V_EZI_CUENTAS.DESCRIPCION AS CUENTA,\\n\"\n+ \"   V_EZI_CUENTAS.CRubro,\\n\"\n+ \"   V_EZI_CUENTAS.NRubro,\\n\"\n+ \"   ISNULL(SUM(V_VALOR_.IMPORTE), 0) AS DEBE,\\n\"\n+ \"   ISNULL(SUM(V_VALOR_1.IMPORTE), 0) AS HABER,\\n\"\n+ \"   ISNULL(V_UNIDADOPERATIVA_.NOMBRE, '') AS UNIDAD_NEGOCIO\\n\"\n+ \"FROM V_TRCONTABLE_\\n\"\n+ \"INNER JOIN V_ITEMCONTABLE_ ON V_TRCONTABLE_.ITEMSTRANSACCION_ID = V_ITEMCONTABLE_.BO_PLACE_ID\\n\"\n+ \"INNER JOIN V_VALOR_ ON V_ITEMCONTABLE_.DEBE_ID = V_VALOR_.ID\\n\"\n+ \"INNER JOIN V_VALOR_ AS V_VALOR_1 ON V_ITEMCONTABLE_.HABER_ID = V_VALOR_1.ID\\n\"\n+ \"INNER JOIN V_EZI_CUENTAS ON V_ITEMCONTABLE_.REFERENCIA_ID = V_EZI_CUENTAS.ID\\n\"\n+ \"LEFT OUTER JOIN V_UNIDADOPERATIVA_ ON V_TRCONTABLE_.UNIDADOPERATIVA_ID = V_UNIDADOPERATIVA_.ID\\n\"\n+ \"WHERE SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) >= '\" + wk.sd + \"'\\n\"\n+ \"  AND SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) <= '\" + wk.ed + \"'\\n\"\n+ \"  AND V_EZI_CUENTAS.CODIGO BETWEEN '0' AND '9'\\n\"\n+ \"  AND V_TRCONTABLE_.ESTADO = 'C'\\n\"\n+ \"GROUP BY V_EZI_CUENTAS.CODIGO, V_EZI_CUENTAS.DESCRIPCION,\\n\"\n+ \"  V_EZI_CUENTAS.CRubro, V_EZI_CUENTAS.NRubro, V_UNIDADOPERATIVA_.NOMBRE\\n\"\n+ \"ORDER BY V_EZI_CUENTAS.CODIGO;\\n\";\nmsg.payload = q;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 350,
+		"y": 220,
+		"wires": [
+			[
+				"sys_chain_ss_mssql"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ss_mssql",
+		"type": "MSSQL",
+		"z": "sync_sys_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: SumasSaldos",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 560,
+		"y": 220,
+		"wires": [
+			[
+				"sys_chain_ss_accum"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ss_accum",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "  Acumular sem {{msg._idx+1}} → next/end",
+		"func": "var rows = msg.payload || [];\nif (rows.length > 0) {\n  for (var i = 0; i < rows.length; i++) msg._accum.push(rows[i]);\n}\nmsg._idx++;\nif (msg._idx < msg._weeks.length) return [msg, null];\nnode.warn('[Sync-SS] Loop completado. ' + msg._accum.length + ' filas totales. Mergeando por CODIGO...');\n// Acumular por CODIGO + UNIDAD_NEGOCIO\nvar map = {};\nfor (var i = 0; i < msg._accum.length; i++) {\n  var r = msg._accum[i];\n  var key = (r.CODIGO || '') + '|' + (r.UNIDAD_NEGOCIO || '');\n  if (!map[key]) map[key] = { CODIGO: r.CODIGO, CUENTA: r.CUENTA, CRubro: r.CRubro, NRubro: r.NRubro, UNIDAD_NEGOCIO: r.UNIDAD_NEGOCIO || '', DEBE: 0, HABER: 0 };\n  map[key].DEBE += parseFloat(r.DEBE) || 0;\n  map[key].HABER += parseFloat(r.HABER) || 0;\n}\nmsg._merged = [];\nvar keys = Object.keys(map).sort();\nfor (var k = 0; k < keys.length; k++) msg._merged.push(map[keys[k]]);\nnode.warn('[Sync-SS] ' + msg._merged.length + ' cuentas unicas (mergeado)');\nreturn [null, msg];",
+		"outputs": 2,
+		"noerr": 0,
+		"x": 760,
+		"y": 220,
+		"wires": [
+			[
+				"sys_chain_ss_build"
+			],
+			[
+				"sys_chain_ss_final"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ss_final",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "📦 SumasSaldos: Final → 2D array",
+		"func": "var merged = msg._merged || [];\nvar timestamp = new Date().toISOString();\nvar periodo = msg._startDate + '-' + msg._endDate;\nmsg._syncInfo = { sync_uuid: msg._sync_uuid, periodo: periodo, timestamp: timestamp };\nif (merged.length === 0) { msg._syncInfo.empty = true; msg.payload = null; return msg; }\nvar data = [];\nfor (var i = 0; i < merged.length; i++) {\n  var r = merged[i], debe = r.DEBE || 0, haber = r.HABER || 0;\n  data.push([r.CODIGO||'', r.CUENTA||'', r.NRubro||'', debe, haber, debe-haber, periodo, timestamp, msg._sync_uuid, r.UNIDAD_NEGOCIO||'']);\n}\nmsg._sheetData = data; msg.payload = data;\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-SS] ' + data.length + ' filas finales (10 cols A-J)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 960,
+		"y": 220,
+		"wires": [
+			[
+				"sys_chain_ss_clear"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ss_clear",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "SumasSaldos!A2:Z",
+		"flatten": false,
+		"name": "Clear SumasSaldos",
+		"x": 1160,
+		"y": 200,
+		"wires": [
+			[
+				"sys_chain_ss_restore"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ss_restore",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "Restaurar payload",
+		"func": "if (msg._sheetData) { msg.payload = msg._sheetData; }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1160,
+		"y": 250,
+		"wires": [
+			[
+				"sys_chain_ss_append"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ss_append",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "SumasSaldos!A2:Z",
+		"flatten": false,
+		"name": "Append a SumasSaldos",
+		"x": 1380,
+		"y": 220,
+		"wires": [
+			[
+				"sys_chain_ss_done"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ss_done",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "✅ SumasSaldos: Done",
+		"func": "var info = msg._syncInfo || {};\nif (info.empty) { node.warn('[Sync-ss] ⚠ Sin datos'); }\nif (msg.error) { node.error('[Sync-ss] ERROR: ' + msg.error); }\nelse { node.warn('[Sync-ss] ✅ ' + (info.rowCount || 0) + ' filas → SumasSaldos'); }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1580,
+		"y": 220,
+		"wires": [
+			[
+				"sys_chain_mov_init"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_mov_init",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "⚡ Movimientos: Init loop",
+		"func": "\n// Generar semanas (lunes a domingo) desde 2025-01-01 hasta hoy\nvar now = new Date();\nvar end = new Date(now.getFullYear(), now.getMonth(), now.getDate());\nvar cur = new Date(2025, 0, 1);  // 2025-01-01\n// Ajustar al lunes de esa semana\nvar dow = cur.getDay();  // 0=Dom, 1=Lun...\nvar adj = dow === 0 ? -6 : 1 - dow;\ncur.setDate(cur.getDate() + adj);\n\nvar weeks = [];\nwhile (cur <= end) {\n  var ws = new Date(cur);\n  var we = new Date(cur);\n  we.setDate(we.getDate() + 6);\n  if (we > end) we = new Date(end);\n  var sd = ws.getFullYear() + String(ws.getMonth()+1).padStart(2,'0') + String(ws.getDate()).padStart(2,'0');\n  var ed = we.getFullYear() + String(we.getMonth()+1).padStart(2,'0') + String(we.getDate()).padStart(2,'0');\n  weeks.push({ sd: sd, ed: ed, label: sd + '-' + ed });\n  cur.setDate(cur.getDate() + 7);\n}\n\nmsg._weeks = weeks;\nmsg._idx = 0;\nmsg._accum = [];\nmsg._sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nmsg._startDate = weeks.length > 0 ? weeks[0].sd : '';\nmsg._endDate = weeks.length > 0 ? weeks[weeks.length-1].ed : '';\nnode.warn('[Sync-mov] Iniciando ' + weeks.length + ' semanas (Movimientos)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 150,
+		"y": 400,
+		"wires": [
+			[
+				"sys_chain_mov_build"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_mov_build",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "  Build query (sem {{msg._idx+1}}/{{msg._weeks.length}})",
+		"func": "var wk = msg._weeks[msg._idx];\nvar q = \"\"\n+ \"SELECT \\n\"\n+ \"    V_EZI_CUENTAS.CODIGO,\\n\"\n+ \"    V_EZI_CUENTAS.DESCRIPCION AS CUENTA,\\n\"\n+ \"    SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) AS FECHA,\\n\"\n+ \"    V_TRCONTABLE_.NUMERODOCUMENTO AS ASIENTO,\\n\"\n+ \"    COALESCE(V_EZI_ASIENTOS_DETALLES.DETALLE, V_TRCONTABLE_.DETALLE) AS DESCRIPCION,\\n\"\n+ \"    V_TRCONTABLE_.NOMBREDESTINATARIO AS PROVEEDOR,\\n\"\n+ \"    ISNULL(SUM(V_VALOR_.IMPORTE), 0) AS DEBE,\\n\"\n+ \"    ISNULL(SUM(V_VALOR_1.IMPORTE), 0) AS HABER,\\n\"\n+ \"    ISNULL(V_UNIDADOPERATIVA_.NOMBRE, '') AS UNIDAD_NEGOCIO\\n\"\n+ \"FROM V_TRCONTABLE_\\n\"\n+ \"INNER JOIN V_ITEMCONTABLE_ ON V_TRCONTABLE_.ITEMSTRANSACCION_ID = V_ITEMCONTABLE_.BO_PLACE_ID\\n\"\n+ \"INNER JOIN V_VALOR_ ON V_ITEMCONTABLE_.DEBE_ID = V_VALOR_.ID\\n\"\n+ \"INNER JOIN V_VALOR_ AS V_VALOR_1 ON V_ITEMCONTABLE_.HABER_ID = V_VALOR_1.ID\\n\"\n+ \"INNER JOIN V_EZI_CUENTAS ON V_ITEMCONTABLE_.REFERENCIA_ID = V_EZI_CUENTAS.ID\\n\"\n+ \"LEFT OUTER JOIN V_EZI_ASIENTOS_DETALLES ON V_TRCONTABLE_.ID = V_EZI_ASIENTOS_DETALLES.ID\\n\"\n+ \"LEFT OUTER JOIN V_UNIDADOPERATIVA_ ON V_TRCONTABLE_.UNIDADOPERATIVA_ID = V_UNIDADOPERATIVA_.ID\\n\"\n+ \"WHERE SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) >= '\" + wk.sd + \"'\\n\"\n+ \"  AND SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) <= '\" + wk.ed + \"'\\n\"\n+ \"  AND V_EZI_CUENTAS.CODIGO BETWEEN '0' AND '9'\\n\"\n+ \"  AND V_TRCONTABLE_.ESTADO = 'C'\\n\"\n+ \"GROUP BY V_EZI_CUENTAS.CODIGO, V_EZI_CUENTAS.DESCRIPCION,\\n\"\n+ \"  V_TRCONTABLE_.FECHAAPLICACION, V_TRCONTABLE_.NUMERODOCUMENTO,\\n\"\n+ \"  COALESCE(V_EZI_ASIENTOS_DETALLES.DETALLE, V_TRCONTABLE_.DETALLE),\\n\"\n+ \"  V_TRCONTABLE_.NOMBREDESTINATARIO, V_UNIDADOPERATIVA_.NOMBRE\\n\"\n+ \"ORDER BY V_EZI_CUENTAS.CODIGO, FECHA DESC;\\n\";\nmsg.payload = q;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 350,
+		"y": 400,
+		"wires": [
+			[
+				"sys_chain_mov_mssql"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_mov_mssql",
+		"type": "MSSQL",
+		"z": "sync_sys_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: Movimientos",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 560,
+		"y": 400,
+		"wires": [
+			[
+				"sys_chain_mov_accum"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_mov_accum",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "  Acumular sem {{msg._idx+1}} → next/end",
+		"func": "var rows = msg.payload || [];\nfor (var i = 0; i < rows.length; i++) msg._accum.push(rows[i]);\nmsg._idx++;\nif (msg._idx < msg._weeks.length) return [msg, null];\nnode.warn('[Sync-MOV] Loop completado. ' + msg._accum.length + ' movimientos totales.');\nreturn [null, msg];",
+		"outputs": 2,
+		"noerr": 0,
+		"x": 760,
+		"y": 400,
+		"wires": [
+			[
+				"sys_chain_mov_build"
+			],
+			[
+				"sys_chain_mov_final"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_mov_final",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "📦 Movimientos: Final → 2D array",
+		"func": "var rows = msg._accum || [];\nvar timestamp = new Date().toISOString();\nvar periodo = msg._startDate + '-' + msg._endDate;\nmsg._syncInfo = { sync_uuid: msg._sync_uuid, periodo: periodo, timestamp: timestamp };\nif (rows.length === 0) { msg._syncInfo.empty = true; msg.payload = null; return msg; }\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i], debe = parseFloat(r.DEBE)||0, haber = parseFloat(r.HABER)||0;\n  data.push([(r.CODIGO||'').toString().trim(), (r.CUENTA||'').toString().trim(),\n    (r.FECHA||'').toString().trim(), (r.ASIENTO||'').toString().trim(),\n    (r.DESCRIPCION||'').toString().trim(), (r.PROVEEDOR||'').toString().trim(),\n    '', debe, haber, debe-haber, msg._sync_uuid, (r.UNIDAD_NEGOCIO||'').toString().trim()]);\n}\nmsg._sheetData = data; msg.payload = data;\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-MOV] ' + data.length + ' filas (12 cols A-L)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 960,
+		"y": 400,
+		"wires": [
+			[
+				"sys_chain_mov_clear"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_mov_clear",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "Movimientos!A2:Z",
+		"flatten": false,
+		"name": "Clear Movimientos",
+		"x": 1160,
+		"y": 380,
+		"wires": [
+			[
+				"sys_chain_mov_restore"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_mov_restore",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "Restaurar payload",
+		"func": "if (msg._sheetData) { msg.payload = msg._sheetData; }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1160,
+		"y": 430,
+		"wires": [
+			[
+				"sys_chain_mov_append"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_mov_append",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "Movimientos!A2:Z",
+		"flatten": false,
+		"name": "Append a Movimientos",
+		"x": 1380,
+		"y": 400,
+		"wires": [
+			[
+				"sys_chain_mov_done"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_mov_done",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "✅ Movimientos: Done",
+		"func": "var info = msg._syncInfo || {};\nif (info.empty) { node.warn('[Sync-mov] ⚠ Sin datos'); }\nif (msg.error) { node.error('[Sync-mov] ERROR: ' + msg.error); }\nelse { node.warn('[Sync-mov] ✅ ' + (info.rowCount || 0) + ' filas → Movimientos'); }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1580,
+		"y": 400,
+		"wires": [
+			[
+				"sys_chain_ld_init"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ld_init",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "⚡ LibroDiario: Init loop",
+		"func": "\n// Generar semanas (lunes a domingo) desde 2025-01-01 hasta hoy\nvar now = new Date();\nvar end = new Date(now.getFullYear(), now.getMonth(), now.getDate());\nvar cur = new Date(2025, 0, 1);  // 2025-01-01\n// Ajustar al lunes de esa semana\nvar dow = cur.getDay();  // 0=Dom, 1=Lun...\nvar adj = dow === 0 ? -6 : 1 - dow;\ncur.setDate(cur.getDate() + adj);\n\nvar weeks = [];\nwhile (cur <= end) {\n  var ws = new Date(cur);\n  var we = new Date(cur);\n  we.setDate(we.getDate() + 6);\n  if (we > end) we = new Date(end);\n  var sd = ws.getFullYear() + String(ws.getMonth()+1).padStart(2,'0') + String(ws.getDate()).padStart(2,'0');\n  var ed = we.getFullYear() + String(we.getMonth()+1).padStart(2,'0') + String(we.getDate()).padStart(2,'0');\n  weeks.push({ sd: sd, ed: ed, label: sd + '-' + ed });\n  cur.setDate(cur.getDate() + 7);\n}\n\nmsg._weeks = weeks;\nmsg._idx = 0;\nmsg._accum = [];\nmsg._sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nmsg._startDate = weeks.length > 0 ? weeks[0].sd : '';\nmsg._endDate = weeks.length > 0 ? weeks[weeks.length-1].ed : '';\nnode.warn('[Sync-ld] Iniciando ' + weeks.length + ' semanas (LibroDiario)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 150,
+		"y": 580,
+		"wires": [
+			[
+				"sys_chain_ld_build"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ld_build",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "  Build query (sem {{msg._idx+1}}/{{msg._weeks.length}})",
+		"func": "var wk = msg._weeks[msg._idx];\nvar q = \"\"\n+ \"SELECT \\n\"\n+ \"    SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) AS FECHA,\\n\"\n+ \"    V_TRCONTABLE_.NUMERODOCUMENTO AS ASIENTO,\\n\"\n+ \"    COALESCE(V_EZI_ASIENTOS_DETALLES.DETALLE, V_TRCONTABLE_.DETALLE) AS DESCRIPCION,\\n\"\n+ \"    V_EZI_CUENTAS.CODIGO + ' ' + V_EZI_CUENTAS.DESCRIPCION AS CUENTA,\\n\"\n+ \"    ISNULL(SUM(V_VALOR_.IMPORTE), 0) AS DEBE,\\n\"\n+ \"    ISNULL(SUM(V_VALOR_1.IMPORTE), 0) AS HABER,\\n\"\n+ \"    ISNULL(V_UNIDADOPERATIVA_.NOMBRE, '') AS UNIDAD_NEGOCIO\\n\"\n+ \"FROM V_TRCONTABLE_\\n\"\n+ \"INNER JOIN V_ITEMCONTABLE_ ON V_TRCONTABLE_.ITEMSTRANSACCION_ID = V_ITEMCONTABLE_.BO_PLACE_ID\\n\"\n+ \"INNER JOIN V_VALOR_ ON V_ITEMCONTABLE_.DEBE_ID = V_VALOR_.ID\\n\"\n+ \"INNER JOIN V_VALOR_ AS V_VALOR_1 ON V_ITEMCONTABLE_.HABER_ID = V_VALOR_1.ID\\n\"\n+ \"INNER JOIN V_EZI_CUENTAS ON V_ITEMCONTABLE_.REFERENCIA_ID = V_EZI_CUENTAS.ID\\n\"\n+ \"LEFT OUTER JOIN V_EZI_ASIENTOS_DETALLES ON V_TRCONTABLE_.ID = V_EZI_ASIENTOS_DETALLES.ID\\n\"\n+ \"LEFT OUTER JOIN V_UNIDADOPERATIVA_ ON V_TRCONTABLE_.UNIDADOPERATIVA_ID = V_UNIDADOPERATIVA_.ID\\n\"\n+ \"WHERE SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) >= '\" + wk.sd + \"'\\n\"\n+ \"  AND SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) <= '\" + wk.ed + \"'\\n\"\n+ \"  AND V_EZI_CUENTAS.CODIGO BETWEEN '0' AND '9'\\n\"\n+ \"  AND V_TRCONTABLE_.ESTADO = 'C'\\n\"\n+ \"GROUP BY V_TRCONTABLE_.FECHAAPLICACION, V_TRCONTABLE_.NUMERODOCUMENTO,\\n\"\n+ \"  COALESCE(V_EZI_ASIENTOS_DETALLES.DETALLE, V_TRCONTABLE_.DETALLE),\\n\"\n+ \"  V_EZI_CUENTAS.CODIGO, V_EZI_CUENTAS.DESCRIPCION, V_UNIDADOPERATIVA_.NOMBRE\\n\"\n+ \"ORDER BY FECHA DESC, ASIENTO;\\n\";\nmsg.payload = q;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 350,
+		"y": 580,
+		"wires": [
+			[
+				"sys_chain_ld_mssql"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ld_mssql",
+		"type": "MSSQL",
+		"z": "sync_sys_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: LibroDiario",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 560,
+		"y": 580,
+		"wires": [
+			[
+				"sys_chain_ld_accum"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ld_accum",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "  Acumular sem {{msg._idx+1}} → next/end",
+		"func": "var rows = msg.payload || [];\nfor (var i = 0; i < rows.length; i++) msg._accum.push(rows[i]);\nmsg._idx++;\nif (msg._idx < msg._weeks.length) return [msg, null];\nnode.warn('[Sync-LD] Loop completado. ' + msg._accum.length + ' lineas totales.');\nreturn [null, msg];",
+		"outputs": 2,
+		"noerr": 0,
+		"x": 760,
+		"y": 580,
+		"wires": [
+			[
+				"sys_chain_ld_build"
+			],
+			[
+				"sys_chain_ld_final"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ld_final",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "📦 LibroDiario: Final → 2D array",
+		"func": "var rows = msg._accum || [];\nvar timestamp = new Date().toISOString();\nmsg._syncInfo = { sync_uuid: msg._sync_uuid, periodo: msg._startDate+'-'+msg._endDate, timestamp: timestamp };\nif (rows.length === 0) { msg._syncInfo.empty = true; msg.payload = null; return msg; }\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i], debe = parseFloat(r.DEBE)||0, haber = parseFloat(r.HABER)||0;\n  var importe = debe > haber ? debe : haber; if (importe === 0) continue;\n  var cuenta = (r.CUENTA||'').toString().trim();\n  data.push([(r.FECHA||'').toString().trim(), (r.ASIENTO||'').toString().trim(),\n    (r.DESCRIPCION||'').toString().trim(), debe > haber ? cuenta : '', haber > debe ? cuenta : '',\n    importe, '', (r.UNIDAD_NEGOCIO||'').toString().trim(), msg._sync_uuid]);\n}\nmsg._sheetData = data; msg.payload = data;\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-LD] ' + data.length + ' filas (9 cols A-I)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 960,
+		"y": 580,
+		"wires": [
+			[
+				"sys_chain_ld_clear"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ld_clear",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "LibroDiario!A2:Z",
+		"flatten": false,
+		"name": "Clear LibroDiario",
+		"x": 1160,
+		"y": 560,
+		"wires": [
+			[
+				"sys_chain_ld_restore"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ld_restore",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "Restaurar payload",
+		"func": "if (msg._sheetData) { msg.payload = msg._sheetData; }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1160,
+		"y": 610,
+		"wires": [
+			[
+				"sys_chain_ld_append"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ld_append",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "LibroDiario!A2:Z",
+		"flatten": false,
+		"name": "Append a LibroDiario",
+		"x": 1380,
+		"y": 580,
+		"wires": [
+			[
+				"sys_chain_ld_done"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ld_done",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "✅ LibroDiario: Done",
+		"func": "var info = msg._syncInfo || {};\nif (info.empty) { node.warn('[Sync-ld] ⚠ Sin datos'); }\nif (msg.error) { node.error('[Sync-ld] ERROR: ' + msg.error); }\nelse { node.warn('[Sync-ld] ✅ ' + (info.rowCount || 0) + ' filas → LibroDiario'); }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1580,
+		"y": 580,
+		"wires": [
+			[
+				"sys_chain_eg_init"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_eg_init",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "⚡ EgresosValores: Init loop",
+		"func": "\n// Generar semanas (lunes a domingo) desde 2025-01-01 hasta hoy\nvar now = new Date();\nvar end = new Date(now.getFullYear(), now.getMonth(), now.getDate());\nvar cur = new Date(2025, 0, 1);  // 2025-01-01\n// Ajustar al lunes de esa semana\nvar dow = cur.getDay();  // 0=Dom, 1=Lun...\nvar adj = dow === 0 ? -6 : 1 - dow;\ncur.setDate(cur.getDate() + adj);\n\nvar weeks = [];\nwhile (cur <= end) {\n  var ws = new Date(cur);\n  var we = new Date(cur);\n  we.setDate(we.getDate() + 6);\n  if (we > end) we = new Date(end);\n  var sd = ws.getFullYear() + String(ws.getMonth()+1).padStart(2,'0') + String(ws.getDate()).padStart(2,'0');\n  var ed = we.getFullYear() + String(we.getMonth()+1).padStart(2,'0') + String(we.getDate()).padStart(2,'0');\n  weeks.push({ sd: sd, ed: ed, label: sd + '-' + ed });\n  cur.setDate(cur.getDate() + 7);\n}\n\nmsg._weeks = weeks;\nmsg._idx = 0;\nmsg._accum = [];\nmsg._sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nmsg._startDate = weeks.length > 0 ? weeks[0].sd : '';\nmsg._endDate = weeks.length > 0 ? weeks[weeks.length-1].ed : '';\nnode.warn('[Sync-eg] Iniciando ' + weeks.length + ' semanas (EgresosValores)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 150,
+		"y": 760,
+		"wires": [
+			[
+				"sys_chain_eg_build"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_eg_build",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "  Build query (sem {{msg._idx+1}}/{{msg._weeks.length}})",
+		"func": "var wk = msg._weeks[msg._idx];\nvar q = \"\"\n+ \"SELECT \\n\"\n+ \"    SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) AS FECHA,\\n\"\n+ \"    V_TRCONTABLE_.NUMERODOCUMENTO AS NRO,\\n\"\n+ \"    V_TRCONTABLE_.NOMBREDESTINATARIO AS BENEFICIARIO,\\n\"\n+ \"    COALESCE(V_EZI_ASIENTOS_DETALLES.DETALLE, V_TRCONTABLE_.DETALLE) AS CONCEPTO,\\n\"\n+ \"    V_EZI_CUENTAS.DESCRIPCION AS MEDIO,\\n\"\n+ \"    ISNULL(SUM(V_VALOR_1.IMPORTE), 0) AS IMPORTE,\\n\"\n+ \"    ISNULL(V_UNIDADOPERATIVA_.NOMBRE, '') AS UNIDAD_NEGOCIO\\n\"\n+ \"FROM V_TRCONTABLE_\\n\"\n+ \"INNER JOIN V_ITEMCONTABLE_ ON V_TRCONTABLE_.ITEMSTRANSACCION_ID = V_ITEMCONTABLE_.BO_PLACE_ID\\n\"\n+ \"INNER JOIN V_VALOR_ ON V_ITEMCONTABLE_.DEBE_ID = V_VALOR_.ID\\n\"\n+ \"INNER JOIN V_VALOR_ AS V_VALOR_1 ON V_ITEMCONTABLE_.HABER_ID = V_VALOR_1.ID\\n\"\n+ \"INNER JOIN V_EZI_CUENTAS ON V_ITEMCONTABLE_.REFERENCIA_ID = V_EZI_CUENTAS.ID\\n\"\n+ \"LEFT OUTER JOIN V_EZI_ASIENTOS_DETALLES ON V_TRCONTABLE_.ID = V_EZI_ASIENTOS_DETALLES.ID\\n\"\n+ \"LEFT OUTER JOIN V_UNIDADOPERATIVA_ ON V_TRCONTABLE_.UNIDADOPERATIVA_ID = V_UNIDADOPERATIVA_.ID\\n\"\n+ \"WHERE SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) >= '\" + wk.sd + \"'\\n\"\n+ \"  AND SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) <= '\" + wk.ed + \"'\\n\"\n+ \"  AND V_EZI_CUENTAS.CODIGO LIKE '1.1.01%'\\n\"\n+ \"  AND V_TRCONTABLE_.ESTADO = 'C'\\n\"\n+ \"GROUP BY V_TRCONTABLE_.FECHAAPLICACION, V_TRCONTABLE_.NUMERODOCUMENTO,\\n\"\n+ \"  V_TRCONTABLE_.NOMBREDESTINATARIO, COALESCE(V_EZI_ASIENTOS_DETALLES.DETALLE, V_TRCONTABLE_.DETALLE),\\n\"\n+ \"  V_EZI_CUENTAS.DESCRIPCION, V_UNIDADOPERATIVA_.NOMBRE\\n\"\n+ \"HAVING SUM(V_VALOR_1.IMPORTE) > 0\\n\"\n+ \"ORDER BY FECHA DESC;\\n\";\nmsg.payload = q;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 350,
+		"y": 760,
+		"wires": [
+			[
+				"sys_chain_eg_mssql"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_eg_mssql",
+		"type": "MSSQL",
+		"z": "sync_sys_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: EgresosValores",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 560,
+		"y": 760,
+		"wires": [
+			[
+				"sys_chain_eg_accum"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_eg_accum",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "  Acumular sem {{msg._idx+1}} → next/end",
+		"func": "var rows = msg.payload || [];\nfor (var i = 0; i < rows.length; i++) msg._accum.push(rows[i]);\nmsg._idx++;\nif (msg._idx < msg._weeks.length) return [msg, null];\nnode.warn('[Sync-EG] Loop completado. ' + msg._accum.length + ' egresos totales.');\nreturn [null, msg];",
+		"outputs": 2,
+		"noerr": 0,
+		"x": 760,
+		"y": 760,
+		"wires": [
+			[
+				"sys_chain_eg_build"
+			],
+			[
+				"sys_chain_eg_final"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_eg_final",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "📦 EgresosValores: Final → 2D array",
+		"func": "var rows = msg._accum || [];\nvar timestamp = new Date().toISOString();\nmsg._syncInfo = { sync_uuid: msg._sync_uuid, periodo: msg._startDate+'-'+msg._endDate, timestamp: timestamp };\nif (rows.length === 0) { msg._syncInfo.empty = true; msg.payload = null; return msg; }\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i], importe = parseFloat(r.IMPORTE)||0; if (importe === 0) continue;\n  data.push([(r.FECHA||'').toString().trim(), (r.NRO||'').toString().trim(),\n    (r.BENEFICIARIO||'').toString().trim(), (r.CONCEPTO||'').toString().trim(),\n    (r.MEDIO||'').toString().trim(), importe, 'ok',\n    (r.UNIDAD_NEGOCIO||'').toString().trim(), msg._sync_uuid]);\n}\nmsg._sheetData = data; msg.payload = data;\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-EG] ' + data.length + ' filas (9 cols A-I)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 960,
+		"y": 760,
+		"wires": [
+			[
+				"sys_chain_eg_clear"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_eg_clear",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "EgresosValores!A2:Z",
+		"flatten": false,
+		"name": "Clear EgresosValores",
+		"x": 1160,
+		"y": 740,
+		"wires": [
+			[
+				"sys_chain_eg_restore"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_eg_restore",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "Restaurar payload",
+		"func": "if (msg._sheetData) { msg.payload = msg._sheetData; }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1160,
+		"y": 790,
+		"wires": [
+			[
+				"sys_chain_eg_append"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_eg_append",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "EgresosValores!A2:Z",
+		"flatten": false,
+		"name": "Append a EgresosValores",
+		"x": 1380,
+		"y": 760,
+		"wires": [
+			[
+				"sys_chain_eg_done"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_eg_done",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "✅ EgresosValores: Done",
+		"func": "var info = msg._syncInfo || {};\nif (info.empty) { node.warn('[Sync-eg] ⚠ Sin datos'); }\nif (msg.error) { node.error('[Sync-eg] ERROR: ' + msg.error); }\nelse { node.warn('[Sync-eg] ✅ ' + (info.rowCount || 0) + ' filas → EgresosValores'); }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1580,
+		"y": 760,
+		"wires": [
+			[
+				"sys_chain_iv_init"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_iv_init",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "⚡ IngresosValores: Init loop",
+		"func": "\n// Generar semanas (lunes a domingo) desde 2025-01-01 hasta hoy\nvar now = new Date();\nvar end = new Date(now.getFullYear(), now.getMonth(), now.getDate());\nvar cur = new Date(2025, 0, 1);  // 2025-01-01\n// Ajustar al lunes de esa semana\nvar dow = cur.getDay();  // 0=Dom, 1=Lun...\nvar adj = dow === 0 ? -6 : 1 - dow;\ncur.setDate(cur.getDate() + adj);\n\nvar weeks = [];\nwhile (cur <= end) {\n  var ws = new Date(cur);\n  var we = new Date(cur);\n  we.setDate(we.getDate() + 6);\n  if (we > end) we = new Date(end);\n  var sd = ws.getFullYear() + String(ws.getMonth()+1).padStart(2,'0') + String(ws.getDate()).padStart(2,'0');\n  var ed = we.getFullYear() + String(we.getMonth()+1).padStart(2,'0') + String(we.getDate()).padStart(2,'0');\n  weeks.push({ sd: sd, ed: ed, label: sd + '-' + ed });\n  cur.setDate(cur.getDate() + 7);\n}\n\nmsg._weeks = weeks;\nmsg._idx = 0;\nmsg._accum = [];\nmsg._sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nmsg._startDate = weeks.length > 0 ? weeks[0].sd : '';\nmsg._endDate = weeks.length > 0 ? weeks[weeks.length-1].ed : '';\nnode.warn('[Sync-iv] Iniciando ' + weeks.length + ' semanas (IngresosValores)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 150,
+		"y": 940,
+		"wires": [
+			[
+				"sys_chain_iv_build"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_iv_build",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "  Build query (sem {{msg._idx+1}}/{{msg._weeks.length}})",
+		"func": "var wk = msg._weeks[msg._idx];\nvar q = \"\"\n+ \"SELECT \\n\"\n+ \"    SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) AS FECHA,\\n\"\n+ \"    V_TRCONTABLE_.NUMERODOCUMENTO AS NRO,\\n\"\n+ \"    V_TRCONTABLE_.NOMBREDESTINATARIO AS ORIGEN,\\n\"\n+ \"    COALESCE(V_EZI_ASIENTOS_DETALLES.DETALLE, V_TRCONTABLE_.DETALLE) AS CONCEPTO,\\n\"\n+ \"    V_EZI_CUENTAS.DESCRIPCION AS MEDIO,\\n\"\n+ \"    ISNULL(SUM(V_VALOR_.IMPORTE), 0) AS IMPORTE,\\n\"\n+ \"    ISNULL(V_UNIDADOPERATIVA_.NOMBRE, '') AS UNIDAD_NEGOCIO\\n\"\n+ \"FROM V_TRCONTABLE_\\n\"\n+ \"INNER JOIN V_ITEMCONTABLE_ ON V_TRCONTABLE_.ITEMSTRANSACCION_ID = V_ITEMCONTABLE_.BO_PLACE_ID\\n\"\n+ \"INNER JOIN V_VALOR_ ON V_ITEMCONTABLE_.DEBE_ID = V_VALOR_.ID\\n\"\n+ \"INNER JOIN V_VALOR_ AS V_VALOR_1 ON V_ITEMCONTABLE_.HABER_ID = V_VALOR_1.ID\\n\"\n+ \"INNER JOIN V_EZI_CUENTAS ON V_ITEMCONTABLE_.REFERENCIA_ID = V_EZI_CUENTAS.ID\\n\"\n+ \"LEFT OUTER JOIN V_EZI_ASIENTOS_DETALLES ON V_TRCONTABLE_.ID = V_EZI_ASIENTOS_DETALLES.ID\\n\"\n+ \"LEFT OUTER JOIN V_UNIDADOPERATIVA_ ON V_TRCONTABLE_.UNIDADOPERATIVA_ID = V_UNIDADOPERATIVA_.ID\\n\"\n+ \"WHERE SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) >= '\" + wk.sd + \"'\\n\"\n+ \"  AND SUBSTRING(V_TRCONTABLE_.FECHAAPLICACION, 1, 8) <= '\" + wk.ed + \"'\\n\"\n+ \"  AND V_EZI_CUENTAS.CODIGO LIKE '1.1.01%'\\n\"\n+ \"  AND V_TRCONTABLE_.ESTADO = 'C'\\n\"\n+ \"GROUP BY V_TRCONTABLE_.FECHAAPLICACION, V_TRCONTABLE_.NUMERODOCUMENTO,\\n\"\n+ \"  V_TRCONTABLE_.NOMBREDESTINATARIO, COALESCE(V_EZI_ASIENTOS_DETALLES.DETALLE, V_TRCONTABLE_.DETALLE),\\n\"\n+ \"  V_EZI_CUENTAS.DESCRIPCION, V_UNIDADOPERATIVA_.NOMBRE\\n\"\n+ \"HAVING SUM(V_VALOR_.IMPORTE) > 0\\n\"\n+ \"ORDER BY FECHA DESC;\\n\";\nmsg.payload = q;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 350,
+		"y": 940,
+		"wires": [
+			[
+				"sys_chain_iv_mssql"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_iv_mssql",
+		"type": "MSSQL",
+		"z": "sync_sys_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: IngresosValores",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 560,
+		"y": 940,
+		"wires": [
+			[
+				"sys_chain_iv_accum"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_iv_accum",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "  Acumular sem {{msg._idx+1}} → next/end",
+		"func": "var rows = msg.payload || [];\nfor (var i = 0; i < rows.length; i++) msg._accum.push(rows[i]);\nmsg._idx++;\nif (msg._idx < msg._weeks.length) return [msg, null];\nnode.warn('[Sync-IV] Loop completado. ' + msg._accum.length + ' ingresos totales.');\nreturn [null, msg];",
+		"outputs": 2,
+		"noerr": 0,
+		"x": 760,
+		"y": 940,
+		"wires": [
+			[
+				"sys_chain_iv_build"
+			],
+			[
+				"sys_chain_iv_final"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_iv_final",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "📦 IngresosValores: Final → 2D array",
+		"func": "var rows = msg._accum || [];\nvar timestamp = new Date().toISOString();\nmsg._syncInfo = { sync_uuid: msg._sync_uuid, periodo: msg._startDate+'-'+msg._endDate, timestamp: timestamp };\nif (rows.length === 0) { msg._syncInfo.empty = true; msg.payload = null; return msg; }\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i], importe = parseFloat(r.IMPORTE)||0; if (importe === 0) continue;\n  data.push([(r.FECHA||'').toString().trim(), (r.NRO||'').toString().trim(),\n    (r.ORIGEN||'').toString().trim(), (r.CONCEPTO||'').toString().trim(),\n    (r.MEDIO||'').toString().trim(), importe, 'ok',\n    (r.UNIDAD_NEGOCIO||'').toString().trim(), msg._sync_uuid]);\n}\nmsg._sheetData = data; msg.payload = data;\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-IV] ' + data.length + ' filas (9 cols A-I)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 960,
+		"y": 940,
+		"wires": [
+			[
+				"sys_chain_iv_clear"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_iv_clear",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "IngresosValores!A2:Z",
+		"flatten": false,
+		"name": "Clear IngresosValores",
+		"x": 1160,
+		"y": 920,
+		"wires": [
+			[
+				"sys_chain_iv_restore"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_iv_restore",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "Restaurar payload",
+		"func": "if (msg._sheetData) { msg.payload = msg._sheetData; }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1160,
+		"y": 970,
+		"wires": [
+			[
+				"sys_chain_iv_append"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_iv_append",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "IngresosValores!A2:Z",
+		"flatten": false,
+		"name": "Append a IngresosValores",
+		"x": 1380,
+		"y": 940,
+		"wires": [
+			[
+				"sys_chain_iv_done"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_iv_done",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "✅ IngresosValores: Done",
+		"func": "var info = msg._syncInfo || {};\nif (info.empty) { node.warn('[Sync-iv] ⚠ Sin datos'); }\nif (msg.error) { node.error('[Sync-iv] ERROR: ' + msg.error); }\nelse { node.warn('[Sync-iv] ✅ ' + (info.rowCount || 0) + ' filas → IngresosValores'); }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1580,
+		"y": 940,
+		"wires": [
+			[
+				"sys_chain_ps_init"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ps_init",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "⚡ ProveedoresSaldos: Init",
+		"func": "msg._sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nvar q = \"\"\n+ \"SELECT TOP 300\\n\"\n+ \"    CODIGO AS CUIT,\\n\"\n+ \"    NOMBREDESTINATARIO AS PROVEEDOR,\\n\"\n+ \"    '' AS CATEGORIA,\\n\"\n+ \"    ISNULL(SUM(SALDODOCUMENTO), 0) AS SALDO,\\n\"\n+ \"    0.0 AS VENCIDO,\\n\"\n+ \"    0.0 AS A_VENCER,\\n\"\n+ \"    MAX(SUBSTRING(FECHAACTUAL, 1, 8)) AS ULTIMO_MOV,\\n\"\n+ \"    ISNULL(UN, '') AS UNIDAD_NEGOCIO\\n\"\n+ \"FROM V_EZI_PROV_CTA_CTE\\n\"\n+ \"WHERE SALDODOCUMENTO <> 0\\n\"\n+ \"GROUP BY CODIGO, NOMBREDESTINATARIO, UN\\n\"\n+ \"ORDER BY SALDO ASC;\\n\";\nmsg.payload = q;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 150,
+		"y": 960,
+		"wires": [
+			[
+				"sys_chain_ps_mssql"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ps_mssql",
+		"type": "MSSQL",
+		"z": "sync_sys_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: ProveedoresSaldos",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 560,
+		"y": 960,
+		"wires": [
+			[
+				"sys_chain_ps_final"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ps_final",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "📦 ProveedoresSaldos: Final → 2D",
+		"func": "var rows = msg.payload || [];\nmsg._syncInfo = { sync_uuid: msg._sync_uuid, timestamp: new Date().toISOString() };\nif (!rows || !Array.isArray(rows) || rows.length === 0) { msg._syncInfo.empty = true; msg.payload = null; return msg; }\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i]; if (!r) continue; var saldo = parseFloat(r.SALDO)||0;\n  data.push([(r.CUIT||'').toString().trim(), (r.PROVEEDOR||'').toString().trim(),\n    (r.CATEGORIA||'').toString().trim(), saldo, parseFloat(r.VENCIDO)||0, parseFloat(r.A_VENCER)||0,\n    (r.ULTIMO_MOV||'').toString().trim(), saldo < 0 ? 'ok' : 'warn',\n    (r.UNIDAD_NEGOCIO||'').toString().trim(), msg._sync_uuid]);\n}\nmsg._sheetData = data; msg.payload = data; msg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-PS] ' + data.length + ' filas (10 cols A-J)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 960,
+		"y": 960,
+		"wires": [
+			[
+				"sys_chain_ps_clear"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ps_clear",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "ProveedoresSaldos!A2:Z",
+		"flatten": false,
+		"name": "Clear ProveedoresSaldos",
+		"x": 1160,
+		"y": 940,
+		"wires": [
+			[
+				"sys_chain_ps_restore"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ps_restore",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "Restaurar payload",
+		"func": "if (msg._sheetData) { msg.payload = msg._sheetData; }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1160,
+		"y": 990,
+		"wires": [
+			[
+				"sys_chain_ps_append"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ps_append",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "ProveedoresSaldos!A2:Z",
+		"flatten": false,
+		"name": "Append a ProveedoresSaldos",
+		"x": 1380,
+		"y": 960,
+		"wires": [
+			[
+				"sys_chain_ps_done"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_ps_done",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "✅ ProveedoresSaldos: Done",
+		"func": "var info = msg._syncInfo || {};\nif (!info.empty) node.warn('[Sync-PS] ✅ ' + (info.rowCount||0) + ' filas → ProveedoresSaldos');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1580,
+		"y": 960,
+		"wires": [
+			[
+				"sys_chain_pp_init"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_pp_init",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "⚡ ProveedoresPendientes: Init",
+		"func": "msg._sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nvar q = \"\"\n+ \"SELECT TOP 300\\n\"\n+ \"    COD_CLIENTE AS CODIGO,\\n\"\n+ \"    NOM_CLIENTE AS PROVEEDOR,\\n\"\n+ \"    DESCRIPCION AS COMPROBANTE,\\n\"\n+ \"    SUBSTRING(FECHAEMISION, 1, 8) AS FECHA,\\n\"\n+ \"    SUBSTRING(FECHAVENCIMIENTO, 1, 8) AS VENCIMIENTO,\\n\"\n+ \"    ISNULL(SALDO, 0) AS IMPORTE,\\n\"\n+ \"    ISNULL(UN, '') AS UNIDAD_NEGOCIO\\n\"\n+ \"FROM V_EZI_PROV_FAC_PEND\\n\"\n+ \"WHERE SALDO > 0\\n\"\n+ \"ORDER BY VENCIMIENTO ASC;\\n\";\nmsg.payload = q;\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 150,
+		"y": 1100,
+		"wires": [
+			[
+				"sys_chain_pp_mssql"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_pp_mssql",
+		"type": "MSSQL",
+		"z": "sync_sys_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: ProveedoresPendientes",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 560,
+		"y": 1100,
+		"wires": [
+			[
+				"sys_chain_pp_final"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_pp_final",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "📦 ProveedoresPendientes: Final → 2D",
+		"func": "var rows = msg.payload || [];\nmsg._syncInfo = { sync_uuid: msg._sync_uuid, timestamp: new Date().toISOString() };\nif (!rows || !Array.isArray(rows) || rows.length === 0) { msg._syncInfo.empty = true; msg.payload = null; return msg; }\nvar now = new Date();\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i]; if (!r) continue;\n  var venc = (r.VENCIMIENTO||'').toString().trim(); var importe = parseFloat(r.IMPORTE)||0; if (importe === 0) continue;\n  var dias = 0;\n  if (venc.length >= 8) {\n    var vY=parseInt(venc.substring(0,4),10), vM=parseInt(venc.substring(4,6),10)-1, vD=parseInt(venc.substring(6,8),10);\n    dias = Math.floor((new Date() - new Date(vY,vM,vD)) / 86400000);\n  }\n  var estado = dias > 0 ? 'VENCIDO' : (dias >= -7 ? 'A_VENCER' : 'VIGENTE');\n  data.push([(r.PROVEEDOR||'').toString().trim(), (r.COMPROBANTE||'').toString().trim(),\n    (r.FECHA||'').toString().trim(), venc, dias, importe, estado,\n    (r.UNIDAD_NEGOCIO||'').toString().trim(), msg._sync_uuid]);\n}\ndata.sort(function(a,b){ return (b[4]||0) - (a[4]||0); });\nmsg._sheetData = data; msg.payload = data; msg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-PP] ' + data.length + ' filas (9 cols A-I)');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 960,
+		"y": 1100,
+		"wires": [
+			[
+				"sys_chain_pp_clear"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_pp_clear",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "ProveedoresPendientes!A2:Z",
+		"flatten": false,
+		"name": "Clear ProveedoresPendientes",
+		"x": 1160,
+		"y": 1080,
+		"wires": [
+			[
+				"sys_chain_pp_restore"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_pp_restore",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "Restaurar payload",
+		"func": "if (msg._sheetData) { msg.payload = msg._sheetData; }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1160,
+		"y": 1130,
+		"wires": [
+			[
+				"sys_chain_pp_append"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_pp_append",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "ProveedoresPendientes!A2:Z",
+		"flatten": false,
+		"name": "Append a ProveedoresPendientes",
+		"x": 1380,
+		"y": 1100,
+		"wires": [
+			[
+				"sys_chain_pp_done"
+			]
+		]
+	},
+	{
+		"id": "sys_chain_pp_done",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "✅ ProveedoresPendientes: Done",
+		"func": "var info = msg._syncInfo || {};\nif (!info.empty) node.warn('[Sync-PP] ✅ ' + (info.rowCount||0) + ' filas → ProveedoresPendientes');\nnode.warn('[Sync-SYS] 🎉 Sync completo del tablero. 9 pestañas actualizadas.');\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1580,
+		"y": 1100,
+		"wires": [
+			[
+				"sync_imp_prep"
+			]
+		]
+	},
+	{
+		"id": "sync_gauth_mov_0009",
+		"type": "gauth",
+		"name": "node-red-sheets-sync@sync-calipso-corona.iam.gserviceaccount.com"
+	},
+	{
+		"id": "6814eb4bb7e82ddb",
+		"type": "MSSQL-CN",
+		"tdsVersion": "7_3_B",
+		"name": "Calipso",
+		"server": "192.168.0.177",
+		"port": "1433",
+		"encyption": false,
+		"trustServerCertificate": false,
+		"database": "CORONA",
+		"useUTC": true,
+		"connectTimeout": "25000",
+		"requestTimeout": "25000",
+		"cancelTimeout": "80000",
+		"pool": "5",
+		"parseJSON": false,
+		"enableArithAbort": true,
+		"readOnlyIntent": false
+	},
+	{
+		"id": "sync_imp_inject",
+		"type": "inject",
+		"z": "sync_sys_tab",
+		"name": "▶ Ejecutar sync ahora",
+		"props": [],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"x": 130,
+		"y": 120,
+		"wires": [
+			[
+				"sync_imp_prep"
+			]
+		]
+	},
+	{
+		"id": "sync_imp_sched",
+		"type": "inject",
+		"z": "sync_sys_tab",
+		"name": "⏰ Schedule diario 06:30",
+		"props": [],
+		"repeat": "",
+		"crontab": "30 6 * * *",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"x": 130,
+		"y": 180,
+		"wires": [
+			[
+				"sync_imp_prep"
+			]
+		]
+	},
+	{
+		"id": "sync_imp_prep",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "1. Preparar query Imputaciones",
+		"func": "var now = new Date();\nvar y = now.getFullYear(); var m = String(now.getMonth() + 1).padStart(2, '0');\nvar lastDay = new Date(y, now.getMonth() + 1, 0).getDate();\nvar startDate = '20250101'; var endDate = y + m + String(lastDay).padStart(2, '0');\nvar sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nmsg.startDate = startDate; msg.endDate = endDate; msg.sync_uuid = sync_uuid;\n\n// V_EZI_IMPUTACIONES_C: DESCRIPCION, COMPROBANTE, FECHAEMISION, IMPORTE,\n//   NOMBREOPERADORCOMERCIAL, ORIGEN, NETO, VALORTOTAL, NOMCLASIFICADOR\nvar q = \"\"\n+ \"SELECT TOP 1000\\n\"\n+ \"    SUBSTRING(FECHAEMISION, 1, 8) AS FECHA,\\n\"\n+ \"    DESCRIPCION,\\n\"\n+ \"    COMPROBANTE,\\n\"\n+ \"    NOMBREOPERADORCOMERCIAL AS ENTE,\\n\"\n+ \"    ORIGEN,\\n\"\n+ \"    ROUND(NETO, 2) AS NETO,\\n\"\n+ \"    ROUND(VALORTOTAL - NETO, 2) AS IVA,\\n\"\n+ \"    ROUND(VALORTOTAL, 2) AS TOTAL,\\n\"\n+ \"    NOMCLASIFICADOR AS CLASIFICADOR\\n\"\n+ \"FROM V_EZI_IMPUTACIONES_C\\n\"\n+ \"WHERE SUBSTRING(FECHAEMISION, 1, 8) >= '\" + startDate + \"'\\n\"\n+ \"  AND SUBSTRING(FECHAEMISION, 1, 8) <= '\" + endDate + \"'\\n\"\n+ \"  AND NETO IS NOT NULL\\n\"\n+ \"ORDER BY FECHAEMISION DESC;\\n\";\n\nmsg.payload = q;\nnode.warn('[Sync-IMP] Preparando sync ' + sync_uuid);\nreturn msg;",
+		"outputs": 1,
+		"timeout": 0,
+		"noerr": 0,
+		"x": 400,
+		"y": 120,
+		"wires": [
+			[
+				"sync_imp_mssql"
+			]
+		]
+	},
+	{
+		"id": "sync_imp_mssql",
+		"type": "MSSQL",
+		"z": "sync_sys_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: SYNC - Imputaciones a GSheet",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 610,
+		"y": 120,
+		"wires": [
+			[
+				"sync_imp_transform"
+			]
+		]
+	},
+	{
+		"id": "sync_imp_transform",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "2. Transformar → 2D array",
+		"func": "var rows = msg.payload;\nvar sync_uuid = msg.sync_uuid || 'N/A';\nvar timestamp = new Date().toISOString();\nmsg._syncInfo = { sync_uuid: sync_uuid, periodo: (msg.startDate||'')+'-'+(msg.endDate||''), timestamp: timestamp };\nif (!rows || !Array.isArray(rows) || rows.length === 0) {\n  node.warn('[Sync-IMP] Sin datos.'); msg._syncInfo.empty = true; msg.payload = null; return msg;\n}\n// Columnas A-J: FECHA|TIPO|COMPROBANTE|ENTE|CLASIFICADOR|NETO|IVA|TOTAL|UNIDAD_NEGOCIO|SYNC_UUID\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i]; if (!r) continue;\n\n  // Derivar tipo desde DESCRIPCION\n  var desc = (r.DESCRIPCION || '').toString();\n  var tipo = 'OTRO';\n  if (desc.indexOf('Fact.Cpra.') > -1 || desc.indexOf('Fact.B') > -1) tipo = 'COMPRA';\n  else if (desc.indexOf('Fact.Vta.') > -1 || desc.indexOf('Fact.A') > -1) tipo = 'VENTA';\n  else if (desc.indexOf('NC.') > -1 || desc.indexOf('ND.') > -1) tipo = 'AJUSTE';\n  else if (desc.indexOf('Rec.') > -1) tipo = 'GASTO';\n  else if (desc.indexOf('Pago') > -1) tipo = 'PAGO';\n\n  var comp = (r.COMPROBANTE || '').toString().trim();\n  var ente = (r.ENTE || '').toString().trim();\n  var cc = (r.CLASIFICADOR || '').toString().trim();\n  var neto = parseFloat(r.NETO) || 0;\n  var iva = parseFloat(r.IVA) || 0;\n  var total = parseFloat(r.TOTAL) || 0;\n\n  data.push([\n    (r.FECHA || '').toString().trim(),\n    tipo,\n    comp,\n    ente,\n    cc,\n    neto,\n    iva,\n    total,\n    cc,  // UNIDAD_NEGOCIO = CLASIFICADOR (BLC, SAS, etc.)\n    sync_uuid\n  ]);\n}\nmsg._sheetData = data; msg.payload = data;\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-IMP] ' + data.length + ' imputaciones. UUID=' + sync_uuid);\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 830,
+		"y": 120,
+		"wires": [
+			[
+				"sync_imp_clear"
+			]
+		]
+	},
+	{
+		"id": "sync_imp_restore",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "2b. Restaurar payload post-Clear",
+		"func": "// El GSheet Clear sobreescribe msg.payload con la respuesta de la API\n// Restaurar el array 2D desde _sheetData para que el Append funcione\nif (msg._sheetData) {\n  msg.payload = msg._sheetData;\n}\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1070,
+		"y": 40,
+		"wires": [
+			[
+				"sync_imp_append"
+			]
+		]
+	},
+	{
+		"id": "sync_imp_clear",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "Imputaciones!A2:Z",
+		"flatten": false,
+		"name": "Clear Imputaciones",
+		"x": 1070,
+		"y": 80,
+		"wires": [
+			[
+				"sync_imp_restore"
+			]
+		]
+	},
+	{
+		"id": "sync_imp_append",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "Imputaciones!A2:Z",
+		"flatten": false,
+		"name": "Append a Imputaciones",
+		"x": 1070,
+		"y": 160,
+		"wires": [
+			[
+				"sync_imp_result"
+			]
+		]
+	},
+	{
+		"id": "sync_imp_result",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "3. Resultado sync",
+		"func": "var info = msg._syncInfo || {};\nif (info.empty) {\n  node.warn('[Sync-IMP] Sync omitido: sin datos');\n  return msg;\n}\nif (msg.error) {\n  node.error('[Sync-IMP] ERROR: ' + msg.error);\n  return msg;\n}\nvar updatedRange = '';\nif (msg.payload && msg.payload.updates) updatedRange = msg.payload.updates.updatedRange || '';\nnode.warn('[Sync-IMP] ✅ Sync exitoso — ' + (info.rowCount || 0) + ' filas → Imputaciones');\nnode.warn('[Sync-IMP]    UUID: ' + (info.sync_uuid || '?') + ' | Rango: ' + updatedRange);\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1280,
+		"y": 120,
+		"wires": [
+			[
+				"sync_inter_prep"
+			]
+		]
+	},
+	{
+		"id": "sync_inter_inject",
+		"type": "inject",
+		"z": "sync_sys_tab",
+		"name": "▶ Ejecutar sync ahora",
+		"props": [],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"x": 130,
+		"y": 120,
+		"wires": [
+			[
+				"sync_inter_prep"
+			]
+		]
+	},
+	{
+		"id": "sync_inter_sched",
+		"type": "inject",
+		"z": "sync_sys_tab",
+		"name": "⏰ Schedule diario 06:30",
+		"props": [],
+		"repeat": "",
+		"crontab": "30 6 * * *",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"x": 130,
+		"y": 180,
+		"wires": [
+			[
+				"sync_inter_prep"
+			]
+		]
+	},
+	{
+		"id": "sync_inter_prep",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "1. Preparar query Interempresas",
+		"func": "var now = new Date();\nvar y = now.getFullYear(); var m = String(now.getMonth() + 1).padStart(2, '0');\nvar lastDay = new Date(y, now.getMonth() + 1, 0).getDate();\nvar startDate = '20250101'; var endDate = y + m + String(lastDay).padStart(2, '0');\nvar sync_uuid = (Date.now().toString(36).toUpperCase().slice(-4) + Math.random().toString(36).substring(2,6).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase());\nmsg.startDate = startDate; msg.endDate = endDate; msg.sync_uuid = sync_uuid;\n\n// V_TRANSACCION: movimientos entre Bioenergia La Corona ↔ Sucroalcoholera del Sur\nvar q = \"\"\n+ \"SELECT TOP 500\\n\"\n+ \"    SUBSTRING(FECHAACTUAL, 1, 8) AS FECHA,\\n\"\n+ \"    NOMBREORIGINANTE AS DESDE,\\n\"\n+ \"    NOMBREDESTINATARIO AS HACIA,\\n\"\n+ \"    COALESCE(NULLIF(DETALLE,''), NUMERODOCUMENTO) AS CONCEPTO,\\n\"\n+ \"    NUMERODOCUMENTO AS COMPROBANTE,\\n\"\n+ \"    ROUND(VALORTOTAL, 2) AS IMPORTE,\\n\"\n+ \"    NOMBREMONEDA AS MONEDA\\n\"\n+ \"FROM V_TRANSACCION\\n\"\n+ \"WHERE SUBSTRING(FECHAACTUAL, 1, 8) >= '\" + startDate + \"'\\n\"\n+ \"  AND SUBSTRING(FECHAACTUAL, 1, 8) <= '\" + endDate + \"'\\n\"\n+ \"  AND (\\n\"\n+ \"    (NOMBREORIGINANTE LIKE '%BIOENERGIA%CORONA%' AND NOMBREDESTINATARIO LIKE '%SUCROALCOHOLERA%SUR%')\\n\"\n+ \"    OR (NOMBREORIGINANTE LIKE '%SUCROALCOHOLERA%SUR%' AND NOMBREDESTINATARIO LIKE '%BIOENERGIA%CORONA%')\\n\"\n+ \"  )\\n\"\n+ \"ORDER BY FECHAACTUAL DESC;\\n\";\n\nmsg.payload = q;\nnode.warn('[Sync-INTER] Preparando sync ' + sync_uuid);\nreturn msg;",
+		"outputs": 1,
+		"timeout": 0,
+		"noerr": 0,
+		"x": 400,
+		"y": 120,
+		"wires": [
+			[
+				"sync_inter_mssql"
+			]
+		]
+	},
+	{
+		"id": "sync_inter_mssql",
+		"type": "MSSQL",
+		"z": "sync_sys_tab",
+		"mssqlCN": "6814eb4bb7e82ddb",
+		"name": "MSSQL: SYNC - Interempresas a GSheet",
+		"outField": "payload",
+		"returnType": "0",
+		"throwErrors": 1,
+		"query": "SELECT 1 AS TEST",
+		"modeOpt": "",
+		"modeOptType": "query",
+		"queryOpt": "payload",
+		"queryOptType": "msg",
+		"paramsOpt": "queryParams",
+		"paramsOptType": "none",
+		"rows": "rows",
+		"rowsType": "msg",
+		"parseMustache": false,
+		"params": [],
+		"x": 610,
+		"y": 120,
+		"wires": [
+			[
+				"sync_inter_transform"
+			]
+		]
+	},
+	{
+		"id": "sync_inter_transform",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "2. Transformar → 2D array",
+		"func": "var rows = msg.payload;\nvar sync_uuid = msg.sync_uuid || 'N/A';\nvar timestamp = new Date().toISOString();\nmsg._syncInfo = { sync_uuid: sync_uuid, periodo: (msg.startDate||'')+'-'+(msg.endDate||''), timestamp: timestamp };\nif (!rows || !Array.isArray(rows) || rows.length === 0) {\n  node.warn('[Sync-INTER] Sin datos.'); msg._syncInfo.empty = true; msg.payload = null; return msg;\n}\n// Columnas A-J: FECHA|DESDE|HACIA|CONCEPTO|COMPROBANTE|IMPORTE|TIPO|MONEDA|UNIDAD_NEGOCIO|SYNC_UUID\nvar data = [];\nfor (var i = 0; i < rows.length; i++) {\n  var r = rows[i]; if (!r) continue;\n\n  var desde = (r.DESDE || '').toString().trim();\n  var hacia = (r.HACIA || '').toString().trim();\n  var importe = parseFloat(r.IMPORTE) || 0;\n  if (importe === 0) continue;  // Saltar movimientos sin importe\n\n  // Determinar tipo desde la perspectiva de Bioenergia La Corona\n  var tipo = 'salida';\n  if (desde.indexOf('SUCROALCOHOLERA') > -1 && hacia.indexOf('BIOENERGIA') > -1) {\n    tipo = 'entrada';\n  }\n\n  // Simplificar nombres para el frontend\n  desde = desde.replace('2-BIOENERGIA LA CORONA S.A.', 'Ingenio La Corona')\n               .replace('5-SUCROALCOHOLERA DEL SUR S.A.', 'Destilería Corona S.A.');\n  hacia = hacia.replace('2-BIOENERGIA LA CORONA S.A.', 'Ingenio La Corona')\n               .replace('5-SUCROALCOHOLERA DEL SUR S.A.', 'Destilería Corona S.A.');\n\n  data.push([\n    (r.FECHA || '').toString().trim(),\n    desde,\n    hacia,\n    (r.CONCEPTO || '').toString().trim(),\n    (r.COMPROBANTE || '').toString().trim(),\n    importe,\n    tipo,\n    (r.MONEDA || '').toString().trim(),\n    '',  // UNIDAD_NEGOCIO (vacío para interempresas — aplica a todo el grupo)\n    sync_uuid\n  ]);\n}\nmsg._sheetData = data; msg.payload = data;\nmsg._syncInfo.rowCount = data.length;\nnode.warn('[Sync-INTER] ' + data.length + ' movimientos interempresas. UUID=' + sync_uuid);\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 830,
+		"y": 120,
+		"wires": [
+			[
+				"sync_inter_clear"
+			]
+		]
+	},
+	{
+		"id": "sync_inter_restore",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "2b. Restaurar payload post-Clear",
+		"func": "// El GSheet Clear sobreescribe msg.payload con la respuesta de la API\n// Restaurar el array 2D desde _sheetData para que el Append funcione\nif (msg._sheetData) {\n  msg.payload = msg._sheetData;\n}\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1070,
+		"y": 40,
+		"wires": [
+			[
+				"sync_inter_append"
+			]
+		]
+	},
+	{
+		"id": "sync_inter_clear",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "clear",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "Interempresas!A2:Z",
+		"flatten": false,
+		"name": "Clear Interempresas",
+		"x": 1070,
+		"y": 80,
+		"wires": [
+			[
+				"sync_inter_restore"
+			]
+		]
+	},
+	{
+		"id": "sync_inter_append",
+		"type": "GSheet",
+		"z": "sync_sys_tab",
+		"creds": "sync_gauth_mov_0009",
+		"method": "append",
+		"sheet": "1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc",
+		"cells": "Interempresas!A2:Z",
+		"flatten": false,
+		"name": "Append a Interempresas",
+		"x": 1070,
+		"y": 160,
+		"wires": [
+			[
+				"sync_inter_result"
+			]
+		]
+	},
+	{
+		"id": "sync_inter_result",
+		"type": "function",
+		"z": "sync_sys_tab",
+		"name": "3. Resultado sync",
+		"func": "var info = msg._syncInfo || {};\nif (info.empty) {\n  node.warn('[Sync-INTER] Sync omitido: sin datos');\n  return msg;\n}\nif (msg.error) {\n  node.error('[Sync-INTER] ERROR: ' + msg.error);\n  return msg;\n}\nvar updatedRange = '';\nif (msg.payload && msg.payload.updates) updatedRange = msg.payload.updates.updatedRange || '';\nnode.warn('[Sync-SYS] 🎉 Sync completo del tablero. 9 pestañas actualizadas.');\nnode.warn('[Sync-INTER] ✅ Sync exitoso — ' + (info.rowCount || 0) + ' filas → Interempresas');\nnode.warn('[Sync-INTER]    UUID: ' + (info.sync_uuid || '?') + ' | Rango: ' + updatedRange);\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 1280,
+		"y": 120,
+		"wires": [
+			[]
+		]
+	}
+]
