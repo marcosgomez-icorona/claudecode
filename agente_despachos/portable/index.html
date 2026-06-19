@@ -60,6 +60,15 @@
         <div class="subtitle">Remitos de azúcar sin facturar — Gestión de facturación pendiente</div>
       </div>
       <div class="header-actions">
+        <span id="syncStatus" class="sync-none" style="font-size:11px;margin-right:4px">Cargando…</span>
+        <button id="btnSync" class="btn btn-secondary btn-sm" onclick="window._syncSheets()" title="Sincronizar con Google Sheets">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          Sync Sheets
+        </button>
         <span class="header-badge">Zafra 2026</span>
         <button class="btn btn-secondary" onclick="window._reintentar()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

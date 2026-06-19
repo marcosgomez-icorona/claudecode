@@ -12,6 +12,7 @@ __pycache__/
 Thumbs.db
 
 # Secrets & credenciales
+.secrets/
 *.key.json
 credentials*.json
 service_account*.json

@@ -30,7 +30,7 @@
       "description": "Node-RED Admin API MCP — inspección, backup, validación y deploy controlado de flows. Arranca en modo readonly para auditoría segura. Cuando se necesite escritura, quitar --read-only y configurar MCP_READ_ONLY=false.",
       "env": {
         "NODE_RED_URL": "http://192.168.0.23:1880",
-        "NODE_RED_TOKEN": "",
+        "NODE_RED_TOKEN": "7SvvBTLmWfp6YHXeN3KCkH9WADEkFtzIgMBVGMJYfA3fAUNdzvjUWx9AktyBeMzWyNq4eoKq5lz6dN2ugkJ9i4zP5FJTWjc3SewOna/8PygCyq1n9vaj10ENebxF3aLrjnB7hOvQh7CX4GeAmlZ+d2oN0xg3QQZnU0LMnnM6TUc=",
         "MCP_READ_ONLY": "true",
         "MCP_BACKUPS_ENABLED": "true",
         "MCP_AUTO_BACKUP": "true",

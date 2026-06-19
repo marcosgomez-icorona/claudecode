@@ -4,1396 +4,370 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Conciliación Bancaria | Bioenergía La Corona</title>
-  <meta name="description" content="Tablero de control de conciliación bancaria — Bioenergía La Corona S.A.">
+  <meta name="description" content="Tablero de conciliación bancaria — Lectura directa desde Google Sheets">
 
-  <!-- Dependencias externas (CDN) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 
-  <!-- Config -->
+  <!-- ════════════════════════════════════════════════════════════════
+       C O N F I G   —   EDITAR AQUÍ
+       ════════════════════════════════════════════════════════════════
+       1. Google Cloud Console → APIs → Habilitar Google Sheets API
+       2. Credenciales → Crear API Key → Restringir por HTTP referrer
+       3. Compartir el Sheet como "lectura" con cualquier link
+       4. Pegar SHEET_ID y API_KEY abajo
+  ════════════════════════════════════════════════════════════════ -->
   <script>
-  const CONFIG = {
-    API_PRIMARY:   'http://ingcorona.ddns.net:4040',
-    API_FALLBACK:  'http://192.168.0.23:1880',
-    API_TIMEOUT_MS: 45000,
-    endpoints: {
-      resumen:    '/api/conciliacion/resumen',
-      pendientes: '/api/conciliacion/pendientes',
-      detalle:    '/api/conciliacion/detalle',
-    }
+  const SHEET_ID = '1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0';
+  const API_KEY  = '';  // ← PEGAR ACA LA API KEY
+
+  const RANGOS = {
+    resumen:    'Resumen!A2:H',
+    pendientes: 'Pendientes!A2:I',
+    detalle:    'Conciliacion!A2:J',
   };
+
+  const COLS = {
+    resumen:    ['banco','periodo','totalBanco','totalCalipso','diferencia','nConciliados','semaforo','pendientes'],
+    pendientes: ['banco','fecha','descripcion','importe','tipo','origen','criticidad','observacion','nroComprobante'],
+    detalle:    ['fecha','tipo','descripcion','banco','calipso','dif','estado','criticidad','calidad','asiento'],
+  };
+
+  const UMBRALES = { critico: 10_000_000, alto: 1_000_000, verde: 100, amarillo: 500_000 };
   </script>
 
   <style>
-  /* ══════════════════════════════════════════════════════════════
-     CORONA DESIGN SYSTEM — Conciliación Bancaria
-     Bioenergía La Corona S.A.
-     ══════════════════════════════════════════════════════════════ */
-
-  /* ── Tokens ── */
-  :root {
-    /* Brand */
-    --c-green: #1D9E75;
-    --c-green-dark: #0F6E56;
-    --c-green-light: #E1F5EE;
-    --c-green-mid: #5DCAA5;
-    --c-amber: #BA7517;
-    --c-amber-light: #FAEEDA;
-    --c-red: #A32D2D;
-    --c-red-light: #FCEBEB;
-    --c-blue: #185FA5;
-    --c-blue-light: #E6F1FB;
-
-    /* Surface */
-    --s-bg: #F4F5F7;
-    --s-card: #FFFFFF;
-    --s-hover: #F0F2F5;
-    --s-border: #E5E7EB;
-    --s-border-strong: #D1D5DB;
-
-    /* Text */
-    --t-primary: #1A1D23;
-    --t-secondary: #5A6170;
-    --t-muted: #9BA3AF;
-    --t-inverse: #FFFFFF;
-
-    /* Typography */
-    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
-    --fs-xs: 0.75rem;
-    --fs-sm: 0.8125rem;
-    --fs-base: 0.875rem;
-    --fs-lg: 1rem;
-    --fs-xl: 1.125rem;
-    --fs-2xl: 1.375rem;
-    --fs-3xl: 1.75rem;
-
-    /* Spacing */
-    --sp-xs: 0.25rem;
-    --sp-sm: 0.5rem;
-    --sp-md: 1rem;
-    --sp-lg: 1.5rem;
-    --sp-xl: 2rem;
-
-    /* Shadows */
-    --shadow-card: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-    --shadow-dropdown: 0 4px 12px rgba(0,0,0,.1);
-    --shadow-modal: 0 8px 30px rgba(0,0,0,.15);
-
-    /* Radius */
-    --radius-sm: 0.375rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
-
-    /* Transitions */
-    --t-fast: 150ms ease;
-    --t-normal: 250ms ease;
-
-    /* Layout */
-    --sidebar-w: 240px;
-    --topbar-h: 56px;
-  }
-
-  /* ── Reset & Base ── */
-  *, *::before, *::after { box-sizing: border-box; }
-  body {
-    font-family: var(--font-sans);
-    background: var(--s-bg);
-    color: var(--t-primary);
-    font-size: var(--fs-base);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-  .mono { font-family: var(--font-mono); }
-
-  /* ── Skip Link ── */
-  .skip-link {
-    position: absolute;
-    top: -100%;
-    left: var(--sp-md);
-    background: var(--c-green);
-    color: var(--t-inverse);
-    padding: var(--sp-sm) var(--sp-md);
-    z-index: 9999;
-    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-    text-decoration: none;
-    font-weight: 500;
-  }
-  .skip-link:focus { top: 0; }
-
-  /* ── Sidebar ── */
-  .sidebar {
-    width: var(--sidebar-w);
-    background: var(--s-card);
-    border-right: 1px solid var(--s-border);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    z-index: 1030;
-    transition: transform var(--t-normal);
-  }
-  @media (max-width: 767.98px) {
-    .sidebar { transform: translateX(-100%); }
-    .sidebar.open { transform: translateX(0); }
-  }
-
-  .sidebar-brand {
-    padding: var(--sp-lg) var(--sp-lg);
-    border-bottom: 1px solid var(--s-border);
-    flex-shrink: 0;
-  }
-  .brand-logo {
-    width: 32px; height: 32px;
-    background: var(--c-green);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-weight: 700;
-    font-size: 13px;
-    flex-shrink: 0;
-  }
-  .brand-name {
-    font-weight: 700; font-size: 13px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .brand-sub { font-size: 11px; color: var(--t-muted); margin-left: 42px; }
-
-  .nav-section {
-    font-size: 10px; font-weight: 600;
-    color: var(--t-muted);
-    text-transform: uppercase;
-    padding: 16px 20px 4px;
-    letter-spacing: 0.8px;
-  }
-  .nav-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 7px 20px;
-    color: var(--t-secondary);
-    text-decoration: none;
-    font-size: 13px;
-    border-left: 2px solid transparent;
-    cursor: pointer;
-    transition: background var(--t-fast), color var(--t-fast);
-  }
-  .nav-item:hover {
-    color: var(--c-green-dark);
-    background: var(--c-green-light);
-  }
-  .nav-item.active {
-    color: var(--c-green-dark);
-    background: var(--c-green-light);
-    border-left-color: var(--c-green);
-    font-weight: 500;
-  }
-
-  .sidebar-footer {
-    margin-top: auto;
-    padding: 16px 20px;
-    border-top: 1px solid var(--s-border);
-    font-size: 11px;
-    color: var(--t-muted);
-  }
-
-  /* ── Sidebar scrollbar ── */
-  .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-track { background: transparent; }
-  .sidebar::-webkit-scrollbar-thumb { background: var(--t-muted); border-radius: 2px; }
-  .sidebar { scrollbar-width: thin; scrollbar-color: var(--t-muted) transparent; }
-
-  /* ── Main area ── */
-  .main {
-    margin-left: var(--sidebar-w);
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  @media (max-width: 767.98px) { .main { margin-left: 0; } }
-
-  .topbar {
-    background: var(--s-card);
-    border-bottom: 1px solid var(--s-border);
-    padding: 10px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--sp-sm);
-    position: sticky;
-    top: 0;
-    z-index: 1020;
-  }
-  .topbar h1 { font-size: var(--fs-lg); font-weight: 600; margin: 0; }
-  .topbar p { font-size: var(--fs-xs); color: var(--t-muted); margin: 0; }
-
-  .topbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  @media (max-width: 575.98px) {
-    .topbar-actions { width: 100%; justify-content: flex-end; }
-    .btn-text-mobile { font-size: 0 !important; padding: 7px 9px; }
-    .btn-text-mobile svg { margin: 0 !important; }
-  }
-
-  .badge-period {
-    background: var(--c-green-light);
-    color: var(--c-green-dark);
-    font-size: 11px; font-weight: 500;
-    padding: 3px 10px; border-radius: 20px;
-    font-family: var(--font-mono);
-    white-space: nowrap;
-  }
-
-  .backend-indicator {
-    font-size: 11px; font-weight: 500;
-    padding: 3px 10px; border-radius: 20px;
-    white-space: nowrap;
-  }
-  .backend-indicator.online {
-    background: var(--c-green-light);
-    color: var(--c-green-dark);
-  }
-  .backend-indicator.warning {
-    background: var(--c-amber-light);
-    color: var(--c-amber);
-  }
-  .backend-indicator.offline {
-    background: var(--c-red-light);
-    color: var(--c-red);
-  }
-
-  /* ── Hamburger ── */
-  .hamburger {
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 3px;
-    width: 36px; height: 36px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    border-radius: var(--radius-sm);
-    transition: background var(--t-fast);
-  }
-  .hamburger:hover { background: var(--s-hover); }
-  .hamburger span {
-    display: block;
-    width: 18px; height: 2px;
-    background: var(--t-primary);
-    border-radius: 1px;
-    transition: transform var(--t-fast);
-  }
-
-  /* ── Content ── */
-  .content {
-    padding: 20px 24px;
-    flex: 1;
-    animation: fadeIn var(--t-normal) ease forwards;
-  }
-
-  /* ── KPI Cards ── */
-  .kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 14px;
-    margin-bottom: 20px;
-  }
-  @media (max-width: 575.98px) {
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  }
-
-  .kpi-card {
-    background: var(--s-card);
-    border: 1px solid var(--s-border);
-    border-radius: var(--radius-lg);
-    padding: 16px 18px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-card);
-    transition: box-shadow var(--t-fast), transform var(--t-fast);
-  }
-  .kpi-card:hover {
-    box-shadow: var(--shadow-dropdown);
-    transform: translateY(-1px);
-  }
-  .kpi-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 3px;
-  }
-  .kpi-card.green::before { background: var(--c-green); }
-  .kpi-card.amber::before { background: var(--c-amber); }
-  .kpi-card.red::before { background: var(--c-red); }
-  .kpi-card.blue::before { background: var(--c-blue); }
-  .kpi-card.gray::before { background: var(--t-muted); }
-
-  .kpi-label {
-    font-size: 10px; font-weight: 600;
-    color: var(--t-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-  }
-  .kpi-value {
-    font-size: var(--fs-2xl);
-    font-weight: 700;
-    line-height: 1.1;
-    margin-bottom: 4px;
-  }
-  .kpi-value.mono { font-family: var(--font-mono); font-size: var(--fs-xl); }
-  .kpi-delta { font-size: 10px; color: var(--t-muted); }
-
-  /* ── Panels ── */
-  .panel {
-    background: var(--s-card);
-    border: 1px solid var(--s-border);
-    border-radius: var(--radius-lg);
-    margin-bottom: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow-card);
-  }
-  .panel-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--s-border);
-    flex-wrap: wrap;
-    gap: var(--sp-sm);
-  }
-  .panel-title {
-    font-size: 13px; font-weight: 600;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .panel-title .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--c-green);
-    flex-shrink: 0;
-  }
-  .panel-tools { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-
-  .panel-tool-btn {
-    padding: 4px 8px; border-radius: 6px;
-    border: 1px solid var(--s-border);
-    font-size: 11px;
-    background: var(--s-card);
-    color: var(--t-secondary);
-    cursor: pointer;
-  }
-  .panel-tool-btn:hover { border-color: var(--s-border-strong); }
-
-  /* ── Tables ── */
-  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  thead th {
-    background: var(--s-bg);
-    color: var(--t-muted);
-    font-size: 10px; font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 9px 12px;
-    text-align: left;
-    border-bottom: 2px solid var(--s-border);
-    white-space: nowrap;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-  thead th.num { text-align: right; }
-  tbody tr { border-bottom: 1px solid var(--s-border); transition: background var(--t-fast); }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: var(--s-hover); }
-  tbody td { padding: 8px 12px; vertical-align: middle; }
-  tbody td.num { text-align: right; font-family: var(--font-mono); font-size: 12px; white-space: nowrap; }
-
-  .pendiente-row-critica { background: #FFF5F5; }
-  .pendiente-row-critica:hover { background: #FCEBEB !important; }
-  .pendiente-row-alta { background: #FFFBF0; }
-  .pendiente-row-alta:hover { background: #FAEEDA !important; }
-
-  /* ── Badges ── */
-  .badge-crit, .badge-warn, .badge-ok, .badge-info {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 10px; font-weight: 600;
-    padding: 2px 9px; border-radius: 20px;
-    white-space: nowrap;
-  }
-  .badge-crit { background: var(--c-red-light); color: var(--c-red); }
-  .badge-warn { background: var(--c-amber-light); color: var(--c-amber); }
-  .badge-ok { background: var(--c-green-light); color: var(--c-green-dark); }
-  .badge-info { background: var(--c-blue-light); color: var(--c-blue); }
-  .badge-crit::before, .badge-warn::before, .badge-ok::before, .badge-info::before {
-    content: '\25CF';
-    font-size: 7px;
-    margin-top: 1px;
-  }
-
-  /* ── Semáforo ── */
-  .semaforo {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-weight: 600; font-size: 13px;
-  }
-  .semaforo-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-
-  /* ── Charts ── */
-  .chart-wrap {
-    padding: 16px;
-    height: 240px;
-    position: relative;
-  }
-
-  /* ── Alert Strip ── */
-  .alert-strip {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--sp-sm);
-    padding: 10px 14px;
-    border-radius: var(--radius-md);
-    margin-bottom: 8px;
-    border-left: 3px solid;
-    font-size: 12px;
-  }
-  .alert-strip.critical { background: var(--c-red-light); border-left-color: var(--c-red); }
-  .alert-strip.warning { background: var(--c-amber-light); border-left-color: var(--c-amber); }
-  .alert-strip.info { background: var(--c-blue-light); border-left-color: var(--c-blue); }
-  .alert-strip.success { background: var(--c-green-light); border-left-color: var(--c-green); }
-
-  /* ── Empty State ── */
-  .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: var(--sp-xl) var(--sp-lg);
-    text-align: center;
-    gap: var(--sp-sm);
-  }
-  .empty-state svg { opacity: 0.3; }
-  .empty-state h3 { font-size: var(--fs-base); color: var(--t-secondary); margin: 0; }
-  .empty-state p { font-size: var(--fs-xs); color: var(--t-muted); margin: 0; max-width: 360px; }
-
-  /* ── Skeleton Loader ── */
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-  .skeleton {
-    background: linear-gradient(90deg, var(--s-border) 25%, var(--s-hover) 50%, var(--s-border) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s infinite;
-    border-radius: var(--radius-sm);
-    color: transparent !important;
-    user-select: none;
-    pointer-events: none;
-    display: inline-block;
-    height: 1em;
-    min-width: 60px;
-  }
-  .skeleton-cell { display: block; height: 14px; margin: 2px 0; }
-
-  /* ── Sync Dot ── */
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.3); }
-  }
-  .sync-dot {
-    display: inline-block;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--t-muted);
-  }
-  .sync-dot.syncing { background: var(--c-amber); animation: pulse 1.2s ease-in-out infinite; }
-  .sync-dot.ok { background: var(--c-green); }
-  .sync-dot.error { background: var(--c-red); }
-
-  /* ── Animations ── */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .fade-in { animation: fadeIn var(--t-normal) ease forwards; }
-
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── Toast ── */
-  .toast-container {
-    position: fixed;
-    top: 12px; right: 12px;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .toast-corona {
-    background: var(--s-card);
-    border: 1px solid var(--s-border);
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
-    min-width: 280px;
-    max-width: 420px;
-    box-shadow: var(--shadow-modal);
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 13px;
-    animation: slideDown 0.3s ease;
-  }
-  .toast-corona.success { border-left: 3px solid var(--c-green); }
-  .toast-corona.error { border-left: 3px solid var(--c-red); }
-  .toast-corona.warning { border-left: 3px solid var(--c-amber); }
-  .toast-corona .toast-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-  .toast-corona .toast-close {
-    margin-left: auto;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--t-muted);
-    font-size: 16px;
-    padding: 0 2px;
-    line-height: 1;
-  }
-
-  /* ── Section views ── */
-  .section-view { display: none; }
-  .section-view.active { display: block; }
-
-  /* ── Botones Corona ── */
-  .btn-corona {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    transition: background var(--t-fast), opacity var(--t-fast);
-    white-space: nowrap;
-  }
-  .btn-corona:disabled { opacity: 0.5; cursor: not-allowed; }
-  .btn-corona svg { width: 14px; height: 14px; }
-  .btn-corona-primary { background: var(--c-green); color: #fff; }
-  .btn-corona-primary:hover:not(:disabled) { background: var(--c-green-dark); }
-  .btn-corona-secondary {
-    background: var(--s-bg);
-    color: var(--t-secondary);
-    border: 1px solid var(--s-border);
-  }
-  .btn-corona-secondary:hover:not(:disabled) { background: var(--s-hover); }
-
-  /* ── Focus visible ── */
-  :focus-visible {
-    outline: 2px solid var(--c-green);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-  }
-  input:focus-visible, select:focus-visible {
-    outline: none;
-    border-color: var(--c-green);
-    box-shadow: 0 0 0 3px rgba(29, 158, 117, .2);
-  }
-
-  /* ── Tooltip custom ── */
-  .tooltip-inner {
-    font-family: var(--font-sans);
-    font-size: 11px;
-    padding: 4px 10px;
-  }
-
-  /* ── Print ── */
-  @media print {
-    .sidebar, .topbar, .hamburger, .btn-corona, .panel-tools, .backend-indicator,
-    .badge-period, .no-print, .toast-container, .sync-dot {
-      display: none !important;
-    }
-    .main { margin-left: 0 !important; }
-    .content { padding: 0 !important; }
-    .panel { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-    .kpi-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-    thead th { background: #eee !important; color: #000 !important; }
-    body { font-size: 11px; }
-  }
-
-  /* ── Grid charts responsive ── */
-  .chart-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  @media (max-width: 767.98px) {
-    .chart-grid { grid-template-columns: 1fr; }
-  }
+  :root{--c-green:#1D9E75;--c-green-dark:#0F6E56;--c-green-light:#E1F5EE;--c-amber:#BA7517;--c-amber-light:#FAEEDA;--c-red:#A32D2D;--c-red-light:#FCEBEB;--c-blue:#185FA5;--c-blue-light:#E6F1FB;--s-bg:#F4F5F7;--s-card:#FFF;--s-hover:#F0F2F5;--s-border:#E5E7EB;--t-primary:#1A1D23;--t-secondary:#5A6170;--t-muted:#9BA3AF;--font-sans:'Inter',system-ui,sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow-card:0 1px 3px rgba(0,0,0,.06);--radius-lg:.75rem;--radius-md:.5rem;--t-fast:150ms ease;--t-normal:250ms ease;--sidebar-w:240px}
+  *,*::before,*::after{box-sizing:border-box}
+  body{font-family:var(--font-sans);background:var(--s-bg);color:var(--t-primary);font-size:.875rem;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .mono{font-family:var(--font-mono)}
+  .sidebar{width:var(--sidebar-w);background:var(--s-card);border-right:1px solid var(--s-border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:1030;transition:transform var(--t-normal)}
+  @media(max-width:767.98px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}}
+  .sidebar-brand{padding:1.5rem;border-bottom:1px solid var(--s-border);flex-shrink:0}
+  .brand-logo{width:32px;height:32px;background:var(--c-green);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0}
+  .brand-name{font-weight:700;font-size:13px;display:flex;align-items:center;gap:10px}
+  .brand-sub{font-size:11px;color:var(--t-muted);margin-left:42px}
+  .nav-section{font-size:10px;font-weight:600;color:var(--t-muted);text-transform:uppercase;padding:16px 20px 4px;letter-spacing:.8px}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:7px 20px;color:var(--t-secondary);text-decoration:none;font-size:13px;border-left:2px solid transparent;cursor:pointer;transition:background var(--t-fast),color var(--t-fast)}
+  .nav-item:hover{color:var(--c-green-dark);background:var(--c-green-light)}
+  .nav-item.active{color:var(--c-green-dark);background:var(--c-green-light);border-left-color:var(--c-green);font-weight:500}
+  .sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid var(--s-border);font-size:11px;color:var(--t-muted)}
+  .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
+  @media(max-width:767.98px){.main{margin-left:0}}
+  .topbar{background:var(--s-card);border-bottom:1px solid var(--s-border);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;position:sticky;top:0;z-index:1020}
+  .topbar h1{font-size:1rem;font-weight:600;margin:0}
+  .topbar p{font-size:.75rem;color:var(--t-muted);margin:0}
+  .topbar-actions{display:flex;align-items:center;gap:8px}
+  @media(max-width:575.98px){.topbar-actions{width:100%;justify-content:flex-end}}
+  .badge-period{background:var(--c-green-light);color:var(--c-green-dark);font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;font-family:var(--font-mono)}
+  .backend-indicator{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px}
+  .backend-indicator.online{background:var(--c-green-light);color:var(--c-green-dark)}
+  .backend-indicator.offline{background:var(--c-red-light);color:var(--c-red)}
+  .hamburger{display:inline-flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;width:36px;height:36px;border:none;background:transparent;cursor:pointer;border-radius:.375rem}
+  .hamburger:hover{background:var(--s-hover)}
+  .hamburger span{display:block;width:18px;height:2px;background:var(--t-primary);border-radius:1px}
+  .content{padding:20px 24px;flex:1}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px}
+  @media(max-width:575.98px){.kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
+  .kpi-card{background:var(--s-card);border:1px solid var(--s-border);border-radius:var(--radius-lg);padding:16px 18px;position:relative;overflow:hidden;box-shadow:var(--shadow-card)}
+  .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+  .kpi-card.green::before{background:var(--c-green)}
+  .kpi-card.amber::before{background:var(--c-amber)}
+  .kpi-card.red::before{background:var(--c-red)}
+  .kpi-card.blue::before{background:var(--c-blue)}
+  .kpi-label{font-size:10px;font-weight:600;color:var(--t-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+  .kpi-value{font-size:1.375rem;font-weight:700;line-height:1.1;margin-bottom:4px}
+  .kpi-value.mono{font-family:var(--font-mono);font-size:1.125rem}
+  .kpi-delta{font-size:10px;color:var(--t-muted)}
+  .panel{background:var(--s-card);border:1px solid var(--s-border);border-radius:var(--radius-lg);margin-bottom:16px;overflow:hidden;box-shadow:var(--shadow-card)}
+  .panel-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--s-border);flex-wrap:wrap;gap:.5rem}
+  .panel-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+  .panel-title .dot{width:8px;height:8px;border-radius:50%;background:var(--c-green);flex-shrink:0}
+  .panel-tools{display:flex;align-items:center;gap:6px}
+  .panel-tool-btn{padding:4px 8px;border-radius:6px;border:1px solid var(--s-border);font-size:11px;background:var(--s-card);color:var(--t-secondary);cursor:pointer}
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  thead th{background:var(--s-bg);color:var(--t-muted);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;padding:9px 12px;text-align:left;border-bottom:2px solid var(--s-border);white-space:nowrap;position:sticky;top:0;z-index:1}
+  thead th.num{text-align:right}
+  tbody tr{border-bottom:1px solid var(--s-border)}
+  tbody tr:hover{background:var(--s-hover)}
+  tbody td{padding:8px 12px;vertical-align:middle}
+  tbody td.num{text-align:right;font-family:var(--font-mono);font-size:12px;white-space:nowrap}
+  .pendiente-row-critica{background:#FFF5F5}
+  .pendiente-row-alta{background:#FFFBF0}
+  .badge-crit,.badge-warn,.badge-ok{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 9px;border-radius:20px}
+  .badge-crit{background:var(--c-red-light);color:var(--c-red)}
+  .badge-warn{background:var(--c-amber-light);color:var(--c-amber)}
+  .badge-ok{background:var(--c-green-light);color:var(--c-green-dark)}
+  .badge-crit::before,.badge-warn::before,.badge-ok::before{content:'\25CF';font-size:7px}
+  .semaforo{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px}
+  .semaforo-dot{width:10px;height:10px;border-radius:50%}
+  .chart-wrap{padding:16px;height:240px;position:relative}
+  .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:767.98px){.chart-grid{grid-template-columns:1fr}}
+  .alert-strip{display:flex;align-items:flex-start;gap:.5rem;padding:10px 14px;border-radius:var(--radius-md);margin-bottom:8px;border-left:3px solid;font-size:12px}
+  .alert-strip.critical{background:var(--c-red-light);border-left-color:var(--c-red)}
+  .alert-strip.warning{background:var(--c-amber-light);border-left-color:var(--c-amber)}
+  .alert-strip.success{background:var(--c-green-light);border-left-color:var(--c-green)}
+  .empty-state{display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;text-align:center;gap:.5rem}
+  .empty-state h3{font-size:.875rem;color:var(--t-secondary);margin:0}
+  .empty-state p{font-size:.75rem;color:var(--t-muted);margin:0;max-width:360px}
+  @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+  .skeleton{background:linear-gradient(90deg,var(--s-border) 25%,var(--s-hover) 50%,var(--s-border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:.375rem;color:transparent!important;display:inline-block;height:1em;min-width:60px}
+  .section-view{display:none}
+  .section-view.active{display:block}
+  .btn-corona{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:none;transition:background var(--t-fast)}
+  .btn-corona-primary{background:var(--c-green);color:#fff}
+  .btn-corona-primary:hover{background:var(--c-green-dark)}
+  @media print{.sidebar,.topbar,.btn-corona{display:none!important}.main{margin-left:0!important}}
   </style>
 </head>
 <body>
-
-<!-- Skip Link -->
-<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
-
-<!-- Toast Container -->
-<div class="toast-container" id="toast-container" role="alert" aria-live="polite"></div>
+<div class="toast-container" id="toast-container" role="alert" aria-live="polite" style="position:fixed;top:12px;right:12px;z-index:9999;display:flex;flex-direction:column;gap:8px"></div>
 
 <div class="app d-flex">
-
-  <!-- ═══ SIDEBAR ═══ -->
-  <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="brand-name">
-        <span class="brand-logo" aria-hidden="true">BLC</span>
-        Bioenergía La Corona
-      </div>
+      <div class="brand-name"><span class="brand-logo">BLC</span>Bioenergía La Corona</div>
       <div class="brand-sub">Tesorería · Conciliación</div>
     </div>
-
-    <nav aria-label="Secciones del tablero">
+    <nav>
       <div class="nav-section">Conciliación</div>
-      <a class="nav-item active" href="#" role="button" data-section="resumen" aria-current="page">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-        </svg>
-        Resumen Ejecutivo
-      </a>
-      <a class="nav-item" href="#" role="button" data-section="pendientes">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-        </svg>
-        Pendientes
-      </a>
-      <a class="nav-item" href="#" role="button" data-section="detalle">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-        </svg>
-        Detalle por Banco
-      </a>
-
+      <a class="nav-item active" href="#" data-section="resumen" aria-current="page">📊 Resumen Ejecutivo</a>
+      <a class="nav-item" href="#" data-section="pendientes">⚠️ Pendientes</a>
+      <a class="nav-item" href="#" data-section="detalle">🏦 Detalle por Banco</a>
       <div class="nav-section">Reportes</div>
-      <a class="nav-item" href="#" role="button" data-section="gastos">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-        </svg>
-        Gastos Bancarios
-      </a>
-      <a class="nav-item" href="#" role="button" data-section="graficos">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
-          <line x1="6" y1="20" x2="6" y2="14"/>
-        </svg>
-        Gráficos
-      </a>
+      <a class="nav-item" href="#" data-section="gastos">💰 Gastos Bancarios</a>
+      <a class="nav-item" href="#" data-section="graficos">📈 Gráficos</a>
     </nav>
-
     <div class="sidebar-footer">
-      <div class="d-flex align-items-center gap-2 mb-1">
-        <span class="sync-dot" id="sync-dot-sidebar" title="Estado de conexión"></span>
-        <small class="text-muted" id="sidebar-sync-status">Sin conectar</small>
-      </div>
-      <div>Conciliación Bancaria v2.0</div>
-      <div style="margin-top:2px;font-size:10px;">Bioenergía La Corona S.A.</div>
+      <div><span class="sync-dot" id="sync-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--t-muted)"></span> <small class="text-muted" id="sidebar-status">Google Sheets</small></div>
+      <div style="margin-top:4px">Conciliación Bancaria v2.0 · GSheet</div>
     </div>
   </aside>
 
-  <!-- ═══ MAIN ═══ -->
-  <div class="main" id="main-content">
-
-    <!-- Topbar -->
-    <header class="topbar" role="banner">
+  <div class="main">
+    <header class="topbar">
       <div class="d-flex align-items-center gap-2">
-        <button class="hamburger d-md-none" id="hamburger-btn" aria-label="Abrir menú de navegación" type="button">
-          <span></span><span></span><span></span>
-        </button>
-        <div>
-          <h1 id="section-title">Resumen Ejecutivo</h1>
-          <p id="section-desc">Conciliación Bancaria — Multi-banco</p>
-        </div>
+        <button class="hamburger d-md-none" id="hamburger-btn" aria-label="Menú" type="button"><span></span><span></span><span></span></button>
+        <div><h1 id="section-title">Resumen Ejecutivo</h1><p id="section-desc">Conciliación Bancaria — Google Sheets</p></div>
       </div>
       <div class="topbar-actions">
-        <span class="backend-indicator offline" id="backend-indicator" title="Estado del servidor">🔴 Offline</span>
         <span class="badge-period" id="period-badge">Cargando…</span>
-        <button class="btn-corona btn-corona-secondary btn-text-mobile" onclick="refreshAll()" title="Actualizar datos">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-            <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-          </svg>
-          <span class="d-none d-sm-inline">Actualizar</span>
-        </button>
+        <span class="backend-indicator" id="gsheet-indicator">📊 Sheets</span>
+        <button class="btn-corona btn-corona-primary" onclick="refreshAll()">🔄 Actualizar</button>
       </div>
     </header>
 
-    <!-- Content -->
     <div class="content">
-
-      <!-- ═══ RESUMEN ═══ -->
-      <section id="section-resumen" class="section-view active" aria-label="Resumen ejecutivo">
-        <div class="kpi-grid" id="resumen-kpis" role="group" aria-label="Indicadores clave"></div>
-
+      <section id="section-resumen" class="section-view active">
+        <div class="kpi-grid" id="resumen-kpis"></div>
         <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title"><span class="dot"></span>Resumen por Banco</div>
-          </div>
+          <div class="panel-header"><div class="panel-title"><span class="dot"></span>Resumen por Banco</div></div>
           <div class="table-wrap">
-            <table aria-label="Resumen de conciliación por banco">
-              <thead><tr>
-                <th scope="col">Banco</th>
-                <th scope="col">Período</th>
-                <th scope="col" class="num">Total Banco</th>
-                <th scope="col" class="num">Total Calipso</th>
-                <th scope="col" class="num">Diferencia</th>
-                <th scope="col">Estado</th>
-                <th scope="col" class="num">Pendientes</th>
-              </tr></thead>
-              <tbody id="resumen-body">
-                <tr><td colspan="7"><div class="empty-state"><h3>Cargando datos…</h3></div></td></tr>
-              </tbody>
-            </table>
+            <table><thead><tr>
+              <th>Banco</th><th>Período</th><th class="num">Total Banco</th><th class="num">Total Calipso</th><th class="num">Diferencia</th><th>Estado</th><th class="num">Pendientes</th>
+            </tr></thead><tbody id="resumen-body"><tr><td colspan="7"><div class="empty-state"><h3>Cargando datos desde Google Sheets…</h3></div></td></tr></tbody></table>
           </div>
         </div>
-
-        <!-- Alertas -->
-        <div id="resumen-alerts" aria-live="polite"></div>
+        <div id="resumen-alerts"></div>
       </section>
 
-      <!-- ═══ PENDIENTES ═══ -->
-      <section id="section-pendientes" class="section-view" aria-label="Pendientes de conciliación">
-        <div class="kpi-grid" id="pendientes-kpis" role="group" aria-label="Resumen de pendientes"></div>
-
+      <section id="section-pendientes" class="section-view">
+        <div class="kpi-grid" id="pendientes-kpis"></div>
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><span class="dot" style="background:var(--c-red)"></span>Pendientes de Conciliación</div>
             <div class="panel-tools">
-              <label for="filter-pend-crit" class="visually-hidden">Filtrar por criticidad</label>
-              <select id="filter-pend-crit" class="panel-tool-btn" onchange="renderPendientes()">
-                <option value="">Todas las criticidades</option>
-                <option value="CRITICA">🔴 Críticas</option>
-                <option value="ALTA">🟠 Altas</option>
-                <option value="MEDIA">🟡 Medias</option>
+              <select id="filter-crit" class="panel-tool-btn" onchange="renderPendientes()">
+                <option value="">Todas</option><option value="CRITICA">🔴 Críticas</option><option value="ALTA">🟠 Altas</option><option value="MEDIA">🟡 Medias</option>
               </select>
             </div>
           </div>
           <div class="table-wrap">
-            <table aria-label="Ítems pendientes de conciliación">
-              <thead><tr>
-                <th scope="col">Banco</th><th scope="col">Fecha</th><th scope="col">Descripción</th>
-                <th scope="col">Origen</th><th scope="col" class="num">Importe</th>
-                <th scope="col">Tipo</th><th scope="col">Criticidad</th><th scope="col">Observación</th>
-              </tr></thead>
-              <tbody id="pendientes-body">
-                <tr><td colspan="8"><div class="empty-state"><h3>Cargando datos…</h3></div></td></tr>
-              </tbody>
-            </table>
+            <table><thead><tr>
+              <th>Banco</th><th>Fecha</th><th>Descripción</th><th>Origen</th><th class="num">Importe</th><th>Tipo</th><th>Criticidad</th><th>Observación</th>
+            </tr></thead><tbody id="pendientes-body"></tbody></table>
           </div>
         </div>
       </section>
 
-      <!-- ═══ DETALLE ═══ -->
-      <section id="section-detalle" class="section-view" aria-label="Detalle por banco">
-        <div class="kpi-grid" id="detalle-kpis" role="group" aria-label="Estados de conciliación"></div>
-
+      <section id="section-detalle" class="section-view">
+        <div class="kpi-grid" id="detalle-kpis"></div>
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title"><span class="dot" style="background:var(--c-blue)"></span>Movimientos — Banco vs Calipso</div>
-            <div class="panel-tools">
-              <small class="text-muted" id="detalle-count"></small>
-            </div>
+            <div class="panel-tools"><small class="text-muted" id="detalle-count"></small></div>
           </div>
           <div class="table-wrap">
-            <table aria-label="Detalle de movimientos conciliados">
-              <thead><tr>
-                <th scope="col">Fecha</th><th scope="col">Tipo</th><th scope="col">Descripción</th>
-                <th scope="col" class="num">Banco</th><th scope="col" class="num">Calipso</th>
-                <th scope="col" class="num">Dif</th><th scope="col">Estado</th>
-              </tr></thead>
-              <tbody id="detalle-body">
-                <tr><td colspan="7"><div class="empty-state"><h3>Cargando datos…</h3></div></td></tr>
-              </tbody>
-            </table>
+            <table><thead><tr>
+              <th>Fecha</th><th>Tipo</th><th>Descripción</th><th class="num">Banco</th><th class="num">Calipso</th><th class="num">Dif</th><th>Estado</th>
+            </tr></thead><tbody id="detalle-body"></tbody></table>
           </div>
         </div>
       </section>
 
-      <!-- ═══ GASTOS ═══ -->
-      <section id="section-gastos" class="section-view" aria-label="Gastos bancarios">
+      <section id="section-gastos" class="section-view">
         <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title"><span class="dot" style="background:var(--c-amber)"></span>Gastos Bancarios — Todos los bancos</div>
-          </div>
+          <div class="panel-header"><div class="panel-title"><span class="dot" style="background:var(--c-amber)"></span>Gastos Bancarios</div></div>
           <div class="table-wrap">
-            <table aria-label="Gastos e impuestos bancarios">
-              <thead><tr>
-                <th scope="col">Fecha</th><th scope="col">Descripción</th><th scope="col">Tipo</th>
-                <th scope="col" class="num">Importe</th><th scope="col">Estado</th>
-              </tr></thead>
-              <tbody id="gastos-body">
-                <tr><td colspan="5"><div class="empty-state"><h3>Cargando datos…</h3></div></td></tr>
-              </tbody>
-            </table>
+            <table><thead><tr>
+              <th>Fecha</th><th>Descripción</th><th>Tipo</th><th class="num">Importe</th><th>Estado</th>
+            </tr></thead><tbody id="gastos-body"></tbody></table>
           </div>
         </div>
       </section>
 
-      <!-- ═══ GRÁFICOS ═══ -->
-      <section id="section-graficos" class="section-view" aria-label="Gráficos">
+      <section id="section-graficos" class="section-view">
         <div class="chart-grid">
           <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title"><span class="dot"></span>Distribución de Estados</div>
-            </div>
-            <div class="chart-wrap">
-              <canvas id="chartEstados" role="img" aria-label="Gráfico de distribución de estados de conciliación"></canvas>
-            </div>
+            <div class="panel-header"><div class="panel-title"><span class="dot"></span>Distribución de Estados</div></div>
+            <div class="chart-wrap"><canvas id="chartEstados"></canvas></div>
           </div>
           <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title"><span class="dot" style="background:var(--c-red)"></span>Pendientes por Criticidad</div>
-            </div>
-            <div class="chart-wrap">
-              <canvas id="chartCriticidad" role="img" aria-label="Gráfico de pendientes por nivel de criticidad"></canvas>
-            </div>
-          </div>
-        </div>
-        <div class="panel mt-3">
-          <div class="panel-header">
-            <div class="panel-title"><span class="dot" style="background:var(--c-blue)"></span>Calidad del Matching (Niveles)</div>
-          </div>
-          <div class="chart-wrap" style="height:180px;">
-            <canvas id="chartCalidad" role="img" aria-label="Gráfico de calidad del matching por niveles N1 a N4"></canvas>
+            <div class="panel-header"><div class="panel-title"><span class="dot" style="background:var(--c-red)"></span>Pendientes por Criticidad</div></div>
+            <div class="chart-wrap"><canvas id="chartCriticidad"></canvas></div>
           </div>
         </div>
       </section>
+    </div>
 
-    </div><!-- /content -->
-
-    <footer class="text-center py-2 no-print" style="font-size:10px;color:var(--t-muted);border-top:1px solid var(--s-border);">
-      Datos actualizados: <span id="footer-ts">—</span>
+    <footer class="text-center py-2" style="font-size:10px;color:var(--t-muted);border-top:1px solid var(--s-border)">
+      Datos desde Google Sheets · <span id="footer-ts">—</span>
     </footer>
-  </div><!-- /main -->
-</div><!-- /app -->
+  </div>
+</div>
 
 <script>
-/* ══════════════════════════════════════════════════════════════
-   UTILS — Formateo y utilidades
-   ══════════════════════════════════════════════════════════════ */
-
-function fmt$(n) {
-  if (n == null || isNaN(n)) return '—';
-  return '$ ' + Number(n).toLocaleString('es-AR', { maximumFractionDigits: 0 });
-}
-
-function fmtFecha(s) {
-  if (!s || s.length < 8) return s || '—';
-  return s.substring(6, 8) + '/' + s.substring(4, 6) + '/' + s.substring(0, 4);
-}
-
-function fmtNumero(n) {
-  if (n == null || isNaN(n)) return '—';
-  return Number(n).toLocaleString('es-AR');
-}
-
-function semaforoStatus(diferencia) {
-  if (diferencia === 0) return { color: 'var(--c-green)', texto: 'CUADRADO', badge: 'ok' };
-  if (diferencia < 500000) return { color: 'var(--c-amber)', texto: 'TIMING', badge: 'warn' };
-  return { color: 'var(--c-red)', texto: 'PENDIENTE', badge: 'crit' };
-}
-
-function fmtTimestamp() {
-  var d = new Date();
-  return d.toLocaleString('es-AR', { timeStyle: 'short', dateStyle: 'short' });
-}
-
-/* ── Toast notifications ── */
-
-function showToast(message, type) {
-  type = type || 'success';
-  var icons = { success: '✅', error: '❌', warning: '⚠️' };
-  var container = document.getElementById('toast-container');
-  var el = document.createElement('div');
-  el.className = 'toast-corona ' + type;
-  el.innerHTML = '<span class="toast-icon">' + (icons[type] || 'ℹ️') + '</span>' +
-    '<span>' + message + '</span>' +
-    '<button class="toast-close" onclick="this.parentElement.remove()" aria-label="Cerrar">&times;</button>';
-  container.appendChild(el);
-  setTimeout(function() { if (el.parentElement) el.remove(); }, 5000);
-  // Click para descartar inmediato
-  el.addEventListener('click', function() { el.remove(); });
-}
-
-/* ── Skeleton helpers ── */
-
-function skeletonRows(cols, rows) {
-  var html = '';
-  for (var r = 0; r < rows; r++) {
-    html += '<tr>';
-    for (var c = 0; c < cols; c++) {
-      html += '<td><span class="skeleton" style="width:' + (40 + Math.random() * 40) + '%"><span class="skeleton-cell"> </span></span></td>';
-    }
-    html += '</tr>';
-  }
-  return html;
-}
-
-/* ══════════════════════════════════════════════════════════════
-   CHARTS — Chart.js config
-   ══════════════════════════════════════════════════════════════ */
-
-const CHART_DEFAULTS = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10, padding: 12 } }
-  }
-};
-
-function crearChartEstados(canvasId, data) {
-  var ctx = document.getElementById(canvasId);
-  if (!ctx) return null;
-  ctx = ctx.getContext('2d');
-  return new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Conciliado', 'Solo Banco', 'Solo Calipso', 'Timing'],
-      datasets: [{
-        data: [data.conciliados || 0, data.soloBanco || 0, data.soloCalipso || 0, data.timing || 0],
-        backgroundColor: ['#1D9E75', '#A32D2D', '#BA7517', '#185FA5'],
-        borderWidth: 2,
-        borderColor: '#fff',
-        hoverOffset: 8
-      }]
-    },
-    options: Object.assign({}, CHART_DEFAULTS, { cutout: '62%' })
-  });
-}
-
-function crearChartCriticidad(canvasId, data) {
-  var ctx = document.getElementById(canvasId);
-  if (!ctx) return null;
-  ctx = ctx.getContext('2d');
-  return new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Críticas', 'Altas', 'Medias'],
-      datasets: [{
-        data: [data.criticas || 0, data.altas || 0, data.medias || 0],
-        backgroundColor: ['#A32D2D', '#BA7517', '#185FA5'],
-        borderRadius: 4,
-        borderSkipped: false
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10 } } },
-        x: { ticks: { font: { size: 10 } } }
-      }
-    }
-  });
-}
-
-function crearChartCalidad(canvasId, data) {
-  var ctx = document.getElementById(canvasId);
-  if (!ctx) return null;
-  ctx = ctx.getContext('2d');
-  var cal = data.calNiveles || {};
-  return new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['N1 — Comprobante', 'N2 — Exacto', 'N3 — ±1% 1d', 'N4 — ±1% 3d', 'Sin Match'],
-      datasets: [{
-        data: [cal.n1 || 0, cal.n2 || 0, cal.n3 || 0, cal.n4 || 0, cal.sinMatch || 0],
-        backgroundColor: ['#1D9E75', '#5DCAA5', '#BA7517', '#185FA5', '#A32D2D'],
-        borderRadius: 4,
-        borderSkipped: false
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10 } } },
-        y: { ticks: { font: { size: 9 } } }
-      }
-    }
-  });
-}
-
-/* ══════════════════════════════════════════════════════════════
-   APP — Lógica principal
-   ══════════════════════════════════════════════════════════════ */
-
-var API_SOURCE = '';
-var STATE = { resumen: null, pendientes: null, detalle: null, _current: 'resumen' };
+/* ═══════════ GOOGLE SHEETS READER — API v4 ═══════════ */
+var CACHE = { resumen: null, pendientes: null, detalle: null };
 var CHARTS = {};
+var SECCION = 'resumen';
 
-/* ── API Fetch con failover (patrón Sumas y Saldos) ── */
+function gsUrl(r) { return 'https://sheets.googleapis.com/v4/spreadsheets/' + SHEET_ID + '/values/' + r + '?key=' + API_KEY; }
 
-async function fetchWithFallback(endpoint) {
-  var urls = [
-    { url: CONFIG.API_PRIMARY + endpoint, name: 'Cloud' },
-    { url: CONFIG.API_FALLBACK + endpoint, name: 'LAN' },
-  ];
-  for (var i = 0; i < urls.length; i++) {
-    var u = urls[i];
-    try {
-      var controller = new AbortController();
-      var timeout = setTimeout(function() { controller.abort(); }, CONFIG.API_TIMEOUT_MS);
-      var res = await fetch(u.url, { signal: controller.signal });
-      clearTimeout(timeout);
-      if (!res.ok) {
-        var errBody = await res.json().catch(function() { return { error: res.statusText }; });
-        throw new Error(errBody.error || res.statusText);
-      }
-      var data = await res.json();
-      API_SOURCE = u.name;
-      return data;
-    } catch (e) {
-      console.warn('[Conciliacion] ' + u.name + ' falló:', e.message);
-    }
-  }
-  throw new Error('Todos los backends fallaron');
-}
-
-/* ── Backend indicator ── */
-
-function updateBackendIndicator() {
-  var el = document.getElementById('backend-indicator');
-  var dot = document.getElementById('sync-dot-sidebar');
-  var statusEl = document.getElementById('sidebar-sync-status');
-  if (!el) return;
-
-  if (API_SOURCE === 'Cloud' || API_SOURCE === 'LAN') {
-    el.className = 'backend-indicator online';
-    el.innerHTML = '🟢 ' + API_SOURCE;
-    if (dot) dot.className = 'sync-dot ok';
-    if (statusEl) statusEl.textContent = API_SOURCE + ' conectado';
-  } else {
-    el.className = 'backend-indicator offline';
-    el.innerHTML = '🔴 Offline';
-    if (dot) dot.className = 'sync-dot error';
-    if (statusEl) statusEl.textContent = 'Sin conexión';
-  }
-}
-
-/* ── Error handler ── */
-
-function showError(section, error) {
-  console.error('[Conciliacion] Error en', section, error);
-  updateBackendIndicator();
-  showToast('Error al cargar ' + section + ': ' + error.message, 'error');
-
-  var bodies = { resumen: 'resumen-body', pendientes: 'pendientes-body', detalle: 'detalle-body', gastos: 'gastos-body' };
-  var id = bodies[section];
-  if (!id) return;
-
-  document.getElementById(id).innerHTML =
-    '<tr><td colspan="8"><div class="empty-state">' +
-    '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>' +
-    '<h3>Sin conexión</h3>' +
-    '<p>No se pudo conectar al servidor Node-RED. Verificá que esté activo.</p>' +
-    '<button class="btn-corona btn-corona-primary" onclick="refreshAll()">Reintentar</button></div></td></tr>';
-}
-
-/* ── Navigation ── */
-
-function showSection(id) {
-  // Update sections
-  document.querySelectorAll('.section-view').forEach(function(e) { e.classList.remove('active'); });
-  document.querySelectorAll('.nav-item').forEach(function(e) { e.classList.remove('active'); });
-
-  var sectionEl = document.getElementById('section-' + id);
-  if (sectionEl) sectionEl.classList.add('active');
-
-  document.querySelectorAll('.nav-item').forEach(function(e) {
-    if (e.getAttribute('data-section') === id) {
-      e.classList.add('active');
-      if (e.getAttribute('aria-current')) e.setAttribute('aria-current', 'page');
-    } else {
-      e.removeAttribute('aria-current');
-    }
+async function leerSheet(key) {
+  if (!API_KEY) throw new Error('API_KEY no configurada');
+  var r = await fetch(gsUrl(RANGOS[key]));
+  if (!r.ok) throw new Error(r.status === 403 ? 'Acceso denegado al sheet' : 'HTTP ' + r.status);
+  var d = await r.json();
+  return (d.values || []).map(function(row) {
+    var o = {};
+    COLS[key].forEach(function(c, i) { o[c] = row[i] || ''; });
+    return o;
   });
-
-  STATE._current = id;
-
-  var titles = {
-    resumen: ['Resumen Ejecutivo', 'Conciliación Bancaria — Multi-banco'],
-    pendientes: ['Pendientes de Conciliación', 'Ítems sin conciliar — Requieren acción'],
-    detalle: ['Detalle por Banco', 'Cruce banco vs Calipso'],
-    gastos: ['Gastos Bancarios', 'Gastos e impuestos detectados en extractos'],
-    graficos: ['Gráficos', 'Visualización de datos de conciliación']
-  };
-  var tInfo = titles[id] || [id, ''];
-  document.getElementById('section-title').textContent = tInfo[0];
-  document.getElementById('section-desc').textContent = tInfo[1];
-
-  // Close sidebar on mobile
-  var sidebar = document.getElementById('sidebar');
-  if (sidebar && window.innerWidth < 768) sidebar.classList.remove('open');
-
-  // Load section
-  var loaders = {
-    resumen: cargarResumen,
-    pendientes: cargarPendientes,
-    detalle: cargarDetalle,
-    gastos: cargarGastos,
-    graficos: cargarGraficos
-  };
-  if (loaders[id]) loaders[id]();
 }
 
-/* ── Refresh ── */
-
-async function refreshAll() {
-  API_SOURCE = '';
-  updateBackendIndicator();
-  // Destroy charts
-  Object.keys(CHARTS).forEach(function(k) { if (CHARTS[k]) { CHARTS[k].destroy(); delete CHARTS[k]; } });
-  showSection(STATE._current || 'resumen');
-  showToast('Datos actualizados', 'success');
+async function loadAll() {
+  var r = await Promise.all([leerSheet('resumen'), leerSheet('pendientes'), leerSheet('detalle')]);
+  CACHE.resumen = r[0]; CACHE.pendientes = r[1]; CACHE.detalle = r[2];
+  var el = document.getElementById('gsheet-indicator');
+  if (el) { el.className = 'backend-indicator online'; el.innerHTML = '🟢 Google Sheets'; }
+  var sd = document.getElementById('sync-dot');
+  if (sd) sd.style.background = 'var(--c-green)';
+  return CACHE;
 }
 
-/* ═══ RESUMEN ═══ */
+/* ═══════════ UTILS ═══════════ */
+function $(n) { n = parseFloat(String(n||'').replace(',','')); return isNaN(n)?'—':'$ '+n.toLocaleString('es-AR',{maximumFractionDigits:0}); }
+function ff(s) { return !s||s.length<8?s||'—':s.substring(6,8)+'/'+s.substring(4,6)+'/'+s.substring(0,4); }
+function nv(v) { return parseFloat(String(v||'').replace(',',''))||0; }
+function sem(d) { d=Math.abs(nv(d)); return d<100?{c:'var(--c-green)',t:'CUADRADO',b:'ok'}:d<500000?{c:'var(--c-amber)',t:'TIMING',b:'warn'}:{c:'var(--c-red)',t:'PENDIENTE',b:'crit'}; }
+function bc(c) { return c==='CRITICA'?'badge-crit':c==='ALTA'?'badge-warn':'badge-ok'; }
+function toast(m,t){t=t||'success';var icons={success:'✅',error:'❌',warning:'⚠️'};var c=document.getElementById('toast-container');var e=document.createElement('div');e.style='background:var(--s-card);border:1px solid var(--s-border);border-radius:var(--radius-md);padding:10px 14px;box-shadow:0 4px 12px rgba(0,0,0,.1);font-size:13px;border-left:3px solid '+(t==='success'?'var(--c-green)':t==='error'?'var(--c-red)':'var(--c-amber)');e.textContent=(icons[t]||'ℹ️')+' '+m;c.appendChild(e);setTimeout(function(){e.remove()},4000);}
 
-async function cargarResumen() {
-  try {
-    // Skeleton
-    document.getElementById('resumen-kpis').innerHTML = skeletonRows(1, 5)
-      .replace(/<tr>/g, '<div class="kpi-card">').replace(/<\/tr>/g, '</div>').replace(/<td>/g, '<div>').replace(/<\/td>/g, '</div>');
-    document.getElementById('resumen-body').innerHTML = skeletonRows(7, 3);
+/* ═══════════ CHARTS ═══════════ */
+function dona(id,l,d,c){var ctx=document.getElementById(id);if(!ctx)return;ctx=ctx.getContext('2d');return new Chart(ctx,{type:'doughnut',data:{labels:l,datasets:[{data:d,backgroundColor:c,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});}
+function bar(id,l,d,c){var ctx=document.getElementById(id);if(!ctx)return;ctx=ctx.getContext('2d');return new Chart(ctx,{type:'bar',data:{labels:l,datasets:[{data:d,backgroundColor:c,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}})}
 
-    var d = await fetchWithFallback(CONFIG.endpoints.resumen);
-    STATE.resumen = d;
-    var row = (d.data || [])[0] || {};
-    var sema = semaforoStatus(row.diferencia);
+/* ═══════════ RENDER ═══════════ */
+function rResumen(){
+  var d=CACHE.resumen;if(!d||!d.length){document.getElementById('resumen-body').innerHTML='<tr><td colspan="7"><div class="empty-state"><h3>Sin datos en Resumen</h3></div></td></tr>';return}
+  var r=d[0],s=sem(r.diferencia),dif=nv(r.diferencia),pend=nv(r.pendientes);
+  document.getElementById('resumen-kpis').innerHTML=
+    '<div class="kpi-card green"><div class="kpi-label">Total Banco</div><div class="kpi-value mono">'+$(r.totalBanco)+'</div></div>'+
+    '<div class="kpi-card blue"><div class="kpi-label">Total Calipso</div><div class="kpi-value mono">'+$(r.totalCalipso)+'</div></div>'+
+    '<div class="kpi-card '+(dif===0?'green':'red')+'"><div class="kpi-label">Diferencia</div><div class="kpi-value mono">'+$(dif)+'</div></div>'+
+    '<div class="kpi-card '+(pend>0?'red':'green')+'"><div class="kpi-label">Pendientes</div><div class="kpi-value">'+pend+'</div></div>'+
+    '<div class="kpi-card '+s.b+'"><div class="kpi-label">Estado</div><div class="kpi-value" style="font-size:16px"><span class="semaforo"><span class="semaforo-dot" style="background:'+s.c+'"></span>'+s.t+'</span></div></div>';
+  document.getElementById('resumen-body').innerHTML=d.map(function(x){var s2=sem(x.diferencia);return '<tr><td><strong>'+x.banco+'</strong></td><td class="mono">'+x.periodo+'</td><td class="num">'+$(x.totalBanco)+'</td><td class="num">'+$(x.totalCalipso)+'</td><td class="num"><strong style="color:'+(nv(x.diferencia)===0?'var(--c-green-dark)':'var(--c-red)')+'">'+$(x.diferencia)+'</strong></td><td><span class="badge-'+s2.b+'">'+s2.t+'</span></td><td class="num">'+nv(x.pendientes)+'</td></tr>'}).join('');
+  if(r.periodo)document.getElementById('period-badge').textContent=r.periodo;
+  document.getElementById('footer-ts').textContent=new Date().toLocaleString('es-AR');
+  var a='';if(pend>0)a+='<div class="alert-strip warning"><span>⚠️</span><div><strong>'+pend+' pendientes</strong></div></div>';if(s.b==='crit')a+='<div class="alert-strip critical"><span>🔴</span><div>Diferencia: '+$(dif)+'</div></div>';if(s.b==='ok')a+='<div class="alert-strip success"><span>✅</span><div>Conciliación cuadrada</div></div>';document.getElementById('resumen-alerts').innerHTML=a;
+}
 
-    document.getElementById('resumen-kpis').innerHTML =
-      '<div class="kpi-card green"><div class="kpi-label">Total Banco</div><div class="kpi-value mono">' + fmt$(row.totalBanco) + '</div><div class="kpi-delta">Extracto bancario</div></div>' +
-      '<div class="kpi-card blue"><div class="kpi-label">Total Calipso</div><div class="kpi-value mono">' + fmt$(row.totalCalipso) + '</div><div class="kpi-delta">Depurado (sin reversiones)</div></div>' +
-      '<div class="kpi-card ' + (row.diferencia === 0 ? 'green' : 'red') + '"><div class="kpi-label">Diferencia</div><div class="kpi-value mono">' + fmt$(row.diferencia) + '</div><div class="kpi-delta">' + (row.diferencia === 0 ? '✅ Cuadrado' : '⚠ Requiere revisión') + '</div></div>' +
-      '<div class="kpi-card ' + (row.pendientes > 0 ? 'red' : 'green') + '"><div class="kpi-label">Pendientes</div><div class="kpi-value">' + (row.pendientes || 0) + '</div><div class="kpi-delta">Ítems sin conciliar</div></div>' +
-      '<div class="kpi-card ' + (sema.badge === 'ok' ? 'green' : sema.badge === 'warn' ? 'amber' : 'red') + '"><div class="kpi-label">Estado</div><div class="kpi-value" style="font-size:16px;"><span class="semaforo"><span class="semaforo-dot" style="background:' + sema.color + '"></span>' + sema.texto + '</span></div><div class="kpi-delta">' + (row.diferencia === 0 ? '✅ Conciliación exitosa' : '⚠ Acción requerida') + '</div></div>';
+function rPendientes(){
+  var d=CACHE.pendientes||[],f=(document.getElementById('filter-crit')||{}).value||'',data=f?d.filter(function(x){return x.criticidad===f}):d;
+  var cr=d.filter(function(x){return x.criticidad==='CRITICA'}).length,al=d.filter(function(x){return x.criticidad==='ALTA'}).length,me=d.filter(function(x){return x.criticidad!=='CRITICA'&&x.criticidad!=='ALTA'}).length;
+  document.getElementById('pendientes-kpis').innerHTML=
+    '<div class="kpi-card red"><div class="kpi-label">🔴 Críticas</div><div class="kpi-value">'+cr+'</div></div>'+
+    '<div class="kpi-card amber"><div class="kpi-label">🟠 Altas</div><div class="kpi-value">'+al+'</div></div>'+
+    '<div class="kpi-card blue"><div class="kpi-label">🟡 Medias</div><div class="kpi-value">'+me+'</div></div>'+
+    '<div class="kpi-card '+(data.length>0?'red':'green')+'"><div class="kpi-label">Total</div><div class="kpi-value">'+data.length+'</div></div>';
+  document.getElementById('pendientes-body').innerHTML=data.length?data.map(function(x){
+    var rc=x.criticidad==='CRITICA'?'pendiente-row-critica':x.criticidad==='ALTA'?'pendiente-row-alta':'';
+    return '<tr class="'+rc+'"><td><strong>'+(x.banco||'Galicia')+'</strong></td><td class="mono">'+ff(x.fecha)+'</td><td>'+(x.descripcion||'').substring(0,150)+'</td><td>'+(x.origen||'')+'</td><td class="num"><strong>'+$(x.importe)+'</strong></td><td>'+(x.tipo||'')+'</td><td><span class="'+bc(x.criticidad)+'">'+(x.criticidad||'MEDIA')+'</span></td><td style="font-size:11px;color:var(--t-secondary)">'+(x.observacion||'')+'</td></tr>'
+  }).join(''):'<tr><td colspan="8"><div class="empty-state"><h3>Sin pendientes ✅</h3></div></td></tr>';
+}
 
-    document.getElementById('resumen-body').innerHTML = (d.data || []).map(function(r) {
-      var s = semaforoStatus(r.diferencia);
-      return '<tr><td><strong>' + r.banco + '</strong></td><td class="code">' + r.periodo + '</td>' +
-        '<td class="num">' + fmt$(r.totalBanco) + '</td><td class="num">' + fmt$(r.totalCalipso) + '</td>' +
-        '<td class="num"><strong style="color:' + (r.diferencia === 0 ? 'var(--c-green-dark)' : 'var(--c-red)') + '">' + fmt$(r.diferencia) + '</strong></td>' +
-        '<td><span class="badge-' + s.badge + '">' + s.texto + '</span></td>' +
-        '<td class="num">' + r.pendientes + '</td></tr>';
-    }).join('');
+function rDetalle(){
+  var d=CACHE.detalle||[];
+  var co=d.filter(function(x){return x.estado==='CONCILIADO'}).length,sb=d.filter(function(x){return x.estado==='SOLO_BANCO'}).length,sc=d.filter(function(x){return x.estado==='SOLO_CALIPSO'}).length,ti=d.filter(function(x){return x.estado==='TIMING'}).length;
+  document.getElementById('detalle-kpis').innerHTML=
+    '<div class="kpi-card green"><div class="kpi-label">Conciliados</div><div class="kpi-value">'+co+'</div></div>'+
+    '<div class="kpi-card red"><div class="kpi-label">Solo Banco</div><div class="kpi-value">'+sb+'</div></div>'+
+    '<div class="kpi-card amber"><div class="kpi-label">Solo Calipso</div><div class="kpi-value">'+sc+'</div></div>'+
+    '<div class="kpi-card blue"><div class="kpi-label">Timing</div><div class="kpi-value">'+ti+'</div></div>';
+  document.getElementById('detalle-count').textContent=d.length+' movimientos';
+  document.getElementById('detalle-body').innerHTML=d.slice(0,500).map(function(x){
+    return '<tr><td class="mono">'+ff(x.fecha)+'</td><td>'+(x.tipo||'')+'</td><td>'+(x.descripcion||'').substring(0,150)+'</td><td class="num">'+(x.banco?$(x.banco):'—')+'</td><td class="num">'+(x.calipso?$(x.calipso):'—')+'</td><td class="num" style="color:'+(nv(x.dif)>100?'var(--c-red)':'var(--t-muted)')+'">'+$(x.dif)+'</td><td><span class="badge-'+(x.estado==='CONCILIADO'?'ok':x.estado==='TIMING'?'warn':'crit')+'">'+(x.estado||'')+'</span></td></tr>'
+  }).join('');
+}
 
-    // Period badge
-    if (row.periodo) document.getElementById('period-badge').textContent = row.periodo;
-    // Footer timestamp
-    document.getElementById('footer-ts').textContent = fmtTimestamp();
+function rGastos(){
+  var d=(CACHE.detalle||[]).filter(function(x){var t=(x.tipo||'').toLowerCase(),d=(x.descripcion||'').toLowerCase();return t.indexOf('gasto')>=0||t.indexOf('impuesto')>=0||d.indexOf('iva')>=0||d.indexOf('iibb')>=0||d.indexOf('comision')>=0});
+  document.getElementById('gastos-body').innerHTML=d.length?d.map(function(x){return '<tr><td class="mono">'+ff(x.fecha)+'</td><td>'+(x.descripcion||'')+'</td><td>'+(x.tipo||'')+'</td><td class="num"><strong>'+$(Math.abs(nv(x.banco||x.calipso)))+'</strong></td><td><span class="badge-'+(x.estado==='CONCILIADO'?'ok':'crit')+'">'+(x.estado||'')+'</span></td></tr>'}).join(''):'<tr><td colspan="5"><div class="empty-state"><h3>Sin gastos detectados</h3></div></td></tr>';
+}
 
-    // Alerts
-    var alertsHtml = '';
-    if (row.pendientes > 0) {
-      alertsHtml += '<div class="alert-strip warning"><span aria-hidden="true">⚠️</span><div><strong>' + row.pendientes + ' pendientes</strong> — Revisar antes de cerrar el período</div></div>';
-    }
-    if (sema.badge === 'crit') {
-      alertsHtml += '<div class="alert-strip critical"><span aria-hidden="true">🔴</span><div><strong>Diferencia sin explicar:</strong> $' + fmtNumero(row.diferencia) + '</div></div>';
-    }
-    if (sema.badge === 'ok') {
-      alertsHtml += '<div class="alert-strip success"><span aria-hidden="true">✅</span><div>Conciliación cuadrada — sin diferencias</div></div>';
-    }
-    document.getElementById('resumen-alerts').innerHTML = alertsHtml;
+function rGraficos(){
+  var dd=CACHE.detalle||[],pd=CACHE.pendientes||[];
+  if(CHARTS.e)CHARTS.e.destroy();CHARTS.e=dona('chartEstados',['Conciliado','Solo Banco','Solo Calipso','Timing'],[dd.filter(function(x){return x.estado==='CONCILIADO'}).length,dd.filter(function(x){return x.estado==='SOLO_BANCO'}).length,dd.filter(function(x){return x.estado==='SOLO_CALIPSO'}).length,dd.filter(function(x){return x.estado==='TIMING'}).length],['#1D9E75','#A32D2D','#BA7517','#185FA5']);
+  if(CHARTS.c)CHARTS.c.destroy();CHARTS.c=bar('chartCriticidad',['Criticas','Altas','Medias'],[pd.filter(function(x){return x.criticidad==='CRITICA'}).length,pd.filter(function(x){return x.criticidad==='ALTA'}).length,pd.filter(function(x){return x.criticidad!=='CRITICA'&&x.criticidad!=='ALTA'}).length],['#A32D2D','#BA7517','#185FA5']);
+}
 
-    updateBackendIndicator();
-  } catch (e) {
-    showError('resumen', e);
+/* ═══════════ NAV ═══════════ */
+function go(id){
+  document.querySelectorAll('.section-view').forEach(function(e){e.classList.remove('active')});
+  document.querySelectorAll('.nav-item').forEach(function(e){e.classList.remove('active')});
+  var el=document.getElementById('section-'+id);if(el)el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(e){if(e.getAttribute('data-section')===id)e.classList.add('active')});
+  SECCION=id;if(window.innerWidth<768)document.getElementById('sidebar').classList.remove('open');
+  var t={resumen:['Resumen Ejecutivo','Google Sheets'],pendientes:['Pendientes','Items sin conciliar'],detalle:['Detalle','Cruce banco vs Calipso'],gastos:['Gastos','Gastos e impuestos'],graficos:['Graficos','Visualizacion']}[id]||[id,''];
+  document.getElementById('section-title').textContent=t[0];document.getElementById('section-desc').textContent=t[1];
+  var fn={resumen:rResumen,pendientes:rPendientes,detalle:rDetalle,gastos:rGastos,graficos:rGraficos}[id];if(fn)fn();
+}
+
+async function refreshAll(){
+  toast('Actualizando desde Google Sheets…','warning');
+  try{await loadAll();go(SECCION);toast('Datos actualizados','success')}catch(e){toast('Error: '+e.message,'error')}
+}
+
+/* ═══════════ INIT ═══════════ */
+document.addEventListener('DOMContentLoaded',async function(){
+  document.querySelectorAll('.nav-item').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();go(this.getAttribute('data-section'))})});
+  document.getElementById('hamburger-btn').addEventListener('click',function(){document.getElementById('sidebar').classList.toggle('open')});
+  document.addEventListener('click',function(e){var sb=document.getElementById('sidebar');if(window.innerWidth<768&&sb&&sb.classList.contains('open')&&!sb.contains(e.target)&&!document.getElementById('hamburger-btn').contains(e.target))sb.classList.remove('open')});
+
+  if(!API_KEY){
+    document.getElementById('resumen-body').innerHTML='<tr><td colspan="7"><div class="empty-state"><h3>⚠️ API Key no configurada</h3><p>Editá index.html y poné tu API Key de Google Cloud en <code>API_KEY</code> (línea 18).</p><p style="font-size:11px;color:var(--t-muted)">Google Cloud Console → APIs → Habilitar Sheets API → Crear API Key</p></div></td></tr>';
+    return;
   }
-}
+  try{document.getElementById('resumen-body').innerHTML='<tr><td colspan="7"><div class="empty-state"><h3>Cargando…</h3></div></td></tr>';await loadAll();go('resumen')}
+  catch(e){console.error(e);document.getElementById('resumen-body').innerHTML='<tr><td colspan="7"><div class="empty-state"><h3>'+e.message+'</h3><button class="btn-corona btn-corona-primary" onclick="refreshAll()">Reintentar</button></div></td></tr>'}
 
-/* ═══ PENDIENTES ═══ */
-
-async function cargarPendientes() {
-  try {
-    document.getElementById('pendientes-kpis').innerHTML = skeletonRows(1, 4)
-      .replace(/<tr>/g, '<div class="kpi-card">').replace(/<\/tr>/g, '</div>').replace(/<td>/g, '<div>').replace(/<\/td>/g, '</div>');
-    document.getElementById('pendientes-body').innerHTML = skeletonRows(8, 5);
-
-    var d = await fetchWithFallback(CONFIG.endpoints.pendientes);
-    STATE.pendientes = d;
-
-    document.getElementById('pendientes-kpis').innerHTML =
-      '<div class="kpi-card red"><div class="kpi-label">🔴 Críticas</div><div class="kpi-value">' + (d.criticas || 0) + '</div><div class="kpi-delta">> $10M o gastos sin registrar</div></div>' +
-      '<div class="kpi-card amber"><div class="kpi-label">🟠 Altas</div><div class="kpi-value">' + (d.altas || 0) + '</div><div class="kpi-delta">> $1M</div></div>' +
-      '<div class="kpi-card blue"><div class="kpi-label">🟡 Medias</div><div class="kpi-value">' + (d.medias || 0) + '</div><div class="kpi-delta">Resto de pendientes</div></div>' +
-      '<div class="kpi-card ' + (d.total > 0 ? 'red' : 'green') + '"><div class="kpi-label">Total Pendientes</div><div class="kpi-value">' + (d.total || 0) + '</div><div class="kpi-delta">' + (d.total === 0 ? '✅ Todo conciliado' : '⚠ Requieren acción') + '</div></div>';
-    renderPendientes();
-    updateBackendIndicator();
-  } catch (e) {
-    showError('pendientes', e);
-  }
-}
-
-function renderPendientes() {
-  var d = STATE.pendientes;
-  if (!d) return;
-  var filtro = document.getElementById('filter-pend-crit') ? document.getElementById('filter-pend-crit').value : '';
-  var data = filtro ? (d.data || []).filter(function(r) { return r.criticidad === filtro; }) : (d.data || []);
-
-  document.getElementById('pendientes-body').innerHTML = data.length
-    ? data.map(function(r) {
-        var rowClass = r.criticidad === 'CRITICA' ? 'pendiente-row-critica' : r.criticidad === 'ALTA' ? 'pendiente-row-alta' : '';
-        var badgeClass = r.criticidad === 'CRITICA' ? 'badge-crit' : r.criticidad === 'ALTA' ? 'badge-warn' : 'badge-ok';
-        return '<tr class="' + rowClass + '"><td><strong>' + r.banco + '</strong></td><td class="code">' + fmtFecha(r.fecha) + '</td>' +
-          '<td>' + r.descripcion + '</td><td>' + r.origen + '</td>' +
-          '<td class="num"><strong>' + fmt$(r.importe) + '</strong></td><td>' + r.tipo + '</td>' +
-          '<td><span class="' + badgeClass + '">' + r.criticidad + '</span></td><td style="font-size:11px;color:var(--t-secondary);">' + (r.observacion || '') + '</td></tr>';
-      }).join('')
-    : '<tr><td colspan="8"><div class="empty-state"><h3>Sin pendientes</h3><p>Todos los movimientos están conciliados ✅</p></div></td></tr>';
-}
-
-/* ═══ DETALLE ═══ */
-
-async function cargarDetalle() {
-  try {
-    document.getElementById('detalle-kpis').innerHTML = skeletonRows(1, 4)
-      .replace(/<tr>/g, '<div class="kpi-card">').replace(/<\/tr>/g, '</div>').replace(/<td>/g, '<div>').replace(/<\/td>/g, '</div>');
-    document.getElementById('detalle-body').innerHTML = skeletonRows(7, 3);
-
-    var d = await fetchWithFallback(CONFIG.endpoints.detalle);
-    STATE.detalle = d;
-
-    document.getElementById('detalle-kpis').innerHTML =
-      '<div class="kpi-card green"><div class="kpi-label">Conciliados</div><div class="kpi-value">' + (d.conciliados || 0) + '</div></div>' +
-      '<div class="kpi-card red"><div class="kpi-label">Solo Banco</div><div class="kpi-value">' + (d.soloBanco || 0) + '</div></div>' +
-      '<div class="kpi-card amber"><div class="kpi-label">Solo Calipso</div><div class="kpi-value">' + (d.soloCalipso || 0) + '</div></div>' +
-      '<div class="kpi-card blue"><div class="kpi-label">Timing</div><div class="kpi-value">' + (d.timing || 0) + '</div></div>';
-
-    var items = d.data || [];
-    document.getElementById('detalle-count').textContent = items.length + ' movimientos';
-    document.getElementById('detalle-body').innerHTML = items.slice(0, 500).map(function(r) {
-      return '<tr><td class="code">' + fmtFecha(r.fecha) + '</td><td>' + r.tipo + '</td><td>' + r.descripcion + '</td>' +
-        '<td class="num">' + (r.banco ? fmt$(r.banco) : '—') + '</td><td class="num">' + (r.calipso ? fmt$(r.calipso) : '—') + '</td>' +
-        '<td class="num"><strong style="color:' + (r.dif > 100 ? 'var(--c-red)' : 'var(--t-muted)') + '">' + fmt$(r.dif) + '</strong></td>' +
-        '<td><span class="badge-' + (r.estado === 'CONCILIADO' ? 'ok' : r.estado === 'TIMING' ? 'warn' : 'crit') + '">' + r.estado + '</span></td></tr>';
-    }).join('');
-    updateBackendIndicator();
-  } catch (e) {
-    showError('detalle', e);
-  }
-}
-
-/* ═══ GASTOS ═══ */
-
-async function cargarGastos() {
-  try {
-    document.getElementById('gastos-body').innerHTML = skeletonRows(5, 3);
-    var d = await fetchWithFallback(CONFIG.endpoints.detalle);
-    var gastos = (d.data || []).filter(function(r) {
-      var t = (r.tipo || '').toLowerCase();
-      var desc = (r.descripcion || '').toLowerCase();
-      return t.indexOf('gasto') >= 0 || t.indexOf('impuesto') >= 0 ||
-             desc.indexOf('iva') >= 0 || desc.indexOf('iibb') >= 0 || desc.indexOf('comision') >= 0;
-    });
-    document.getElementById('gastos-body').innerHTML = gastos.length
-      ? gastos.map(function(r) {
-          return '<tr><td class="code">' + fmtFecha(r.fecha) + '</td><td>' + r.descripcion + '</td><td>' + r.tipo + '</td>' +
-            '<td class="num"><strong>' + fmt$(Math.abs(r.banco || r.calipso || 0)) + '</strong></td>' +
-            '<td><span class="badge-' + (r.estado === 'CONCILIADO' ? 'ok' : 'crit') + '">' + r.estado + '</span></td></tr>';
-        }).join('')
-      : '<tr><td colspan="5"><div class="empty-state"><h3>Sin gastos detectados</h3><p>No se encontraron gastos bancarios en el período</p></div></td></tr>';
-    updateBackendIndicator();
-  } catch (e) {
-    showError('gastos', e);
-  }
-}
-
-/* ═══ GRÁFICOS ═══ */
-
-async function cargarGraficos() {
-  try {
-    if (!STATE.detalle) STATE.detalle = await fetchWithFallback(CONFIG.endpoints.detalle);
-    var d = STATE.detalle;
-    if (!d) return;
-
-    if (CHARTS.estados) CHARTS.estados.destroy();
-    CHARTS.estados = crearChartEstados('chartEstados', d);
-
-    if (!STATE.pendientes) STATE.pendientes = await fetchWithFallback(CONFIG.endpoints.pendientes);
-    if (CHARTS.criticidad) CHARTS.criticidad.destroy();
-    CHARTS.criticidad = crearChartCriticidad('chartCriticidad', STATE.pendientes);
-
-    // Chart de calidad — usa la data del detalle si tiene calNiveles
-    if (d.calNiveles) {
-      if (CHARTS.calidad) CHARTS.calidad.destroy();
-      CHARTS.calidad = crearChartCalidad('chartCalidad', d);
-    } else {
-      var calidadCanvas = document.getElementById('chartCalidad');
-      if (calidadCanvas) {
-        calidadCanvas.parentElement.innerHTML = '<div class="empty-state"><h3>Sin datos de calidad</h3><p>El endpoint no reporta niveles de matching</p></div>';
-      }
-    }
-
-    updateBackendIndicator();
-  } catch (e) {
-    console.error('[Conciliacion] Error en graficos:', e);
-    updateBackendIndicator();
-    showToast('Error al cargar gráficos: ' + e.message, 'error');
-  }
-}
-
-/* ═══ INIT ═══ */
-
-document.addEventListener('DOMContentLoaded', function() {
-  // Nav click handler
-  document.querySelectorAll('.nav-item').forEach(function(el) {
-    el.addEventListener('click', function(e) {
-      e.preventDefault();
-      var section = this.getAttribute('data-section');
-      if (section) showSection(section);
-    });
-  });
-
-  // Hamburger
-  document.getElementById('hamburger-btn').addEventListener('click', function() {
-    document.getElementById('sidebar').classList.toggle('open');
-  });
-
-  // Close sidebar on click outside
-  document.addEventListener('click', function(e) {
-    var sidebar = document.getElementById('sidebar');
-    if (window.innerWidth < 768 && sidebar && sidebar.classList.contains('open')) {
-      if (!sidebar.contains(e.target) && !document.getElementById('hamburger-btn').contains(e.target)) {
-        sidebar.classList.remove('open');
-      }
-    }
-  });
-
-  // Bootstrap tooltips
-  if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
-    var tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    [].slice.call(tooltips).map(function(el) { return new bootstrap.Tooltip(el); });
-  }
-
-  // Init resumen
-  showSection('resumen');
-
-  // Auto-refresh cada 120s
-  setInterval(function() {
-    if (STATE._current && STATE._current !== 'graficos') {
-      showSection(STATE._current);
-    }
-  }, 120000);
+  setInterval(function(){if(SECCION&&SECCION!=='graficos')go(SECCION)},120000);
 });
 </script>
 </body>
