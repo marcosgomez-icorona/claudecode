@@ -119,6 +119,49 @@ export async function getResumen(days = CONFIG.defaults.daysBack) {
 }
 
 /**
+ * Dispara sincronización a Google Sheets vía MySQL cache
+ * @param {number} days - Días hacia atrás para sincronizar
+ */
+export async function syncToSheets(days = CONFIG.defaults.daysBack) {
+  const path = CONFIG.endpoints.syncSheets;
+  const result = await apiFetch(path, {
+    method: 'POST',
+    body: JSON.stringify({ days })
+  });
+
+  if (result !== null) return result;
+
+  // Mock: simular sync exitoso
+  await new Promise(r => setTimeout(r, 800));
+  return {
+    success: true,
+    runUuid: 'MOCK-SYNC-' + Date.now().toString(36).toUpperCase(),
+    timestamp: new Date().toISOString(),
+    sheetsStatus: 'skipped',
+    cacheStatus: 'OK',
+    resumen: mock.resumen
+  };
+}
+
+/**
+ * Obtiene estado de la última sincronización a Google Sheets
+ */
+export async function getSyncStatus() {
+  const path = CONFIG.endpoints.sheetsStatus;
+  const result = await apiFetch(path);
+
+  if (result !== null) return result;
+
+  // Mock
+  await new Promise(r => setTimeout(r, 150));
+  return {
+    service: 'despachos-sheets-sync',
+    lastSync: null,
+    recentHistory: []
+  };
+}
+
+/**
  * Vincula un remito con una factura (operación restringida)
  * @param {string} remitoId - Número de remito
  * @param {string} factura - Número de factura

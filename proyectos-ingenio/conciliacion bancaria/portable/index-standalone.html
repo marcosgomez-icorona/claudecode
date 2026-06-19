@@ -15,10 +15,14 @@
   <!-- Config -->
   <script>
   const CONFIG = {
-    backends: [
-      { name: 'Cloud', url: 'http://ingcorona.ddns.net:4040', timeout: 5000 },
-      { name: 'LAN',   url: 'http://192.168.0.23:1880',       timeout: 5000 }
-    ]
+    API_PRIMARY:   'http://ingcorona.ddns.net:4040',
+    API_FALLBACK:  'http://192.168.0.23:1880',
+    API_TIMEOUT_MS: 45000,
+    endpoints: {
+      resumen:    '/api/conciliacion/resumen',
+      pendientes: '/api/conciliacion/pendientes',
+      detalle:    '/api/conciliacion/detalle',
+    }
   };
   </script>
 
@@ -1033,28 +1037,33 @@ function crearChartCalidad(canvasId, data) {
    APP — Lógica principal
    ══════════════════════════════════════════════════════════════ */
 
-var ACTIVE_BACKEND = null;
-var ACTIVE_BACKEND_LABEL = '';
+var API_SOURCE = '';
 var STATE = { resumen: null, pendientes: null, detalle: null, _current: 'resumen' };
 var CHARTS = {};
 
-/* ── API Fetch con failover ── */
+/* ── API Fetch con failover (patrón Sumas y Saldos) ── */
 
-async function apiFetch(endpoint) {
-  for (var bi = 0; bi < CONFIG.backends.length; bi++) {
-    var backend = CONFIG.backends[bi];
+async function fetchWithFallback(endpoint) {
+  var urls = [
+    { url: CONFIG.API_PRIMARY + endpoint, name: 'Cloud' },
+    { url: CONFIG.API_FALLBACK + endpoint, name: 'LAN' },
+  ];
+  for (var i = 0; i < urls.length; i++) {
+    var u = urls[i];
     try {
       var controller = new AbortController();
-      var id = setTimeout(function() { controller.abort(); }, backend.timeout);
-      var res = await fetch(backend.url + endpoint, { signal: controller.signal });
-      clearTimeout(id);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var timeout = setTimeout(function() { controller.abort(); }, CONFIG.API_TIMEOUT_MS);
+      var res = await fetch(u.url, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (!res.ok) {
+        var errBody = await res.json().catch(function() { return { error: res.statusText }; });
+        throw new Error(errBody.error || res.statusText);
+      }
       var data = await res.json();
-      ACTIVE_BACKEND = backend.url;
-      ACTIVE_BACKEND_LABEL = backend.name;
+      API_SOURCE = u.name;
       return data;
     } catch (e) {
-      console.warn('[Conciliacion] Backend ' + backend.name + ' no responde:', e.message);
+      console.warn('[Conciliacion] ' + u.name + ' falló:', e.message);
     }
   }
   throw new Error('Todos los backends fallaron');
@@ -1068,16 +1077,11 @@ function updateBackendIndicator() {
   var statusEl = document.getElementById('sidebar-sync-status');
   if (!el) return;
 
-  if (ACTIVE_BACKEND_LABEL === 'Cloud' || ACTIVE_BACKEND_LABEL === 'Node-RED') {
+  if (API_SOURCE === 'Cloud' || API_SOURCE === 'LAN') {
     el.className = 'backend-indicator online';
-    el.innerHTML = '🟢 ' + ACTIVE_BACKEND_LABEL;
+    el.innerHTML = '🟢 ' + API_SOURCE;
     if (dot) dot.className = 'sync-dot ok';
-    if (statusEl) statusEl.textContent = ACTIVE_BACKEND_LABEL + ' conectado';
-  } else if (ACTIVE_BACKEND_LABEL) {
-    el.className = 'backend-indicator warning';
-    el.innerHTML = '🟡 ' + ACTIVE_BACKEND_LABEL;
-    if (dot) dot.className = 'sync-dot ok';
-    if (statusEl) statusEl.textContent = ACTIVE_BACKEND_LABEL;
+    if (statusEl) statusEl.textContent = API_SOURCE + ' conectado';
   } else {
     el.className = 'backend-indicator offline';
     el.innerHTML = '🔴 Offline';
@@ -1155,8 +1159,7 @@ function showSection(id) {
 /* ── Refresh ── */
 
 async function refreshAll() {
-  ACTIVE_BACKEND = null;
-  ACTIVE_BACKEND_LABEL = '';
+  API_SOURCE = '';
   updateBackendIndicator();
   // Destroy charts
   Object.keys(CHARTS).forEach(function(k) { if (CHARTS[k]) { CHARTS[k].destroy(); delete CHARTS[k]; } });
@@ -1173,7 +1176,7 @@ async function cargarResumen() {
       .replace(/<tr>/g, '<div class="kpi-card">').replace(/<\/tr>/g, '</div>').replace(/<td>/g, '<div>').replace(/<\/td>/g, '</div>');
     document.getElementById('resumen-body').innerHTML = skeletonRows(7, 3);
 
-    var d = await apiFetch('/api/conciliacion/resumen');
+    var d = await fetchWithFallback(CONFIG.endpoints.resumen);
     STATE.resumen = d;
     var row = (d.data || [])[0] || {};
     var sema = semaforoStatus(row.diferencia);
@@ -1226,7 +1229,7 @@ async function cargarPendientes() {
       .replace(/<tr>/g, '<div class="kpi-card">').replace(/<\/tr>/g, '</div>').replace(/<td>/g, '<div>').replace(/<\/td>/g, '</div>');
     document.getElementById('pendientes-body').innerHTML = skeletonRows(8, 5);
 
-    var d = await apiFetch('/api/conciliacion/pendientes');
+    var d = await fetchWithFallback(CONFIG.endpoints.pendientes);
     STATE.pendientes = d;
 
     document.getElementById('pendientes-kpis').innerHTML =
@@ -1267,7 +1270,7 @@ async function cargarDetalle() {
       .replace(/<tr>/g, '<div class="kpi-card">').replace(/<\/tr>/g, '</div>').replace(/<td>/g, '<div>').replace(/<\/td>/g, '</div>');
     document.getElementById('detalle-body').innerHTML = skeletonRows(7, 3);
 
-    var d = await apiFetch('/api/conciliacion/detalle');
+    var d = await fetchWithFallback(CONFIG.endpoints.detalle);
     STATE.detalle = d;
 
     document.getElementById('detalle-kpis').innerHTML =
@@ -1295,7 +1298,7 @@ async function cargarDetalle() {
 async function cargarGastos() {
   try {
     document.getElementById('gastos-body').innerHTML = skeletonRows(5, 3);
-    var d = await apiFetch('/api/conciliacion/detalle');
+    var d = await fetchWithFallback(CONFIG.endpoints.detalle);
     var gastos = (d.data || []).filter(function(r) {
       var t = (r.tipo || '').toLowerCase();
       var desc = (r.descripcion || '').toLowerCase();
@@ -1319,14 +1322,14 @@ async function cargarGastos() {
 
 async function cargarGraficos() {
   try {
-    if (!STATE.detalle) STATE.detalle = await apiFetch('/api/conciliacion/detalle');
+    if (!STATE.detalle) STATE.detalle = await fetchWithFallback(CONFIG.endpoints.detalle);
     var d = STATE.detalle;
     if (!d) return;
 
     if (CHARTS.estados) CHARTS.estados.destroy();
     CHARTS.estados = crearChartEstados('chartEstados', d);
 
-    if (!STATE.pendientes) STATE.pendientes = await apiFetch('/api/conciliacion/pendientes');
+    if (!STATE.pendientes) STATE.pendientes = await fetchWithFallback(CONFIG.endpoints.pendientes);
     if (CHARTS.criticidad) CHARTS.criticidad.destroy();
     CHARTS.criticidad = crearChartCriticidad('chartCriticidad', STATE.pendientes);
 

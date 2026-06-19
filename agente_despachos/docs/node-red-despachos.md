@@ -105,10 +105,21 @@ Sirve el frontend HTML (requiere `httpStatic` configurado en `settings.js` para 
 
 ## Setup inicial (solo una vez)
 
+### SQL Server (ERP Calipso)
 Ejecutar en SSMS contra CORONA, en orden:
-1. `sql/01_crear_audit_factura.sql` — Crea tabla de auditoría
-2. `sql/02_crear_sp_vincular_factura.sql` — Crea SP de vinculación
+1. `sql/01_crear_audit_factura.sql` — ⚠ MOVED to MySQL
+2. `sql/02_crear_sp_vincular_factura.sql` — Crea SP middleware de vinculación
 3. `sql/03_test_sp.sql` — Prueba que el SP funciona
+
+### MySQL (servidor auxiliar)
+Ejecutar en MySQL db_corona (127.0.0.1:3306):
+1. `sql/mysql/01_crear_audit_factura.sql` — Tabla de auditoría
+2. `sql/mysql/02_crear_sync_sheets.sql` — Tablas para sync con Google Sheets
+
+### Node-RED
+1. Importar flow v1.2.0
+2. Configurar credenciales del nodo `MySQLdatabase` (db_corona en 127.0.0.1:3306)
+3. Deploy
 
 ## Seguridad
 

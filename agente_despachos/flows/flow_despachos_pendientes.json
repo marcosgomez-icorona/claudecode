@@ -4,7 +4,7 @@
     "type": "tab",
     "label": "Despachos Pendientes",
     "disabled": false,
-    "info": "=== DESPACHOS PENDIENTES DE FACTURACIÓN ===\n\nENDPOINTS:\n  GET  /api/despachos/health\n  GET  /api/despachos/pendientes?days=30\n  GET  /api/despachos/pendientes/:remito\n  POST /api/despachos/pendientes/:remito/facturar\n  GET  /api/despachos/resumen?days=30\n  GET  /despachos-pendientes\n\nFUENTES: CORONA.dbo.pr_ezi_remitos + pr_ezi_remitos_items\nPATRÓN: queries en msg.payload, throwErrors=1 + Catch node\nMySQL: despachos_audit_factura (auditoría complementaria)"
+    "info": "=== DESPACHOS PENDIENTES DE FACTURACIÓN ===\n\nENDPOINTS:\n  GET  /api/despachos/health\n  GET  /api/despachos/pendientes?days=30\n  GET  /api/despachos/pendientes/:remito\n  POST /api/despachos/pendientes/:remito/facturar\n  GET  /api/despachos/resumen?days=30\n  GET  /despachos-pendientes\n\nFUENTES: CORONA.dbo.pr_ezi_remitos + pr_ezi_remitos_items\nPATRÓN: queries en msg.payload, throwErrors=1 + Catch node\nMySQL: despachos_audit_factura (auditoría complementaria)\nSync: POST /sync-sheets (MSSQL→MySQL→Sheets) + GET /sheets-status"
   },
   {
     "id": "6814eb4bb7e82ddb",
@@ -91,7 +91,7 @@
     "type": "function",
     "z": "tab_despachos",
     "name": "2. Format health",
-    "func": "var sqlInfo = (msg.payload || [])[0] || {};\nmsg.payload = {\n  status: 'ok',\n  service: 'despachos-pendientes',\n  timestamp: new Date().toISOString(),\n  version: '1.2.0',\n  sql: {\n    server: sqlInfo.server_name || 'n/a',\n    database: sqlInfo.db_name || 'n/a',\n    user: sqlInfo.login_user || 'n/a',\n    serverTime: sqlInfo.server_time || 'n/a'\n  }\n};\nreturn msg;",
+    "func": "var sqlInfo = (msg.payload || [])[0] || {};\nmsg.payload = {\n  status: 'ok',\n  service: 'despachos-pendientes',\n  timestamp: new Date().toISOString(),\n  version: '1.3.0',\n  sql: {\n    server: sqlInfo.server_name || 'n/a',\n    database: sqlInfo.db_name || 'n/a',\n    user: sqlInfo.login_user || 'n/a',\n    serverTime: sqlInfo.server_time || 'n/a'\n  }\n};\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 740,
@@ -364,7 +364,7 @@
     "type": "function",
     "z": "tab_despachos",
     "name": "2. Resultado",
-    "func": "// 2. Procesar resultado del SP pr_ezi_vincular_factura + preparar auditoría MySQL\nvar row = (msg.payload || [])[0] || {};\n\nif (row.success === true || row.success === 1 || row.success === \"1\") {\n  node.warn('[Despachos] Vinculación exitosa — '\n    + 'remito ' + msg._trace.remito\n    + ' ← factura ' + msg._trace.factura\n    + ' [sp_audit_id=' + (row.audit_id || 0) + ']');\n\n  msg.payload = {\n    success: true,\n    remito: msg._trace.remito,\n    factura: msg._trace.factura,\n    auditId: row.audit_id || 0,\n    mensaje: row.mensaje || 'Vinculado correctamente'\n  };\n\n  // Preparar INSERT de auditoría en MySQL\n  var uuid = msg._trace.uuid || 'N/A';\n  var remitoSafe = msg._trace.remito.replace(/'/g, \"\\\\'\");\n  var facturaSafe = msg._trace.factura.replace(/'/g, \"\\\\'\");\n  msg.mysqlAudit = \"INSERT INTO despachos_audit_factura \"\n    + \"(run_uuid, remito, factura, usuario, aplicacion, accion, resultado, mensaje, sp_audit_id) \"\n    + \"VALUES ('\" + uuid + \"', '\" + remitoSafe + \"', '\" + facturaSafe + \"', \"\n    + \"'Node-RED', 'DespachosApp', 'VINCULAR', 1, \"\n    + \"'Vinculado correctamente', \" + (row.audit_id || 0) + \")\";\n  msg.topic = \"audit\";\n\n} else {\n  msg.statusCode = 409;\n  msg.payload = {\n    success: false,\n    remito: msg._trace.remito,\n    error: row.mensaje || 'No se pudo vincular la factura',\n    auditId: row.audit_id || 0\n  };\n\n  // Preparar INSERT de auditoría en MySQL (fallo)\n  var uuid = msg._trace.uuid || 'N/A';\n  var remitoSafe = msg._trace.remito.replace(/'/g, \"\\\\'\");\n  var facturaSafe = msg._trace.factura.replace(/'/g, \"\\\\'\");\n  var errorMsg = (row.mensaje || 'Error desconocido').replace(/'/g, \"\\\\'\").substring(0, 200);\n  msg.mysqlAudit = \"INSERT INTO despachos_audit_factura \"\n    + \"(run_uuid, remito, factura, usuario, aplicacion, accion, resultado, mensaje, sp_audit_id) \"\n    + \"VALUES ('\" + uuid + \"', '\" + remitoSafe + \"', '\" + facturaSafe + \"', \"\n    + \"'Node-RED', 'DespachosApp', 'VINCULAR', 0, \"\n    + \"'\" + errorMsg + \"', \" + (row.audit_id || 0) + \")\";\n  msg.topic = \"audit\";\n}\nreturn [msg, msg];",
+    "func": "// 2. Procesar resultado del SP pr_ezi_vincular_factura + preparar auditoría MySQL\nvar row = (msg.payload || [])[0] || {};\n\n// Construir consulta de auditoría MySQL (común a éxito y fallo)\nvar uuid = msg._trace.uuid || 'N/A';\nvar remitoSafe = (msg._trace.remito || '').replace(/'/g, \"\\\\'\");\nvar facturaSafe = (msg._trace.factura || '').replace(/'/g, \"\\\\'\");\n\nif (row.success === true || row.success === 1 || row.success === \"1\") {\n  node.warn('[Despachos] Vinculación exitosa — '\n    + 'remito ' + msg._trace.remito\n    + ' ← factura ' + msg._trace.factura\n    + ' [sp_audit_id=' + (row.audit_id || 0) + ']');\n\n  // msg1: HTTP response\n  var msg1 = { payload: { success: true, remito: msg._trace.remito,\n      factura: msg._trace.factura, auditId: row.audit_id || 0,\n      mensaje: row.mensaje || 'Vinculado correctamente' } };\n\n  // msg2: MySQL audit (fire-and-forget)\n  var msg2 = { topic: \"INSERT INTO despachos_audit_factura \"\n      + \"(run_uuid, remito, factura, usuario, aplicacion, accion, resultado, mensaje, sp_audit_id) \"\n      + \"VALUES ('\" + uuid + \"', '\" + remitoSafe + \"', '\" + facturaSafe + \"', \"\n      + \"'Node-RED', 'DespachosApp', 'VINCULAR', 1, \"\n      + \"'Vinculado correctamente', \" + (row.audit_id || 0) + \")\" };\n\n  return [msg1, msg2];\n}\n\n// Fallo validado por el SP\nmsg.statusCode = 409;\nvar errorMsg = (row.mensaje || 'No se pudo vincular').replace(/'/g, \"\\\\'\").substring(0, 200);\n\nvar msg1 = { statusCode: 409,\n  payload: { success: false, remito: msg._trace.remito,\n    error: row.mensaje || 'No se pudo vincular la factura',\n    auditId: row.audit_id || 0 } };\n\nvar msg2 = { topic: \"INSERT INTO despachos_audit_factura \"\n    + \"(run_uuid, remito, factura, usuario, aplicacion, accion, resultado, mensaje, sp_audit_id) \"\n    + \"VALUES ('\" + uuid + \"', '\" + remitoSafe + \"', '\" + facturaSafe + \"', \"\n    + \"'Node-RED', 'DespachosApp', 'VINCULAR', 0, \"\n    + \"'\" + errorMsg + \"', \" + (row.audit_id || 0) + \")\" };\n\nreturn [msg1, msg2];",
     "outputs": 2,
     "noerr": 0,
     "x": 790,
@@ -638,7 +638,8 @@
       [
         "fn_audit_done"
       ]
-    ]
+    ],
+    "query": "msg.topic"
   },
   {
     "id": "fn_audit_done",
@@ -650,6 +651,262 @@
     "noerr": 0,
     "x": 1050,
     "y": 480,
+    "wires": []
+  },
+  {
+    "id": "http_sync_sheets",
+    "type": "http in",
+    "z": "tab_despachos",
+    "name": "POST /api/despachos/sync-sheets",
+    "url": "/api/despachos/sync-sheets",
+    "method": "post",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 120,
+    "y": 820,
+    "wires": [
+      [
+        "fn_sync_start"
+      ]
+    ]
+  },
+  {
+    "id": "fn_sync_start",
+    "type": "function",
+    "z": "tab_despachos",
+    "name": "1. Iniciar sync",
+    "func": "// 1. Iniciar sync — generar UUID y preparar parámetros\nvar days = parseInt((msg.req.body || {}).days) || 30;\nif (days < 1) days = 1;\nif (days > 365) days = 365;\n\nvar uuid = Date.now().toString(36).toUpperCase().slice(-4) +\n  Math.random().toString(36).substring(2, 6).toUpperCase() +\n  Math.random().toString(36).substring(2, 6).toUpperCase();\n\nmsg._trace = { uuid: uuid, days: days, startedAt: new Date().toISOString() };\n\nnode.warn('[Despachos] Sync Sheets iniciado [' + uuid + '] days=' + days);\n\n// Query SQL Server — mismos datos que GET /pendientes\nmsg.payload = \"SELECT pr.remito, pr.fecha, pr.razonsocial AS cliente, pr.cuit, \"\n  + \"pr.domicilio, pr.localidad, pr.provincia, \"\n  + \"pr.transportista, pr.chofer, pr.patente, pr.chasis, \"\n  + \"pr.numero_pesada AS guia, pr.usuario, pr.creado, pr.observaciones, \"\n  + \"pr.destino, pi.descripcion AS producto, pi.cantidad, \"\n  + \"pi.unidamedida2 AS unidad, pi.cantidad2, pi.precio, pi.orden \"\n  + \"FROM pr_ezi_remitos pr \"\n  + \"INNER JOIN pr_ezi_remitos_items pi ON pr.remito = pi.Remito \"\n  + \"WHERE pr.factura IS NULL \"\n  + \"AND pr.fecha >= DATEADD(DAY, -\" + days + \", GETDATE()) \"\n  + \"ORDER BY pr.fecha DESC, pr.remito, pi.orden\";\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 330,
+    "y": 820,
+    "wires": [
+      [
+        "mssql_sync_data"
+      ]
+    ]
+  },
+  {
+    "id": "mssql_sync_data",
+    "type": "MSSQL",
+    "z": "tab_despachos",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "MSSQL Sync Data",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT 1 AS placeholder",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "msg",
+    "rows": "",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 540,
+    "y": 820,
+    "wires": [
+      [
+        "fn_sync_transform"
+      ]
+    ]
+  },
+  {
+    "id": "fn_sync_transform",
+    "type": "function",
+    "z": "tab_despachos",
+    "name": "2. Transformar + KPIs",
+    "func": "// 2. Transformar datos SQL Server → formato MySQL cache + Sheets\nvar rows = msg.payload || [];\nvar uuid = msg._trace.uuid;\nvar days = msg._trace.days;\n\n// Agrupar por remito (misma lógica que GET /pendientes)\nvar remitos = {};\nvar clientesSet = {};\n\nrows.forEach(function(row) {\n  var key = row.remito;\n  if (!remitos[key]) {\n    remitos[key] = {\n      remito: row.remito, fecha: row.fecha, cliente: row.cliente, cuit: row.cuit,\n      domicilio: row.domicilio, localidad: row.localidad, provincia: row.provincia,\n      transportista: row.transportista ? row.transportista.trim() : '',\n      chofer: row.chofer ? row.chofer.trim() : '',\n      patente: row.patente ? row.patente.trim() : '',\n      guia: row.guia, usuario: row.usuario, creado: row.creado,\n      observaciones: row.observaciones, destino: row.destino,\n      items: [], totalItems: 0, totalImporte: 0\n    };\n    clientesSet[row.cliente] = true;\n  }\n  remitos[key].items.push({\n    orden: row.orden, producto: row.producto, cantidad: row.cantidad,\n    unidad: row.unidad, cantidad2: row.cantidad2, precio: row.precio,\n    total: (row.cantidad || 0) * (row.precio || 0)\n  });\n  remitos[key].totalItems++;\n  remitos[key].totalImporte += (row.cantidad || 0) * (row.precio || 0);\n});\n\n// Preparar INSERTs para MySQL cache\nvar inserts = [];\nvar totalBolsas = 0, totalToneladas = 0, totalImporte = 0;\nvar prodCounts = {};\n\nObject.keys(remitos).forEach(function(key) {\n  var r = remitos[key];\n  var firstItem = r.items[0] || {};\n  var prod = firstItem.producto || '';\n  \n  // KPIs\n  totalImporte += r.totalImporte || 0;\n  if (firstItem.unidad === 'Bolsa' || firstItem.unidad === 'Bolsa(s)') totalBolsas += firstItem.cantidad || 0;\n  if (firstItem.unidad === 'Tonelada' || firstItem.unidad === 'TN') totalToneladas += firstItem.cantidad2 || 0;\n  prodCounts[prod] = (prodCounts[prod] || 0) + 1;\n\n  // Escapar strings para MySQL\n  var esc = function(s) {\n    if (!s) return 'NULL';\n    return \"'\" + String(s).replace(/\\\\/g, \"\\\\\\\\\").replace(/'/g, \"\\\\'\").substring(0, 200) + \"'\";\n  };\n\n  inserts.push(\n    \"INSERT INTO despachos_pendientes_cache \"\n    + \"(remito, fecha, cliente, cuit, producto, cantidad, unidad, precio, total, transportista, sync_run_uuid) \"\n    + \"VALUES (\"\n    + esc(r.remito) + \", \"\n    + (r.fecha ? \"'\" + r.fecha + \"'\" : 'NULL') + \", \"\n    + esc(r.cliente) + \", \"\n    + esc(r.cuit) + \", \"\n    + esc(prod) + \", \"\n    + (firstItem.cantidad || 0) + \", \"\n    + esc(firstItem.unidad) + \", \"\n    + (firstItem.precio || 0) + \", \"\n    + (firstItem.total || 0) + \", \"\n    + esc(r.transportista) + \", \"\n    + esc(uuid) + \")\"\n    + \" ON DUPLICATE KEY UPDATE \"\n    + \"fecha=VALUES(fecha), cliente=VALUES(cliente), cuit=VALUES(cuit), \"\n    + \"producto=VALUES(producto), cantidad=VALUES(cantidad), unidad=VALUES(unidad), \"\n    + \"precio=VALUES(precio), total=VALUES(total), transportista=VALUES(transportista), \"\n    + \"sync_run_uuid=VALUES(sync_run_uuid)\"\n  );\n});\n\n// Guardar metadata para el response y el sync_state\nmsg._kpi = {\n  totalRemitos: Object.keys(remitos).length,\n  totalClientes: Object.keys(clientesSet).length,\n  totalBolsas: totalBolsas,\n  totalToneladas: totalToneladas,\n  totalImporte: totalImporte,\n  productos: prodCounts\n};\n\n// Guardar los INSERTs para el paso MySQL (msg.mysqlPayload)\nmsg.mysqlPayload = inserts;\nmsg.payload = rows; // mantener rows originales por si se necesita\n\nnode.warn('[Despachos] Sync: ' + inserts.length + ' remitos para INSERT en MySQL cache');\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 750,
+    "y": 820,
+    "wires": [
+      [
+        "mysql_sync_cache"
+      ]
+    ]
+  },
+  {
+    "id": "mysql_sync_cache",
+    "type": "mysql",
+    "z": "tab_despachos",
+    "mydb": "mysql_corona_aux",
+    "name": "MySQL Cache INSERT",
+    "query": "msg.topic",
+    "x": 960,
+    "y": 820,
+    "wires": [
+      [
+        "fn_sync_push_sheets"
+      ]
+    ]
+  },
+  {
+    "id": "fn_sync_push_sheets",
+    "type": "function",
+    "z": "tab_despachos",
+    "name": "3. Push a Sheets",
+    "func": "// 3. Preparar push a Google Sheets (vía SheetDB o Google Apps Script webapp)\n//    Configurar GOOGLE_SHEETS_WEBHOOK en settings.js de Node-RED\nvar sheetsUrl = env.get(\"DESPACHOS_SHEETS_WEBHOOK\") || \"\";\n\nif (!sheetsUrl) {\n  // Sin webhook configurado — solo MySQL cache, reportar skip\n  node.warn('[Despachos] Sheets webhook no configurado (DESPACHOS_SHEETS_WEBHOOK). Solo MySQL cache.');\n  msg._sheetsStatus = \"skipped\";\n  msg._sheetsMessage = \"Webhook no configurado. Solo MySQL cache actualizado.\";\n  return msg;\n}\n\n// Preparar payload para Sheets\nvar kpi = msg._kpi || {};\nmsg.url = sheetsUrl;\nmsg.method = \"POST\";\nmsg.headers = { \"Content-Type\": \"application/json\" };\n\n// Formato: filas para SheetDB o Google Apps Script\nmsg.payload = {\n  action: \"sync_pendientes\",\n  metadata: {\n    runUuid: msg._trace.uuid,\n    timestamp: new Date().toISOString(),\n    source: \"CORONA.pr_ezi_remitos\",\n    filterDays: msg._trace.days\n  },\n  resumen: kpi,\n  data: [] // Se completa abajo\n};\n\n// Reconstruir data desde mysqlPayload (INSERTs ya ejecutados)\n// Usamos las filas originales para armar el payload de Sheets\n// (se hace en el siguiente nodo para no duplicar)\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1160,
+    "y": 820,
+    "wires": [
+      [
+        "http_sheets_post"
+      ]
+    ]
+  },
+  {
+    "id": "http_sheets_post",
+    "type": "http request",
+    "z": "tab_despachos",
+    "name": "POST Sheets API",
+    "method": "POST",
+    "ret": "obj",
+    "paytoqs": false,
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 1350,
+    "y": 820,
+    "wires": [
+      [
+        "fn_sync_done"
+      ]
+    ]
+  },
+  {
+    "id": "fn_sync_done",
+    "type": "function",
+    "z": "tab_despachos",
+    "name": "4. Registrar sync_state",
+    "func": "// 4. Registrar resultado del sync en MySQL + responder al cliente\nvar kpi = msg._kpi || {};\nvar uuid = msg._trace.uuid;\nvar startedAt = msg._trace.startedAt;\nvar completedAt = new Date().toISOString();\nvar rowsCount = kpi.totalRemitos || 0;\n\nvar sheetsStatus = msg._sheetsStatus || \"OK\";\nvar sheetsMsg = msg._sheetsMessage || \"\";\n\n// Determinar status basado en respuesta del HTTP request\nif (msg.payload && msg.payload.error) {\n  sheetsStatus = \"ERROR\";\n  sheetsMsg = msg.payload.error;\n}\n\n// Preparar INSERT en despachos_sync_state (fire-and-forget vía msg2)\nvar escMsg = sheetsMsg ? sheetsMsg.replace(/'/g, \"\\\\'\").substring(0, 500) : \"\";\nmsg.mysqlTopic = \"INSERT INTO despachos_sync_state \"\n  + \"(run_uuid, sheet_name, rows_synced, status, error_message, started_at, completed_at) \"\n  + \"VALUES ('\" + uuid + \"', 'Pendientes', \" + rowsCount + \", \"\n  + \"'\" + sheetsStatus + \"', \"\n  + (escMsg ? \"'\" + escMsg + \"'\" : \"NULL\") + \", \"\n  + \"'\" + startedAt + \"', '\" + completedAt + \"')\";\n\n// Responder al cliente con resumen\nvar responseMsg = {\n  payload: {\n    success: sheetsStatus === \"OK\" || sheetsStatus === \"skipped\",\n    runUuid: uuid,\n    timestamp: completedAt,\n    sheetsStatus: sheetsStatus,\n    sheetsMessage: sheetsMsg,\n    cacheStatus: \"OK\",\n    resumen: {\n      totalRemitos: rowsCount,\n      totalClientes: kpi.totalClientes || 0,\n      totalBolsas: kpi.totalBolsas || 0,\n      totalToneladas: kpi.totalToneladas || 0,\n      totalImporte: kpi.totalImporte || 0\n    }\n  }\n};\n\n// msg2: auditoría MySQL (fire-and-forget)\nvar auditMsg = { topic: msg.mysqlTopic };\n\nnode.warn('[Despachos] Sync completado [' + uuid + '] status=' + sheetsStatus + ' rows=' + rowsCount);\n\nreturn [responseMsg, auditMsg];",
+    "outputs": 2,
+    "noerr": 0,
+    "x": 1550,
+    "y": 820,
+    "wires": [
+      [
+        "http_resp_sync"
+      ],
+      [
+        "mysql_sync_state"
+      ]
+    ]
+  },
+  {
+    "id": "http_resp_sync",
+    "type": "http response",
+    "z": "tab_despachos",
+    "name": "Sync Response",
+    "statusCode": "",
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    },
+    "x": 1760,
+    "y": 820,
+    "wires": []
+  },
+  {
+    "id": "mysql_sync_state",
+    "type": "mysql",
+    "z": "tab_despachos",
+    "mydb": "mysql_corona_aux",
+    "name": "MySQL Sync State",
+    "query": "msg.topic",
+    "x": 1550,
+    "y": 900,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "http_sheets_status",
+    "type": "http in",
+    "z": "tab_despachos",
+    "name": "GET /api/despachos/sheets-status",
+    "url": "/api/despachos/sheets-status",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 120,
+    "y": 980,
+    "wires": [
+      [
+        "fn_sheets_status"
+      ]
+    ]
+  },
+  {
+    "id": "fn_sheets_status",
+    "type": "function",
+    "z": "tab_despachos",
+    "name": "1. Query status",
+    "func": "// Consultar último estado de sync desde MySQL\nmsg.topic = \"SELECT run_uuid, sheet_name, rows_synced, status, error_message, \"\n  + \"started_at, completed_at \"\n  + \"FROM despachos_sync_state \"\n  + \"ORDER BY started_at DESC LIMIT 5\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 330,
+    "y": 980,
+    "wires": [
+      [
+        "mysql_status_query"
+      ]
+    ]
+  },
+  {
+    "id": "mysql_status_query",
+    "type": "mysql",
+    "z": "tab_despachos",
+    "mydb": "mysql_corona_aux",
+    "name": "MySQL Status Query",
+    "query": "msg.topic",
+    "x": 540,
+    "y": 980,
+    "wires": [
+      [
+        "fn_status_format"
+      ]
+    ]
+  },
+  {
+    "id": "fn_status_format",
+    "type": "function",
+    "z": "tab_despachos",
+    "name": "2. Format status",
+    "func": "// Formatear respuesta de estado de sync\nvar rows = msg.payload || [];\n\nmsg.payload = {\n  service: \"despachos-sheets-sync\",\n  lastSync: rows.length > 0 ? {\n    runUuid: rows[0].run_uuid,\n    sheetName: rows[0].sheet_name,\n    rowsSynced: rows[0].rows_synced,\n    status: rows[0].status,\n    errorMessage: rows[0].error_message || null,\n    startedAt: rows[0].started_at,\n    completedAt: rows[0].completed_at\n  } : null,\n  recentHistory: rows.map(function(r) { return {\n    runUuid: r.run_uuid,\n    rowsSynced: r.rows_synced,\n    status: r.status,\n    completedAt: r.completed_at\n  }})\n};\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 750,
+    "y": 980,
+    "wires": [
+      [
+        "http_resp_status"
+      ]
+    ]
+  },
+  {
+    "id": "http_resp_status",
+    "type": "http response",
+    "z": "tab_despachos",
+    "name": "Status Response",
+    "statusCode": "",
+    "headers": {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    },
+    "x": 960,
+    "y": 980,
     "wires": []
   }
 ]

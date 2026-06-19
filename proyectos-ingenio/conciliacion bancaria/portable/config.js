@@ -1,15 +1,18 @@
 /**
  * Config.js — Backends Node-RED para Dashboard de Conciliación Bancaria
- * Patrón Dashboard Portable Corona (MODO A — Node-RED como servidor web)
+ * Patrón Sumas y Saldos (funcional en producción)
  *
- * MODO A: url vacía = mismo origen
- * Node-RED sirve el HTML y los endpoints desde el mismo proceso
- * NO requiere CORS porque es mismo origen
+ * API_PRIMARY intenta Cloud primero, API_FALLBACK cae a LAN local
+ * TIMEOUT 45s para consultas pesadas
  */
 
 const CONFIG = {
-  backends: [
-    { name: 'Cloud', url: 'http://ingcorona.ddns.net:4040', timeout: 5000 },
-    { name: 'LAN',   url: 'http://192.168.0.23:1880',       timeout: 5000 }
-  ]
+  API_PRIMARY:   'http://ingcorona.ddns.net:4040',
+  API_FALLBACK:  'http://192.168.0.23:1880',
+  API_TIMEOUT_MS: 45000,
+  endpoints: {
+    resumen:    '/api/conciliacion/resumen',
+    pendientes: '/api/conciliacion/pendientes',
+    detalle:    '/api/conciliacion/detalle',
+  }
 };

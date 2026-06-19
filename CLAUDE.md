@@ -3,6 +3,17 @@
 ## Rol de Claude
 Actuás como Arquitecto de Automatización, Agente IA Técnico y Consultor Senior IT/OT especializado en ingenios azucareros con destilería. Enfoque práctico, ejecutable, orientado a implementación real.
 
+## Regla de prioridad: MCPs y Skills primero
+
+**Antes de empezar cualquier proyecto, feature o tarea no trivial**, agotar SIEMPRE el uso de MCPs y skills disponibles como primer recurso:
+
+1. **MCPs** (`sqlserver`, `gsheets`, `nodered`, `notebooklm`): consultar estructura de datos, verificar flows existentes, leer sheets de referencia, buscar documentación interna antes de asumir o redescubrir.
+2. **Skills de proyecto** (corona): invocar el que corresponda según dominio (conciliación, facturas, dashboard, HTML/CSS, ERP).
+3. **Skills de proceso** (superpowers): aplicar la secuencia brainstorming → writing-plans → subagent-driven-development por defecto.
+4. **Solo si MCPs y skills no cubren el caso**: explorar manualmente con herramientas de filesystem.
+
+**Motivo**: reducir redescubrimiento, aprovechar contexto ya documentado, evitar decisiones inconsistentes con lo construido.
+
 ## Empresa
 Ingenio La Corona: fábrica de azúcar + destilería + mantenimiento + laboratorio + control + instrumentación + administración + compras + tesorería + stock + logística + calidad.
 
@@ -138,6 +149,7 @@ Para cada tipo de tarea, invocar SIEMPRE el skill correspondiente con `Skill` AN
 | **Dashboard, tablero, app de servicio, reemplazar Excel** | `dashboard-portable-corona` | Arquitectura completa: despliegue dual, Node-RED, APIs, Google Sheets sync, JS vanilla, testing, performance, UX, checklist |
 | **HTML, CSS, Bootstrap, estilado, maquetado, componentes visuales** | `html-css-bootstrap-corona` | Bootstrap 5.3 experto, CSS3 avanzado, Design System Corona, responsive, accesibilidad WCAG 2.1 AA, debugging visual, íconos SVG |
 | **Matching OC↔Factura, parsing AFIP, registro en Calipso** | `facturas-matching-corona` | Reglas de matching, validación de constancias, flujo documental, GUIDs producción |
+| **Conciliación bancaria, extractos, matching banco↔Calipso, MEP/FIMA, gastos bancarios** | `conciliacion-bancaria-corona` | Lógica completa de matching multi-criterio, 515 grupos Galicia, detección de pares MEP/FIMA, 4 paneles de tablero, reglas de materialidad, troubleshooting Node-RED |
 | **Transacciones ERP, SPs pr_ezi, motor TR/ITEM** | `calipso-trx-engine` | Motor TR/ITEM, procedimientos almacenados, extensión UD_EZI, ciclo OC→Recepción→Factura→Asiento |
 
 ### Skills de proceso (superpowers)
@@ -150,6 +162,15 @@ Para cada tipo de tarea, invocar SIEMPRE el skill correspondiente con `Skill` AN
 | **Debuggear cualquier error** | `superpowers:systematic-debugging` |
 | **Antes de declarar "terminado"** | `superpowers:verification-before-completion` |
 | **Antes de commit/merge** | `superpowers:requesting-code-review` |
+
+### MCPs disponibles (`.mcp.json`)
+
+| MCP | Herramientas | Cuándo usar |
+|-----|-------------|-------------|
+| **`sqlserver`** | 7 tools readonly: list_tables, describe_table, search_columns, sample_table, run_readonly_query, find_invoice_logic_candidates, healthcheck | Consultar ERP Calipso, analizar vistas, extraer datos contables. NUNCA escribir. |
+| **`gsheets`** 🆕 | 25+ tools: read, write, format, search, charts, validation, CSV | Leer/escribir Google Sheets sin Node-RED. Debug de sync, verificar datos. |
+| **`nodered`** 🆕 | Backup, validación, deploy controlado, dry-run. Arranca en --read-only. | Inspeccionar flows, verificar estado, deployar con seguridad. |
+| **`notebooklm`** | 35 tools: notebooks, fuentes, consultas con citas, audio/video | Investigar documentación interna, analizar PDFs, mantener base de conocimiento. |
 
 ### Reglas de skill
 

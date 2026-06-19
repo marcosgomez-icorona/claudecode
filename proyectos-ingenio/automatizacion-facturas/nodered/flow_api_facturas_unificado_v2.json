@@ -1,0 +1,1030 @@
+[
+  {
+    "id": "mysqle9c00ba9445",
+    "type": "MySQL-database",
+    "z": "facturas-unified-tab",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "db": "db_automatizaciones",
+    "name": "MySQL staging",
+    "x": 100,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "mssqld851a0cdc75",
+    "type": "MSSQL",
+    "z": "facturas-unified-tab",
+    "mssqlConfig": "mssql-corona-config",
+    "name": "SQL Server CORONA",
+    "x": 100,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "facturas-unified-tab",
+    "type": "tab",
+    "label": "Facturas API",
+    "disabled": false,
+    "info": "API unificada: MySQL staging + SQL Server OC/constancias"
+  },
+  {
+    "id": "http43f85cceadf",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "GET /api/facturas/pendientes",
+    "url": "/api/facturas/pendientes",
+    "method": "get",
+    "upload": false,
+    "x": 120,
+    "y": 200,
+    "wires": [
+      [
+        "fn40e3a385015"
+      ]
+    ]
+  },
+  {
+    "id": "fn40e3a385015",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MySQL pendientes",
+    "func": "// Consulta facturas pendientes desde MySQL staging\nmsg._req = msg.req;\nmsg._res = msg.res;\nmsg.topic = 'SELECT id, tipo_operacion, estado_proceso, fecha_carga, ' +\n    'numerodocumento, letra, fecha_emision, fecha_vencimiento, ' +\n    'proveedor_cuit, proveedor_nombre, proveedor_codigo, ' +\n    'neto, iva_21, iva_105, percepciones, otros_impuestos, total, ' +\n    'es_dolar, cotizacion, cotizacion_origen, cotizacion_aviso, ' +\n    'cae, referencia, nro_remito, pdf_filename, email_origen, ' +\n    'registrado_erp, requiere_constancia, constancia_nro ' +\n    'FROM staging_facturas WHERE estado_proceso = \\'PENDIENTE\\' ' +\n    'ORDER BY fecha_carga ASC';\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 200,
+    "wires": [
+      [
+        "sqlc3707fa26bb"
+      ]
+    ]
+  },
+  {
+    "id": "sqlc3707fa26bb",
+    "type": "mysql",
+    "z": "facturas-unified-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "MySQL pendientes",
+    "x": 520,
+    "y": 200,
+    "wires": [
+      [
+        "fnfaacda0dd0c"
+      ]
+    ]
+  },
+  {
+    "id": "fnfaacda0dd0c",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder pendientes JSON",
+    "func": "// Formatear respuesta de pendientes\nmsg._res = msg._res || msg.res;\nvar rows = msg.payload || [];\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\n// Formatear fechas de YYYY-MM-DD a YYYYMMDD para compatibilidad con frontend\nrows = rows.map(function(r) {\n    var fmt = function(d) {\n        if (!d) return null;\n        var s = String(d).replace(/[^0-9]/g, '');\n        return s.substring(0, 8);\n    };\n    return {\n        ID: r.id,\n        TIPO_OPERACION: r.tipo_operacion,\n        ESTADO_PROCESO: r.estado_proceso,\n        FECHA_CARGA: r.fecha_carga,\n        NUMERODOCUMENTO: r.numerodocumento,\n        LETRA: r.letra,\n        FECHA_EMISION: fmt(r.fecha_emision),\n        FECHA_VENCIMIENTO: fmt(r.fecha_vencimiento),\n        PROVEEDOR_CUIT: r.proveedor_cuit,\n        PROVEEDOR_NOMBRE: r.proveedor_nombre,\n        PROVEEDOR_CODIGO: r.proveedor_codigo,\n        NETO: Number(r.neto) || 0,\n        IVA_21: Number(r.iva_21) || 0,\n        IVA_105: Number(r.iva_105) || 0,\n        PERCEPCIONES: Number(r.percepciones) || 0,\n        OTROS_IMPUESTOS: Number(r.otros_impuestos) || 0,\n        TOTAL: Number(r.total) || 0,\n        ES_DOLAR: Number(r.es_dolar) || 0,\n        COTIZACION: Number(r.cotizacion) || 1,\n        COTIZACION_ORIGEN: r.cotizacion_origen,\n        COTIZACION_AVISO: r.cotizacion_aviso,\n        CAE: r.cae,\n        REFERENCIA: r.referencia,\n        NRO_REMITO: r.nro_remito,\n        PDF_FILENAME: r.pdf_filename,\n        EMAIL_ORIGEN: r.email_origen,\n        MONEDA: (Number(r.es_dolar) === 1) ? 'D\u00f3lares' : 'Pesos',\n        ESTADO_CAE: (!r.cae) ? 'SIN_CAE' : 'CAE_OK',\n        DIAS_EN_COLA: 0,\n        requiere_constancia: Number(r.requiere_constancia) || 0,\n        constancia_nro: r.constancia_nro\n    };\n});\nmsg.payload = rows;\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 200,
+    "wires": [
+      [
+        "respfaecc5def22"
+      ]
+    ]
+  },
+  {
+    "id": "respfaecc5def22",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "http1624e5f415d",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "GET /api/facturas/:id",
+    "url": "/api/facturas/:id",
+    "method": "get",
+    "upload": false,
+    "x": 120,
+    "y": 340,
+    "wires": [
+      [
+        "fn8dc2f75346b"
+      ]
+    ]
+  },
+  {
+    "id": "fn8dc2f75346b",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MySQL factura por ID",
+    "func": "// Obtener factura por ID desde MySQL\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar id = (msg.req.params && msg.req.params.id) || '';\n// Sanitizar: solo alfanumerico + guiones\nid = id.replace(/[^a-zA-Z0-9\\-]/g, '');\nmsg.topic = 'SELECT * FROM staging_facturas WHERE id = \\'' + id.replace(/'/g, \"\\'\\'\") + '\\'';\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 340,
+    "wires": [
+      [
+        "sql38aeb738504"
+      ]
+    ]
+  },
+  {
+    "id": "sql38aeb738504",
+    "type": "mysql",
+    "z": "facturas-unified-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "MySQL factura by ID",
+    "x": 520,
+    "y": 340,
+    "wires": [
+      [
+        "fn22f527225a2"
+      ]
+    ]
+  },
+  {
+    "id": "fn22f527225a2",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder factura JSON",
+    "func": "// Formatear respuesta de factura individual\nmsg._res = msg._res || msg.res;\nvar rows = msg.payload || [];\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nif (rows.length === 0) {\n    msg.statusCode = 404;\n    msg.payload = { error: 'Factura no encontrada' };\n    return msg;\n}\nvar r = rows[0];\n// Formatear para frontend\nvar fmt = function(d) {\n    if (!d) return null;\n    var s = String(d).replace(/[^0-9]/g, '');\n    return s.substring(0, 8);\n};\nmsg.payload = {\n    ID: r.id,\n    TIPO_OPERACION: r.tipo_operacion,\n    ESTADO_PROCESO: r.estado_proceso,\n    FECHA_CARGA: r.fecha_carga,\n    FECHA_APROBACION: r.fecha_aprobacion,\n    NUMERODOCUMENTO: r.numerodocumento,\n    LETRA: r.letra,\n    FECHA_EMISION: fmt(r.fecha_emision),\n    FECHA_VENCIMIENTO: fmt(r.fecha_vencimiento),\n    PROVEEDOR_CUIT: r.proveedor_cuit,\n    PROVEEDOR_NOMBRE: r.proveedor_nombre,\n    PROVEEDOR_CODIGO: r.proveedor_codigo,\n    NETO: Number(r.neto) || 0,\n    IVA_21: Number(r.iva_21) || 0,\n    IVA_105: Number(r.iva_105) || 0,\n    PERCEPCIONES: Number(r.percepciones) || 0,\n    OTROS_IMPUESTOS: Number(r.otros_impuestos) || 0,\n    TOTAL: Number(r.total) || 0,\n    ES_DOLAR: Number(r.es_dolar) || 0,\n    COTIZACION: Number(r.cotizacion) || 1,\n    COTIZACION_ORIGEN: r.cotizacion_origen,\n    COTIZACION_AVISO: r.cotizacion_aviso,\n    CAE: r.cae,\n    FECHA_VTO_CAE: fmt(r.fecha_vto_cae),\n    REFERENCIA: r.referencia,\n    NRO_REMITO: r.nro_remito,\n    PDF_FILENAME: r.pdf_filename,\n    PDF_HASH: r.pdf_hash,\n    EMAIL_ORIGEN: r.email_origen,\n    EMAIL_ASUNTO: r.email_asunto,\n    ITEMS_JSON: r.items_json,\n    items_count: r.items_count,\n    requiere_constancia: Number(r.requiere_constancia) || 0,\n    constancia_nro: r.constancia_nro,\n    constancia_id_calipso: r.constancia_id_calipso,\n    constancia_total: Number(r.constancia_total) || 0,\n    constancia_fecha: fmt(r.constancia_fecha),\n    constancia_detalle: r.constancia_detalle,\n    registrado_erp: Number(r.registrado_erp) || 0,\n    fecha_registro_erp: r.fecha_registro_erp\n};\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 340,
+    "wires": [
+      [
+        "resp81afeec4ce8"
+      ]
+    ]
+  },
+  {
+    "id": "resp81afeec4ce8",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 340,
+    "wires": []
+  },
+  {
+    "id": "httpadf2a2e6652",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "PUT /api/facturas/:id",
+    "url": "/api/facturas/:id",
+    "method": "put",
+    "upload": false,
+    "x": 120,
+    "y": 480,
+    "wires": [
+      [
+        "fn51e5659ed01"
+      ]
+    ]
+  },
+  {
+    "id": "fn51e5659ed01",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MySQL UPDATE factura",
+    "func": "// Actualizar campos editables de factura en MySQL\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar id = (msg.req.params && msg.req.params.id) || '';\nid = id.replace(/[^a-zA-Z0-9\\-]/g, '');\nvar b = msg.req.body || {};\n\n// Helper sanitize\nvar esc = function(v) {\n    if (v === null || v === undefined) return 'NULL';\n    return '\\'' + String(v).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") + '\\'';\n};\nvar num = function(v) {\n    if (v === null || v === undefined || v === '' || isNaN(Number(v))) return 'NULL';\n    return Number(v);\n};\n\nmsg.topic = 'UPDATE staging_facturas SET ' +\n    'proveedor_nombre = ' + esc(b.proveedor_nombre) + ', ' +\n    'proveedor_cuit = ' + esc(b.proveedor_cuit) + ', ' +\n    'letra = ' + esc(b.letra) + ', ' +\n    'numerodocumento = ' + esc(b.numerodocumento) + ', ' +\n    'fecha_emision = ' + esc(b.fecha_emision) + ', ' +\n    'fecha_vencimiento = ' + esc(b.fecha_vencimiento) + ', ' +\n    'neto = ' + num(b.neto) + ', ' +\n    'iva_21 = ' + num(b.iva_21) + ', ' +\n    'iva_105 = ' + num(b.iva_105) + ', ' +\n    'percepciones = ' + num(b.percepciones) + ', ' +\n    'otros_impuestos = ' + num(b.otros_impuestos) + ', ' +\n    'total = ' + num(b.total) + ', ' +\n    'referencia = ' + esc(b.referencia) + ', ' +\n    'cae = ' + esc(b.cae) + ', ' +\n    'es_dolar = ' + num(b.es_dolar) + ', ' +\n    'cotizacion = ' + num(b.cotizacion) + ' ' +\n    'WHERE id = \\'' + id.replace(/'/g, \"\\'\\'\") + '\\'' +\n    ' AND estado_proceso IN (\\'PENDIENTE\\',\\'EN_REVISION\\')';\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 480,
+    "wires": [
+      [
+        "sqla2a69f88b22"
+      ]
+    ]
+  },
+  {
+    "id": "sqla2a69f88b22",
+    "type": "mysql",
+    "z": "facturas-unified-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "MySQL UPDATE factura",
+    "x": 520,
+    "y": 480,
+    "wires": [
+      [
+        "fn183dee91c23"
+      ]
+    ]
+  },
+  {
+    "id": "fn183dee91c23",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder UPDATE OK",
+    "func": "// Respuesta de exito para actualizacion\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nmsg.payload = { ok: true, changed: (msg.payload && msg.payload.affectedRows) || 0 };\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 480,
+    "wires": [
+      [
+        "resp6999fb1b0bd"
+      ]
+    ]
+  },
+  {
+    "id": "resp6999fb1b0bd",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 480,
+    "wires": []
+  },
+  {
+    "id": "http96b7bd3b0f8",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "POST /api/facturas/:id/aprobar",
+    "url": "/api/facturas/:id/aprobar",
+    "method": "post",
+    "upload": false,
+    "x": 120,
+    "y": 480,
+    "wires": [
+      [
+        "fnef2314f4cc3"
+      ]
+    ]
+  },
+  {
+    "id": "fnef2314f4cc3",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Aprobar factura",
+    "func": "// Aprobar factura: actualiza MySQL + registra sync pendiente\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar id = (msg.req.params && msg.req.params.id) || '';\nid = id.replace(/[^a-zA-Z0-9\\-]/g, '');\nvar operador = (msg.req.body && msg.req.body.operador) || 'pdietrich';\n\n// Actualizar estado en MySQL\nmsg.topic = \"UPDATE staging_facturas SET \" +\n    \"estado_proceso = 'APROBADO', \" +\n    \"fecha_aprobacion = NOW(), \" +\n    \"aprobado_por = '\" + operador.replace(/'/g, \"\\\\'\") + \"' \" +\n    \"WHERE id = '\" + id.replace(/'/g, \"\\\\'\") + \"' \" +\n    \"AND estado_proceso IN ('PENDIENTE','EN_REVISION')\";\nmsg._facturaId = id;\nmsg._operador = operador;\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 480,
+    "wires": [
+      [
+        "sqla054c807038"
+      ]
+    ]
+  },
+  {
+    "id": "sqla054c807038",
+    "type": "mysql",
+    "z": "facturas-unified-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "MySQL UPDATE aprobar",
+    "x": 520,
+    "y": 480,
+    "wires": [
+      [
+        "fnd30704b6130"
+      ]
+    ]
+  },
+  {
+    "id": "fnd30704b6130",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Verificar + insertar log sync",
+    "func": "// Verificar que se actualizo y loguear sync pendiente\nvar affected = (msg.payload && msg.payload.affectedRows) || 0;\nif (affected === 0) {\n    msg._res = msg._res || msg.res;\n    msg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\n    msg.statusCode = 409;\n    msg.payload = { ok: false, error: 'Factura no encontrada o ya procesada' };\n    return msg;\n}\n\n// Insertar log de sync pendiente para SQL Server\nvar id = msg._facturaId;\nvar oper = msg._operador;\nmsg.topic = \"INSERT INTO log_sync_calipso (factura_id, tipo_operacion, estado) \" +\n    \"VALUES ('\" + id.replace(/'/g, \"\\\\'\") + \"', 'INSERT', 'PENDIENTE')\";\nmsg._syncLogged = true;\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 480,
+    "wires": [
+      [
+        "sqlcb0740f0cf2"
+      ]
+    ]
+  },
+  {
+    "id": "sqlcb0740f0cf2",
+    "type": "mysql",
+    "z": "facturas-unified-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "MySQL log sync",
+    "x": 920,
+    "y": 480,
+    "wires": [
+      [
+        "fn3bc82e1dfde"
+      ]
+    ]
+  },
+  {
+    "id": "fn3bc82e1dfde",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder OK aprobar",
+    "func": "// Respuesta exitosa de aprobacion\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nmsg.payload = { ok: true, affected: 1, sync_pendiente: true };\nreturn msg;",
+    "outputs": 1,
+    "x": 1120,
+    "y": 480,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "resp16506ad4062",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 1320,
+    "y": 480,
+    "wires": []
+  },
+  {
+    "id": "http1a81c7b05e6",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "POST /api/facturas/:id/rechazar",
+    "url": "/api/facturas/:id/rechazar",
+    "method": "post",
+    "upload": false,
+    "x": 120,
+    "y": 620,
+    "wires": [
+      [
+        "fn90f418dcdf2"
+      ]
+    ]
+  },
+  {
+    "id": "fn90f418dcdf2",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Rechazar factura",
+    "func": "// Rechazar factura\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar id = (msg.req.params && msg.req.params.id) || '';\nid = id.replace(/[^a-zA-Z0-9\\-]/g, '');\nvar b = msg.req.body || {};\nvar operador = b.operador || 'pdietrich';\nvar motivo = (b.motivo || 'Rechazado por operador').replace(/'/g, \"\\\\'\");\n\nmsg.topic = \"UPDATE staging_facturas SET \" +\n    \"estado_proceso = 'RECHAZADO', \" +\n    \"fecha_aprobacion = NOW(), \" +\n    \"aprobado_por = '\" + operador.replace(/'/g, \"\\\\'\") + \"', \" +\n    \"error_detalle = '\" + motivo.replace(/'/g, \"\\\\'\") + \"' \" +\n    \"WHERE id = '\" + id.replace(/'/g, \"\\\\'\") + \"' \" +\n    \"AND estado_proceso IN ('PENDIENTE','EN_REVISION')\";\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 620,
+    "wires": [
+      [
+        "sqle8c2cc9894d"
+      ]
+    ]
+  },
+  {
+    "id": "sqle8c2cc9894d",
+    "type": "mysql",
+    "z": "facturas-unified-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "MySQL UPDATE rechazar",
+    "x": 520,
+    "y": 620,
+    "wires": [
+      [
+        "fnbd011d5bf80"
+      ]
+    ]
+  },
+  {
+    "id": "fnbd011d5bf80",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder OK rechazar",
+    "func": "// Verificar y responder\nvar affected = (msg.payload && msg.payload.affectedRows) || 0;\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nif (affected === 0) {\n    msg.statusCode = 409;\n    msg.payload = { ok: false, error: 'Factura no encontrada o ya procesada' };\n} else {\n    msg.payload = { ok: true, affected: 1 };\n}\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 620,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "respc48fe54a767",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 620,
+    "wires": []
+  },
+  {
+    "id": "http61ecb0ee191",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "GET /api/facturas/:id/items",
+    "url": "/api/facturas/:id/items",
+    "method": "get",
+    "upload": false,
+    "x": 120,
+    "y": 760,
+    "wires": [
+      [
+        "fnd483e727273"
+      ]
+    ]
+  },
+  {
+    "id": "fnd483e727273",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MySQL items",
+    "func": "// Obtener items de factura desde MySQL\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar id = (msg.req.params && msg.req.params.id) || '';\nid = id.replace(/[^a-zA-Z0-9\\-]/g, '');\nmsg.topic = 'SELECT id, linea, descripcion, cantidad, unidad, precio_unitario, ' +\n    'alicuota_iva, subtotal, moneda ' +\n    'FROM staging_facturas_items WHERE factura_id = \\'' + id.replace(/'/g, \"\\'\\'\") + '\\' ' +\n    'ORDER BY linea ASC';\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 760,
+    "wires": [
+      [
+        "sql0f0fcac2c17"
+      ]
+    ]
+  },
+  {
+    "id": "sql0f0fcac2c17",
+    "type": "mysql",
+    "z": "facturas-unified-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "MySQL items",
+    "x": 520,
+    "y": 760,
+    "wires": [
+      [
+        "fn1d106cc1e0e"
+      ]
+    ]
+  },
+  {
+    "id": "fn1d106cc1e0e",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder items",
+    "func": "// Formatear respuesta de items\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nvar rows = msg.payload || [];\nmsg.payload = rows.map(function(r) {\n    return {\n        LINEA: Number(r.linea) || 0,\n        DESCRIPCION: r.descripcion || '',\n        CANTIDAD: Number(r.cantidad) || 0,\n        UNIDAD: r.unidad || 'u',\n        PRECIO_UNITARIO: Number(r.precio_unitario) || 0,\n        ALICUOTA_IVA: Number(r.alicuota_iva) || 0,\n        SUBTOTAL: Number(r.subtotal) || 0,\n        MONEDA: r.moneda || 'ARS'\n    };\n});\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 760,
+    "wires": [
+      [
+        "resp9faf33a9359"
+      ]
+    ]
+  },
+  {
+    "id": "resp9faf33a9359",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 760,
+    "wires": []
+  },
+  {
+    "id": "http4d25e372692",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "GET /api/oc",
+    "url": "/api/oc",
+    "method": "get",
+    "upload": false,
+    "x": 120,
+    "y": 900,
+    "wires": [
+      [
+        "fndc9ec11b1ee"
+      ]
+    ]
+  },
+  {
+    "id": "fndc9ec11b1ee",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MSSQL OC",
+    "func": "// Buscar OCs en SQL Server por CUIT\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar cuit = (msg.req.query && msg.req.query.cuit) || '';\n// Sanitizar: solo numeros\ncuit = cuit.replace(/[^0-9]/g, '');\nif (!cuit) {\n    msg.payload = [];\n    msg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\n    return msg;\n}\nmsg.payload = \"SELECT TOP 20 OC, FECHAACTUAL, nom_PROVEEDOR, CUIT, ESTADO, \" +\n    \"DESCRIPCION, btotal_doc, bneto, NOMBREMONEDA \" +\n    \"FROM V_EZI_PROV_ORDENCOMPRA_ENC \" +\n    \"WHERE CUIT = '\" + cuit + \"' AND ESTADO != 'ANULADO' \" +\n    \"ORDER BY FECHAACTUAL DESC\";\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 900,
+    "wires": [
+      [
+        "mssqlad84e4f58bc"
+      ]
+    ]
+  },
+  {
+    "id": "mssqlad84e4f58bc",
+    "type": "MSSQL",
+    "z": "facturas-unified-tab",
+    "mssql": "mssql-corona-config",
+    "name": "MSSQL OC por CUIT",
+    "query": "",
+    "out": "msg",
+    "x": 520,
+    "y": 900,
+    "wires": [
+      [
+        "fn86bb9690bf7"
+      ]
+    ]
+  },
+  {
+    "id": "fn86bb9690bf7",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder OC list",
+    "func": "// Formatear respuesta de OCs\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nvar rows = msg.payload || [];\nmsg.payload = rows.map(function(r) {\n    return {\n        OC: r.OC,\n        FECHAACTUAL: r.FECHAACTUAL,\n        nom_PROVEEDOR: r.nom_PROVEEDOR,\n        CUIT: r.CUIT,\n        ESTADO: r.ESTADO,\n        DESCRIPCION: r.DESCRIPCION,\n        btotal_doc: Number(r.btotal_doc) || 0,\n        bneto: Number(r.bneto) || 0,\n        NOMBREMONEDA: r.NOMBREMONEDA || 'Pesos'\n    };\n});\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 900,
+    "wires": [
+      [
+        "resp3e91c228cf1"
+      ]
+    ]
+  },
+  {
+    "id": "resp3e91c228cf1",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 900,
+    "wires": []
+  },
+  {
+    "id": "http5fc0d4576c7",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "GET /api/oc/:oc/items",
+    "url": "/api/oc/:oc/items",
+    "method": "get",
+    "upload": false,
+    "x": 120,
+    "y": 1040,
+    "wires": [
+      [
+        "fn30bfbe7b11e"
+      ]
+    ]
+  },
+  {
+    "id": "fn30bfbe7b11e",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MSSQL items OC",
+    "func": "// Obtener items de una OC desde SQL Server\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar oc = (msg.req.params && msg.req.params.oc) || '';\n// Sanitizar: solo alfanumerico + guiones\noc = oc.replace(/[^a-zA-Z0-9\\-]/g, '');\n\nmsg.payload = \"SELECT OC, ITEM, NOM_PRODUCTO, CANTIDAD, PU, TOTAL_ITEM, IVATASA \" +\n    \"FROM V_EZI_ORDENDECOMPRA0 \" +\n    \"WHERE OC = '\" + oc.replace(/'/g, \"''\") + \"' \" +\n    \"ORDER BY NRO_ITEM ASC\";\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 1040,
+    "wires": [
+      [
+        "mssql31d98326381"
+      ]
+    ]
+  },
+  {
+    "id": "mssql31d98326381",
+    "type": "MSSQL",
+    "z": "facturas-unified-tab",
+    "mssql": "mssql-corona-config",
+    "name": "MSSQL items OC",
+    "query": "",
+    "out": "msg",
+    "x": 520,
+    "y": 1040,
+    "wires": [
+      [
+        "fn5be5ef94df5"
+      ]
+    ]
+  },
+  {
+    "id": "fn5be5ef94df5",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder items OC",
+    "func": "// Formatear items de OC\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nvar rows = msg.payload || [];\nmsg.payload = rows.map(function(r) {\n    return {\n        OC: r.OC,\n        ITEM: Number(r.ITEM) || 0,\n        NOM_PRODUCTO: r.NOM_PRODUCTO || '',\n        CANTIDAD: Number(r.CANTIDAD) || 0,\n        PU: Number(r.PU) || 0,\n        TOTAL_ITEM: Number(r.TOTAL_ITEM) || 0,\n        IVATASA: Number(r.IVATASA) || 0\n    };\n});\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 1040,
+    "wires": [
+      [
+        "resp474d46a1d64"
+      ]
+    ]
+  },
+  {
+    "id": "resp474d46a1d64",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 1040,
+    "wires": []
+  },
+  {
+    "id": "httpc3a765a8d28",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "GET /api/constancias",
+    "url": "/api/constancias",
+    "method": "get",
+    "upload": false,
+    "x": 120,
+    "y": 1180,
+    "wires": [
+      [
+        "fn1b1437a5d8e"
+      ]
+    ]
+  },
+  {
+    "id": "fn1b1437a5d8e",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MSSQL constancias por OC",
+    "func": "// Buscar constancias de servicio en SQL Server por OC\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar oc = (msg.req.query && msg.req.query.oc) || '';\nif (!oc) {\n    msg.payload = [];\n    msg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\n    return msg;\n}\noc = oc.replace(/[^a-zA-Z0-9\\-]/g, '');\n\nmsg.payload = \"SELECT \" +\n    \"enc.ID AS CONSTANCIA_ID, enc.CONSTANCIA, enc.CODIGOPROVEEDOR, \" +\n    \"enc.FECHAACTUAL, enc.NETO, \" +\n    \"(SELECT TOP 1 DETALLE FROM V_EZI_PROV_CONST_SC_DET det \" +\n    \" WHERE det.ID_CABECERA = enc.ID) AS DETALLE, \" +\n    \"ISNULL((SELECT TOP 1 'EXISTE' FROM V_EZI_CONSTANCIA_FACTURA cf \" +\n    \" WHERE cf.ID_CABECERA = enc.ID), '') AS FACTURA_EXISTENTE \" +\n    \"FROM V_EZI_PROV_CONST_SC_ENC enc \" +\n    \"WHERE enc.numeroOC = '\" + oc.replace(/'/g, \"''\") + \"' \" +\n    \"ORDER BY enc.FECHAACTUAL DESC\";\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 1180,
+    "wires": [
+      [
+        "mssql7ad29646d67"
+      ]
+    ]
+  },
+  {
+    "id": "mssql7ad29646d67",
+    "type": "MSSQL",
+    "z": "facturas-unified-tab",
+    "mssql": "mssql-corona-config",
+    "name": "MSSQL constancias",
+    "query": "",
+    "out": "msg",
+    "x": 520,
+    "y": 1180,
+    "wires": [
+      [
+        "fnc944b1b58cb"
+      ]
+    ]
+  },
+  {
+    "id": "fnc944b1b58cb",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder constancias",
+    "func": "// Formatear constancias\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nvar rows = msg.payload || [];\nmsg.payload = rows.map(function(r) {\n    return {\n        CONSTANCIA_ID: r.CONSTANCIA_ID || '',\n        CONSTANCIA: r.CONSTANCIA || '',\n        CODIGOPROVEEDOR: r.CODIGOPROVEEDOR || '',\n        FECHAACTUAL: r.FECHAACTUAL || '',\n        NETO: Number(r.NETO) || 0,\n        DETALLE: r.DETALLE || '',\n        FACTURA_EXISTENTE: r.FACTURA_EXISTENTE || ''\n    };\n});\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 1180,
+    "wires": [
+      [
+        "respb703e3e4663"
+      ]
+    ]
+  },
+  {
+    "id": "respb703e3e4663",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 1180,
+    "wires": []
+  },
+  {
+    "id": "httpd2265518d17",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "GET /api/proveedores",
+    "url": "/api/proveedores",
+    "method": "get",
+    "upload": false,
+    "x": 120,
+    "y": 1320,
+    "wires": [
+      [
+        "fn3a8bfb33320"
+      ]
+    ]
+  },
+  {
+    "id": "fn3a8bfb33320",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MSSQL proveedores",
+    "func": "// Buscar proveedores en SQL Server\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar q = (msg.req.query && msg.req.query.q) || '';\n// Sanitizar: solo letras, numeros y espacios\nq = q.replace(/[^a-zA-Z0-9\\s\\-\\u00C0-\\u024F]/g, '');\n\nvar where = \"ACTIVESTATUS = 0\";\nif (q.length > 0) {\n    where += \" AND (DENOMINACION LIKE '%\" + q.replace(/'/g, \"''\") + \"%'\" +\n             \" OR CUIT LIKE '%\" + q.replace(/'/g, \"''\") + \"%' \" +\n             \" OR CODIGO LIKE '%\" + q.replace(/'/g, \"''\") + \"%')\";\n}\n\nmsg.payload = \"SELECT TOP 20 ID, CODIGO, DENOMINACION AS nombre, CUIT AS cuit \" +\n    \"FROM PROVEEDOR WHERE \" + where + \" ORDER BY DENOMINACION\";\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 1320,
+    "wires": [
+      [
+        "mssql5bf3e01c32f"
+      ]
+    ]
+  },
+  {
+    "id": "mssql5bf3e01c32f",
+    "type": "MSSQL",
+    "z": "facturas-unified-tab",
+    "mssql": "mssql-corona-config",
+    "name": "MSSQL proveedores",
+    "query": "",
+    "out": "msg",
+    "x": 520,
+    "y": 1320,
+    "wires": [
+      [
+        "fn8cc9aedeb30"
+      ]
+    ]
+  },
+  {
+    "id": "fn8cc9aedeb30",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder proveedores",
+    "func": "// Formatear proveedores\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nvar rows = msg.payload || [];\nmsg.payload = rows.map(function(r) {\n    return {\n        ID: r.ID || '',\n        CODIGO: r.CODIGO || '',\n        nombre: r.nombre || '',\n        cuit: r.cuit || ''\n    };\n});\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 1320,
+    "wires": [
+      [
+        "resp50bac79bbbf"
+      ]
+    ]
+  },
+  {
+    "id": "resp50bac79bbbf",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 1320,
+    "wires": []
+  },
+  {
+    "id": "http3beda9b094b",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "GET /api/facturas/resumen",
+    "url": "/api/facturas/resumen",
+    "method": "get",
+    "upload": false,
+    "x": 120,
+    "y": 1460,
+    "wires": [
+      [
+        "fn27eb79e97e4"
+      ]
+    ]
+  },
+  {
+    "id": "fn27eb79e97e4",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MySQL resumen",
+    "func": "// Obtener resumen de facturas en staging\nmsg._req = msg.req;\nmsg._res = msg.res;\nmsg.topic = \"SELECT \" +\n    \"estado_proceso AS estado, \" +\n    \"COUNT(*) AS cantidad, \" +\n    \"COALESCE(SUM(total), 0) AS total_acumulado \" +\n    \"FROM staging_facturas \" +\n    \"GROUP BY estado_proceso \" +\n    \"ORDER BY CASE estado_proceso \" +\n    \"  WHEN 'PENDIENTE' THEN 1 \" +\n    \"  WHEN 'EN_REVISION' THEN 2 \" +\n    \"  WHEN 'APROBADO' THEN 3 \" +\n    \"  WHEN 'RECHAZADO' THEN 4 \" +\n    \"  ELSE 5 END ASC\";\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 1460,
+    "wires": [
+      [
+        "sql138e91aabf0"
+      ]
+    ]
+  },
+  {
+    "id": "sql138e91aabf0",
+    "type": "mysql",
+    "z": "facturas-unified-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "MySQL resumen",
+    "x": 520,
+    "y": 1460,
+    "wires": [
+      [
+        "fn582031a89ca"
+      ]
+    ]
+  },
+  {
+    "id": "fn582031a89ca",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder resumen",
+    "func": "// Formatear resumen\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nmsg.payload = msg.payload || [];\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 1460,
+    "wires": [
+      [
+        "respf8512eec979"
+      ]
+    ]
+  },
+  {
+    "id": "respf8512eec979",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 1460,
+    "wires": []
+  },
+  {
+    "id": "httpe3a01d4369e",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "GET /api/facturas/check",
+    "url": "/api/facturas/check",
+    "method": "get",
+    "upload": false,
+    "x": 120,
+    "y": 1600,
+    "wires": [
+      [
+        "fn02194e52b38"
+      ]
+    ]
+  },
+  {
+    "id": "fn02194e52b38",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MySQL check duplicado",
+    "func": "// Verificar si una factura ya existe en staging\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar q = msg.req.query || {};\nvar hash = (q.hash || '').replace(/[^a-fA-F0-9]/g, '');\nvar doc = (q.numerodocumento || '').replace(/[^a-zA-Z0-9\\-]/g, '');\nvar cuit = (q.cuit || '').replace(/[^0-9]/g, '');\n\nvar conditions = [];\nif (hash.length > 0) {\n    conditions.push(\"pdf_hash = '\" + hash + \"'\");\n}\nif (doc.length > 0 && cuit.length > 0) {\n    conditions.push(\"(numerodocumento = '\" + doc + \"' AND proveedor_cuit = '\" + cuit + \"')\");\n}\nif (conditions.length === 0) {\n    msg.statusCode = 400;\n    msg.payload = { ok: false, error: 'Se requiere hash o numerodocumento+cuit' };\n    return msg;\n}\n\nmsg.topic = \"SELECT id FROM staging_facturas WHERE \" + conditions.join(\" OR \") + \" LIMIT 1\";\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 1600,
+    "wires": [
+      [
+        "sqlfc1a14c59dd"
+      ]
+    ]
+  },
+  {
+    "id": "sqlfc1a14c59dd",
+    "type": "mysql",
+    "z": "facturas-unified-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "MySQL check duplicado",
+    "x": 520,
+    "y": 1600,
+    "wires": [
+      [
+        "fn73529b6d3f6"
+      ]
+    ]
+  },
+  {
+    "id": "fn73529b6d3f6",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder check",
+    "func": "// Formatear respuesta de check\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nvar rows = msg.payload || [];\nmsg.payload = { existe: rows.length > 0, id: rows.length > 0 ? rows[0].id : null };\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 1600,
+    "wires": [
+      [
+        "resp7d98cf1efd3"
+      ]
+    ]
+  },
+  {
+    "id": "resp7d98cf1efd3",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 1600,
+    "wires": []
+  },
+  {
+    "id": "http3ca87fd6c24",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "GET /api/oc/proveedor/:cuit",
+    "url": "/api/oc/proveedor/:cuit",
+    "method": "get",
+    "upload": false,
+    "x": 120,
+    "y": 1740,
+    "wires": [
+      [
+        "fn7f856f31b39"
+      ]
+    ]
+  },
+  {
+    "id": "fn7f856f31b39",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Query MSSQL OC por proveedor",
+    "func": "// Obtener OCs por CUIT de proveedor desde SQL Server\nmsg._req = msg.req;\nmsg._res = msg.res;\nvar cuit = (msg.req.params && msg.req.params.cuit) || '';\ncuit = cuit.replace(/[^0-9]/g, '');\nif (!cuit) {\n    msg.payload = [];\n    msg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\n    return msg;\n}\n\nmsg.payload = \"SELECT oc.OC, oc.FECHAINGRESO, oc.FECHAACTUAL, \" +\n    \"oc.ESTADO, oc.DESCRIPCION, oc.btotal_doc, oc.NOMBREMONEDA, \" +\n    \"p.CODIGO, p.DENOMINACION, p.CUIT \" +\n    \"FROM TRORDENCOMPRA oc \" +\n    \"JOIN PROVEEDOR p ON p.CODIGO = oc.CODIGODESTINATARIO \" +\n    \"WHERE p.CUIT = '\" + cuit.replace(/'/g, \"''\") + \"' \" +\n    \"AND oc.ESTADO IN ('A','P','C') \" +\n    \"ORDER BY oc.FECHAINGRESO DESC\";\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 1740,
+    "wires": [
+      [
+        "mssql715f35a4c95"
+      ]
+    ]
+  },
+  {
+    "id": "mssql715f35a4c95",
+    "type": "MSSQL",
+    "z": "facturas-unified-tab",
+    "mssql": "mssql-corona-config",
+    "name": "MSSQL OC por proveedor",
+    "query": "",
+    "out": "msg",
+    "x": 520,
+    "y": 1740,
+    "wires": [
+      [
+        "fn001c1420821"
+      ]
+    ]
+  },
+  {
+    "id": "fn001c1420821",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder OCs proveedor",
+    "func": "// Formatear OCs de proveedor\nmsg._res = msg._res || msg.res;\nmsg.headers = {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'};\nvar rows = msg.payload || [];\nmsg.payload = rows.map(function(r) {\n    return {\n        OC: r.OC || '',\n        FECHAINGRESO: r.FECHAINGRESO || '',\n        FECHAACTUAL: r.FECHAACTUAL || '',\n        ESTADO: r.ESTADO || '',\n        DESCRIPCION: r.DESCRIPCION || '',\n        btotal_doc: Number(r.btotal_doc) || 0,\n        NOMBREMONEDA: r.NOMBREMONEDA || 'Pesos',\n        CODIGO: r.CODIGO || '',\n        DENOMINACION: r.DENOMINACION || '',\n        CUIT: r.CUIT || ''\n    };\n});\nreturn msg;",
+    "outputs": 1,
+    "x": 720,
+    "y": 1740,
+    "wires": [
+      [
+        "resp58a3ee0af05"
+      ]
+    ]
+  },
+  {
+    "id": "resp58a3ee0af05",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 920,
+    "y": 1740,
+    "wires": []
+  },
+  {
+    "id": "http0f85e4d5155",
+    "type": "http in",
+    "z": "facturas-unified-tab",
+    "name": "OPTIONS /* (CORS preflight)",
+    "url": "/*",
+    "method": "options",
+    "upload": false,
+    "x": 120,
+    "y": 1880,
+    "wires": [
+      [
+        "fn590917abfcc"
+      ]
+    ]
+  },
+  {
+    "id": "fn590917abfcc",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "CORS OK",
+    "func": "// Responder CORS preflight\nmsg._res = msg._res || msg.res;\nmsg.headers = {\n    'Access-Control-Allow-Origin': '*',\n    'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',\n    'Access-Control-Allow-Headers': 'Content-Type, Authorization',\n    'Access-Control-Max-Age': '86400'\n};\nmsg.statusCode = 204;\nmsg.payload = '';\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 1880,
+    "wires": [
+      [
+        "respdfa850cca64"
+      ]
+    ]
+  },
+  {
+    "id": "respdfa850cca64",
+    "type": "http response",
+    "z": "facturas-unified-tab",
+    "name": "",
+    "x": 520,
+    "y": 1880,
+    "wires": []
+  },
+  {
+    "id": "catch1c1417abd4c",
+    "type": "catch",
+    "z": "facturas-unified-tab",
+    "name": "Error handler",
+    "scope": null,
+    "x": 120,
+    "y": 2020,
+    "wires": [
+      [
+        "fn5b71e20972e"
+      ]
+    ]
+  },
+  {
+    "id": "fn5b71e20972e",
+    "type": "function",
+    "z": "facturas-unified-tab",
+    "name": "Responder error",
+    "func": "// Manejo general de errores\nvar err = msg._error || msg.error || msg;\nmsg._res = msg._res || msg.res;\nif (msg._res && typeof msg._res.status === 'function') {\n    msg._res.setHeader('Content-Type', 'application/json');\n    msg._res.setHeader('Access-Control-Allow-Origin', '*');\n    msg._res.status(500).json({\n        ok: false,\n        error: (err.message || err.toString() || 'Error interno'),\n        source: err.source || 'unknown'\n    });\n    msg._res = null;\n}\nreturn null;",
+    "outputs": 1,
+    "x": 320,
+    "y": 2020,
+    "wires": [
+      []
+    ]
+  }
+]

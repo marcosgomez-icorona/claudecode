@@ -10,7 +10,7 @@
  * Si todos los backends fallan, usa mock data automáticamente.
  */
 import { CONFIG } from '../config.js';
-import { getPendientes, getDetalleRemito, vincularFactura } from './dataService.js';
+import { getPendientes, getDetalleRemito, vincularFactura, syncToSheets, getSyncStatus } from './dataService.js';
 import { renderTablaPendientes, initModal, renderDetalleRemito, mostrarModal, ocultarModal } from './renderTables.js';
 
 /* ─── Estado global ─── */
@@ -199,12 +199,72 @@ async function vincular(remitoId) {
   }
 }
 
+/* ─── Sync Google Sheets ─── */
+
+async function syncSheets() {
+  const btn = document.getElementById('btnSync');
+  const statusEl = document.getElementById('syncStatus');
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;border-width:2px;margin:0"></div> Sincronizando…';
+  }
+
+  try {
+    const result = await syncToSheets(state.daysBack);
+    if (result && result.success) {
+      const rows = result.resumen ? result.resumen.totalRemitos : '?';
+      if (statusEl) {
+        statusEl.textContent = `✓ ${rows} remitos sincronizados`;
+        statusEl.className = 'sync-ok';
+      }
+    } else {
+      throw new Error(result?.sheetsMessage || 'Error desconocido');
+    }
+  } catch (err) {
+    console.error('[Despachos] Sync falló:', err);
+    if (statusEl) {
+      statusEl.textContent = '✗ Error al sincronizar';
+      statusEl.className = 'sync-err';
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Sync Sheets';
+    }
+    actualizarFecha();
+  }
+}
+
+async function cargarSyncStatus() {
+  try {
+    const status = await getSyncStatus();
+    const el = document.getElementById('syncStatus');
+    if (!el) return;
+
+    if (status.lastSync) {
+      const fecha = new Date(status.lastSync.completedAt);
+      const fechaStr = fecha.toLocaleString('es-AR', {
+        day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+      });
+      el.textContent = `✓ Último sync: ${fechaStr} (${status.lastSync.rowsSynced} remitos)`;
+      el.className = status.lastSync.status === 'OK' ? 'sync-ok' : 'sync-warn';
+    } else {
+      el.textContent = 'Sin sincronización previa';
+      el.className = 'sync-none';
+    }
+  } catch (e) {
+    // Silencioso — el status no es crítico
+  }
+}
+
 /* ─── Exposición global para onclick en HTML ─── */
 
 window._verDetalle = verDetalle;
 window._vincularFactura = vincular;
 window._cerrarModal = ocultarModal;
 window._reintentar = cargarDatos;
+window._syncSheets = syncSheets;
 
 /* ─── Inicialización ─── */
 
@@ -213,6 +273,7 @@ function init() {
   initFiltros();
   actualizarFecha();
   cargarDatos();
+  cargarSyncStatus();
 }
 
 if (document.readyState === 'loading') {

@@ -1,15 +1,56 @@
-# Continuidad — 2026-06-19
+# Continuidad — 2026-06-19 (Sesión 2)
 
 ## Tema
-Fase 1 + 2 — Arquitectura portable + Middleware ERP para Despachos Pendientes de Facturación
+Automatización de Facturas de Compra — Análisis completo y generación de entregables
+
+## Issues críticos detectados y resueltos
+
+1. **BUG CRÍTICO en aprobar/rechazar** — T-SQL (`CONVERT`, `GETDATE`, `REPLACE`) usado en contexto JavaScript en los function nodes de `api_registracion_facturas-16-06-26.json`. Rompe timestamp de aprobación. **RESUELTO** en nuevo flow usando `new Date()` nativo de JS.
+
+2. **Data flow inconsistente** — n8n escribe en MySQL `staging_facturas`, pero el flow API completo lee de SQL Server `UD_EZI_STAGING_FACTURAS`. Nunca se encuentran datos. **RESUELTO** creando flow unificado que lee facturas de MySQL y OC/constancias de SQL Server.
+
+3. **Múltiples versiones de flow** — 5+ versiones de flow Node-RED con diferentes endpoints y DBs. **RESUELTO** creando único flow de 75 nodos con todos los endpoints.
+
+4. **SQL scripts pendientes** — Scripts 06-09 nunca ejecutados en MySQL (6 meses pendientes). **RESUELTO** consolidando en `10_migracion_completa_mysql.sql`.
+
+## Archivos creados/modificados
+
+| Archivo | Acción | Propósito |
+|---------|--------|-----------|
+| `sql/10_migracion_completa_mysql.sql` | CREADO | Migración MySQL única (06+07+08+09+columnas extra) |
+| `sql/11_crear_staging_sqlserver.sql` | CREADO | Crear UD_EZI_STAGING_FACTURAS + UD_EZI_STAGING_ITEMS en SQL Server |
+| `nodered/flow_api_facturas_unificado_v2.json` | CREADO | Flow unificado 75 nodos (MySQL staging + SQL Server OC/constancias) |
+| `nodered/flow_sync_calipso.json` | CREADO | Subflow sync MySQL → SQL Server (cada 5 min) |
+| `nodered/build_unified_flow.py` | CREADO | Build script para regenerar el flow |
+| `nodered/build_sync_flow.py` | CREADO | Build script para flow de sync |
+| `docs/GUIA_DEPLOY.md` | CREADO | Guía de deploy paso a paso |
+| `docs/superpowers/proposals/2026-06-19-skills-web-uiux-propuesta.md` | CREADO | Propuesta de skills UI/UX |
+| `/home/soporte/.claude/skills/frontend-design.md` | CREADO | Skill oficial Anthropic copiado localmente |
+
+## Próximos pasos inmediatos
+
+1. ⚠️ Ejecutar `sql/10_migracion_completa_mysql.sql` en MySQL (phpMyAdmin)
+2. ⚠️ Ejecutar `sql/11_crear_staging_sqlserver.sql` en SSMS
+3. ⚠️ Instalar `node-red-contrib-mssql-plus` en Node-RED
+4. ⚠️ Importar `flow_api_facturas_unificado_v2.json` en Node-RED
+5. ⚠️ Importar `flow_sync_calipso.json` en Node-RED
+6. Probar endpoints con curl
+7. Activar n8n workflow (verificar POST url)
+8. Probar flujo completo: email → n8n → Node-RED → MySQL → UI → sync
+
+## Deuda técnica
+- MSSQL queries con interpolación (no parametrizadas)
+- Instalación de mssql-plus requerida para OC/constancias
+- Proveedor_ID placeholder en sync SQL Server
+- Config nodes requieren ajuste manual al importar
 
 ## Decisiones técnicas
 
 1. **Patrón portable** (mismo que Conciliación Bancaria): carpeta `portable/` autónoma con HTML + CSS + JS vanilla, sin build tooling
-2. **config.js multi-backend**: failover automático Node-RED → LAN → Cloud → mock data. Detecta protocolo `file://` para saltar backends sin URL
-3. **dataService.js con failover**: itera backends en orden, timeout por backend, fallback a mock si todos fallan
-4. **Inline HTML en Node-RED**: se mantuvo como fallback autónomo (no depende de archivos), pero actualizado al design system Corona
-5. **httpStatic es el método recomendado** para producción; el endpoint `/despachos-pendientes` sirve como fallback
+2. **config.js multi-backend**: failover automático Node-RED → LAN → Cloud → mock data
+3. **MySQL para tablas auxiliares** (nueva regla global CLAUDE.md): toda tabla no-ERP va en MySQL. SQL Server solo para ERP transaccional + SPs middleware
+4. **SP en SQL Server + auditoría en MySQL**: `pr_ezi_vincular_factura` (SP middleware) toca `pr_ezi_remitos` en SQL Server. La auditoría se registra en `despachos_audit_factura` en MySQL desde Node-RED (rama separada, fire-and-forget)
+5. **httpStatic recomendado** para servir portable/; el endpoint `/despachos-pendientes` como fallback inline
 
 ## Archivos modificados o creados
 
@@ -28,63 +69,60 @@ Fase 1 + 2 — Arquitectura portable + Middleware ERP para Despachos Pendientes 
 - `flows/flow_despachos_pendientes.json` — v1.0.0 → v1.1.0: HTML inline actualizado, endpoint `/facturar` migrado de UPDATE directo a SP
 - `docs/node-red-despachos.md` — Documentado SP, auditoría, setup inicial
 
-### Creados (Fase 2 — Middleware ERP)
-- `sql/01_crear_audit_factura.sql` — Tabla `pr_ezi_audit_factura` (UUID, remito, factura, usuario, resultado, timestamp)
-- `sql/02_crear_sp_vincular_factura.sql` — SP `pr_ezi_vincular_factura` con validación + transacción + auditoría
-- `sql/03_test_sp.sql` — Pruebas unitarias del SP (casos negativos + positivo)
+### Creados (Fase 2 — Middleware ERP + MySQL)
+- `sql/01_crear_audit_factura.sql` — ⚠ OBSOLETO: tabla movida a MySQL
+- `sql/02_crear_sp_vincular_factura.sql` — SP `pr_ezi_vincular_factura` en SQL Server (middleware ERP)
+- `sql/03_test_sp.sql` — Pruebas del SP
+- `sql/mysql/01_crear_audit_factura.sql` — Tabla `despachos_audit_factura` en MySQL (auditoría real)
+- `sql/mysql/02_crear_sync_sheets.sql` — Tablas `despachos_sync_state` + `despachos_pendientes_cache` para sync futuro
 
-### Arquitectura del SP
+### Modificado en CLAUDE.md (regla global)
+- Stack: MySQL como servidor complementario obligatorio para tablas auxiliares
+- Criterios permanentes: regla explícita — NUNCA crear tablas auxiliares en SQL Server
+- Nueva sección "MySQL — servidor complementario" con qué va y qué no va
+
+### Arquitectura del endpoint /facturar (v1.2.0)
 ```
 POST /api/despachos/pendientes/:remito/facturar
-  → Node-RED Function (validar params, generar UUID)
-  → MSSQL node (EXEC pr_ezi_vincular_factura @remito, @factura, @usuario, @run_uuid)
-  → SP: valida → BEGIN TRAN → UPDATE → INSERT auditoría → COMMIT
-  → Function (parse resultado: success/mensaje/auditId)
-  → HTTP Response
+  → fn_facturar_query (validar params, generar UUID)
+  → mssql_facturar (EXEC pr_ezi_vincular_factura)  ← SQL Server (ERP)
+  → fn_facturar_result (parse resultado)
+      ├─[out 1]→ http_resp_facturar (respuesta al cliente)
+      └─[out 2]→ mysql_audit_facturar (INSERT auditoría) ← MySQL (aux)
+                      → fn_audit_done (log, fire-and-forget)
 ```
-Reglas implementadas en el SP:
-- Remito no vacío, factura no vacía
-- Remito debe existir en pr_ezi_remitos
-- No sobrescribe factura existente
-- Transacción atómica (UPDATE + INSERT auditoría)
-- Concurrency-safe (WHERE factura IS NULL en el UPDATE)
-- Auditoría incluso en fallos
 
 ## Lo que NO se tocó (archivos legacy)
 - `agente_despachos/index.html` — Versión original (mock-only)
 - `agente_despachos/assets/` — JS/CSS originales (sin failover)
 - `agente_despachos/flows/flow_despachos_pendientes_v2.json` — No modificado
 
-## Próximos pasos
+## Próximos pasos (adaptado con MySQL)
 
-1. **Ejecutar SQL en SSMS** contra CORONA:
-   - `sql/01_crear_audit_factura.sql`
-   - `sql/02_crear_sp_vincular_factura.sql`
-   - `sql/03_test_sp.sql`
-2. **Importar flow v1.1.0** en Node-RED (192.168.0.23:1880) — incluye endpoint `/facturar` con SP
-3. **Configurar httpStatic** en `settings.js` de Node-RED para servir `portable/`
-4. **Fase 3 — Sync Google Sheets**: endpoint `POST /api/despachos/sync-sheets`
-5. **Fase 4 — Calidad de datos**: mockData realista, filtro por estado, ordenamiento por columna
+### Setup (usuario)
+1. **SQL Server**: ejecutar `sql/02_crear_sp_vincular_factura.sql` en SSMS
+2. **MySQL**: ejecutar `sql/mysql/01_crear_audit_factura.sql` y `sql/mysql/02_crear_sync_sheets.sql`
+3. **Node-RED**: importar flow v1.2.0, configurar credenciales MySQL, Deploy
+
+### Fases siguientes (adaptadas)
+3. **Fase 3 — Sync Google Sheets**: SQL Server → Node-RED → MySQL (staging `despachos_pendientes_cache`) → Google Sheets API. Endpoint `POST /api/despachos/sync-sheets` con estado en `despachos_sync_state`
+4. **Fase 4 — Calidad de datos**: mockData realista, lookup tables en MySQL, filtro por estado, ordenamiento
+5. **Fase 5 — Agente de Despachos**: Apps Script → MySQL (lee/escribe) → propuestas de clasificación
 
 ## Acciones pendientes del usuario
-
 ```bash
-# 1. Ejecutar scripts SQL en SSMS conectado a CORONA (192.168.0.177)
-#    Abrir y ejecutar en orden:
-#      agente_despachos/sql/01_crear_audit_factura.sql
+# 1. SQL Server (SSMS → CORONA en 192.168.0.177):
 #      agente_despachos/sql/02_crear_sp_vincular_factura.sql
 #      agente_despachos/sql/03_test_sp.sql
 
-# 2. Re-importar flow en Node-RED:
-#    Abrir http://192.168.0.23:1880
-#    Menu → Import → Clipboard
-#    Pegar contenido de agente_despachos/flows/flow_despachos_pendientes.json
-#    Deploy
+# 2. MySQL (mysql -h 127.0.0.1 -u root db_corona):
+#      agente_despachos/sql/mysql/01_crear_audit_factura.sql
+#      agente_despachos/sql/mysql/02_crear_sync_sheets.sql
 
-# 3. Probar vinculación:
-#    curl -X POST http://192.168.0.23:1880/api/despachos/pendientes/0099-00001996/facturar \
-#      -H "Content-Type: application/json" \
-#      -d '{"factura": "000100001500"}'
+# 3. Node-RED (http://192.168.0.23:1880):
+#    Importar: agente_despachos/flows/flow_despachos_pendientes.json
+#    Configurar password en nodo "db_corona (MySQL aux)"
+#    Deploy
 ```
 
 ## Riesgos identificados

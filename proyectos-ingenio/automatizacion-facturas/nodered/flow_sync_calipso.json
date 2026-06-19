@@ -1,0 +1,204 @@
+[
+  {
+    "id": "facturas-sync-tab",
+    "label": "Sync Calipso",
+    "type": "tab",
+    "disabled": false,
+    "info": "Sincroniza facturas aprobadas desde MySQL a SQL Server UD_EZI_STAGING_FACTURAS"
+  },
+  {
+    "id": "sync-timer-01",
+    "type": "inject",
+    "z": "facturas-sync-tab",
+    "name": "Cada 5 min",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "300",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 30,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 80,
+    "wires": [
+      [
+        "sync-check-01"
+      ]
+    ]
+  },
+  {
+    "id": "sync-manual-01",
+    "type": "inject",
+    "z": "facturas-sync-tab",
+    "name": "Sync ahora",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 140,
+    "wires": [
+      [
+        "sync-check-01"
+      ]
+    ]
+  },
+  {
+    "id": "sync-check-01",
+    "type": "function",
+    "z": "facturas-sync-tab",
+    "name": "Leer pendientes sync",
+    "func": "// Leer facturas aprobadas pendientes de sync a SQL Server\nmsg.topic = \"SELECT f.*, l.id AS log_id \" +\n    \"FROM staging_facturas f \" +\n    \"JOIN log_sync_calipso l ON l.factura_id = f.id \" +\n    \"WHERE f.estado_proceso = 'APROBADO' \" +\n    \"AND l.estado = 'PENDIENTE' \" +\n    \"LIMIT 10\";\nreturn msg;",
+    "outputs": 1,
+    "x": 320,
+    "y": 80,
+    "wires": [
+      [
+        "sync-mysql-01"
+      ]
+    ]
+  },
+  {
+    "id": "sync-mysql-01",
+    "type": "mysql",
+    "z": "facturas-sync-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "Leer MySQL",
+    "x": 520,
+    "y": 80,
+    "wires": [
+      [
+        "sync-process-01"
+      ]
+    ]
+  },
+  {
+    "id": "sync-process-01",
+    "type": "function",
+    "z": "facturas-sync-tab",
+    "name": "Procesar sync a SQL Server",
+    "func": "// Procesar cada fila y generar INSERT a SQL Server\nvar facturas = msg.payload || [];\nvar results = [];\n\nfor (var i = 0; i < facturas.length; i++) {\n    var f = facturas[i];\n    var esDolar = (f.es_dolar == 1 || f.es_dolar == '1') ? 1 : 0;\n    var monedaId = esDolar\n        ? '76C69768-3DAE-11D5-B059-004854841C8A'\n        : '76C69765-3DAE-11D5-B059-004854841C8A';\n\n    var esc = function(v) {\n        if (v === null || v === undefined) return 'NULL';\n        return \"'\" + String(v).replace(/'/g, \"''\") + \"'\";\n    };\n    var num = function(v) {\n        if (v === null || v === undefined || v === '' || isNaN(Number(v))) return 0;\n        return Number(v);\n    };\n    var fmtDate = function(d) {\n        if (!d) return 'NULL';\n        var s = String(d).replace(/[^0-9]/g, '');\n        return s.length >= 8 ? \"'\" + s.substring(0,8) + \"'\" : 'NULL';\n    };\n\n    var now = new Date();\n    var ts = now.getFullYear().toString() +\n        String(now.getMonth()+1).padStart(2,'0') +\n        String(now.getDate()).padStart(2,'0') +\n        String(now.getHours()).padStart(2,'0') +\n        String(now.getMinutes()).padStart(2,'0') +\n        String(now.getSeconds()).padStart(2,'0');\n\n    var sql = \"INSERT INTO UD_EZI_STAGING_FACTURAS (\" +\n        \"ID, TIPO_OPERACION, ESTADO_PROCESO, FECHA_CARGA, FECHA_APROBACION, \" +\n        \"USUARIO_CARGA, APROBADO_POR, ORIGEN, \" +\n        \"TIPOTRANSACCION_ID, NUMERODOCUMENTO, LETRA, FECHA_EMISION, \" +\n        \"FECHA_VENCIMIENTO, REFERENCIA, \" +\n        \"PROVEEDOR_ID, PROVEEDOR_CODIGO, PROVEEDOR_CUIT, PROVEEDOR_NOMBRE, \" +\n        \"NETO, IVA_21, IVA_105, PERCEPCIONES, OTROS_IMPUESTOS, TOTAL, \" +\n        \"MONEDA_ID, COTIZACION, \" +\n        \"CAE, FECHA_VTO_CAE, COMPANIA_ID, \" +\n        \"PDF_FILENAME, PDF_HASH, EMAIL_ORIGEN, EMAIL_ASUNTO, \" +\n        \"ITEMS_JSON, ES_DOLAR, COTIZACION_ORIGEN, COTIZACION_AVISO, \" +\n        \"NRO_REMITO, CONFIANZA_PARSEO, NOTAS_PARSEO\" +\n        \") VALUES (\" +\n        \"NEWID(), \" +\n        esc(f.tipo_operacion || 'FACTURA_COMPRA') + \", \" +\n        \"'APROBADO', \" +\n        esc(ts) + \", \" +\n        esc(ts) + \", \" +\n        \"'n8n', \" +\n        esc(f.aprobado_por || 'pdietrich') + \", \" +\n        esc(f.origen || 'EMAIL_GMAIL_N8N') + \", \" +\n        \"'50829758-5905-11D5-86C4-0080AD403F5F', \" +  // TipoTR Fact.Cpra.\n        esc(f.numerodocumento) + \", \" +\n        esc(f.letra) + \", \" +\n        fmtDate(f.fecha_emision) + \", \" +\n        fmtDate(f.fecha_vencimiento) + \", \" +\n        esc(f.referencia) + \", \" +\n        \"'00000000-0000-0000-0000-000000000000', \" +  // PROVEEDOR_ID placeholder\n        esc(f.proveedor_codigo) + \", \" +\n        esc(f.proveedor_cuit) + \", \" +\n        esc(f.proveedor_nombre) + \", \" +\n        num(f.neto) + \", \" +\n        num(f.iva_21) + \", \" +\n        num(f.iva_105) + \", \" +\n        num(f.percepciones) + \", \" +\n        num(f.otros_impuestos) + \", \" +\n        num(f.total) + \", \" +\n        \"'\" + monedaId + \"', \" +\n        num(f.cotizacion || 1) + \", \" +\n        esc(f.cae) + \", \" +\n        fmtDate(f.fecha_vto_cae) + \", \" +\n        \"'FC20C32D-3EFA-11D5-86AD-0080AD403F5F', \" +  // Compania ID\n        esc(f.pdf_filename) + \", \" +\n        esc(f.pdf_hash) + \", \" +\n        esc(f.email_origen) + \", \" +\n        esc(f.email_asunto) + \", \" +\n        esc(f.items_json) + \", \" +\n        esDolar + \", \" +\n        esc(f.cotizacion_origen) + \", \" +\n        esc(f.cotizacion_aviso) + \", \" +\n        esc(f.nro_remito) + \", \" +\n        \"70, \" +  // confianza_parseo default\n        esc(f.notas_parseo) +\n        \")\";\n\n    results.push({\n        sql: sql,\n        factura_id: f.id,\n        log_id: f.log_id\n    });\n}\n\nmsg._results = results;\nmsg._index = 0;\nreturn msg;",
+    "outputs": 1,
+    "x": 740,
+    "y": 80,
+    "wires": [
+      [
+        "sync-loop-01"
+      ]
+    ]
+  },
+  {
+    "id": "sync-loop-01",
+    "type": "function",
+    "z": "facturas-sync-tab",
+    "name": "Loop: ejecutar INSERT",
+    "func": "// Ejecutar INSERT para cada factura\nvar results = msg._results || [];\nvar idx = msg._index || 0;\n\nif (idx >= results.length) {\n    // Ya terminamos\n    node.status({fill:\"green\", shape:\"dot\", text:\"Sync completado: \" + results.length + \" facturas\"});\n    return null;\n}\n\nvar r = results[idx];\nmsg.payload = r.sql;\nmsg._currentLogId = r.log_id;\nmsg._currentFacturaId = r.factura_id;\nmsg._index = idx + 1;\nmsg._total = results.length;\n\nreturn msg;",
+    "outputs": 1,
+    "x": 940,
+    "y": 80,
+    "wires": [
+      [
+        "sync-mssql-01"
+      ]
+    ]
+  },
+  {
+    "id": "sync-mssql-01",
+    "type": "MSSQL",
+    "z": "facturas-sync-tab",
+    "mssql": "mssql-corona-config",
+    "name": "INSERT a SQL Server",
+    "query": "",
+    "out": "msg",
+    "x": 1140,
+    "y": 80,
+    "wires": [
+      [
+        "sync-result-01"
+      ]
+    ]
+  },
+  {
+    "id": "sync-result-01",
+    "type": "function",
+    "z": "facturas-sync-tab",
+    "name": "Resultado: log OK o ERROR",
+    "func": "// Registrar resultado del sync\nvar total = msg._total || 0;\nvar facturaId = msg._currentFacturaId;\nvar logId = msg._currentLogId;\n\nif (msg.payload && msg.payload.rowsAffected && msg.payload.rowsAffected > 0) {\n    // OK: actualizar log como sincronizado\n    node.status({fill:\"green\", shape:\"dot\", text: \"OK: \" + facturaId});\n    msg.topic = \"UPDATE log_sync_calipso SET estado = 'SINCRONIZADO', \" +\n        \"fecha_sync = NOW() \" +\n        \"WHERE id = \" + logId;\n} else {\n    // ERROR\n    var err = msg.error || msg.payload || {};\n    node.status({fill:\"red\", shape:\"dot\", text: \"Error: \" + facturaId});\n    msg.topic = \"UPDATE log_sync_calipso SET estado = 'ERROR', \" +\n        \"error_detalle = '\" + (String(err.message || err).replace(/'/g, \"''\")) + \"', \" +\n        \"fecha_sync = NOW() \" +\n        \"WHERE id = \" + logId;\n}\n\n// Volver al loop\nreturn msg;",
+    "outputs": 1,
+    "x": 1340,
+    "y": 80,
+    "wires": [
+      [
+        "sync-update-log-01"
+      ]
+    ]
+  },
+  {
+    "id": "sync-update-log-01",
+    "type": "mysql",
+    "z": "facturas-sync-tab",
+    "mydb": "mysqle9c00ba9445",
+    "name": "Actualizar log sync",
+    "x": 1540,
+    "y": 80,
+    "wires": [
+      [
+        "sync-loop-01"
+      ]
+    ]
+  },
+  {
+    "id": "sync-catch-01",
+    "type": "catch",
+    "z": "facturas-sync-tab",
+    "name": "Error sync",
+    "scope": [
+      "sync-check-01",
+      "sync-mysql-01",
+      "sync-process-01",
+      "sync-loop-01",
+      "sync-mssql-01",
+      "sync-result-01",
+      "sync-update-log-01"
+    ],
+    "x": 120,
+    "y": 300,
+    "wires": [
+      [
+        "sync-error-01"
+      ]
+    ]
+  },
+  {
+    "id": "sync-error-01",
+    "type": "function",
+    "z": "facturas-sync-tab",
+    "name": "Log error + continuar",
+    "func": "// Loggear error y continuar con siguiente\nvar err = msg._error || msg.error || {};\nnode.warn(\"Error en sync: \" + (err.message || JSON.stringify(err)));\n\n// Avanzar al siguiente item en el loop\nvar results = msg._results || [];\nvar idx = (msg._index || 0) + 1;\nmsg._index = idx;\n\nif (idx < results.length) {\n    var r = results[idx];\n    msg.payload = r.sql;\n    msg._currentLogId = r.log_id;\n    msg._currentFacturaId = r.factura_id;\n    return msg;\n}\nreturn null;",
+    "outputs": 1,
+    "x": 320,
+    "y": 300,
+    "wires": [
+      [
+        "sync-mssql-01"
+      ]
+    ]
+  }
+]

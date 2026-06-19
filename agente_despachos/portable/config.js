@@ -30,11 +30,13 @@ const CONFIG = {
 
   // API endpoints (relativos a la base del backend)
   endpoints: {
-    pendientes: '/api/despachos/pendientes',
-    detalle:    '/api/despachos/pendientes',    // + /:remito
-    resumen:    '/api/despachos/resumen',
-    health:     '/api/despachos/health',
-    facturar:   '/api/despachos/pendientes'     // + /:remito/facturar
+    pendientes:  '/api/despachos/pendientes',
+    detalle:     '/api/despachos/pendientes',    // + /:remito
+    resumen:     '/api/despachos/resumen',
+    health:      '/api/despachos/health',
+    facturar:    '/api/despachos/pendientes',    // + /:remito/facturar
+    syncSheets:  '/api/despachos/sync-sheets',
+    sheetsStatus:'/api/despachos/sheets-status'
   },
 
   // Filtros por defecto
