@@ -4,7 +4,7 @@
     "type": "tab",
     "label": "Despachos Pendientes",
     "disabled": false,
-    "info": "=== DESPACHOS PENDIENTES DE FACTURACIÓN ===\n\nENDPOINTS:\n  GET  /api/despachos/health\n  GET  /api/despachos/pendientes?days=30\n  GET  /api/despachos/pendientes/:remito\n  POST /api/despachos/pendientes/:remito/facturar\n  GET  /api/despachos/resumen?days=30\n  GET  /despachos-pendientes\n\nFUENTES: CORONA.dbo.pr_ezi_remitos + pr_ezi_remitos_items\nPATRÓN: queries en msg.payload, throwErrors=1 + Catch node"
+    "info": "=== DESPACHOS PENDIENTES DE FACTURACIÓN ===\n\nENDPOINTS:\n  GET  /api/despachos/health\n  GET  /api/despachos/pendientes?days=30\n  GET  /api/despachos/pendientes/:remito\n  POST /api/despachos/pendientes/:remito/facturar\n  GET  /api/despachos/resumen?days=30\n  GET  /despachos-pendientes\n\nFUENTES: CORONA.dbo.pr_ezi_remitos + pr_ezi_remitos_items\nPATRÓN: queries en msg.payload, throwErrors=1 + Catch node\nMySQL: despachos_audit_factura (auditoría complementaria)"
   },
   {
     "id": "6814eb4bb7e82ddb",
@@ -91,7 +91,7 @@
     "type": "function",
     "z": "tab_despachos",
     "name": "2. Format health",
-    "func": "var sqlInfo = (msg.payload || [])[0] || {};\nmsg.payload = {\n  status: 'ok',\n  service: 'despachos-pendientes',\n  timestamp: new Date().toISOString(),\n  version: '1.1.0',\n  sql: {\n    server: sqlInfo.server_name || 'n/a',\n    database: sqlInfo.db_name || 'n/a',\n    user: sqlInfo.login_user || 'n/a',\n    serverTime: sqlInfo.server_time || 'n/a'\n  }\n};\nreturn msg;",
+    "func": "var sqlInfo = (msg.payload || [])[0] || {};\nmsg.payload = {\n  status: 'ok',\n  service: 'despachos-pendientes',\n  timestamp: new Date().toISOString(),\n  version: '1.2.0',\n  sql: {\n    server: sqlInfo.server_name || 'n/a',\n    database: sqlInfo.db_name || 'n/a',\n    user: sqlInfo.login_user || 'n/a',\n    serverTime: sqlInfo.server_time || 'n/a'\n  }\n};\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 740,
@@ -364,14 +364,17 @@
     "type": "function",
     "z": "tab_despachos",
     "name": "2. Resultado",
-    "func": "// 2. Procesar resultado del SP pr_ezi_vincular_factura\nvar row = (msg.payload || [])[0] || {};\n\nif (row.success === true || row.success === 1 || row.success === \"1\") {\n  node.warn('[Despachos] Vinculación exitosa — '\n    + 'remito ' + msg._trace.remito\n    + ' ← factura ' + msg._trace.factura\n    + ' [audit_id=' + (row.audit_id || 0) + ']');\n\n  msg.payload = {\n    success: true,\n    remito: msg._trace.remito,\n    factura: msg._trace.factura,\n    auditId: row.audit_id || 0,\n    mensaje: row.mensaje || 'Vinculado correctamente'\n  };\n} else {\n  // Fallo validado por el SP (no error de SQL)\n  msg.statusCode = 409;\n  msg.payload = {\n    success: false,\n    remito: msg._trace.remito,\n    error: row.mensaje || 'No se pudo vincular la factura',\n    auditId: row.audit_id || 0\n  };\n}\nreturn msg;",
-    "outputs": 1,
+    "func": "// 2. Procesar resultado del SP pr_ezi_vincular_factura + preparar auditoría MySQL\nvar row = (msg.payload || [])[0] || {};\n\nif (row.success === true || row.success === 1 || row.success === \"1\") {\n  node.warn('[Despachos] Vinculación exitosa — '\n    + 'remito ' + msg._trace.remito\n    + ' ← factura ' + msg._trace.factura\n    + ' [sp_audit_id=' + (row.audit_id || 0) + ']');\n\n  msg.payload = {\n    success: true,\n    remito: msg._trace.remito,\n    factura: msg._trace.factura,\n    auditId: row.audit_id || 0,\n    mensaje: row.mensaje || 'Vinculado correctamente'\n  };\n\n  // Preparar INSERT de auditoría en MySQL\n  var uuid = msg._trace.uuid || 'N/A';\n  var remitoSafe = msg._trace.remito.replace(/'/g, \"\\\\'\");\n  var facturaSafe = msg._trace.factura.replace(/'/g, \"\\\\'\");\n  msg.mysqlAudit = \"INSERT INTO despachos_audit_factura \"\n    + \"(run_uuid, remito, factura, usuario, aplicacion, accion, resultado, mensaje, sp_audit_id) \"\n    + \"VALUES ('\" + uuid + \"', '\" + remitoSafe + \"', '\" + facturaSafe + \"', \"\n    + \"'Node-RED', 'DespachosApp', 'VINCULAR', 1, \"\n    + \"'Vinculado correctamente', \" + (row.audit_id || 0) + \")\";\n  msg.topic = \"audit\";\n\n} else {\n  msg.statusCode = 409;\n  msg.payload = {\n    success: false,\n    remito: msg._trace.remito,\n    error: row.mensaje || 'No se pudo vincular la factura',\n    auditId: row.audit_id || 0\n  };\n\n  // Preparar INSERT de auditoría en MySQL (fallo)\n  var uuid = msg._trace.uuid || 'N/A';\n  var remitoSafe = msg._trace.remito.replace(/'/g, \"\\\\'\");\n  var facturaSafe = msg._trace.factura.replace(/'/g, \"\\\\'\");\n  var errorMsg = (row.mensaje || 'Error desconocido').replace(/'/g, \"\\\\'\").substring(0, 200);\n  msg.mysqlAudit = \"INSERT INTO despachos_audit_factura \"\n    + \"(run_uuid, remito, factura, usuario, aplicacion, accion, resultado, mensaje, sp_audit_id) \"\n    + \"VALUES ('\" + uuid + \"', '\" + remitoSafe + \"', '\" + facturaSafe + \"', \"\n    + \"'Node-RED', 'DespachosApp', 'VINCULAR', 0, \"\n    + \"'\" + errorMsg + \"', \" + (row.audit_id || 0) + \")\";\n  msg.topic = \"audit\";\n}\nreturn [msg, msg];",
+    "outputs": 2,
     "noerr": 0,
     "x": 790,
     "y": 420,
     "wires": [
       [
         "http_resp_facturar"
+      ],
+      [
+        "mysql_audit_facturar"
       ]
     ]
   },
@@ -611,6 +614,42 @@
     },
     "x": 550,
     "y": 620,
+    "wires": []
+  },
+  {
+    "id": "mysql_corona_aux",
+    "type": "MySQLdatabase",
+    "name": "db_corona (MySQL aux)",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "db": "db_corona",
+    "tz": "",
+    "charset": "UTF8"
+  },
+  {
+    "id": "mysql_audit_facturar",
+    "type": "mysql",
+    "z": "tab_despachos",
+    "mydb": "mysql_corona_aux",
+    "name": "MySQL Auditoría",
+    "x": 1050,
+    "y": 420,
+    "wires": [
+      [
+        "fn_audit_done"
+      ]
+    ]
+  },
+  {
+    "id": "fn_audit_done",
+    "type": "function",
+    "z": "tab_despachos",
+    "name": "Auditoría OK (log)",
+    "func": "// Fire-and-forget: solo loguea resultado de la auditoría MySQL\nif (msg.topic === 'audit') {\n  node.log('[Despachos] Auditoría MySQL registrada');\n}\n// No modifica msg — la respuesta HTTP ya se envió por la rama principal\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1050,
+    "y": 480,
     "wires": []
   }
 ]

@@ -22,13 +22,15 @@ Encargado de Sistemas. Interactúa con Administración, Control, Instrumentació
 - **Node-RED (on-prem)**: adquisición local, PLC, SCADA, OPC, SQL local, envío por API/webhook
 - **n8n (cloud)**: orquestación, workflows, generación documental, integraciones externas
 - **Claude Code**: desarrollo, refactor, skills, agentes, scripts
-- **SQL Server 2008 R2**: base objetivo de ERP — TODA consulta compatible con esta versión
+- **SQL Server 2008 R2**: base objetivo de ERP Calipso — TODA consulta compatible con esta versión. Solo lectura para consultas transaccionales y reporting desde el ERP.
+- **MySQL**: servidor complementario y/o espejo para TODAS las tablas auxiliares, auditoría, sync, staging, logs y datos no transaccionales de cualquier proyecto. Node-RED lee y escribe en MySQL; NUNCA crear tablas auxiliares en SQL Server.
 - **Python / PowerShell**: scripts y utilidades
-- **Middleware obligatorio** cuando se toca ERP
+- **Middleware obligatorio** cuando se toca ERP Calipso (SPs, no UPDATE directo)
 
 ## Criterios permanentes
 - SQL compatible SQL Server 2008 R2 (sin STRING_AGG, OPENJSON, funciones modernas)
 - NO escribir directo en tablas del ERP Calipso — siempre middleware + validación
+- **MySQL para tablas auxiliares**: TODA tabla que no sea del ERP (auditoría, sync, staging, logs, cache, lookup, métricas, colas) va en MySQL. SQL Server solo para lo transaccional del ERP. Ningún proyecto nuevo crea tablas auxiliares en SQL Server.
 - Todo agente: modular, auditable, logs, trazabilidad por UUID, intervención humana en puntos críticos
 - Separación test/prod obligatoria
 - Nomenclatura clara, documentación operativa mínima
@@ -40,6 +42,34 @@ Encargado de Sistemas. Interactúa con Administración, Control, Instrumentació
 - Motor TR/ITEM de transacciones
 - Extensiones tipo UD_EZI / pr_ezi disponibles para personalizaciones
 - Análisis previo de estructura de tablas reconstruido
+
+## MySQL — servidor complementario
+
+**Regla**: MySQL es el servidor por defecto para TODA tabla que NO sea transaccional del ERP Calipso. Funciona como complemento y/o espejo.
+
+### Qué va en MySQL (obligatorio para todo proyecto)
+| Tipo | Ejemplos |
+|------|----------|
+| **Auditoría** | Logs de vinculaciones, cambios, ejecuciones |
+| **Sync / Staging** | Datos intermedios antes de Google Sheets, caché de APIs |
+| **Logs** | Ejecuciones de agentes, errores, métricas |
+| **Lookup / Config** | Mapeos, parámetros, configuraciones de la app |
+| **Colas** | Trabajos pendientes, notificaciones |
+| **Réplicas parciales** | Copia espejo de tablas del ERP para consultas sin impacto |
+
+### Qué NO va en MySQL
+- Tablas transaccionales del ERP (Van en SQL Server — `dbo.pr_ezi_*`, `dbo.TR*`, etc.)
+- Stored procedures que tocan tablas del ERP (Van en SQL Server como middleware)
+
+### Conexión desde Node-RED
+Node-RED tiene conexión a ambos motores:
+- **MSSQL-CN**: solo lectura de ERP + ejecución de SPs middleware
+- **MySQL**: lectura/escritura libre para todas las tablas auxiliares
+
+### Base de datos
+- Nombre por defecto: `corona_aux`
+- Charset: `utf8mb4`, collation: `utf8mb4_unicode_ci`
+- Motor: InnoDB
 
 ## Proyectos madre
 1. Envío OC a Proveedores — PRODUCCIÓN

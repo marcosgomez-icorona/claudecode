@@ -9,6 +9,7 @@
 
 const CONFIG = {
   backends: [
-    { name: 'Node-RED', url: '', timeout: 3000 }
+    { name: 'Cloud', url: 'http://ingcorona.ddns.net:4040', timeout: 5000 },
+    { name: 'LAN',   url: 'http://192.168.0.23:1880',       timeout: 5000 }
   ]
 };
