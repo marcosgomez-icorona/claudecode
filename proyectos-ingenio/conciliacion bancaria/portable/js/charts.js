@@ -7,15 +7,14 @@ const CHART_DEFAULTS = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: {
-      position: 'bottom',
-      labels: { font: { size: 10 }, boxWidth: 10 }
-    }
+    legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10, padding: 12 } }
   }
 };
 
 function crearChartEstados(canvasId, data) {
-  const ctx = document.getElementById(canvasId).getContext('2d');
+  var ctx = document.getElementById(canvasId);
+  if (!ctx) return null;
+  ctx = ctx.getContext('2d');
   return new Chart(ctx, {
     type: 'doughnut',
     data: {
@@ -24,18 +23,18 @@ function crearChartEstados(canvasId, data) {
         data: [data.conciliados || 0, data.soloBanco || 0, data.soloCalipso || 0, data.timing || 0],
         backgroundColor: ['#1D9E75', '#A32D2D', '#BA7517', '#185FA5'],
         borderWidth: 2,
-        borderColor: '#fff'
+        borderColor: '#fff',
+        hoverOffset: 8
       }]
     },
-    options: {
-      ...CHART_DEFAULTS,
-      cutout: '60%'
-    }
+    options: Object.assign({}, CHART_DEFAULTS, { cutout: '62%' })
   });
 }
 
 function crearChartCriticidad(canvasId, data) {
-  const ctx = document.getElementById(canvasId).getContext('2d');
+  var ctx = document.getElementById(canvasId);
+  if (!ctx) return null;
+  ctx = ctx.getContext('2d');
   return new Chart(ctx, {
     type: 'bar',
     data: {
@@ -43,7 +42,8 @@ function crearChartCriticidad(canvasId, data) {
       datasets: [{
         data: [data.criticas || 0, data.altas || 0, data.medias || 0],
         backgroundColor: ['#A32D2D', '#BA7517', '#185FA5'],
-        borderRadius: 4
+        borderRadius: 4,
+        borderSkipped: false
       }]
     },
     options: {
@@ -51,43 +51,37 @@ function crearChartCriticidad(canvasId, data) {
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        y: { beginAtZero: true, ticks: { stepSize: 1 } }
+        y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10 } } },
+        x: { ticks: { font: { size: 10 } } }
       }
     }
   });
 }
 
-function crearChartTendencia(canvasId, labels, dataConciliados, dataPendientes) {
-  const ctx = document.getElementById(canvasId).getContext('2d');
+function crearChartCalidad(canvasId, data) {
+  var ctx = document.getElementById(canvasId);
+  if (!ctx) return null;
+  ctx = ctx.getContext('2d');
+  var cal = data.calNiveles || {};
   return new Chart(ctx, {
-    type: 'line',
+    type: 'bar',
     data: {
-      labels: labels,
-      datasets: [
-        {
-          label: 'Conciliados',
-          data: dataConciliados,
-          borderColor: '#1D9E75',
-          backgroundColor: 'rgba(29,158,117,0.1)',
-          fill: true,
-          tension: 0.4
-        },
-        {
-          label: 'Pendientes',
-          data: dataPendientes,
-          borderColor: '#A32D2D',
-          backgroundColor: 'rgba(163,45,45,0.1)',
-          fill: true,
-          tension: 0.4
-        }
-      ]
+      labels: ['N1 — Comprobante', 'N2 — Exacto', 'N3 — ±1% 1d', 'N4 — ±1% 3d', 'Sin Match'],
+      datasets: [{
+        data: [cal.n1 || 0, cal.n2 || 0, cal.n3 || 0, cal.n4 || 0, cal.sinMatch || 0],
+        backgroundColor: ['#1D9E75', '#5DCAA5', '#BA7517', '#185FA5', '#A32D2D'],
+        borderRadius: 4,
+        borderSkipped: false
+      }]
     },
     options: {
-      ...CHART_DEFAULTS,
-      plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10 } } },
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
       scales: {
-        y: { beginAtZero: true, ticks: { font: { size: 10 } } },
-        x: { ticks: { font: { size: 10 } } }
+        x: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10 } } },
+        y: { ticks: { font: { size: 9 } } }
       }
     }
   });

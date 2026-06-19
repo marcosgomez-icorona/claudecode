@@ -83,10 +83,13 @@ Detalle completo de un remito (incluye todos los items).
 
 ### `POST /api/despachos/pendientes/:remito/facturar`
 
-Vincula un remito con una factura. Requiere body JSON:
+Vincula un remito con una factura via **stored procedure `pr_ezi_vincular_factura`** (middleware ERP).
+Requiere body JSON:
 ```json
 { "factura": "000100001500" }
 ```
+
+**Seguridad**: el SP valida reglas de negocio, registra auditoría en `pr_ezi_audit_factura` y ejecuta en transacción atómica. No se permite sobrescribir facturas existentes.
 
 ### `GET /api/despachos/resumen?days=30`
 
@@ -98,16 +101,26 @@ Health check del servicio.
 
 ### `GET /despachos-pendientes`
 
-Sirve el frontend HTML (requiere `httpStatic` configurado).
+Sirve el frontend HTML (requiere `httpStatic` configurado en `settings.js` para modo modular; sin httpStatic sirve versión inline autónoma).
+
+## Setup inicial (solo una vez)
+
+Ejecutar en SSMS contra CORONA, en orden:
+1. `sql/01_crear_audit_factura.sql` — Crea tabla de auditoría
+2. `sql/02_crear_sp_vincular_factura.sql` — Crea SP de vinculación
+3. `sql/03_test_sp.sql` — Prueba que el SP funciona
 
 ## Seguridad
 
-- El endpoint `POST .../facturar` es destructivo (UPDATE en SQL Server)
-- Considerar agregar autenticación vía HTTP Node-RED (settings.js)
+- El endpoint `POST .../facturar` usa **SP como middleware** — no hace UPDATE directo
+- Toda vinculación queda registrada en `pr_ezi_audit_factura` con UUID, usuario y timestamp
+- El SP valida: remito existe, factura no vacía, sin factura previa, concurrency-safe
 - Las credenciales SQL se guardan cifradas en Node-RED
-- En producción, validar que solo usuarios autorizados puedan facturar
+- Pendiente: autenticación en el endpoint HTTP (settings.js)
 
 ## Fuentes de datos
 
 - `CORONA.dbo.pr_ezi_remitos` — Tabla de remitos
 - `CORONA.dbo.pr_ezi_remitos_items` — Items por remito
+- `CORONA.dbo.pr_ezi_audit_factura` — Auditoría de vinculaciones
+- `CORONA.dbo.pr_ezi_vincular_factura` — SP middleware de vinculación

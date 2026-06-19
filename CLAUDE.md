@@ -97,6 +97,37 @@ El compactado se graba en `/mnt/c/claudecode/.claude/continuidad/` como un archi
 
 Usar **deepseek-v4-flash** con **razonamiento máximo (max effort)** como modelo predeterminado para todas las respuestas y ejecuciones. Solo cambiar a otro modelo si se solicita explícitamente por mensaje o comando `/model`.
 
+## Skills del ecosistema — reglas de uso por defecto
+
+Para cada tipo de tarea, invocar SIEMPRE el skill correspondiente con `Skill` ANTES de empezar a trabajar. No leer los archivos manualmente — usar la herramienta `Skill` para que el skill se cargue correctamente.
+
+### Skills de proyecto (invocables — tipo directorio)
+
+| Tarea | Skill a invocar | Cobertura |
+|-------|-----------------|-----------|
+| **Dashboard, tablero, app de servicio, reemplazar Excel** | `dashboard-portable-corona` | Arquitectura completa: despliegue dual, Node-RED, APIs, Google Sheets sync, JS vanilla, testing, performance, UX, checklist |
+| **HTML, CSS, Bootstrap, estilado, maquetado, componentes visuales** | `html-css-bootstrap-corona` | Bootstrap 5.3 experto, CSS3 avanzado, Design System Corona, responsive, accesibilidad WCAG 2.1 AA, debugging visual, íconos SVG |
+| **Matching OC↔Factura, parsing AFIP, registro en Calipso** | `facturas-matching-corona` | Reglas de matching, validación de constancias, flujo documental, GUIDs producción |
+| **Transacciones ERP, SPs pr_ezi, motor TR/ITEM** | `calipso-trx-engine` | Motor TR/ITEM, procedimientos almacenados, extensión UD_EZI, ciclo OC→Recepción→Factura→Asiento |
+
+### Skills de proceso (superpowers)
+
+| Tarea | Skill a invocar |
+|-------|-----------------|
+| **Antes de cualquier tarea creativa** (features, componentes, funcionalidad nueva) | `superpowers:brainstorming` |
+| **Planificar implementación multi-step** | `superpowers:writing-plans` |
+| **Ejecutar plan con subagentes** | `superpowers:subagent-driven-development` |
+| **Debuggear cualquier error** | `superpowers:systematic-debugging` |
+| **Antes de declarar "terminado"** | `superpowers:verification-before-completion` |
+| **Antes de commit/merge** | `superpowers:requesting-code-review` |
+
+### Reglas de skill
+
+1. **Skill de proyecto + skill de proceso**: cuando una tarea requiere ambos (ej: "crear dashboard de CxP"), invocar primero el de proceso (`brainstorming` o `writing-plans`) y luego el de proyecto (`dashboard-portable-corona`)
+2. **No leer skills manualmente**: usar siempre la herramienta `Skill` — si un skill no está registrado como invocable, solo ahí leer el `.md` con `Read`
+3. **`html-css-bootstrap-corona` + `dashboard-portable-corona`**: cuando la tarea es un dashboard completo, invocar ambos en secuencia (arquitectura → estilado)
+4. **Skills de referencia** (`.md` simple en `/home/soporte/.claude/skills/`): leer con `Read` solo bajo demanda. Son: `code-review-ingenio.md`, `seguridad-it-ingenio.md`, `node-red-flow-reviewer.md`, `n8n-architect.md`, `calipso-sql-server.md`, `molienda-web.md`, `git-workflow-ingenio.md`, `documentacion-tecnica.md`, `codebase-mapper.md`, `sql-reviewer.md`, `test-planner.md`, `docs-writer.md`
+
 ## Arquitectura recomendada para dashboards y apps de servicio
 
 Para proyectos que contemplen **dashboards, visualizaciones, tableros de indicadores o aplicaciones de servicio**, aplicar SIEMPRE la arquitectura **portable** con servidor web dedicado.
