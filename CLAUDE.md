@@ -7,7 +7,7 @@ Actuás como Arquitecto de Automatización, Agente IA Técnico y Consultor Senio
 
 **Antes de empezar cualquier proyecto, feature o tarea no trivial**, agotar SIEMPRE el uso de MCPs y skills disponibles como primer recurso:
 
-1. **MCPs** (`sqlserver`, `mysql`, `gsheets`, `nodered`, `n8n`, `notebooklm`, `browser`): consultar estructura de datos, verificar flows existentes y documentación de nodos, leer sheets de referencia, buscar documentación interna, testear dashboards y apps web en vivo antes de asumir o redescubrir.
+1. **MCPs** (`sqlserver`, `mysql`, `gsheets`, `nodered`, `n8n`, `github`, `notebooklm`, `browser`): consultar estructura de datos, verificar flows existentes y documentación de nodos, leer sheets de referencia, buscar documentación interna, testear dashboards y apps web en vivo, gestionar PRs y repos antes de asumir o redescubrir.
 2. **Skills de proyecto** (corona): invocar el que corresponda según dominio (conciliación, facturas, dashboard, HTML/CSS, ERP, validación de datos, revisión de flows/SQL, arquitectura n8n).
 3. **Skills de proceso** (superpowers): aplicar la secuencia brainstorming → writing-plans → subagent-driven-development por defecto.
 4. **Solo si MCPs y skills no cubren el caso**: explorar manualmente con herramientas de filesystem.
@@ -184,8 +184,7 @@ Para cada tipo de tarea, invocar SIEMPRE el skill correspondiente con `Skill` AN
 | **Revisión y auditoría de flows Node-RED** | `node-red-flow-reviewer` 🆕 | Usa MCP nodered para auditar flows, simular function nodes, tracear datos, detectar vulnerabilidades y revisar pre-deploy. |
 | **Revisión de consultas SQL, compatibilidad 2008 R2, performance** | `sql-reviewer` 🆕 | Usa MCPs sqlserver + mysql para probar queries en vivo. Checklist sintaxis 2008 R2, MySQL, performance, seguridad. |
 | **Diseño y revisión de workflows n8n cloud** | `n8n-architect` 🆕 | Usa MCP n8n-mcp para documentación de nodos y validación. Arquitectura cloud/on-prem, seguridad webhooks, costos de ejecución. |
-
-### Skills de proceso (superpowers)
+| **Gestión de repositorios GitHub, PRs, issues, push** | `github-corona` 🆕 | Usa MCP github + gh CLI. Flujo commit→push→PR, checklist pre-commit, formato conventional commits. |
 
 | Tarea | Skill a invocar |
 |-------|-----------------|
@@ -203,6 +202,7 @@ Para cada tipo de tarea, invocar SIEMPRE el skill correspondiente con `Skill` AN
 | **`sqlserver`** | 7 tools readonly: list_tables, describe_table, search_columns, sample_table, run_readonly_query, find_invoice_logic_candidates, healthcheck | Consultar ERP Calipso, analizar vistas, extraer datos contables. NUNCA escribir. |
 | **`mysql`** 🆕 | 6 tools readonly: healthcheck, list_tables, describe_table, sample_table, run_query, search_tables. Bases: db_automatizaciones, corona_aux. | Consultar tablas auxiliares, staging, logs, lookup, sync. MySQL es el servidor por defecto para TODO dato no-ERP. |
 | **`gsheets`** 🆕 | 25+ tools: read, write, format, search, charts, validation, CSV | Leer/escribir Google Sheets sin Node-RED. Debug de sync, verificar datos. |
+| **`github`** 🆕 | GitHub MCP oficial (Anthropic) v2025.4.8 — repos, PRs, issues, branches, actions, files vía API. Requiere `GITHUB_PERSONAL_ACCESS_TOKEN` en env. Sin token no arranca. | Gestionar repos, crear PRs, revisar issues, leer/actualizar archivos, ver Actions. Usar junto con el skill `github-corona`. |
 | **`nodered`** ✅ | ~30 tools via API Admin: get-flows, get-node, search-nodes, find-nodes-by-type, backup-flows, list-backups, get-backup-diff, derive-backup, diff-flow-against-source, dry-run-create-flow, validate-flow-payload, simulate-function-node (sandbox), get-function-context, entity-audit, api-help, visualize-flows, get-settings, get-diagnostics. Instalación local `MCPs/mcp-nodered/` (v1.3.4). Conecta a Node-RED 4.0.5 en 192.168.0.23:1880. Token Bearer vigencia 7 días — refrescar con `bash MCPs/mcp-nodered/refresh_token.sh`. | Inspeccionar flows en vivo, auditar function nodes, simular en sandbox, backups, diff entre versiones, validación pre-deploy, tracear datos entre nodos. Arranca en modo readonly. Para escritura: quitar `--read-only` y setear `MCP_READ_ONLY=false`. |
 | **`n8n`** 🆕 | n8n-mcp (21.9k ⭐, MIT) — documentación y validación de workflows n8n. 1,845 nodos documentados (816 core + 1,029 community), 2,352 templates, validación de config y expresiones. Modo readonly sin API key. Para gestión de workflows: configurar `N8N_API_URL` + `N8N_API_KEY` en env. | Diseñar y revisar workflows n8n, buscar nodos por tarea, validar configuraciones, consultar documentación actualizada. Usar junto con el skill `n8n-architect`. |
 | **`browser`** 🆕 | agent-browser (Vercel, 36.8k ⭐). Navegación, snapshots, clicks, screenshots, diffs, React introspection, network/logs, web vitals. Domain allowlist: localhost:7070 + LAN. | Testear dashboards portable, verificar UI en vivo, screenshots, debugging visual, E2E exploratorio de apps web del ingenio. NUNCA navegar a internet (dominios no allowlisteados). |
