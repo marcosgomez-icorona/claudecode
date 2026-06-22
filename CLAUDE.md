@@ -7,8 +7,8 @@ Actuás como Arquitecto de Automatización, Agente IA Técnico y Consultor Senio
 
 **Antes de empezar cualquier proyecto, feature o tarea no trivial**, agotar SIEMPRE el uso de MCPs y skills disponibles como primer recurso:
 
-1. **MCPs** (`sqlserver`, `gsheets`, `nodered`, `notebooklm`): consultar estructura de datos, verificar flows existentes, leer sheets de referencia, buscar documentación interna antes de asumir o redescubrir.
-2. **Skills de proyecto** (corona): invocar el que corresponda según dominio (conciliación, facturas, dashboard, HTML/CSS, ERP).
+1. **MCPs** (`sqlserver`, `mysql`, `gsheets`, `nodered`, `n8n`, `notebooklm`, `browser`): consultar estructura de datos, verificar flows existentes y documentación de nodos, leer sheets de referencia, buscar documentación interna, testear dashboards y apps web en vivo antes de asumir o redescubrir.
+2. **Skills de proyecto** (corona): invocar el que corresponda según dominio (conciliación, facturas, dashboard, HTML/CSS, ERP, validación de datos, revisión de flows/SQL, arquitectura n8n).
 3. **Skills de proceso** (superpowers): aplicar la secuencia brainstorming → writing-plans → subagent-driven-development por defecto.
 4. **Solo si MCPs y skills no cubren el caso**: explorar manualmente con herramientas de filesystem.
 
@@ -28,6 +28,35 @@ Encargado de Sistemas. Interactúa con Administración, Control, Instrumentació
 - SCADA Wonderware InTouch, HMI Weintek, PLC Fatek
 - Node-RED, SQL Server 2008 R2, MySQL
 - ERP Calipso Corporate local
+
+### Servidores — direcciones IP y puertos
+
+| Servidor | IP:Puerto | Descripción | Auth |
+|----------|-----------|-------------|------|
+| **Apache (Web Server)** | `192.168.0.23:7070` | Servidor web de pruebas XAMPP (Apache/2.4.26, PHP/7.1.7). Sirve dashboards, apps PHP legacy y archivos estáticos. Docroot: `C:\xampp\htdocs\` | Pública |
+| **Node-RED** | `192.168.0.23:1880` | Motor de automatización on-prem. Endpoints REST API, conexión SQL/MySQL, flows de PLC/SCADA. Token Bearer requerido para Admin API (`/flows`, `/settings`). Token expira a los 7 días. | Bearer token (generar con POST `/auth/token` usando user:pass) |
+| **phpMyAdmin** | `http://192.168.0.23:7070/phpmyadmin` | Gestión visual de MySQL. ⚠️ Sujeto a restricción de IP de XAMPP (solo acceso local). Config: `C:\xampp\phpMyAdmin\config.inc.php` | MySQL root (sin password en dev) |
+| **SQL Server (MSSQL)** | `192.168.0.177:1433` | ERP Calipso — Base `CORONA`. Solo lectura para reporting. Usuario `powerbi`. Conexión vía MCP `sqlserver`. | SQL Auth |
+| **MySQL** | `127.0.0.1:3306` (en 192.168.0.23) | Base complementaria `corona_aux`. Tablas auxiliares, sync, staging, logs, lookup. Gestionado vía phpMyAdmin. Usuario `root` sin password (dev). | MySQL Auth |
+
+### Generar token Node-RED (vigencia 7 días)
+
+```bash
+# Refresco rápido con script local
+bash MCPs/mcp-nodered/refresh_token.sh
+
+# O manual:
+curl -s -X POST http://192.168.0.23:1880/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{"client_id":"node-red-admin","grant_type":"password","username":"admin","password":"2105","scope":"*"}'
+# Respuesta: {"access_token":"...", "expires_in":604800, "token_type":"Bearer"}
+```
+
+El token se almacena en dos lugares (ambos deben mantenerse sincronizados):
+- `.mcp.json` → `mcpServers.nodered.env.NODE_RED_TOKEN` (usado por el MCP en runtime)
+- `MCPs/mcp-nodered/.env` → `NODE_RED_TOKEN` (referencia local del proyecto)
+
+⚠️ Al expirar, correr `bash MCPs/mcp-nodered/refresh_token.sh` y reiniciar sesión.
 
 ## Stack arquitectónico de referencia
 - **Node-RED (on-prem)**: adquisición local, PLC, SCADA, OPC, SQL local, envío por API/webhook
@@ -151,6 +180,10 @@ Para cada tipo de tarea, invocar SIEMPRE el skill correspondiente con `Skill` AN
 | **Matching OC↔Factura, parsing AFIP, registro en Calipso** | `facturas-matching-corona` | Reglas de matching, validación de constancias, flujo documental, GUIDs producción |
 | **Conciliación bancaria, extractos, matching banco↔Calipso, MEP/FIMA, gastos bancarios** | `conciliacion-bancaria-corona` | Lógica completa de matching multi-criterio, 515 grupos Galicia, detección de pares MEP/FIMA, 4 paneles de tablero, reglas de materialidad, troubleshooting Node-RED |
 | **Transacciones ERP, SPs pr_ezi, motor TR/ITEM** | `calipso-trx-engine` | Motor TR/ITEM, procedimientos almacenados, extensión UD_EZI, ciclo OC→Recepción→Factura→Asiento |
+| **Validación de datos entre capas (SQL↔Sheets↔Dashboard)** | `data-validation-corona` 🆕 | Coordina sqlserver + mysql + gsheets + browser para cross-check de conteos, valores y renderizado visual. Solo diagnóstico. |
+| **Revisión y auditoría de flows Node-RED** | `node-red-flow-reviewer` 🆕 | Usa MCP nodered para auditar flows, simular function nodes, tracear datos, detectar vulnerabilidades y revisar pre-deploy. |
+| **Revisión de consultas SQL, compatibilidad 2008 R2, performance** | `sql-reviewer` 🆕 | Usa MCPs sqlserver + mysql para probar queries en vivo. Checklist sintaxis 2008 R2, MySQL, performance, seguridad. |
+| **Diseño y revisión de workflows n8n cloud** | `n8n-architect` 🆕 | Usa MCP n8n-mcp para documentación de nodos y validación. Arquitectura cloud/on-prem, seguridad webhooks, costos de ejecución. |
 
 ### Skills de proceso (superpowers)
 
@@ -168,16 +201,35 @@ Para cada tipo de tarea, invocar SIEMPRE el skill correspondiente con `Skill` AN
 | MCP | Herramientas | Cuándo usar |
 |-----|-------------|-------------|
 | **`sqlserver`** | 7 tools readonly: list_tables, describe_table, search_columns, sample_table, run_readonly_query, find_invoice_logic_candidates, healthcheck | Consultar ERP Calipso, analizar vistas, extraer datos contables. NUNCA escribir. |
+| **`mysql`** 🆕 | 6 tools readonly: healthcheck, list_tables, describe_table, sample_table, run_query, search_tables. Bases: db_automatizaciones, corona_aux. | Consultar tablas auxiliares, staging, logs, lookup, sync. MySQL es el servidor por defecto para TODO dato no-ERP. |
 | **`gsheets`** 🆕 | 25+ tools: read, write, format, search, charts, validation, CSV | Leer/escribir Google Sheets sin Node-RED. Debug de sync, verificar datos. |
-| **`nodered`** 🆕 | Backup, validación, deploy controlado, dry-run. Arranca en --read-only. | Inspeccionar flows, verificar estado, deployar con seguridad. |
+| **`nodered`** ✅ | ~30 tools via API Admin: get-flows, get-node, search-nodes, find-nodes-by-type, backup-flows, list-backups, get-backup-diff, derive-backup, diff-flow-against-source, dry-run-create-flow, validate-flow-payload, simulate-function-node (sandbox), get-function-context, entity-audit, api-help, visualize-flows, get-settings, get-diagnostics. Instalación local `MCPs/mcp-nodered/` (v1.3.4). Conecta a Node-RED 4.0.5 en 192.168.0.23:1880. Token Bearer vigencia 7 días — refrescar con `bash MCPs/mcp-nodered/refresh_token.sh`. | Inspeccionar flows en vivo, auditar function nodes, simular en sandbox, backups, diff entre versiones, validación pre-deploy, tracear datos entre nodos. Arranca en modo readonly. Para escritura: quitar `--read-only` y setear `MCP_READ_ONLY=false`. |
+| **`n8n`** 🆕 | n8n-mcp (21.9k ⭐, MIT) — documentación y validación de workflows n8n. 1,845 nodos documentados (816 core + 1,029 community), 2,352 templates, validación de config y expresiones. Modo readonly sin API key. Para gestión de workflows: configurar `N8N_API_URL` + `N8N_API_KEY` en env. | Diseñar y revisar workflows n8n, buscar nodos por tarea, validar configuraciones, consultar documentación actualizada. Usar junto con el skill `n8n-architect`. |
+| **`browser`** 🆕 | agent-browser (Vercel, 36.8k ⭐). Navegación, snapshots, clicks, screenshots, diffs, React introspection, network/logs, web vitals. Domain allowlist: localhost:7070 + LAN. | Testear dashboards portable, verificar UI en vivo, screenshots, debugging visual, E2E exploratorio de apps web del ingenio. NUNCA navegar a internet (dominios no allowlisteados). |
 | **`notebooklm`** | 35 tools: notebooks, fuentes, consultas con citas, audio/video | Investigar documentación interna, analizar PDFs, mantener base de conocimiento. |
+
+### MCPs locales y globales — instalación y mantenimiento
+
+Tres MCPs usan instalación local en `MCPs/`, uno es global (`n8n`):
+
+| MCP | Carpeta | Paquete npm | Mantenimiento |
+|-----|---------|-------------|---------------|
+| **`sqlserver`** | `MCPs/mcp-calipso-sqlserver/` | `mssql` + SDK | `.env` con credenciales MSSQL |
+| **`mysql`** | `MCPs/mcp-mysql/` | `mysql2` + SDK | `.env` con credenciales MySQL |
+| **`nodered`** ✅ | `MCPs/mcp-nodered/` | `@jensrudolph/node-red-mcp-server` v1.3.4 | `bash refresh_token.sh` cada 7 días. Conecta a NR 4.0.5. |
+| **`n8n`** 🆕 | global (`npm i -g n8n-mcp`) | `n8n-mcp` v2.59.3 | `npm update -g n8n-mcp`. Sin API key = solo lectura de docs. |
+
+```bash
+# Actualizar dependencias de los 3 MCPs locales
+for dir in MCPs/mcp-*/; do (cd "$dir" && npm update); done
+```
 
 ### Reglas de skill
 
 1. **Skill de proyecto + skill de proceso**: cuando una tarea requiere ambos (ej: "crear dashboard de CxP"), invocar primero el de proceso (`brainstorming` o `writing-plans`) y luego el de proyecto (`dashboard-portable-corona`)
 2. **No leer skills manualmente**: usar siempre la herramienta `Skill` — si un skill no está registrado como invocable, solo ahí leer el `.md` con `Read`
 3. **`html-css-bootstrap-corona` + `dashboard-portable-corona`**: cuando la tarea es un dashboard completo, invocar ambos en secuencia (arquitectura → estilado)
-4. **Skills de referencia** (`.md` simple en `/home/soporte/.claude/skills/`): leer con `Read` solo bajo demanda. Son: `code-review-ingenio.md`, `seguridad-it-ingenio.md`, `node-red-flow-reviewer.md`, `n8n-architect.md`, `calipso-sql-server.md`, `molienda-web.md`, `git-workflow-ingenio.md`, `documentacion-tecnica.md`, `codebase-mapper.md`, `sql-reviewer.md`, `test-planner.md`, `docs-writer.md`
+4. **Skills de referencia** (`.md` simple en `/home/soporte/.claude/skills/`): leer con `Read` solo bajo demanda. Son: `code-review-ingenio.md`, `seguridad-it-ingenio.md`, `calipso-sql-server.md`, `molienda-web.md`, `git-workflow-ingenio.md`, `documentacion-tecnica.md`, `codebase-mapper.md`, `test-planner.md`, `docs-writer.md`, `automation-diagnostics.md`, `frontend-design.md`
 
 ## Arquitectura recomendada para dashboards y apps de servicio
 
@@ -187,7 +239,7 @@ Para proyectos que contemplen **dashboards, visualizaciones, tableros de indicad
 
 | Capa | Tecnología | Entorno |
 |------|-----------|---------|
-| **Servidor web** | Apache (localhost:7070) | Sirve el frontend durante desarrollo y pruebas |
+| **Servidor web** | Apache (`192.168.0.23:7070`) | Sirve el frontend durante desarrollo y pruebas |
 | **Frontend** | `index.html` + CSS/JS vanilla en carpeta `/portable/` | Sin build tooling, sin frameworks |
 | **Backend API** | Node-RED (puerto 1880) | Endpoints REST, conexión SQL/MySQL, lógica de negocio |
 | **Sincronización** | Google Sheets (SheetDB / API) | Capa compartida visible para usuarios no técnicos |
@@ -210,8 +262,23 @@ Apache (puerto 7070)              Node-RED (puerto 1880)
 ### Ciclo de desarrollo
 
 1. **Desarrollo local** — El frontend se sirve desde Apache en `http://192.168.0.23:7070`, consume APIs de Node-RED en `http://192.168.0.23:1880`
-2. **Pruebas** — Mismo entorno, se itera sobre el `index.html` y se recarga el browser
+2. **Pruebas** — Mismo entorno, se itera sobre el `index.html` y se recarga el browser. **Usar el MCP `browser`** para testear en vivo: abrir la app, hacer snapshot, verificar KPIs, interactuar con filtros/modales, tomar screenshots de evidencia.
 3. **Producción** — La carpeta `portable/` se deploya al servidor web definitivo (nube o Apache on-prem) apuntando al Node-RED de producción
+
+### Testing visual con browser MCP
+
+Para verificar dashboards y apps web sin intervención manual:
+- **Abrir y navegar**: `agent-browser open "http://192.168.0.23:7070/conciliacion/portable/"`
+- **Snapshot**: capturar árbol de accesibilidad con refs `@e1`, `@e2` para ubicar elementos
+- **Interactuar**: `click @e5`, `fill @e3 "texto"`, verificar modales y filtros
+- **Evidencia visual**: `screenshot` para documentar estado de la UI
+- **Domain allowlist**: restringido a `localhost:7070`, `192.168.0.23:1880`, `192.168.0.23:7070`, `192.168.0.23:7070/phpmyadmin`, `192.168.0.177`
+
+**Cuándo usar el browser MCP**:
+- Después de modificar HTML/CSS/JS de un dashboard → verificar que renderiza bien
+- Antes de commitear cambios a `portable/` → test visual rápido
+- Debuggear un problema de UI reportado → reproducir y screenshot
+- Verificar que una API de Node-RED responde correctamente en el frontend
 
 ### config.js (frontend)
 

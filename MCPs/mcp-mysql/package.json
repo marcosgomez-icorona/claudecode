@@ -1,0 +1,22 @@
+{
+  "name": "mcp-mysql-corona",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MCP readonly para explorar MySQL del Ingenio (db_automatizaciones, corona_aux).",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "check": "node --check src/server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.0",
+    "dotenv": "^16.4.7",
+    "mysql2": "^3.11.0",
+    "uuid": "^11.0.5",
+    "zod": "^3.24.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -32,6 +32,9 @@ service_account*.json
 # VSCode
 .vscode/
 
+# Submodules locales (referencia, no trackeados)
+skills/mcp-sqlserver/
+
 # Excel tmp
 ~$*.xlsx
 

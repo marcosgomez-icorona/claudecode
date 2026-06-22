@@ -2,39 +2,85 @@
   "mcpServers": {
     "sqlserver": {
       "command": "node",
-      "args": ["src/server.js"],
+      "args": [
+        "src/server.js"
+      ],
       "cwd": "/mnt/c/claudecode/MCPs/mcp-calipso-sqlserver",
-      "description": "SQL Server Calipso CORONA — 7 herramientas readonly: list_tables, describe_table, search_columns, sample_table, run_readonly_query, find_invoice_logic_candidates, healthcheck. Bloquea INSERT/UPDATE/DELETE/DROP. Credenciales en .env del proyecto.",
+      "description": "SQL Server Calipso CORONA \u2014 7 herramientas readonly: list_tables, describe_table, search_columns, sample_table, run_readonly_query, find_invoice_logic_candidates, healthcheck. Bloquea INSERT/UPDATE/DELETE/DROP. Credenciales en .env del proyecto.",
       "env": {
         "NODE_ENV": "production"
       }
     },
     "notebooklm": {
       "command": "notebooklm-mcp",
-      "args": ["--transport", "stdio"],
-      "description": "Google NotebookLM vía MCP — base de conocimiento aumentada con Gemini. 35 herramientas: notebooks, fuentes, consultas con citas, audio/video/presentaciones, batch, pipelines.",
+      "args": [
+        "--transport",
+        "stdio"
+      ],
+      "description": "Google NotebookLM v\u00eda MCP \u2014 base de conocimiento aumentada con Gemini. 35 herramientas: notebooks, fuentes, consultas con citas, audio/video/presentaciones, batch, pipelines.",
       "env": {}
     },
     "gsheets": {
       "command": "npx",
-      "args": ["-y", "@mcp-z/mcp-sheets"],
-      "description": "Google Sheets MCP — lectura/escritura directa de sheets desde Claude. 25+ herramientas: read, write, format, search, charts, validation, CSV. Service account auth.",
+      "args": [
+        "-y",
+        "@mcp-z/mcp-sheets",
+        "--auth=service-account"
+      ],
+      "description": "Google Sheets MCP \u2014 lectura/escritura directa de sheets desde Claude. 25+ herramientas: read, write, format, search, charts, validation, CSV. Service account auth.",
       "env": {
-        "GOOGLE_SERVICE_ACCOUNT_KEY_PATH": "/mnt/c/claudecode/.secrets/service-account-sheets.json",
-        "GOOGLE_SHEETS_SPREADSHEET_ID": ""
+        "GOOGLE_SERVICE_ACCOUNT_KEY_FILE": "/mnt/c/claudecode/.secrets/service-account-sheets.json",
+        "GOOGLE_CLIENT_ID": "106191104338479011721",
+        "GOOGLE_SHEETS_SPREADSHEET_ID": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0"
       }
     },
+    "browser": {
+      "command": "agent-browser",
+      "args": [
+        "mcp",
+        "--profile",
+        "core"
+      ],
+      "description": "agent-browser (Vercel) \u2014 browser automation v\u00eda Chrome DevTools Protocol. Navegaci\u00f3n, snapshots, clicks, screenshots, diffs, React introspection, network/logs. Domain allowlist restringe a LAN/localhost. 36.8k \u2b50, Apache 2.0.",
+      "env": {
+        "AGENT_BROWSER_ALLOWED_DOMAINS": "localhost:7070,192.168.0.23:1880,192.168.0.23:7070,192.168.0.23:7070/phpmyadmin,192.168.0.177,192.168.0.23,localhost",
+        "AGENT_BROWSER_CONFIRM_ACTIONS": "eval,download",
+        "AGENT_BROWSER_SESSION_NAME": "corona-dev"
+      }
+    },
+    "mysql": {
+      "command": "node",
+      "args": [
+        "src/server.js"
+      ],
+      "cwd": "/mnt/c/claudecode/MCPs/mcp-mysql",
+      "description": "MySQL Corona \u2014 6 herramientas readonly: healthcheck, list_tables, describe_table, sample_table, run_query, search_tables, list_databases. Credenciales en .env. Bases: db_automatizaciones, corona_aux.",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "n8n": {
+      "command": "n8n-mcp",
+      "args": [],
+      "description": "n8n MCP (21.9k ⭐, MIT) — documentación y validación de workflows n8n. 1,845 nodos documentados, 2,352 templates. Sin API key funciona en modo readonly (solo docs). Para gestión de workflows: configurar N8N_API_URL y N8N_API_KEY en env. Usar junto con el skill n8n-architect.",
+      "env": {}
+    },
     "nodered": {
-      "command": "npx",
-      "args": ["-y", "@jensrudolph/node-red-mcp-server", "--read-only"],
-      "description": "Node-RED Admin API MCP — inspección, backup, validación y deploy controlado de flows. Arranca en modo readonly para auditoría segura. Cuando se necesite escritura, quitar --read-only y configurar MCP_READ_ONLY=false.",
+      "command": "node",
+      "args": [
+        "./node_modules/.bin/node-red-mcp",
+        "--read-only"
+      ],
+      "cwd": "/mnt/c/claudecode/MCPs/mcp-nodered",
+      "description": "Node-RED Admin API MCP \u2014 inspecci\u00f3n, backup, validaci\u00f3n y deploy controlado de flows. Instalaci\u00f3n local en MCPs/mcp-nodered. Token Bearer expira cada 7 d\u00edas. Refrescar con: bash MCPs/mcp-nodered/refresh_token.sh.",
       "env": {
         "NODE_RED_URL": "http://192.168.0.23:1880",
-        "NODE_RED_TOKEN": "7SvvBTLmWfp6YHXeN3KCkH9WADEkFtzIgMBVGMJYfA3fAUNdzvjUWx9AktyBeMzWyNq4eoKq5lz6dN2ugkJ9i4zP5FJTWjc3SewOna/8PygCyq1n9vaj10ENebxF3aLrjnB7hOvQh7CX4GeAmlZ+d2oN0xg3QQZnU0LMnnM6TUc=",
+        "NODE_RED_TOKEN": "j//x2xsX4y+fbYCdmWRXNzsbe9INqVtDLOZUad6j7QkEL1CE+NuGp9Rk9NVbzDKMnG6lgb89fndB5WseiUPp7PJGjtjPQk9+yJ8ZleJr2HUESg0hOYbr31isN3HcMizppDI3OxFxNT1/w6w5SbaspoC9YnMflSpMimkxBj7qfm4=",
         "MCP_READ_ONLY": "true",
         "MCP_BACKUPS_ENABLED": "true",
         "MCP_AUTO_BACKUP": "true",
-        "MCP_ALLOW_FULL_FLOW_WRITES": "false"
+        "MCP_ALLOW_FULL_FLOW_WRITES": "false",
+        "NODE_RED_TOKEN_REFRESHED": "2026-06-22T16:40:30+00:00"
       }
     }
   }
