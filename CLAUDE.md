@@ -42,8 +42,29 @@ Todo proyecto no trivial debe seguir este ciclo. El coordinador (`ingenio-dev-co
 | No modificar producción, `.env`, credenciales, dumps SQL, backups, datos sensibles | Todos los agentes |
 | No ejecutar SQL de escritura (INSERT, UPDATE, DELETE, DROP, ALTER, TRUNCATE) sin aprobación explícita | `backend-dev`, `sql-server-calipso-reviewer` |
 | No borrar archivos sin autorización expresa | Todos los agentes |
+| **No modificar, borrar, deployar ni alterar flows, tabs, nodos o configuraciones del servidor Node-RED** (`192.168.0.23:1880`). El MCP `nodered` está en modo `--read-only`. Cualquier operación de escritura sobre Node-RED requiere autorización humana explícita y backup previo obligatorio. | **Todos los agentes** |
 | Usar ramas Git para cualquier cambio no trivial | Todos los agentes |
 | Dejar cada cambio recuperable (Git, backup o copia controlada) | Todos los agentes |
+
+### Node-RED — Regla estricta de solo lectura
+
+El servidor Node-RED en `192.168.0.23:1880` es **entorno productivo crítico** que controla:
+- Sincronización OPC → MySQL (PLC, instrumentos, SCADA)
+- Molienda Web, IngenioOnLine
+- Migración a Supabase
+- Cámaras IP, Telegram, Alexa
+- Relojes de fichadas (ANVIZ)
+- API Facturas, registro en Calipso
+- WhatsApp, hosting externo
+- +24 tabs, ~2,200 nodos
+
+**Regla absoluta:** Ningún agente, script, MCP o comando puede modificar nada en este servidor sin:
+1. Autorización humana explícita
+2. Backup completo de los 24 tabs antes de cualquier cambio
+3. Plan de rollback verificado
+4. Prueba en entorno aislado primero
+
+El MCP `nodered` está configurado con `--read-only` y `MCP_ALLOW_FULL_FLOW_WRITES: false`. Esto no se modifica bajo ninguna circunstancia.
 
 ### Git y ramas
 
