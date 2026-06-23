@@ -1,1 +1,0 @@
-node-red-sheets-sync@sync-calipso-corona.iam.gserviceaccount.com
