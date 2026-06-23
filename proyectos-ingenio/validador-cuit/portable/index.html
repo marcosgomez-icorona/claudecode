@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validador de CUITs | Ingenio La Corona</title>
+  <meta name="description" content="Validación de CUITs en facturas de proveedores — Extracción y verificación contra Calipso">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ═══════ TOPBAR ═══════ -->
+<header class="topbar" role="banner">
+  <div class="d-flex align-items-center gap-3">
+    <div class="brand-logo" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+    <div>
+      <h1 class="fs-6 fw-semibold m-0">Validador de CUITs</h1>
+      <p class="fs-xs text-muted m-0">Verificaci&oacute;n de CUITs en facturas de proveedores</p>
+    </div>
+  </div>
+  <div class="d-flex align-items-center gap-2">
+    <span class="badge-period">v1.0</span>
+    <span class="badge-status" id="backend-status">Verificando backend...</span>
+  </div>
+</header>
+
+<!-- ═══════ MAIN CONTENT ═══════ -->
+<main class="content" id="app" role="main">
+
+  <!-- ── INPUT CARD ── -->
+  <section class="panel" aria-label="Ingreso de datos">
+    <div class="panel-header">
+      <span class="panel-title">
+        <span class="dot dot-blue" aria-hidden="true"></span>
+        Ingreso de datos
+      </span>
+      <span class="fs-xs text-muted">Todos los campos son obligatorios</span>
+    </div>
+
+    <div class="panel-body p-4">
+
+      <!-- Mode selector -->
+      <fieldset class="mb-3">
+        <legend class="fs-sm fw-medium text-secondary mb-2">Modo de operaci&oacute;n</legend>
+        <div class="d-flex gap-4 flex-wrap">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="modo" id="modo-directo" value="directo" checked>
+            <label class="form-check-label fw-medium" for="modo-directo">
+              Validaci&oacute;n directa
+              <span class="fs-xs text-muted d-block fw-normal">Detecta CUITs autom&aacute;ticamente en el texto ingresado</span>
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="modo" id="modo-ia" value="ia">
+            <label class="form-check-label fw-medium" for="modo-ia">
+              Extracci&oacute;n con IA
+              <span class="fs-xs text-muted d-block fw-normal">Usa inteligencia artificial para extraer CUITs del texto</span>
+            </label>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Textarea -->
+      <div class="mb-3">
+        <label for="input-texto" class="form-label fw-medium" id="input-label">
+          Pegue el texto de la factura o ingrese los CUITs manualmente
+        </label>
+        <textarea
+          id="input-texto"
+          class="form-control cuit-textarea"
+          rows="6"
+          placeholder="Ej: 20-30123456-7, 30-12345678-9&#10;O pegue el texto completo de una factura con datos del proveedor..."
+          aria-describedby="input-hint"
+          spellcheck="false"
+        ></textarea>
+        <div id="input-hint" class="fs-xs text-muted mt-1">
+          Ingrese uno o m&aacute;s CUITs (separados por coma, espacio o l&iacute;nea nueva). Los CUITs de 11 d&iacute;gitos se formatear&aacute;n autom&aacute;ticamente.
+        </div>
+        <div id="cuits-preview" class="cuits-preview d-none mt-2">
+          <span class="fw-medium fs-sm">CUITs detectados:</span>
+          <span id="cuits-count" class="badge badge-info ms-1">0</span>
+          <span id="cuits-list" class="fs-xs text-muted ms-2"></span>
+        </div>
+      </div>
+
+      <!-- Action -->
+      <div class="d-flex align-items-center gap-3">
+        <button id="btn-validar" class="btn-corona btn-corona-primary btn-lg-action" type="button">
+          <span class="btn-icon" id="btn-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+          <span id="btn-text">Validar CUITs</span>
+          <span id="btn-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+        </button>
+        <button id="btn-limpiar" class="btn-corona btn-corona-secondary" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+          Limpiar
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── ERROR / EMPTY STATES ── -->
+  <div id="error-container" class="d-none" role="alert" aria-live="polite"></div>
+
+  <!-- ── STATS BAR ── -->
+  <section id="stats-bar" class="kpi-grid d-none" aria-label="Resumen de validaci&oacute;n">
+    <div class="kpi-card blue">
+      <div class="kpi-label">Total CUITs</div>
+      <div class="kpi-value mono" id="stat-total">0</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">V&aacute;lidos</div>
+      <div class="kpi-value mono" id="stat-validos">0</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">Inv&aacute;lidos</div>
+      <div class="kpi-value mono" id="stat-invalidos">0</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">Registrados en Calipso</div>
+      <div class="kpi-value mono" id="stat-registrados">0</div>
+    </div>
+  </section>
+
+  <!-- ── RESULTS TABLE ── -->
+  <section id="results-panel" class="panel d-none" aria-label="Resultados de validaci&oacute;n">
+    <div class="panel-header">
+      <span class="panel-title">
+        <span class="dot dot-green" aria-hidden="true"></span>
+        Resultados
+      </span>
+      <span id="results-count" class="fs-xs text-muted"></span>
+    </div>
+    <div class="table-wrap">
+      <table class="table-results" id="results-table">
+        <thead>
+          <tr>
+            <th scope="col">CUIT</th>
+            <th scope="col">Formateado</th>
+            <th scope="col">V&aacute;lido</th>
+            <th scope="col">Registrado en Calipso</th>
+            <th scope="col">Detalle</th>
+          </tr>
+        </thead>
+        <tbody id="results-body">
+          <tr class="empty-row">
+            <td colspan="5">
+              <div class="empty-state">
+                <p>No hay resultados para mostrar.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── LOADING OVERLAY ── -->
+  <div id="loading-overlay" class="loading-overlay d-none">
+    <div class="loading-box">
+      <div class="spinner-border text-light mb-2" role="status">
+        <span class="visually-hidden">Procesando...</span>
+      </div>
+      <p class="text-light m-0 fs-sm" id="loading-text">Procesando CUITs...</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer class="footer-bar" role="contentinfo">
+  <span>Ingenio La Corona &mdash; Bioenerg&iacute;a La Corona S.A.</span>
+  <span class="text-muted footer-sep">|</span>
+  <span class="text-muted">Sistema de validaci&oacute;n de CUITs &mdash; Automatizaci&oacute;n de Facturas</span>
+  <span class="text-muted footer-sep">|</span>
+  <span class="text-muted" id="footer-time"></span>
+</footer>
+
+<!-- ═══════ TOAST CONTAINER ═══════ -->
+<div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<!-- ═══════ SCRIPTS ═══════ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
+<script src="js/app.js"></script>
+</body>
+</html>
