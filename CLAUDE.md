@@ -14,11 +14,42 @@ Actuás como Arquitecto de Automatización, Agente IA Técnico y Consultor Senio
 
 **Motivo**: reducir redescubrimiento, aprovechar contexto ya documentado, evitar decisiones inconsistentes con lo construido.
 
-## Regla global: Agentes y Git
+## Regla global: Trabajo semi-autónomo de agentes
 
-**Los agentes pueden crear ramas y commits de forma autónoma.** Cada agente de implementación (`backend-dev`, `frontend-dev`, `n8n-flow-architect`, `node-red-flow-reviewer`, `qa-tester`, `docs-writer`) trabaja en su propia rama con prefijo de dominio, commitea en incrementos pequeños con conventional commits, y pushea para que el coordinador merguee.
+**Los agentes trabajan en forma semi-autónoma hasta alcanzar los objetivos definidos**, respetando las reglas de seguridad, Git y coordinación establecidas en este documento y en `docs/dev_agent_ingenio-claudecode/reglas_trabajo_agentes.md`.
 
-**El humano aprueba el merge.** El coordinador (`ingenio-dev-coordinator`) orquesta los merges `--no-ff` de las sub-ramas, pero el merge final a `main` requiere aprobación humana explícita. Ningún agente mergea a `main` sin aprobación.
+### Flujo de trabajo obligatorio (8 fases)
+
+Todo proyecto no trivial debe seguir este ciclo. El coordinador (`ingenio-dev-coordinator`) es responsable de hacerlo cumplir:
+
+1. **Relevamiento** — `codebase-mapper` mapea el proyecto. No se toca código sin entender el contexto.
+2. **Planificación** — `requirements-analyst` define el alcance. `solution-architect` diseña la arquitectura.
+3. **Validación de riesgos** — El coordinador identifica qué puede fallar y dónde hay que pedir aprobación humana.
+4. **Implementación controlada** — Agentes de implementación trabajan en ramas separadas, commits chicos, push frecuente.
+5. **Revisión** — `security-reviewer` + `qa-tester` validan seguridad y funcionamiento. No se saltea para código productivo.
+6. **Pruebas** — Plan de test ejecutado, resultados documentados, regresiones chequeadas.
+7. **Documentación** — `docs-writer` produce README, changelog, runbooks y notas de handoff.
+8. **Cierre con reporte** — El coordinador entrega: qué se hizo, archivos modificados, tests, riesgos, rollback y próximos pasos.
+
+### Reglas de seguridad inquebrantables
+
+| Regla | Aplica a |
+|-------|----------|
+| No hacer cambios masivos en una sola iteración | Todos los agentes |
+| No avanzar sin validar Git, estructura y agentes primero | Coordinador |
+| No asumir que todo está correcto — criterio crítico siempre | Todos los agentes |
+| Explicar el cambio y esperar aprobación antes de modificar archivos críticos | Todos los agentes |
+| No modificar producción, `.env`, credenciales, dumps SQL, backups, datos sensibles | Todos los agentes |
+| No ejecutar SQL de escritura (INSERT, UPDATE, DELETE, DROP, ALTER, TRUNCATE) sin aprobación explícita | `backend-dev`, `sql-server-calipso-reviewer` |
+| No borrar archivos sin autorización expresa | Todos los agentes |
+| Usar ramas Git para cualquier cambio no trivial | Todos los agentes |
+| Dejar cada cambio recuperable (Git, backup o copia controlada) | Todos los agentes |
+
+### Git y ramas
+
+**Los agentes pueden crear ramas y commits de forma autónoma.** Cada agente de implementación trabaja en su propia rama con prefijo de dominio, commitea en incrementos pequeños con conventional commits, y pushea para que el coordinador merguee.
+
+**El humano aprueba el merge.** El coordinador orquesta los merges `--no-ff` de las sub-ramas, pero el merge final a `main` requiere aprobación humana explícita. Ningún agente mergea a `main` sin aprobación.
 
 **Estructura de ramas:**
 ```
@@ -30,6 +61,16 @@ feature/<tarea>          ← coordinador (orquesta)
   ├── qa/<slug>          ← qa-tester
   └── docs/<slug>        ← docs-writer
 ```
+
+### Reporte obligatorio de cada agente
+
+Todo agente, al finalizar su tarea, debe informar:
+- Archivos analizados
+- Archivos modificados
+- Motivo del cambio
+- Pruebas realizadas
+- Riesgos detectados
+- Próximos pasos recomendados
 
 ## Empresa
 Ingenio La Corona: fábrica de azúcar + destilería + mantenimiento + laboratorio + control + instrumentación + administración + compras + tesorería + stock + logística + calidad.

@@ -67,6 +67,10 @@
   </a>
 
   <div class="sidebar-section-label">Control</div>
+  <a class="nav-item-custom" onclick="showSection('variaciones')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    Variaciones
+  </a>
   <a class="nav-item-custom" onclick="showSection('interempresas')">
     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
     Interempresas
@@ -266,6 +270,44 @@
       </div>
     </div>
 
+    <div id="section-variaciones" class="section-view">
+      <div class="kpi-grid" id="var-kpi-grid">
+        <div class="kpi-card green"><div class="kpi-label">Período Actual</div><div class="kpi-value mono" id="var-periodo-actual">···</div><div class="kpi-desc" id="var-periodo-actual-sub">Junio 2026</div></div>
+        <div class="kpi-card blue"><div class="kpi-label">Período Anterior</div><div class="kpi-value mono" id="var-periodo-anterior">···</div><div class="kpi-desc" id="var-periodo-anterior-sub">Mayo 2026</div></div>
+        <div class="kpi-card amber"><div class="kpi-label">Cuentas Cambiadas</div><div class="kpi-value" id="var-cambiadas">···</div><div class="kpi-desc" id="var-cambiadas-sub">de total</div></div>
+        <div class="kpi-card red"><div class="kpi-label">Alertas Activas</div><div class="kpi-value" id="var-alertas-total">···</div><div class="kpi-desc" id="var-alertas-sub">críticas / warnings / info</div></div>
+        <div class="kpi-card green"><div class="kpi-label">Cuentas Nuevas</div><div class="kpi-value" id="var-nuevas">···</div><div class="kpi-desc">No existían en período anterior</div></div>
+        <div class="kpi-card red"><div class="kpi-label">Cuentas Ausentes</div><div class="kpi-value" id="var-ausentes">···</div><div class="kpi-desc">Existían en período anterior</div></div>
+      </div>
+      <div class="card-section">
+        <div class="card-header-custom">
+          <span>Top Variaciones por Saldo</span>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <select class="param-input" id="filter-var-change" onchange="filtrarVariaciones()" style="width:140px;font-size:12px;">
+              <option value="">Todos los cambios</option>
+              <option value="CHANGED">Cambiadas</option>
+              <option value="NEW">Nuevas</option>
+              <option value="MISSING">Ausentes</option>
+            </select>
+            <input type="text" class="search-input" placeholder="Buscar cuenta..." oninput="filtrarVariaciones()" id="filter-var-search" style="width:200px;" />
+          </div>
+        </div>
+        <div class="table-container"><table class="table-custom"><thead><tr><th>Código</th><th>Cuenta</th><th class="num">Saldo Anterior</th><th class="num">Saldo Actual</th><th class="num">Delta</th><th>Variación %</th><th>Tipo</th></tr></thead><tbody id="var-body"></tbody></table></div>
+      </div>
+      <div class="card-section">
+        <div class="card-header-custom">
+          <span>🚨 Alertas de Variación</span>
+          <select class="param-input" id="filter-alert-var-severity" onchange="filtrarAlertasVariaciones()" style="width:150px;font-size:12px;">
+            <option value="">Todas</option>
+            <option value="critical">Críticas</option>
+            <option value="warning">Advertencias</option>
+            <option value="info">Informativas</option>
+          </select>
+        </div>
+        <div id="var-alertas-body"></div>
+      </div>
+    </div>
+
     <div id="section-alertas" class="section-view">
       <div class="card-section">
         <div class="card-header-custom"><span>Alertas y Recomendaciones</span>
@@ -331,6 +373,7 @@
 <script src="assets/js/mock.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/ui.js"></script>
+<script src="assets/js/snapshots.js"></script>
 <script src="assets/js/app.js"></script>
 
 </body>

@@ -26,6 +26,7 @@ const SECTION_META = {
   proveedoresSaldos:    { title: 'Saldos de Proveedores',    desc: 'Posición actual por proveedor' },
   proveedoresPendientes:{ title: 'Pendientes de Proveedores',desc: 'Facturas pendientes y fechas de vencimiento' },
   interempresas:        { title: 'Movimientos Interempresas',desc: 'Transacciones entre empresas del grupo' },
+  variaciones:          { title: 'Variaciones entre Períodos',desc: 'Comparación de snapshots — diferencias, altas, bajas y alertas' },
   alertas:              { title: 'Alertas y Recomendaciones',desc: 'Reglas de control y señales críticas' },
 };
 
