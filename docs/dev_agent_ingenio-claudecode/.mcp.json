@@ -1,0 +1,24 @@
+{
+    "mcpServers": {
+        "github": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-github"
+            ],
+            "env": {
+                "GITHUB_TOKEN": "<GITHUB_PERSONAL_ACCESS_TOKEN>"
+            }
+        },
+        "sql-server-calipso": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-mssql"
+            ],
+            "env": {
+                "MSSQL_CONNECTION_STRING": "Server=<IP_SERVIDOR>;Database=CORONA;User Id=<USUARIO_READONLY>;Password=<PASSWORD>;Encrypt=false;TrustServerCertificate=true;"
+            }
+        }
+    }
+}

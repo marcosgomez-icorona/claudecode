@@ -1,0 +1,5 @@
+Instrucciones de implementación
+Guarda los archivos .md de habilidades (calipso-sql-patterns.md, n8n-export-safety.md, php-bootstrap-conventions.md) en una carpeta dedicada de documentación (por ejemplo, ~/.claude/skills/).
+Ubica el archivo CLAUDE.md en la raíz de los repositorios en los que vas a trabajar.
+Asegúrate de configurar correctamente las variables de entorno (GITHUB_TOKEN y detalles de SQL Server) en tu sistema operativo antes de levantar Claude Code para que los MCPs funcionen según lo declarado en .mcp.json
+.

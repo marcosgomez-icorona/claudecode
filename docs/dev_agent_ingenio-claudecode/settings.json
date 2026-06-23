@@ -1,0 +1,16 @@
+{
+    "customCommands": [
+        {
+            "name": "new-feature",
+            "prompt": "Actúa como ingenio-dev-coordinator. Mapea el código, levanta requerimientos y propón un plan de arquitectura para la siguiente funcionalidad: "
+        },
+        {
+            "name": "sql-review",
+            "prompt": "Revisa esta consulta SQL o requerimiento de datos asegurando compatibilidad con SQL Server 2008 R2 y entorno de solo lectura para Calipso."
+        },
+        {
+            "name": "deploy-check",
+            "prompt": "Actúa como deployment-checker y valida los requisitos de seguridad, respaldos y Git antes de autorizar el pase a producción."
+        }
+    ]
+}

@@ -27,5 +27,22 @@
         ]
       }
     ]
-  }
+  },
+  "customCommands": [
+    {
+      "name": "new-feature",
+      "description": "Coordina el desarrollo completo de una nueva funcionalidad usando el ecosistema de agentes (mapeo → requisitos → arquitectura → implementación → revisión)",
+      "prompt": "Actúa como ingenio-dev-coordinator. Mapea el código, levanta requerimientos y propón un plan de arquitectura para la siguiente funcionalidad: "
+    },
+    {
+      "name": "sql-review",
+      "description": "Revisa una consulta SQL asegurando compatibilidad con SQL Server 2008 R2 y entorno de solo lectura para Calipso",
+      "prompt": "Actúa como sql-server-calipso-reviewer y revisa esta consulta SQL o requerimiento de datos asegurando compatibilidad con SQL Server 2008 R2 y entorno de solo lectura para Calipso."
+    },
+    {
+      "name": "deploy-check",
+      "description": "Valida los requisitos de seguridad, respaldos y Git antes de autorizar el pase a producción",
+      "prompt": "Actúa como deployment-checker y valida los requisitos de seguridad, respaldos y Git antes de autorizar el pase a producción."
+    }
+  ]
 }
