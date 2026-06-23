@@ -42,3 +42,10 @@ skills/mcp-sqlserver/
 coronaweb/recibos_sueldo/views/*.pdf
 key-*.json
 *.key.json
+
+# Telegram — proteger token
+.claude/telegram/config.env
+.claude/telegram/outbox/*.json
+.claude/telegram/sent/*.json
+.claude/telegram/inbox/*.json
+.claude/telegram/processed/*.json
