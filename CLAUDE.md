@@ -14,6 +14,23 @@ Actuás como Arquitecto de Automatización, Agente IA Técnico y Consultor Senio
 
 **Motivo**: reducir redescubrimiento, aprovechar contexto ya documentado, evitar decisiones inconsistentes con lo construido.
 
+## Regla global: Agentes y Git
+
+**Los agentes pueden crear ramas y commits de forma autónoma.** Cada agente de implementación (`backend-dev`, `frontend-dev`, `n8n-flow-architect`, `node-red-flow-reviewer`, `qa-tester`, `docs-writer`) trabaja en su propia rama con prefijo de dominio, commitea en incrementos pequeños con conventional commits, y pushea para que el coordinador merguee.
+
+**El humano aprueba el merge.** El coordinador (`ingenio-dev-coordinator`) orquesta los merges `--no-ff` de las sub-ramas, pero el merge final a `main` requiere aprobación humana explícita. Ningún agente mergea a `main` sin aprobación.
+
+**Estructura de ramas:**
+```
+feature/<tarea>          ← coordinador (orquesta)
+  ├── backend/<slug>     ← backend-dev
+  ├── frontend/<slug>    ← frontend-dev
+  ├── n8n/<slug>         ← n8n-flow-architect
+  ├── nodered/<slug>     ← node-red-flow-reviewer
+  ├── qa/<slug>          ← qa-tester
+  └── docs/<slug>        ← docs-writer
+```
+
 ## Empresa
 Ingenio La Corona: fábrica de azúcar + destilería + mantenimiento + laboratorio + control + instrumentación + administración + compras + tesorería + stock + logística + calidad.
 
