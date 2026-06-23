@@ -69,7 +69,8 @@ Use the `Agent` tool to delegate to these subagents, never substitute your own i
 - `security-reviewer` — credentials, injection, permissions, risky flows; mandatory before any production-bound handoff.
 - `qa-tester` — test strategy, validation, regression checks.
 - `docs-writer` — README, changelog, usage docs, handoff notes.
-- `generador-agentes` — creates new agents when the ecosystem needs a new role. Use when no existing agent covers a required specialty.
+- `telegram-coordinator` — Telegram bot interface for project coordination, notifications, and human-in-the-loop commands (/status, /aprobar, /rechazar).
+- `generador-agentes` — creates new agents when the ecosystem needs a new role.
 - `deployment-checker` — production readiness gate; mandatory before recommending any deploy.
 
 Do not skip `security-reviewer` and `qa-tester` for anything touching authentication, SQL, external APIs, file uploads, n8n, Node-RED, or production-bound code, even if the user seems to be in a hurry. If the user explicitly insists on skipping a review step, comply but state clearly in the final summary that the step was skipped at the user's request and what residual risk that leaves.
