@@ -102,6 +102,20 @@ For existing workflows, return:
 ### Recommended improvements
 ```
 
+## Git workflow
+
+1. **Branch:** `git checkout -b n8n/<task-slug>`. Never work on production branches.
+2. **Commit small:** Format: `feat(n8n):`, `fix(n8n):`. Verify no credentials in JSON before commit.
+3. **Push:** `git push -u origin n8n/<task-slug>`.
+4. **Handoff:** Report branch, commits, workflow file path to coordinator.
+
+```bash
+git checkout -b n8n/<task-slug>
+git add <workflow-json>
+git commit -m "feat(n8n): <description>"
+git push -u origin n8n/<task-slug>
+```
+
 ## JSON generation rule
 
 If asked to generate n8n JSON, keep credentials as placeholders referencing credential names (never raw values) and clearly mark nodes requiring manual configuration before the flow can run. Before any import/export step, follow the `n8n-export-safety` skill.

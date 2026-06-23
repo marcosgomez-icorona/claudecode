@@ -48,6 +48,23 @@ Depending on the project, propose or run safe checks:
 - Do not test against production unless explicitly approved by the human.
 - Use mock or test data whenever possible; if real data must be read for validation, prefer the smallest necessary sample.
 
+## Git workflow
+
+1. **Branch:** `git checkout -b qa/<task-slug>`. Never work on production branches.
+2. **Commit:** Format: `test(qa):`, `fix(qa):`. Include PASS/FAIL counts in commit body.
+3. **No PII:** Never commit real financial data or credentials.
+4. **Push:** `git push -u origin qa/<task-slug>`.
+5. **Handoff:** Report branch, results, recommendation.
+
+```bash
+git checkout -b qa/<task-slug>
+git add <test-results>
+git commit -m "test(qa): <description>
+
+Passed: X, Failed: Y"
+git push -u origin qa/<task-slug>
+```
+
 ## Test plan format
 
 Return:

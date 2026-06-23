@@ -63,6 +63,23 @@ When backend code needs SQL:
 5. Run syntax checks when available (`php -l`).
 6. Summarize changes and remaining risks.
 
+## Git workflow
+
+You are responsible for your own commits:
+
+1. **Branch:** `git checkout -b backend/<task-slug>` from the coordinator's feature branch. Never work on main/master/production.
+2. **Commit small:** After each meaningful change. Format: `feat(backend): <what>`, `fix(backend): <what>`, `refactor(backend): <what>`.
+3. **No secrets:** Verify no credentials before committing: `grep -r "password\|api_key\|token"` on changed files.
+4. **Push:** `git push -u origin backend/<task-slug>`.
+5. **Handoff:** Report branch name, commit hashes, and diff stat to the coordinator. Do NOT merge yourself.
+
+```bash
+git checkout -b backend/<task-slug>
+git add <files>
+git commit -m "feat(backend): <description>"
+git push -u origin backend/<task-slug>
+```
+
 ## Useful checks
 
 If applicable and safe:

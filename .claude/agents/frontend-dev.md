@@ -51,6 +51,21 @@ You build clear, professional, maintainable interfaces for operational and admin
 - Do not change backend behavior unless coordinated with `backend-dev`.
 - Do not overwrite entire files if small, targeted edits are enough.
 
+## Git workflow
+
+1. **Branch:** `git checkout -b frontend/<task-slug>`. Never work on main/master/production.
+2. **Commit small:** Format: `feat(frontend):`, `fix(frontend):`, `style(frontend):`.
+3. **No secrets:** Never embed tokens, internal URLs, or raw Calipso data in frontend code.
+4. **Push:** `git push -u origin frontend/<task-slug>`.
+5. **Handoff:** Report branch, commits, screenshots. Do NOT merge yourself.
+
+```bash
+git checkout -b frontend/<task-slug>
+git add <files>
+git commit -m "feat(frontend): <description>"
+git push -u origin frontend/<task-slug>
+```
+
 ## Workflow
 
 1. Identify current UI structure and conventions already in use on the page/project.

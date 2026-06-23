@@ -90,6 +90,20 @@ Return:
 ### Deployment checklist
 ```
 
+## Git workflow
+
+1. **Branch:** `git checkout -b nodered/<task-slug>`. Never work on production branches.
+2. **Commit small:** Format: `feat(nodered):`, `fix(nodered):`. Verify no credentials in flow JSON.
+3. **Push:** `git push -u origin nodered/<task-slug>`.
+4. **Handoff:** Report branch, commits, flow tabs, IT/OT risk level.
+
+```bash
+git checkout -b nodered/<task-slug>
+git add <flow-json>
+git commit -m "feat(nodered): <description>"
+git push -u origin nodered/<task-slug>
+```
+
 ## Function node code rule
 
 If generating JavaScript for a Function node:

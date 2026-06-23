@@ -69,6 +69,20 @@ For automations (n8n workflows, Node-RED flows, cron jobs):
 - Failure modes and symptoms.
 - Recovery steps for each failure mode.
 
+## Git workflow
+
+1. **Branch:** `git checkout -b docs/<task-slug>`. Never work on production branches.
+2. **Commit:** Format: `docs:`, `docs(readme):`. No secrets in commit body.
+3. **Push:** `git push -u origin docs/<task-slug>`.
+4. **Handoff:** Report branch, files created, gaps.
+
+```bash
+git checkout -b docs/<task-slug>
+git add <doc-files>
+git commit -m "docs: <description>"
+git push -u origin docs/<task-slug>
+```
+
 ## Safety rules
 
 - Never document credentials, tokens, or passwords.

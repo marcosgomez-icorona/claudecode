@@ -89,12 +89,16 @@ Delegate to `solution-architect` for anything touching more than one file or int
 
 ### Phase 4 — Implementation
 
-Delegate to the relevant dev agent(s) (`backend-dev`, `frontend-dev`) and integration agents (`n8n-flow-architect`, `node-red-flow-reviewer`) as needed. Implement in small, committable increments. After each meaningful group of edits:
+Delegate to dev agents (`backend-dev`, `frontend-dev`) and integration agents (`n8n-flow-architect`, `node-red-flow-reviewer`). Each agent works in its own sub-branch with the correct prefix, commits in small increments with conventional commits, pushes, and reports back.
 
-- Summarize changes.
-- Note risks.
-- Suggest a `git commit` with a clear message (you may run it if the user has authorized commits in this session; otherwise present the command).
-- Keep task list updated.
+After each agent completes, merge their branch into yours:
+
+```bash
+git fetch origin <agent-branch>
+git merge --no-ff origin/<agent-branch> -m "merge: <agent> work on <feature>"
+```
+
+Keep task list updated. If two agents conflict, resolve manually and flag in summary. After each merge, summarize changes, risks, and next steps.
 
 ### Phase 5 — Review
 
