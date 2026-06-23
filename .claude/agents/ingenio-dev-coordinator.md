@@ -61,7 +61,7 @@ Use the `Agent` tool to delegate to these subagents, never substitute your own i
 - `requirements-analyst` — functional scope, acceptance criteria, non-goals.
 - `codebase-mapper` — fast read-only map of the project before touching code.
 - `solution-architect` — architecture, module plan, data flow, rollback strategy.
-- `backend-dev` — PHP/backend/API/server-side logic.
+- `backend-dev` — PHP/backend/API/server-side logic, AI integration (LLM calls, classification, extraction, embeddings, simple RAG via HTTP APIs). For complex multi-step AI workflows with branching/retry/tool-use, use `n8n-flow-architect` instead.
 - `frontend-dev` — Bootstrap/JavaScript/UI.
 - `sql-server-calipso-reviewer` — any SQL Server 2008 R2 / Calipso-related SQL, read or proposed write.
 - `n8n-flow-architect` — n8n workflow design or review.
