@@ -1,0 +1,276 @@
+[
+  {
+    "id": "inject_manual",
+    "type": "inject",
+    "z": "e33f72a757b7b038",
+    "name": "Iniciar Manualmente",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "Manual Trigger",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 80,
+    "wires": [
+      [
+        "mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "inject_15min",
+    "type": "inject",
+    "z": "e33f72a757b7b038",
+    "name": "Ejecutar cada 15 Minutos",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "900",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "Scheduled Trigger",
+    "payload": "",
+    "payloadType": "date",
+    "x": 180,
+    "y": 220,
+    "wires": [
+      [
+        "mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "mssql_query",
+    "type": "MSSQL",
+    "z": "e33f72a757b7b038",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT numero_pesada,remito,id_caniero,razon_social,bruto,netoreal,Caña as tipo,GRUPO,fechaindustrial FROM [CORONA].[dbo].[v_pr_detallado_cania] ORDER BY CONVERT(DATE, fechaindustrial, 103) desc;",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "msg",
+    "rows": "",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 230,
+    "y": 140,
+    "wires": [
+      [
+        "process_data",
+        "0809d0f3ba482589"
+      ]
+    ]
+  },
+  {
+    "id": "process_data",
+    "type": "function",
+    "z": "e33f72a757b7b038",
+    "name": "Procesar Datos",
+    "func": "msg.payload = msg.payload.map(row => [\n    row.numero_pesada,\n    row.razon_social,\n    row.remito,\n    row.tipo,\n    row.bruto,\n    row.GRUPO,\n    row.netoreal,\n    row.fechaindustrial\n]);\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 460,
+    "y": 140,
+    "wires": [
+      [
+        "33f5d77b990234ac"
+      ]
+    ]
+  },
+  {
+    "id": "debug_before_insert",
+    "type": "debug",
+    "z": "e33f72a757b7b038",
+    "name": "Datos antes de la inserción",
+    "active": false,
+    "console": "false",
+    "complete": "payload",
+    "x": 480,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "debug_after_insert",
+    "type": "debug",
+    "z": "e33f72a757b7b038",
+    "name": "Datos después de la inserción",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 950,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "mysql_insert",
+    "type": "mysql",
+    "z": "e33f72a757b7b038",
+    "mydb": "be57a95186f3df2f",
+    "name": "Insertar en MySQL",
+    "x": 150,
+    "y": 300,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "0809d0f3ba482589",
+    "type": "debug",
+    "z": "e33f72a757b7b038",
+    "name": "debug 64",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 440,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "29c8bb8008278b00",
+    "type": "mysql2",
+    "z": "e33f72a757b7b038",
+    "name": "sync_detalle_canieros",
+    "server": "6dcd8b9470924132",
+    "bind": "",
+    "topic": "msg.topic = \"INSERT INTO tu_tabla (columna1, columna2) VALUES ('valor1', 'valor2')\";\nreturn msg;",
+    "x": 340,
+    "y": 400,
+    "wires": [
+      [
+        "7f8b8f0a08691a62",
+        "838cffa70d5288ca"
+      ]
+    ]
+  },
+  {
+    "id": "93247ddb9c5febe8",
+    "type": "function",
+    "z": "e33f72a757b7b038",
+    "name": "Leer BDs Nueva",
+    "func": "msg.payload = msg.payload.map(row => [\n    row.numero_pesada,\n    row.razon_social,\n    row.remito,\n    row.tipo,\n    row.bruto,\n    row.GRUPO,\n    row.netoreal,\n    row.fechaindustrial\n]);\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 120,
+    "y": 400,
+    "wires": [
+      [
+        "29c8bb8008278b00"
+      ]
+    ]
+  },
+  {
+    "id": "7f8b8f0a08691a62",
+    "type": "function",
+    "z": "e33f72a757b7b038",
+    "name": "Reestructurado",
+    "func": "msg.payload = msg.payload.map(row => [\n    row.numero_pesada,\n    row.razon_social,\n    row.remito,\n    row.tipo,\n    row.bruto,\n    row.GRUPO,\n    row.netoreal,\n    row.fechaindustrial\n]);\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 580,
+    "y": 400,
+    "wires": [
+      [
+        "aa1936fa4f616746"
+      ]
+    ]
+  },
+  {
+    "id": "838cffa70d5288ca",
+    "type": "debug",
+    "z": "e33f72a757b7b038",
+    "name": "debug 65",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 560,
+    "y": 460,
+    "wires": []
+  },
+  {
+    "id": "aa1936fa4f616746",
+    "type": "websocket out",
+    "z": "e33f72a757b7b038",
+    "name": "Datos Corona",
+    "server": "ba72c4bedfbc06da",
+    "client": "",
+    "x": 780,
+    "y": 400,
+    "wires": []
+  },
+  {
+    "id": "d4ded75f4203e3c4",
+    "type": "mysql",
+    "z": "e33f72a757b7b038",
+    "mydb": "be57a95186f3df2f",
+    "name": "Insertar en MySQL",
+    "x": 930,
+    "y": 140,
+    "wires": [
+      [
+        "debug_after_insert"
+      ]
+    ]
+  },
+  {
+    "id": "33f5d77b990234ac",
+    "type": "function",
+    "z": "e33f72a757b7b038",
+    "name": "Insertar en BDs Nueva",
+    "func": "msg.payload = msg.payload.map(row => [\n    row.numero_pesada,\n    row.razon_social,\n    row.remito,\n    row.tipo,\n    row.bruto,\n    row.GRUPO,\n    row.netoreal,\n    row.fechaindustrial\n]);\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 700,
+    "y": 140,
+    "wires": [
+      [
+        "d4ded75f4203e3c4"
+      ]
+    ]
+  }
+]

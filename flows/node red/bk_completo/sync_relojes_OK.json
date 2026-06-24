@@ -1,0 +1,455 @@
+[
+  {
+    "id": "894efb96d3953fec",
+    "type": "inject",
+    "z": "aa82e316ec538df7",
+    "name": "▶ Ejecutar TODOS los relojes",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "start_all",
+    "payloadType": "str",
+    "x": 180,
+    "y": 80,
+    "wires": [
+      [
+        "c038177acb2a2ec7"
+      ]
+    ]
+  },
+  {
+    "id": "c038177acb2a2ec7",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Verificar bloqueo",
+    "func": "// Verificar si ya hay un proceso global activo\nconst procesoGlobalActivo = global.get('anvizProcesoGlobalActivo') || false;\nconst inicioProceso = global.get('anvizInicioProceso') || 0;\n\n// Timeout de seguridad: si lleva más de 30 minutos, forzar reset\nconst MAX_DURACION_MS = 30 * 60 * 1000; // 30 minutos\nconst tiempoTranscurrido = Date.now() - inicioProceso;\n\nif (procesoGlobalActivo && tiempoTranscurrido < MAX_DURACION_MS) {\n    node.warn(`⏳ Proceso ya activo desde hace ${(tiempoTranscurrido/1000).toFixed(0)}s - IGNORANDO nueva ejecución`);\n    node.status({ fill: 'yellow', shape: 'ring', text: 'Bloqueado - proceso activo' });\n    return null;\n}\n\nif (procesoGlobalActivo && tiempoTranscurrido >= MAX_DURACION_MS) {\n    node.warn(`⚠ Proceso colgado por más de 30min - FORZANDO RESET`);\n}\n\n// Marcar proceso como activo\nglobal.set('anvizProcesoGlobalActivo', true);\nglobal.set('anvizInicioProceso', Date.now());\n\nnode.status({ fill: 'green', shape: 'dot', text: 'Iniciando proceso' });\nnode.log('🔓 Bloqueo adquirido - iniciando proceso');\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 380,
+    "y": 120,
+    "wires": [
+      [
+        "6818b0560f5579af"
+      ]
+    ]
+  },
+  {
+    "id": "6818b0560f5579af",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Inicializar lista relojes",
+    "func": "// Lista de relojes a procesar\nconst relojes = [\n    { ip: '192.168.7.243', sucursal: 'SAS' },\n    { ip: '192.168.7.244', sucursal: 'SAS' },\n    { ip: '192.168.7.245', sucursal: 'SAS' },\n    { ip: '192.168.7.246', sucursal: 'SAS' },\n    { ip: '192.168.7.247', sucursal: 'SAS' }\n];\n\n// Configuración de fechas: últimos 7 días\nconst diasAtras = 7;\nconst fechaHasta = new Date();\nconst fechaDesde = new Date();\nfechaDesde.setDate(fechaDesde.getDate() - diasAtras);\n\nconst fechaDesdeStr = `${fechaDesde.getFullYear()}-${String(fechaDesde.getMonth()+1).padStart(2,'0')}-${String(fechaDesde.getDate()).padStart(2,'0')}`;\nconst fechaHastaStr = `${fechaHasta.getFullYear()}-${String(fechaHasta.getMonth()+1).padStart(2,'0')}-${String(fechaHasta.getDate()).padStart(2,'0')}`;\n\nflow.set('fechaDesde', fechaDesdeStr);\nflow.set('fechaHasta', fechaHastaStr);\nflow.set('diasConsulta', diasAtras);\n\n// Inicializar control de proceso\nflow.set('relojes', relojes);\nflow.set('relojActualIndex', 0);\nflow.set('pausaEntreConsultas', 800);\nflow.set('pausaEntreRelojes', 2000);\n\n// Estadísticas globales por reloj\nconst estadoRelojes = relojes.map(r => ({\n    ip: r.ip,\n    sucursal: r.sucursal,\n    estado: 'PENDIENTE',\n    procesados: 0,\n    insertados: 0,\n    intentos: 0,\n    error: null,\n    duracion: 0\n}));\nflow.set('estadoRelojes', estadoRelojes);\n\n// Lista de relojes para reintento (segunda pasada)\nflow.set('relojesParaReintento', []);\nflow.set('faseReintento', false);\n\n// Estadísticas globales\nflow.set('estadisticasGlobales', {\n    totalProcesados: 0,\n    totalInsertados: 0,\n    inicioProceso: Date.now()\n});\n\nnode.log('========================================');\nnode.log('🚀 INICIANDO PROCESO PARA TODOS LOS RELOJES');\nnode.log(`📋 Relojes a procesar: ${relojes.length}`);\nnode.log(`📅 Consultando últimos ${diasAtras} días (${fechaDesdeStr} al ${fechaHastaStr})`);\nnode.log('========================================');\n\nmsg.payload = 'start';\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 610,
+    "y": 120,
+    "wires": [
+      [
+        "6d03875ad8ce1341"
+      ]
+    ]
+  },
+  {
+    "id": "6d03875ad8ce1341",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Procesar siguiente reloj",
+    "func": "const relojes = flow.get('relojes') || [];\nconst relojIndex = flow.get('relojActualIndex') || 0;\nconst faseReintento = flow.get('faseReintento') || false;\n\n// Verificar si terminamos todos los relojes\nif (relojIndex >= relojes.length) {\n    const relojesParaReintento = flow.get('relojesParaReintento') || [];\n    \n    // Si no estamos en fase de reintento y hay relojes fallidos -> iniciar reintento\n    if (!faseReintento && relojesParaReintento.length > 0) {\n        node.log('========================================');\n        node.log(`🔁 INICIANDO FASE DE REINTENTO`);\n        node.log(`📋 Relojes a reintentar: ${relojesParaReintento.length}`);\n        node.log('========================================');\n        \n        // Cambiar a fase de reintento\n        flow.set('faseReintento', true);\n        flow.set('relojes', relojesParaReintento);\n        flow.set('relojActualIndex', 0);\n        flow.set('relojesParaReintento', []);\n        \n        // Reiniciar el proceso con los relojes fallidos\n        setTimeout(() => {\n            node.send({ payload: 'reintento_inicio' });\n        }, 3000);\n        \n        return null;\n    }\n    \n    // Proceso completado - mostrar resumen y liberar bloqueo\n    return [null, { payload: 'resumen_final' }];\n}\n\n// Obtener el reloj actual\nconst reloj = relojes[relojIndex];\n\nnode.log('========================================');\nnode.log(`🕒 ${faseReintento ? '[REINTENTO] ' : ''}PROCESANDO RELOJ ${relojIndex + 1}/${relojes.length}: ${reloj.ip} - ${reloj.sucursal}`);\nnode.log('========================================');\n\n// Configurar el reloj actual\nflow.set('relojActual', reloj);\nflow.set('inicioRelojActual', Date.now());\n\n// Resetear contadores para este reloj\nflow.set('registroIndex', 0);\nflow.set('batchIndex', 0);\nflow.set('totalProcesados', 0);\nflow.set('totalInsertados', 0);\nflow.set('esUltimoBatch', false);\nflow.set('todosLosRegistros', []);\n\n// Actualizar estado del reloj\nconst estadoRelojes = flow.get('estadoRelojes') || [];\nconst estadoReloj = estadoRelojes.find(r => r.ip === reloj.ip);\nif (estadoReloj) {\n    estadoReloj.estado = 'PROCESANDO';\n    estadoReloj.intentos += 1;\n    flow.set('estadoRelojes', estadoRelojes);\n}\n\nmsg.payload = 'start';\nmsg.reloj = reloj;\nmsg.relojIndex = relojIndex;\nmsg.readerIp = reloj.ip;\nmsg.sucursal = reloj.sucursal;\n\nreturn [msg, null];",
+    "outputs": 2,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 840,
+    "y": 120,
+    "wires": [
+      [
+        "99b4ad184dfe6971"
+      ],
+      [
+        "9bbb36bcf3c4c186"
+      ]
+    ]
+  },
+  {
+    "id": "99b4ad184dfe6971",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Login reloj",
+    "func": "const reloj = flow.get('relojActual');\nif (!reloj) {\n    node.error('❌ No hay reloj actual configurado');\n    return null;\n}\n\nconst ip = reloj.ip;\nconst userid = 'admin';\nconst password = '12345';\nconst sucursal = reloj.sucursal;\n\nflow.set('readerIp', ip);\nflow.set('sucursal', sucursal);\n\nmsg.readerIp = ip;\nmsg.sucursal = sucursal;\n\nmsg.url = `http://${ip}/goform/chklogin?_t=${Date.now()}`;\nmsg.method = 'POST';\nmsg.headers = {\n    'Content-Type': 'application/json',\n    'Accept': 'application/json, text/plain, */*',\n    'Referer': `http://${ip}/index.html`\n};\nmsg.payload = {\n    userid: userid,\n    password: password\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1040,
+    "y": 120,
+    "wires": [
+      [
+        "b89e79fdcc798f50"
+      ]
+    ]
+  },
+  {
+    "id": "b89e79fdcc798f50",
+    "type": "http request",
+    "z": "aa82e316ec538df7",
+    "name": "POST /chklogin",
+    "method": "use",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": true,
+    "headers": [],
+    "x": 1220,
+    "y": 120,
+    "wires": [
+      [
+        "dd9618d6b0ab5db3"
+      ]
+    ]
+  },
+  {
+    "id": "dd9618d6b0ab5db3",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Extraer token",
+    "func": "function parseAnvizJSON(text) {\n    if (typeof text !== 'string') return text;\n    text = text.trim();\n    \n    try {\n        return JSON.parse(text);\n    } catch(e) {}\n    \n    let cleaned = text.replace(/,\\s*}/g, '}');\n    cleaned = cleaned.replace(/,\\s*]/g, ']');\n    cleaned = cleaned.replace(/([{,]\\s*)([a-zA-Z_][a-zA-Z0-9_]*)\\s*:/g, '$1\"$2\":');\n    cleaned = cleaned.replace(/'/g, '\"');\n    cleaned = cleaned.replace(/[\\x00-\\x1F\\x7F-\\x9F]/g, '');\n    \n    try {\n        return JSON.parse(cleaned);\n    } catch(e) {\n        const jsonMatch = cleaned.match(/\\{[\\s\\S]*\\}/);\n        if (jsonMatch) {\n            try {\n                return JSON.parse(jsonMatch[0]);\n            } catch(e2) {}\n        }\n        throw new Error(`No se pudo parsear JSON: ${e.message}`);\n    }\n}\n\n// Función para marcar reloj como fallido y pasar al siguiente\nfunction marcarFalloYContinuar(errorMsg) {\n    const readerIp = flow.get('readerIp');\n    const faseReintento = flow.get('faseReintento') || false;\n    const estadoRelojes = flow.get('estadoRelojes') || [];\n    const estadoReloj = estadoRelojes.find(r => r.ip === readerIp);\n    \n    if (estadoReloj) {\n        estadoReloj.estado = faseReintento ? 'FALLIDO_DEFINITIVO' : 'FALLIDO_PRIMERA';\n        estadoReloj.error = errorMsg;\n        estadoReloj.duracion = Math.round((Date.now() - flow.get('inicioRelojActual')) / 1000);\n        flow.set('estadoRelojes', estadoRelojes);\n    }\n    \n    // Si NO es fase de reintento, agregar a lista de reintento\n    if (!faseReintento) {\n        const relojesParaReintento = flow.get('relojesParaReintento') || [];\n        const relojActual = flow.get('relojActual');\n        if (relojActual && !relojesParaReintento.find(r => r.ip === relojActual.ip)) {\n            relojesParaReintento.push(relojActual);\n            flow.set('relojesParaReintento', relojesParaReintento);\n        }\n    }\n    \n    // Pasar al siguiente reloj\n    const relojActualIndex = flow.get('relojActualIndex') || 0;\n    flow.set('relojActualIndex', relojActualIndex + 1);\n    \n    setTimeout(() => {\n        node.send([null, { payload: 'siguiente_reloj' }]);\n    }, 2000);\n}\n\ntry {\n    let data = msg.payload;\n    \n    if (typeof data === 'string') {\n        data = parseAnvizJSON(data);\n    }\n    \n    if (data.code === 'error' || data.code === 'Error') {\n        throw new Error(`Login falló: ${data.msg || data.message || 'error desconocido'}`);\n    }\n    \n    if (data.retvalue !== undefined && data.retvalue !== 0) {\n        throw new Error(`Login retvalue: ${data.retvalue} - ${data.msg || ''}`);\n    }\n    \n    const token = data.token || data.Token || data.TOKEN || (data.data && data.data.token);\n    \n    if (!token) {\n        throw new Error(`No se encontró token en la respuesta`);\n    }\n    \n    msg.token = token;\n    node.log(`✅ Login OK - Token obtenido para ${msg.readerIp}`);\n    \n    const fechaDesde = flow.get('fechaDesde');\n    const fechaHasta = flow.get('fechaHasta');\n    \n    const batchIndex = flow.get('batchIndex') || 0;\n    const batchSize = 25;\n    const start = batchIndex * batchSize;\n    \n    flow.set('batchSize', batchSize);\n    \n    const url = `http://${msg.readerIp}/goform/GetReportFormInfo` +\n        `?_t=${Date.now()}` +\n        `&userid=` +\n        `&from=${fechaDesde}` +\n        `&to=${fechaHasta}` +\n        `&intime=00:00` +\n        `&outtime=23:59` +\n        `&start=${start}` +\n        `&limit=${batchSize}`;\n    \n    msg.url = url;\n    msg.method = 'GET';\n    msg.headers = {\n        'token': token,\n        'Accept': 'application/json, text/plain, */*',\n        'Referer': `http://${msg.readerIp}/index.html`,\n        'Cache-Control': 'no-cache'\n    };\n    msg.payload = '';\n    \n    node.log(`📦 [${msg.readerIp}] Solicitando batch ${batchIndex + 1} (registros ${start} a ${start + batchSize - 1})`);\n    \n    const pausa = flow.get('pausaEntreConsultas') || 800;\n    setTimeout(() => {\n        node.send([msg, null]);\n    }, pausa);\n    \n    return null;\n    \n} catch (e) {\n    node.error(`❌ Error login para ${msg.readerIp}: ${e.message}`);\n    marcarFalloYContinuar(e.message);\n    return null;\n}",
+    "outputs": 2,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1420,
+    "y": 120,
+    "wires": [
+      [
+        "b1b838d691589147"
+      ],
+      [
+        "6d03875ad8ce1341"
+      ]
+    ]
+  },
+  {
+    "id": "b1b838d691589147",
+    "type": "http request",
+    "z": "aa82e316ec538df7",
+    "name": "GET registros (batch)",
+    "method": "use",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": true,
+    "headers": [],
+    "x": 340,
+    "y": 260,
+    "wires": [
+      [
+        "660a133c55219c8e"
+      ]
+    ]
+  },
+  {
+    "id": "660a133c55219c8e",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Parsear batch",
+    "func": "function parseAnvizJSON(text) {\n    if (typeof text !== 'string') return text;\n    let cleaned = text.replace(/,(\\s*})/g, '$1');\n    cleaned = cleaned.replace(/,(\\s*\\])/g, '$1');\n    cleaned = cleaned.replace(/([{,]\\s*)([a-zA-Z_][a-zA-Z0-9_]*)\\s*:/g, '$1\"$2\":');\n    return JSON.parse(cleaned);\n}\n\n// Función para marcar reloj como fallido y pasar al siguiente\nfunction marcarFalloYContinuar(errorMsg) {\n    const readerIp = flow.get('readerIp');\n    const faseReintento = flow.get('faseReintento') || false;\n    const estadoRelojes = flow.get('estadoRelojes') || [];\n    const estadoReloj = estadoRelojes.find(r => r.ip === readerIp);\n    \n    if (estadoReloj) {\n        estadoReloj.estado = faseReintento ? 'FALLIDO_DEFINITIVO' : 'FALLIDO_PRIMERA';\n        estadoReloj.error = errorMsg;\n        estadoReloj.duracion = Math.round((Date.now() - flow.get('inicioRelojActual')) / 1000);\n        flow.set('estadoRelojes', estadoRelojes);\n    }\n    \n    if (!faseReintento) {\n        const relojesParaReintento = flow.get('relojesParaReintento') || [];\n        const relojActual = flow.get('relojActual');\n        if (relojActual && !relojesParaReintento.find(r => r.ip === relojActual.ip)) {\n            relojesParaReintento.push(relojActual);\n            flow.set('relojesParaReintento', relojesParaReintento);\n        }\n    }\n    \n    const relojActualIndex = flow.get('relojActualIndex') || 0;\n    flow.set('relojActualIndex', relojActualIndex + 1);\n    \n    setTimeout(() => {\n        node.send([null, { payload: 'siguiente_reloj' }]);\n    }, 2000);\n}\n\ntry {\n    let data = msg.payload;\n    \n    if (typeof data === 'string') {\n        data = parseAnvizJSON(data);\n    }\n    \n    if (data.code === 'error' || (data.retvalue !== 0 && data.retvalue !== undefined)) {\n        throw new Error(`API error: ${data.msg || 'error'}`);\n    }\n    \n    const records = data.record || [];\n    const batchSize = flow.get('batchSize') || 25;\n    const batchIndex = flow.get('batchIndex') || 0;\n    \n    if (!records || records.length === 0) {\n        // Sin registros - marcar como completado y pasar al siguiente\n        node.log(`ℹ [${msg.readerIp}] Sin registros en este batch - reloj completado`);\n        flow.set('esUltimoBatch', true);\n        flow.set('todosLosRegistros', []);\n        flow.set('registroIndex', 0);\n        \n        return [msg, null];\n    }\n    \n    // Guardar registros del batch actual\n    flow.set('todosLosRegistros', records);\n    flow.set('registroIndex', 0);\n    \n    node.log(`📦 [${msg.readerIp}] Batch ${batchIndex + 1}: ${records.length} registros obtenidos`);\n    \n    // Si obtuvimos menos que el batchSize, es el último batch\n    if (records.length < batchSize) {\n        flow.set('esUltimoBatch', true);\n    } else {\n        flow.set('esUltimoBatch', false);\n    }\n    \n    return [msg, null];\n    \n} catch (e) {\n    node.error(`❌ Error parseo batch para ${msg.readerIp}: ${e.message}`);\n    marcarFalloYContinuar(e.message);\n    return null;\n}",
+    "outputs": 2,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 310,
+    "y": 330,
+    "wires": [
+      [
+        "e5bdcdbe488846c6"
+      ],
+      [
+        "6d03875ad8ce1341"
+      ]
+    ]
+  },
+  {
+    "id": "e5bdcdbe488846c6",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Procesar siguiente registro",
+    "func": "const registros = flow.get('todosLosRegistros') || [];\nconst index = flow.get('registroIndex') || 0;\nconst readerIp = flow.get('readerIp');\nconst sucursal = flow.get('sucursal');\n\n// SALIDAS:\n// 1: registro a insertar\n// 2: pasar al siguiente reloj (reloj completado)\n// 3: solicitar siguiente batch\n\n// Verificar si terminamos este batch\nif (index >= registros.length) {\n    const esUltimoBatch = flow.get('esUltimoBatch');\n    \n    if (esUltimoBatch) {\n        // RELOJ COMPLETADO\n        const totalProcesados = flow.get('totalProcesados') || 0;\n        const totalInsertados = flow.get('totalInsertados') || 0;\n        const duracion = Math.round((Date.now() - flow.get('inicioRelojActual')) / 1000);\n        \n        node.log('----------------------------------------');\n        node.log(`✅ RELOJ ${readerIp} COMPLETADO`);\n        node.log(`   📊 Procesados: ${totalProcesados} | Insertados: ${totalInsertados} | Duración: ${duracion}s`);\n        node.log('----------------------------------------');\n        \n        // Actualizar estado del reloj\n        const estadoRelojes = flow.get('estadoRelojes') || [];\n        const estadoReloj = estadoRelojes.find(r => r.ip === readerIp);\n        if (estadoReloj) {\n            estadoReloj.estado = 'OK';\n            estadoReloj.procesados = totalProcesados;\n            estadoReloj.insertados = totalInsertados;\n            estadoReloj.duracion = duracion;\n            estadoReloj.error = null;\n            flow.set('estadoRelojes', estadoRelojes);\n        }\n        \n        // Actualizar estadísticas globales\n        const estadisticas = flow.get('estadisticasGlobales');\n        estadisticas.totalProcesados += totalProcesados;\n        estadisticas.totalInsertados += totalInsertados;\n        flow.set('estadisticasGlobales', estadisticas);\n        \n        // Pasar al siguiente reloj\n        flow.set('relojActualIndex', (flow.get('relojActualIndex') || 0) + 1);\n        \n        const pausaEntreRelojes = flow.get('pausaEntreRelojes') || 2000;\n        setTimeout(() => {\n            node.send([null, { payload: 'siguiente_reloj' }, null]);\n        }, pausaEntreRelojes);\n        \n        return null;\n    } else {\n        // SIGUIENTE BATCH\n        const batchIndex = flow.get('batchIndex') || 0;\n        flow.set('batchIndex', batchIndex + 1);\n        flow.set('registroIndex', 0);\n        \n        node.log(`🔄 [${readerIp}] Batch ${batchIndex + 1} completado. Solicitando siguiente...`);\n        \n        const pausa = flow.get('pausaEntreConsultas') || 800;\n        setTimeout(() => {\n            node.send([null, null, { payload: 'next_batch' }]);\n        }, pausa);\n        \n        return null;\n    }\n}\n\n// Procesar registro actual\nconst record = registros[index];\nconst dniRaw = record.id || '';\nconst dni = String(dniRaw).padStart(5, '0');\nconst fecha = record.date || '';\nconst firstin = record.firstin || '';\nconst lastout = record.lastout || '';\nconst batchIndex = flow.get('batchIndex') || 0;\nconst totalEnBatch = registros.length;\n\nif (!dni || !fecha) {\n    node.log(`⚠ [${readerIp}] [B${batchIndex + 1}] [${index+1}/${totalEnBatch}] Sin DNI/Fecha - SKIP`);\n    flow.set('registroIndex', index + 1);\n    \n    setTimeout(() => {\n        node.send([{ payload: 'next' }, null, null]);\n    }, 50);\n    \n    return null;\n}\n\n// Generar filas: firstin y/o lastout\nconst sqlRows = [];\n\nif (firstin && firstin !== '') {\n    sqlRows.push({\n        Dni: dni,\n        Fecha: fecha,\n        Hora: firstin,\n        Sucursal: sucursal,\n        ipreloj: readerIp\n    });\n}\n\nif (lastout && lastout !== '') {\n    sqlRows.push({\n        Dni: dni,\n        Fecha: fecha,\n        Hora: lastout,\n        Sucursal: sucursal,\n        ipreloj: readerIp\n    });\n}\n\nif (sqlRows.length === 0) {\n    node.log(`⚠ [${readerIp}] [B${batchIndex + 1}] [${index+1}/${totalEnBatch}] Sin horas - SKIP`);\n    flow.set('registroIndex', index + 1);\n    \n    setTimeout(() => {\n        node.send([{ payload: 'next' }, null, null]);\n    }, 50);\n    \n    return null;\n}\n\nmsg.sqlRows = sqlRows;\nmsg.registroActual = index + 1;\nmsg.totalRegistros = totalEnBatch;\nmsg.batchActual = batchIndex + 1;\n\nflow.set('totalProcesados', (flow.get('totalProcesados') || 0) + 1);\n\nnode.log(`📝 [${readerIp}] [B${batchIndex + 1}] [${index+1}/${totalEnBatch}] DNI: ${dni} - ${sqlRows.length} fichada(s)`);\n\nreturn [msg, null, null];",
+    "outputs": 3,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 320,
+    "y": 440,
+    "wires": [
+      [
+        "f8b3962d1ec9ddc7"
+      ],
+      [
+        "6d03875ad8ce1341"
+      ],
+      [
+        "f201fca0fda1f5b7"
+      ]
+    ]
+  },
+  {
+    "id": "f8b3962d1ec9ddc7",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Preparar INSERT MSSQL",
+    "func": "const rows = msg.sqlRows;\n\nif (!rows || rows.length === 0) return null;\n\nfunction escapeSql(value) {\n    if (value === null || value === undefined) return '';\n    return String(value).replace(/'/g, \"''\");\n}\n\n// MERGE para respetar el índice único UX_RelojImportacion_Dedup\n// Índice compuesto por: EmpleadoId, Sucursal, Dni, Fecha, HoraSeg (columna calculada)\nlet sql = '';\n\nrows.forEach(row => {\n    sql += `\nMERGE INTO RelojImportacion AS target\nUSING (\n    SELECT \n        '${escapeSql(row.Dni)}' AS Dni,\n        '${escapeSql(row.Fecha)}' AS Fecha,\n        '${escapeSql(row.Hora)}' AS Hora,\n        '${escapeSql(row.Sucursal)}' AS Sucursal,\n        '${escapeSql(row.ipreloj)}' AS ipreloj,\n        (\n            SELECT TOP 1 EmpleadoID \n            FROM RelojImportacion WITH (NOLOCK)\n            WHERE Dni = '${escapeSql(row.Dni)}' \n            AND EmpleadoID IS NOT NULL\n        ) AS EmpleadoID\n) AS source\nON (\n    (target.EmpleadoId IS NULL AND source.EmpleadoID IS NULL) \n    OR (target.EmpleadoId = source.EmpleadoID)\n)\nAND target.Sucursal = source.Sucursal\nAND target.Dni = source.Dni \nAND target.Fecha = source.Fecha \nAND target.HoraSeg = source.Hora\nWHEN NOT MATCHED THEN\n    INSERT (Id, Dni, Fecha, Hora, Sucursal, ipreloj, EmpleadoID)\n    VALUES (NEWID(), source.Dni, source.Fecha, source.Hora, source.Sucursal, source.ipreloj, source.EmpleadoID);\n`;\n});\n\nmsg.payload = sql;\nmsg.topic = sql;\nmsg.query = sql;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 640,
+    "y": 440,
+    "wires": [
+      [
+        "3b155df8064dee31"
+      ]
+    ]
+  },
+  {
+    "id": "3b155df8064dee31",
+    "type": "MSSQL",
+    "z": "aa82e316ec538df7",
+    "mssqlCN": "53097304e9b52ca5",
+    "name": "MSSQL INSERT",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "msg",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 920,
+    "y": 440,
+    "wires": [
+      [
+        "558df6f8a890531d"
+      ]
+    ]
+  },
+  {
+    "id": "558df6f8a890531d",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Incrementar índice",
+    "func": "// Contar filas afectadas\nlet rowsAffected = 0;\n\nif (msg.payload && msg.payload.rowsAffected) {\n    if (Array.isArray(msg.payload.rowsAffected)) {\n        rowsAffected = msg.payload.rowsAffected.reduce((a, b) => a + b, 0);\n    } else {\n        rowsAffected = msg.payload.rowsAffected;\n    }\n}\n\nif (rowsAffected > 0) {\n    flow.set('totalInsertados', (flow.get('totalInsertados') || 0) + rowsAffected);\n    node.log(`   ✅ ${rowsAffected} fichada(s) insertada(s)`);\n} else {\n    node.log(`   ⏭ Fichada(s) ya existente(s) - SKIP`);\n}\n\n// Incrementar índice\nconst index = flow.get('registroIndex') || 0;\nflow.set('registroIndex', index + 1);\n\n// Delay para no saturar la BD\nsetTimeout(() => {\n    node.send({ payload: 'next' });\n}, 150);\n\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1150,
+    "y": 440,
+    "wires": [
+      [
+        "e5bdcdbe488846c6"
+      ]
+    ]
+  },
+  {
+    "id": "f201fca0fda1f5b7",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Solicitar siguiente batch",
+    "func": "// Redirigir a login para nuevo token y batch\nconst readerIp = flow.get('readerIp');\nconst pausa = flow.get('pausaEntreConsultas') || 800;\n\nnode.log(`🔄 Solicitando siguiente batch para ${readerIp}...`);\n\nsetTimeout(() => {\n    node.send({\n        payload: 'next_batch',\n        readerIp: readerIp,\n        sucursal: flow.get('sucursal')\n    });\n}, pausa);\n\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 640,
+    "y": 560,
+    "wires": [
+      [
+        "99b4ad184dfe6971"
+      ]
+    ]
+  },
+  {
+    "id": "9bbb36bcf3c4c186",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "📊 Generar resumen final",
+    "func": "const estadoRelojes = flow.get('estadoRelojes') || [];\nconst estadisticas = flow.get('estadisticasGlobales') || {};\nconst duracion = ((Date.now() - estadisticas.inicioProceso) / 1000).toFixed(2);\n\n// Contar estados\nconst stats = {\n    OK: 0,\n    FALLIDO_PRIMERA: 0,\n    FALLIDO_DEFINITIVO: 0,\n    PENDIENTE: 0,\n    PROCESANDO: 0\n};\n\nestadoRelojes.forEach(r => {\n    stats[r.estado] = (stats[r.estado] || 0) + 1;\n});\n\nnode.log('');\nnode.log('╔════════════════════════════════════════════════════════════════╗');\nnode.log('║          🏁 RESUMEN FINAL DEL PROCESO ANVIZ                    ║');\nnode.log('╚════════════════════════════════════════════════════════════════╝');\nnode.log(`⏱  Duración total: ${duracion} segundos (${(duracion/60).toFixed(2)} min)`);\nnode.log(`📊 Total registros procesados: ${estadisticas.totalProcesados}`);\nnode.log(`📊 Total fichadas insertadas: ${estadisticas.totalInsertados}`);\nnode.log('');\nnode.log('┌─────────────────────────────────────────────────────────────────┐');\nnode.log('│ ESTADO POR RELOJ:                                               │');\nnode.log('├─────────────────────────────────────────────────────────────────┤');\n\nestadoRelojes.forEach(r => {\n    let icono = '❓';\n    if (r.estado === 'OK') icono = '✅';\n    else if (r.estado === 'FALLIDO_DEFINITIVO') icono = '❌';\n    else if (r.estado === 'FALLIDO_PRIMERA') icono = '⚠';\n    \n    const linea = `│ ${icono} ${r.ip} | ${r.estado.padEnd(20)} | Proc: ${String(r.procesados).padStart(4)} | Ins: ${String(r.insertados).padStart(4)} | ${r.duracion}s | Intentos: ${r.intentos}`;\n    node.log(linea);\n    \n    if (r.error) {\n        node.log(`│    └─ Error: ${r.error}`);\n    }\n});\n\nnode.log('├─────────────────────────────────────────────────────────────────┤');\nnode.log(`│ ✅ Exitosos: ${stats.OK} | ❌ Fallidos: ${stats.FALLIDO_DEFINITIVO} | ⚠ Recuperados: ${stats.FALLIDO_PRIMERA}`);\nnode.log('└─────────────────────────────────────────────────────────────────┘');\n\n// Liberar el bloqueo global\nglobal.set('anvizProcesoGlobalActivo', false);\nglobal.set('anvizInicioProceso', 0);\n\nnode.status({ \n    fill: stats.FALLIDO_DEFINITIVO > 0 ? 'red' : 'green', \n    shape: 'dot', \n    text: `OK: ${stats.OK} | Fallos: ${stats.FALLIDO_DEFINITIVO}` \n});\n\n// Construir mensaje de resumen para el debug\nmsg.payload = {\n    duracionSegundos: parseFloat(duracion),\n    duracionMinutos: parseFloat((duracion/60).toFixed(2)),\n    totalProcesados: estadisticas.totalProcesados,\n    totalInsertados: estadisticas.totalInsertados,\n    relojes: estadoRelojes,\n    resumen: {\n        exitosos: stats.OK,\n        fallidos: stats.FALLIDO_DEFINITIVO,\n        recuperadosEnReintento: stats.FALLIDO_PRIMERA - stats.FALLIDO_DEFINITIVO\n    },\n    timestamp: new Date().toISOString()\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1120,
+    "y": 640,
+    "wires": [
+      [
+        "be2a16627efae338"
+      ]
+    ]
+  },
+  {
+    "id": "be2a16627efae338",
+    "type": "debug",
+    "z": "aa82e316ec538df7",
+    "name": "📊 RESUMEN FINAL",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "payload.resumen",
+    "statusType": "auto",
+    "x": 1380,
+    "y": 640,
+    "wires": []
+  },
+  {
+    "id": "2eb309e58bc42117",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "d": true,
+    "name": "Preparar INSERT MSSQL",
+    "func": "const rows = msg.sqlRows;\n\nif (!rows || rows.length === 0) return null;\n\nfunction escapeSql(value) {\n    if (value === null || value === undefined) return '';\n    return String(value).replace(/'/g, \"''\");\n}\n\n// INSERT con verificación NOT EXISTS para evitar duplicados\nlet sql = '';\n\nrows.forEach(row => {\n    sql += `\nINSERT INTO RelojImportacion (Id, Dni, Fecha, Hora, Sucursal, ipreloj)\nSELECT \n    NEWID(),\n    '${escapeSql(row.Dni)}',\n    '${escapeSql(row.Fecha)}',\n    '${escapeSql(row.Hora)}',\n    '${escapeSql(row.Sucursal)}',\n    '${escapeSql(row.ipreloj)}'\nWHERE NOT EXISTS (\n    SELECT 1 FROM RelojImportacion WITH (NOLOCK)\n    WHERE Dni = '${escapeSql(row.Dni)}' \n    AND Fecha = '${escapeSql(row.Fecha)}' \n    AND Hora = '${escapeSql(row.Hora)}' \n    AND Sucursal = '${escapeSql(row.Sucursal)}' \n    AND ipreloj = '${escapeSql(row.ipreloj)}'\n);\n`;\n});\n\nmsg.payload = sql;\nmsg.topic = sql;\nmsg.query = sql;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 270,
+    "y": 560,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "56ead75479b55250",
+    "type": "inject",
+    "z": "aa82e316ec538df7",
+    "name": "🔓 FORZAR RESET BLOQUEO",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 190,
+    "y": 20,
+    "wires": [
+      [
+        "cc258795ea835258"
+      ]
+    ]
+  },
+  {
+    "id": "cc258795ea835258",
+    "type": "function",
+    "z": "aa82e316ec538df7",
+    "name": "Fozar reinicio",
+    "func": "// Forzar reset del bloqueo global\nglobal.set('anvizProcesoGlobalActivo', false);\nglobal.set('anvizInicioProceso', 0);\n\nnode.warn('🔓 BLOQUEO FORZADO A RESET - Proceso liberado');\nnode.status({ fill: 'green', shape: 'dot', text: 'Desbloqueado' });\n\nmsg.payload = 'Bloqueo liberado correctamente';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 20,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "022e382a34e1de25",
+    "type": "cronplus",
+    "z": "aa82e316ec538df7",
+    "name": "Cada 10 minutos",
+    "outputField": "payload",
+    "timeZone": "",
+    "storeName": "",
+    "commandResponseMsgOutput": "output1",
+    "defaultLocation": "",
+    "defaultLocationType": "default",
+    "outputs": 1,
+    "options": [
+      {
+        "name": "schedule1",
+        "topic": "ANVIZ",
+        "payloadType": "default",
+        "payload": "",
+        "expressionType": "cron",
+        "expression": "0 */10 * * * *",
+        "location": "",
+        "offset": "0",
+        "solarType": "all",
+        "solarEvents": "sunrise,sunset"
+      }
+    ],
+    "x": 150,
+    "y": 180,
+    "wires": [
+      [
+        "c038177acb2a2ec7"
+      ]
+    ]
+  }
+]

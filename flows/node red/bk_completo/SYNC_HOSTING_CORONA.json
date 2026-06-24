@@ -1,0 +1,2161 @@
+[
+  {
+    "id": "a2495694ba9138c6",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "a las 00:30hs",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "*/6 0-22 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 140,
+    "wires": [
+      [
+        "07b36b2c3625245c"
+      ]
+    ]
+  },
+  {
+    "id": "07b36b2c3625245c",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "LIST OC (ultimo mes)",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 1000 ID,OC AS nro_oc,LEFT(FECHAACTUAL, 8) AS fecha_emision,DETALLE AS detalle,PLAZOENTREGA AS plazo_entrega,\r\nformapago AS condicion_pago, total_doc AS total, nom_PROVEEDOR AS proveedor,cod_ORIGINANTE AS originante\r\nFROM V_EZI_PROV_ORDENCOMPRA_ENC\r\nWHERE DESCRIPCION LIKE '%compra%' AND YEAR(CONVERT(date, LEFT(FECHAACTUAL, 8)))>=2025 -- and nom_PROVEEDOR LIKE '%GERVAN BRISA ANABEL%'\r\nORDER BY CONVERT(date, LEFT(FECHAACTUAL, 8)) DESC, nom_PROVEEDOR ASC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 360,
+    "y": 140,
+    "wires": [
+      [
+        "226f1c7212628fcb"
+      ]
+    ]
+  },
+  {
+    "id": "226f1c7212628fcb",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 560,
+    "y": 140,
+    "wires": [
+      [
+        "fe34a8432d645f70",
+        "969252882f5d6975"
+      ]
+    ]
+  },
+  {
+    "id": "fe34a8432d645f70",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "http REQ HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_ordenes_comrpa.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 800,
+    "y": 140,
+    "wires": [
+      [
+        "d94a0e7d30f82537"
+      ]
+    ]
+  },
+  {
+    "id": "d94a0e7d30f82537",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1010,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "81685c289c511dcd",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 580,
+    "y": 1780,
+    "wires": [
+      [
+        "208ef2c320c36a90",
+        "5aff52b04b6a5caf"
+      ]
+    ]
+  },
+  {
+    "id": "208ef2c320c36a90",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "http REQ HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_proveedores.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 840,
+    "y": 1760,
+    "wires": [
+      [
+        "be62d324bcf13099"
+      ]
+    ]
+  },
+  {
+    "id": "be62d324bcf13099",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1050,
+    "y": 1780,
+    "wires": []
+  },
+  {
+    "id": "acd050afd5b66662",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "LIST PROVEEDORES",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT [NOMBRE],[CUIT],[CALLE],[CODPOS],\r\n[CIUDAD] ,[PROVINCIA],[PAIS],\r\nDIRECCIONELECTRONICA.DIRECCIONELECTRONICA AS MAIL\r\nFROM [CORONA].[dbo].[V_EZI_PROV_PROVEEDORES]\r\nLEFT JOIN DIRECCIONELECTRONICA ON DIRECCIONELECTRONICA.BO_PLACE_ID = [DIRECCIONESELECTRONICAS_ID]",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 380,
+    "y": 1780,
+    "wires": [
+      [
+        "81685c289c511dcd"
+      ]
+    ]
+  },
+  {
+    "id": "1414062c6ef7d741",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "a las 00:00",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "00 00 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 1780,
+    "wires": [
+      [
+        "acd050afd5b66662"
+      ]
+    ]
+  },
+  {
+    "id": "e643b91a8b8b71e7",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "LIST CERTIFICACION SERVICIOS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 1000 ID,CONSTANCIA,CONVERT(date, LEFT(FECHAACTUAL, 8)) AS FECHAEMISION,CONVERT(date, LEFT(FECHAENTREGA, 8)) AS FECHAENTREGA,cod_proveedor ,nom_proveedor ,\r\nnom_cond_iva,subtotal_doc,total_doc,DETALLE ,numeroOC ,totalOC,monOC ,totalConstancia,monConstancia\r\nFROM CORONA.dbo.V_EZI_PROV_CONST_SC_ENC\r\nWHERE YEAR(CONVERT(date, LEFT(FECHAACTUAL, 8)))>=2025\r\nORDER BY CONVERT(date, LEFT(FECHAACTUAL, 8)) DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 400,
+    "y": 340,
+    "wires": [
+      [
+        "ea960ca89d8067f6"
+      ]
+    ]
+  },
+  {
+    "id": "ea960ca89d8067f6",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 680,
+    "y": 340,
+    "wires": [
+      [
+        "7578a76cc412e507",
+        "324353d9cf1d06b7"
+      ]
+    ]
+  },
+  {
+    "id": "7578a76cc412e507",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_certificacion_servicios.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 900,
+    "y": 340,
+    "wires": [
+      [
+        "3098d4a3b854164a"
+      ]
+    ]
+  },
+  {
+    "id": "3098d4a3b854164a",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1130,
+    "y": 340,
+    "wires": []
+  },
+  {
+    "id": "8134190d33d765d8",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "A las 05:00",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "00 05 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 760,
+    "wires": [
+      [
+        "44223a23b4f24f6c"
+      ]
+    ]
+  },
+  {
+    "id": "44223a23b4f24f6c",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "LIST OP",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 1000 CONVERT(date, LEFT([FECHAACTUAL], 8)) as fecha_orden,descr_item,importe,[NUMERODOCUMENTO],LEFT([FECHAACTUAL], 8) as [FECHAACTUAL],[nom_proveedor],[moneda],[egreso_valor],[total],VALORTOTAL,[comprador],id_egresovalores,COTIZACION,\r\nimporte_cancelado,NroCertifGan, RetGan,NroCertifIIBB, RetIIBB,NroCertifIVA, RetIVA\r\nFROM [CORONA].[dbo].[V_EZI_PROV_ORDENPAGO_ENC]\r\nWHERE YEAR(CONVERT(date, LEFT([FECHAACTUAL], 8)))>=2025 and importe_cancelado > 0\r\nORDER BY CONVERT(date, LEFT([FECHAACTUAL], 8)) DESC,NUMERODOCUMENTO DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 320,
+    "y": 760,
+    "wires": [
+      [
+        "36261f9a6011bc68"
+      ]
+    ]
+  },
+  {
+    "id": "4f3df3e15a7a2811",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_ordenes_pago.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 980,
+    "y": 760,
+    "wires": [
+      [
+        "c03e8e76a5f2de48"
+      ]
+    ]
+  },
+  {
+    "id": "c03e8e76a5f2de48",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1250,
+    "y": 760,
+    "wires": []
+  },
+  {
+    "id": "36261f9a6011bc68",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 560,
+    "y": 760,
+    "wires": [
+      [
+        "4f3df3e15a7a2811",
+        "1fccf661e10e448e",
+        "08f24aa6484e6cb1"
+      ]
+    ]
+  },
+  {
+    "id": "4bddc163f2072d56",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "a las 01:00 am ",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "*/6 0-22 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 240,
+    "wires": [
+      [
+        "06cd86cdcae562dc"
+      ]
+    ]
+  },
+  {
+    "id": "c753021280162f34",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "// Función para convertir fecha DD/MM/YYYY a YYYY-MM-DD\nfunction convertirFechaDDMMYYYY(fechaStr) {\n    if (!fechaStr) return null;\n    const partes = fechaStr.split('/');\n    if (partes.length === 3) {\n        const dia = partes[0].padStart(2, '0');\n        const mes = partes[1].padStart(2, '0');\n        const anio = partes[2];\n        return `${anio}-${mes}-${dia}`;\n    }\n    return null;\n}\n\n// Función para convertir fecha ISO a YYYY-MM-DD\nfunction convertirFechaISO(fechaISO) {\n    if (!fechaISO) return null;\n    const fecha = new Date(fechaISO);\n    if (!isNaN(fecha.getTime())) {\n        const anio = fecha.getUTCFullYear();\n        const mes = String(fecha.getUTCMonth() + 1).padStart(2, '0');\n        const dia = String(fecha.getUTCDate()).padStart(2, '0');\n        return `${anio}-${mes}-${dia}`;\n    }\n    return null;\n}\n\n// Procesar los datos recibidos\nlet datosRecibidos = msg.payload;\nconst esArray = Array.isArray(datosRecibidos);\nconst registros = esArray ? datosRecibidos : [datosRecibidos];\n\n// Procesar cada registro\nconst registrosProcesados = registros.map(reg => ({\n    ...reg,\n    fechaentrega: convertirFechaDDMMYYYY(reg.fechaentrega) || reg.fechaentrega,\n    fecha_oc: convertirFechaISO(reg.fecha_oc) || reg.fecha_oc\n}));\n\n// Estructurar el payload final con API key\nmsg.payload = {\n    api_key: \"Corona1234$\",\n    data: esArray ? registrosProcesados : registrosProcesados[0]\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 520,
+    "y": 240,
+    "wires": [
+      [
+        "261d9bf266f43ec4",
+        "90cda7c3e3899b4b",
+        "a42c11f849bfd880"
+      ]
+    ]
+  },
+  {
+    "id": "261d9bf266f43ec4",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_detalle_oc.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 760,
+    "y": 240,
+    "wires": [
+      [
+        "9eef4d2966e4fadc"
+      ]
+    ]
+  },
+  {
+    "id": "9eef4d2966e4fadc",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1010,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "1656a1663f95cca3",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "a las 22:00hs",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "00 22 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 1000,
+    "wires": [
+      [
+        "039f60d1cfb0b968"
+      ]
+    ]
+  },
+  {
+    "id": "039f60d1cfb0b968",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "LIST CAÑEROS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 2000 dbo.V_CLIENTE.ID AS id_caniero,dbo.V_PERSONA.NOMBRE AS razon_social, MAX(dbo.v_pr_grupos.GRUPO) AS grupo, dbo.V_PERSONA.CUIT AS cuit\r\nFROM         dbo.V_UD_CLIENTE RIGHT OUTER JOIN\r\n                      dbo.V_CLIENTE WITH (NOLOCK) ON dbo.V_UD_CLIENTE.ID = dbo.V_CLIENTE.BOEXTENSION_ID LEFT OUTER JOIN\r\n                      dbo.v_pr_grupos ON dbo.V_CLIENTE.ID = dbo.v_pr_grupos.idcaniero LEFT OUTER JOIN\r\n                      dbo.V_PERSONA WITH (NOLOCK) ON dbo.V_CLIENTE.ENTEASOCIADO_ID = dbo.V_PERSONA.ID\r\n-- WHERE V_PERSONA.NOMBRE LIKE '%SOTILLO%' --dbo.V_PERSONA.CUIT IS NOT NULL \r\nGROUP BY dbo.V_PERSONA.CUIT, dbo.V_CLIENTE.ID, dbo.V_PERSONA.NOMBRE, dbo.V_CLIENTE.ACTIVESTATUS, dbo.V_UD_CLIENTE.PRODUCTOR, dbo.V_UD_CLIENTE.ID\r\nHAVING      (dbo.V_CLIENTE.ACTIVESTATUS = 0 OR\r\n                      dbo.V_CLIENTE.ACTIVESTATUS IS NULL) AND (dbo.V_UD_CLIENTE.PRODUCTOR = 'T')          \r\nORDER BY dbo.V_CLIENTE.ID DESC;\r\n",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 300,
+    "y": 1000,
+    "wires": [
+      [
+        "12ee6ea645df6d7e"
+      ]
+    ]
+  },
+  {
+    "id": "9347e1b45079470b",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_canieros.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 960,
+    "y": 1000,
+    "wires": [
+      [
+        "7b520948b328b200"
+      ]
+    ]
+  },
+  {
+    "id": "7b520948b328b200",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1190,
+    "y": 1000,
+    "wires": []
+  },
+  {
+    "id": "12ee6ea645df6d7e",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 520,
+    "y": 1000,
+    "wires": [
+      [
+        "9347e1b45079470b"
+      ]
+    ]
+  },
+  {
+    "id": "09ae81c14a8978da",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "DET CONSTANCIAS SERVICIOS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 1000 ID,constancia,NUMEROITEM,CODIGO,NOM_PRODUCTO,BONIFICACION,DESCUENTO,CANTIDAD,CANTIDADOC ,CANTIDADPENDIENTEOC,CUMPLIDO,PORCENTAJE,\r\nESTADO ,UNI_MED,PU ,TOTAL_ITEM ,TOTALTR,CONVERT(date, LEFT(FECHAENTREGA, 8)) AS FECHAENTREGA,REPRESENTANTE ,ID_SOLICITUD,SECTOR,CUMPLIDOHASTAHOY,CUMPLIDOHOY,MEMO,MEMOITEM\r\nFROM CORONA.dbo.V_EZI_PROV_CONST_SC_DET\r\nWHERE YEAR(CONVERT(date, LEFT(FECHAENTREGA, 8)))>=2025\r\nORDER BY constancia DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 400,
+    "y": 420,
+    "wires": [
+      [
+        "a81b4c9ef4885c56"
+      ]
+    ]
+  },
+  {
+    "id": "a81b4c9ef4885c56",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 660,
+    "y": 420,
+    "wires": [
+      [
+        "59515580b0483d29",
+        "30153e1016a5aae9"
+      ]
+    ]
+  },
+  {
+    "id": "59515580b0483d29",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_detalle_constancia_servicio.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 880,
+    "y": 420,
+    "wires": [
+      [
+        "a01a5ade99211d62"
+      ]
+    ]
+  },
+  {
+    "id": "a01a5ade99211d62",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1150,
+    "y": 420,
+    "wires": []
+  },
+  {
+    "id": "fb5ce4f764e2b2a1",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "Cada hora (de 5 a 14 hs)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "0 5-13 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 1140,
+    "wires": [
+      [
+        "f2f2380f38f07520"
+      ]
+    ]
+  },
+  {
+    "id": "f2f2380f38f07520",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "DET CAÑEROS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 700 CONVERT(DATE, fechaindustrial, 103) as fechaindustrial, CONVERT(DATE, fecha_pesada, 103) as fecha_pesada,numero_pesada as pesada, remito, id_caniero, v_pr_tipocana.NOMBRE as tipo, razon_social,\r\nv_pr_grupos.GRUPO AS grupo, [peso_neto] AS bruto, trash, neto_cana as netoreal, brix, pol, pureza, rendimiento\r\nFROM [CORONA].[dbo].[pr_ezi_muestralab2]\r\nLEFT JOIN v_pr_tipocontrato on v_pr_tipocontrato.ID = tipocontrato\r\nLEFT JOIN v_pr_tipocana on v_pr_tipocana.ID = id_tipo_cana\r\nLEFT JOIN v_pr_grupos on v_pr_grupos.idcaniero = pr_ezi_muestralab2.id_caniero\r\nWHERE YEAR(CONVERT(DATE, fecha_pesada, 103)) = YEAR(CONVERT(DATE, GETDATE())) -- and fechaindustrial IS NULL\r\norder by CONVERT(DATE, fecha_pesada, 103) desc,hora_pesada desc, numero_pesada desc;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 380,
+    "y": 1140,
+    "wires": [
+      [
+        "0b428e50deb638ae"
+      ]
+    ]
+  },
+  {
+    "id": "98aa5b0fb35eedd1",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "Enviar DetCania",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "https://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_detalle_canieros.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 1160,
+    "y": 1380,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "00d42102993bc6ed",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1210,
+    "y": 1140,
+    "wires": []
+  },
+  {
+    "id": "d52c57e54b66fe73",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "SALIDA JSON",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 880,
+    "y": 1200,
+    "wires": []
+  },
+  {
+    "id": "0b428e50deb638ae",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Función corregida - Sin modificar propiedades del nodo\nmsg.payload = {\n    api_key: \"Corona1234$\",\n    data: msg.payload\n};\n\n// Headers se envían correctamente\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"User-Agent\": \"Node-RED-Corona-API/1.0\"\n};\n\n// NO modificar otras propiedades que afecten al nodo HTTP Request\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 560,
+    "y": 1140,
+    "wires": [
+      [
+        "69c41f0a53fb3fb1",
+        "66a31e0cca67f2cb",
+        "d52c57e54b66fe73"
+      ]
+    ]
+  },
+  {
+    "id": "378ef3b5ce1b7872",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "A las 06:00",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "00 06 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 880,
+    "wires": [
+      [
+        "6d3165e7104410b4"
+      ]
+    ]
+  },
+  {
+    "id": "6d3165e7104410b4",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "DETALLE OP",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 1000 [id_egresovalores],[egreso_valor],[num_banco],[TIPOVALOR],[importe_valor],[total],CONVERT(DATE, [fechavencimiento_cheque], 103) AS [fechavencimiento_cheque],CONVERT(DATE,fechaemision_cheque, 103) AS [fechaemision_cheque],[NOMBREORIGINANTETR]\r\nFROM [CORONA].[dbo].[V_EZI_PROV_ORDENPAGO_DET]\r\nWHERE YEAR(CONVERT(DATE,fechaemision_cheque, 103))>=2025\r\nORDER BY CONVERT(DATE,fechaemision_cheque, 103) DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 300,
+    "y": 880,
+    "wires": [
+      [
+        "0cf975538d5b2efc"
+      ]
+    ]
+  },
+  {
+    "id": "49dc62fef5985d2c",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_detalle_ordenes_pago.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 720,
+    "y": 880,
+    "wires": [
+      [
+        "b1bc7e238a255b61"
+      ]
+    ]
+  },
+  {
+    "id": "b1bc7e238a255b61",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 930,
+    "y": 880,
+    "wires": []
+  },
+  {
+    "id": "0cf975538d5b2efc",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 880,
+    "wires": [
+      [
+        "49dc62fef5985d2c",
+        "82b57df6b79e7b65"
+      ]
+    ]
+  },
+  {
+    "id": "eaaa895aeabf4a97",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "a las 05:00hs",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "00 05 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 1320,
+    "wires": [
+      [
+        "49aa8ad63608dcf2"
+      ]
+    ]
+  },
+  {
+    "id": "49aa8ad63608dcf2",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "LIST PERSONAL",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "/*LISTADO DE EMPLEADOS*/\r\nSELECT V_PERSONA_.ID id_empleado,NUMERODOCUMENTO dni, V_PERSONA_.NOMBRE nombre, V_EMPLEADO_.CODIGO legajo,V_CATEGORIA_.CODIGO cod_cat, V_CATEGORIA_.NOMBRE tipo_convenio,\r\nV_TIPOCONTRATACION_.DESCRIPCION puesto, V_PERFIL_.DESCRIPCION tipo_liquidacion,V_ESQUEMAOPERATIVO_.DESCRIPCION empresa\r\n  --SELECT *\r\n  FROM   V_EMPLEADO_   \r\n  LEFT OUTER JOIN V_PERSONA_  ON V_EMPLEADO_.ENTEASOCIADO_ID = V_PERSONA_.ID   \r\n  LEFT OUTER JOIN V_CATEGORIA_  ON V_EMPLEADO_.CATEGORIA_ID = V_CATEGORIA_.ID   \r\n  LEFT OUTER JOIN V_TIPOCONTRATACION_  ON V_EMPLEADO_.TIPOCONTRATACION_ID = V_TIPOCONTRATACION_.ID   \r\n  LEFT OUTER JOIN V_PERFIL_  ON V_EMPLEADO_.PERFIL_ID = V_PERFIL_.ID   \r\n  LEFT OUTER JOIN V_ESQUEMAOPERATIVO_  ON V_EMPLEADO_.ESQUEMAOPERATIVO_ID = V_ESQUEMAOPERATIVO_.ID  \r\n  -- WHERE V_EMPLEADO_.CODIGO LIKE '%1005%'\r\n  ORDER BY V_CATEGORIA_.NOMBRE ASC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 310,
+    "y": 1320,
+    "wires": [
+      [
+        "8c141186c592e989"
+      ]
+    ]
+  },
+  {
+    "id": "a81a03f9145f1d85",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "API LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/recibos_sueldo/api/sincronizar_personal.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 710,
+    "y": 1360,
+    "wires": [
+      [
+        "c372cbb054fa4af2"
+      ]
+    ]
+  },
+  {
+    "id": "c372cbb054fa4af2",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 910,
+    "y": 1320,
+    "wires": []
+  },
+  {
+    "id": "8c141186c592e989",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 1320,
+    "wires": [
+      [
+        "a81a03f9145f1d85",
+        "c1e4a5949d3e4650"
+      ]
+    ]
+  },
+  {
+    "id": "c1e4a5949d3e4650",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "API HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/recibos_sueldo/api/sincronizar_personal.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 720,
+    "y": 1320,
+    "wires": [
+      [
+        "c372cbb054fa4af2"
+      ]
+    ]
+  },
+  {
+    "id": "84f776e33ab47833",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "a las 03:00",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "00 03 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 520,
+    "wires": [
+      [
+        "04b046ec89569d8c"
+      ]
+    ]
+  },
+  {
+    "id": "04b046ec89569d8c",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "CTA CTE PROVEEDOR",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 1000 [NOMBRE] AS COMPROBANTE, [NOMBREDESTINATARIO], debe, [haber], CASE\tWHEN debe > 0 THEN debe \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tWHEN haber > 0 THEN haber\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tELSE 0  END AS TOTAL,\r\n    [SALDODOCUMENTO],CONVERT(date, LEFT([FECHAACTUAL], 8)) AS [FECHAACTUAL], TIPO,[NUMERODOCUMENTO]\r\nFROM [CORONA].[dbo].[V_EZI_PROV_CTA_CTE]\r\nWHERE YEAR(CONVERT(date, LEFT([FECHAACTUAL], 8)))>=2025 \r\nORDER BY CONVERT(date, LEFT([FECHAACTUAL], 8)) DESC;\r\n",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 370,
+    "y": 520,
+    "wires": [
+      [
+        "28cad0449e716438"
+      ]
+    ]
+  },
+  {
+    "id": "8e280b825c5779ac",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_cta_cte_proveedor.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 870,
+    "y": 560,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "8e02a1f309f2303e",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1090,
+    "y": 520,
+    "wires": []
+  },
+  {
+    "id": "28cad0449e716438",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 660,
+    "y": 520,
+    "wires": [
+      [
+        "8e280b825c5779ac",
+        "c3be3223ea522709"
+      ]
+    ]
+  },
+  {
+    "id": "69c41f0a53fb3fb1",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "DetCania Local",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_detalle_canieros.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 780,
+    "y": 1060,
+    "wires": [
+      [
+        "00d42102993bc6ed"
+      ]
+    ]
+  },
+  {
+    "id": "3c68d557644d5a7f",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "A las 04:00",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "00 04 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 660,
+    "wires": [
+      [
+        "32da25219005456c"
+      ]
+    ]
+  },
+  {
+    "id": "32da25219005456c",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "FACT PENDIENTE DE PAGO",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 1000 NOM_CLIENTE AS PROVEEROR,DESCRIPCION AS comprobante,'0' AS DEBE, SALDO_ORIG AS HABER, SALDO, IMPORTE_TOTAL AS IMPORTE_ORIGINAL,\r\n TRCOTIZACION, LEFT(FECHAEMISION, 8) as FECHAEMISION, LEFT(FECHAVENCIMIENTO, 8) as FECHAVENCIMIENTO,TIPO AS TIPO_PAGO\r\nFROM [CORONA].[dbo].[V_EZI_PROV_FAC_PEND]\r\nWHERE NOMCLASIFICADOR<>'DTA' AND NOMCLASIFICADOR<>'ING' AND YEAR(CONVERT(date, LEFT([FECHAVENCIMIENTO], 8)))>=2025\r\nORDER BY CONVERT(date, LEFT([FECHAVENCIMIENTO], 8)) DESC,DESCRIPCION DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 390,
+    "y": 660,
+    "wires": [
+      [
+        "845de91faff54c06"
+      ]
+    ]
+  },
+  {
+    "id": "1a066f4822a89c2e",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_pagos_pendientes_proveedor.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 930,
+    "y": 700,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "c99edea7bce4225b",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1150,
+    "y": 660,
+    "wires": []
+  },
+  {
+    "id": "845de91faff54c06",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 660,
+    "y": 660,
+    "wires": [
+      [
+        "1a066f4822a89c2e",
+        "b97e4ec149902c27"
+      ]
+    ]
+  },
+  {
+    "id": "c3be3223ea522709",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_cta_cte_proveedor.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 880,
+    "y": 520,
+    "wires": [
+      [
+        "8e02a1f309f2303e"
+      ]
+    ]
+  },
+  {
+    "id": "b97e4ec149902c27",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ HOSTING",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_pagos_pendientes_proveedor.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 940,
+    "y": 660,
+    "wires": [
+      [
+        "c99edea7bce4225b"
+      ]
+    ]
+  },
+  {
+    "id": "5351b8c56b817637",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "a las 02:00 am",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "00 02 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 340,
+    "wires": [
+      [
+        "e643b91a8b8b71e7"
+      ]
+    ]
+  },
+  {
+    "id": "bd37c789f418cfba",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "a las 02:40 am",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "40 02 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 420,
+    "wires": [
+      [
+        "09ae81c14a8978da"
+      ]
+    ]
+  },
+  {
+    "id": "7fc03f6d1928c73a",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "Cada 1hs",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "0 8-9 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 1240,
+    "wires": [
+      [
+        "5b9b929e7d2c8b11"
+      ]
+    ]
+  },
+  {
+    "id": "5b9b929e7d2c8b11",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "CTA CTE CAÑEROS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "WITH datos_muestreo AS (\r\n    SELECT \r\n        t.id_caniero, \r\n        t.razon_social, \r\n        t.peso_neto AS neto,\r\n        ISNULL(t.azucarcaniertoneto, 0) + ISNULL(t.devengado2, 0) AS devengado_total,\r\n        ISNULL(t.azucarcaniertoneto, 0) AS dev_v1,\r\n        ISNULL(t.devengado2, 0) AS dev_v2,\r\n        RIGHT(t.fechaindustrial, 4) AS ZAFRA,\r\n        f.fecha AS fechafiltro,\r\n        f.idcaniero2\r\n    FROM dbo.pr_ezi_muestralab3 t\r\n    INNER JOIN dbo.pr_ezi_filtro_ec f \r\n        ON RIGHT(t.fechaindustrial, 4) + SUBSTRING(t.fechaindustrial, 4, 2) + LEFT(t.fechaindustrial, 2) <= f.fecha\r\n),\r\ndatos_ordenes AS (\r\n    SELECT \r\n        o.id_caniero, \r\n        o.firma AS razon_social,\r\n        o.zafra AS ZAFRA,\r\n        f.fecha AS fechafiltro,\r\n        f.idcaniero2,\r\n        o.cantidad AS ord_emitidas_v1\r\n    FROM dbo.pr_ezi_ordenes_azucar o\r\n    INNER JOIN dbo.pr_ezi_filtro_ec f \r\n        ON RIGHT(o.fecha, 4) + SUBSTRING(o.fecha, 4, 2) + LEFT(o.fecha, 2) <= f.fecha AND o.zafra = f.zafra\r\n    WHERE o.estado <> N'Anulada' AND (o.autorizada = N'S' OR o.autorizada IS NULL) AND tipoorden IS NULL\r\n),\r\nctacte AS (\r\n    SELECT \r\n        id_caniero, razon_social, \r\n        SUM(neto) AS neto, \r\n        ROUND(SUM(devengado_total) / 50, 0) AS devengado,\r\n        ROUND(SUM(dev_v1) / 50, 0) AS dev_v1,\r\n        ROUND(SUM(dev_v2) / 50, 0) AS dev_v2,\r\n        ZAFRA, \r\n        fechafiltro, \r\n        idcaniero2,\r\n        0 AS ord_emitidas_v1\r\n    FROM datos_muestreo\r\n    GROUP BY id_caniero, razon_social, ZAFRA, fechafiltro, idcaniero2\r\n),\r\nordenes_azucar AS (\r\n    SELECT \r\n        id_caniero, razon_social, \r\n        0 AS neto, \r\n        0 AS devengado, \r\n        0 AS dev_v1,\r\n        0 AS dev_v2,\r\n        ZAFRA, \r\n        fechafiltro, \r\n        idcaniero2, \r\n        SUM(ord_emitidas_v1) AS ord_emitidas_v1\r\n    FROM datos_ordenes\r\n    GROUP BY id_caniero, razon_social, ZAFRA, fechafiltro, idcaniero2\r\n),\r\nEC AS (\r\n    SELECT * FROM ctacte\r\n    UNION ALL\r\n    SELECT * FROM ordenes_azucar\r\n)\r\nSELECT \r\n    EC.razon_social AS caniero,\r\n    g.GRUPO,\r\n    SUM(EC.neto) AS cania_bruta,\r\n    SUM(EC.devengado) AS bls_totales_dev,\r\n    SUM(EC.dev_v1) AS bls_dev_v1,\r\n    SUM(EC.dev_v2) AS bls_dev_v2,\r\n    SUM(EC.ord_emitidas_v1) AS ord_emitidas_v1,\r\n    0 AS saldozafraanterior,\r\n    SUM(EC.dev_v1 - EC.ord_emitidas_v1) AS saldobolsas_v1,\r\n    EC.ZAFRA,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, STUFF(STUFF(EC.fechafiltro, 5, 0, '-'), 8, 0, '-')), 103) AS fechafiltro\r\nFROM EC\r\nINNER JOIN dbo.v_pr_grupos g ON EC.id_caniero = g.idcaniero\r\nINNER JOIN dbo.pr_ezi_filtro_ec f ON EC.ZAFRA = f.zafra\r\nGROUP BY \r\n    EC.id_caniero, EC.razon_social, EC.ZAFRA, \r\n    EC.fechafiltro, g.GRUPO, EC.idcaniero2, f.grupo\r\nORDER BY EC.ZAFRA, EC.razon_social;\r\n",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 340,
+    "y": 1240,
+    "wires": [
+      [
+        "8396b9808401412f"
+      ]
+    ]
+  },
+  {
+    "id": "7f97a53a03671352",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "Cta Cte Canieros (HOSTING)",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_cta_cte_canieros.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 890,
+    "y": 1240,
+    "wires": [
+      [
+        "7c56a6fe2c31cc47"
+      ]
+    ]
+  },
+  {
+    "id": "7c56a6fe2c31cc47",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1170,
+    "y": 1240,
+    "wires": []
+  },
+  {
+    "id": "8396b9808401412f",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 580,
+    "y": 1240,
+    "wires": [
+      [
+        "7f97a53a03671352"
+      ]
+    ]
+  },
+  {
+    "id": "5aff52b04b6a5caf",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "http REQ LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_proveedores.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 830,
+    "y": 1820,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "969252882f5d6975",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "http REQ LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_ordenes_compra.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 790,
+    "y": 200,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "90cda7c3e3899b4b",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_detalle_oc.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 770,
+    "y": 300,
+    "wires": [
+      [
+        "9eef4d2966e4fadc"
+      ]
+    ]
+  },
+  {
+    "id": "324353d9cf1d06b7",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_certificacion_servicios.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 890,
+    "y": 380,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "30153e1016a5aae9",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_detalle_constancia_servicio.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 870,
+    "y": 460,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "1fccf661e10e448e",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_ordenes_pago.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 970,
+    "y": 800,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "82b57df6b79e7b65",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "HTTP REQ LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_detalle_ordenes_pago.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 710,
+    "y": 920,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "08f24aa6484e6cb1",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 690,
+    "y": 820,
+    "wires": []
+  },
+  {
+    "id": "66a31e0cca67f2cb",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "DetCania ",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_detalle_canieros.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 960,
+    "y": 1140,
+    "wires": [
+      [
+        "00d42102993bc6ed"
+      ]
+    ]
+  },
+  {
+    "id": "d90edec3138392ac",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "function 82",
+    "func": "// Nodo Function - Test Simple\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"User-Agent\": \"Mozilla/5.0 (compatible; Node-RED-API/1.0)\"\n};\n\nmsg.payload = {\n    \"api_key\": \"Corona1234$\",\n    \"test\": \"hello\"\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 290,
+    "y": 1440,
+    "wires": [
+      [
+        "8185c9b6851b74b7"
+      ]
+    ]
+  },
+  {
+    "id": "8185c9b6851b74b7",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "DetCania ",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "https://ingeniolacorona.com/coronaweb/extranet/api/test.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 480,
+    "y": 1440,
+    "wires": [
+      [
+        "30ec586acda5ad89"
+      ]
+    ]
+  },
+  {
+    "id": "30ec586acda5ad89",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 770,
+    "y": 1440,
+    "wires": []
+  },
+  {
+    "id": "3d5d9fe5596c4e46",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 1440,
+    "wires": [
+      [
+        "d90edec3138392ac"
+      ]
+    ]
+  },
+  {
+    "id": "432c64456a47279b",
+    "type": "inject",
+    "z": "bd122a711bad16cc",
+    "name": "a las 00:00",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "00 00 * * *",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 1560,
+    "wires": [
+      [
+        "2554e15e07dbdf07"
+      ]
+    ]
+  },
+  {
+    "id": "2554e15e07dbdf07",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "LIST PROVEEDORES",
+    "outField": "payload",
+    "returnType": 1,
+    "throwErrors": 1,
+    "query": "SELECT [NOMBRE],[CUIT],[CALLE],[CODPOS],\r\n[CIUDAD] ,[PROVINCIA],[PAIS],\r\nDIRECCIONELECTRONICA.DIRECCIONELECTRONICA AS MAIL\r\nFROM [CORONA].[dbo].[V_EZI_PROV_PROVEEDORES]\r\nLEFT JOIN DIRECCIONELECTRONICA ON DIRECCIONELECTRONICA.BO_PLACE_ID = [DIRECCIONESELECTRONICAS_ID]",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 320,
+    "y": 1560,
+    "wires": [
+      [
+        "e5825689a79c754d"
+      ]
+    ]
+  },
+  {
+    "id": "e5825689a79c754d",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Dividir en lotes",
+    "func": "// Extraer los datos de la estructura correcta\nlet datos = [];\n\n// La estructura tiene recordsets[0] con el array de registros\nif (msg.payload && \n    msg.payload.recordsets && \n    Array.isArray(msg.payload.recordsets) && \n    msg.payload.recordsets.length > 0 && \n    Array.isArray(msg.payload.recordsets[0])) {\n    \n    datos = msg.payload.recordsets[0];\n    node.warn(`✅ Datos extraídos de recordsets: ${datos.length} registros`);\n    \n} else if (Array.isArray(msg.payload)) {\n    // Fallback por si es array directo\n    datos = msg.payload;\n    node.warn(`✅ Datos en formato array: ${datos.length} registros`);\n} else {\n    node.warn(\"❌ Formato de datos no reconocido\");\n    node.warn(\"Estructura recibida: \" + JSON.stringify(msg.payload).substring(0, 200));\n    return null;\n}\n\n// Validar que tenemos datos\nif (!datos || datos.length === 0) {\n    node.warn(\"⚠️ No hay registros para procesar\");\n    return null;\n}\n\nconst LOTE_TAMANO = 500; // Puedes ajustar este valor\nconst TOTAL_REGISTROS = datos.length;\nconst TOTAL_LOTES = Math.ceil(TOTAL_REGISTROS / LOTE_TAMANO);\n\nnode.warn(`📊 Total registros: ${TOTAL_REGISTROS}, Lotes: ${TOTAL_LOTES}`);\n\n// Crear array de lotes\nconst lotes = [];\nfor (let i = 0; i < TOTAL_REGISTROS; i += LOTE_TAMANO) {\n    const lote = datos.slice(i, i + LOTE_TAMANO);\n    \n    // Validar y limpiar cada registro\n    const loteValidado = lote.map(item => ({\n        NOMBRE: item.NOMBRE || item.nombre || '',\n        CUIT: item.CUIT ? item.CUIT.toString().trim() : (item.cuit ? item.cuit.toString().trim() : ''),\n        CALLE: item.CALLE || item.calle || item.domicilio || '',\n        MAIL: item.MAIL || item.mail || item.email || ''\n    })).filter(item => item.NOMBRE && item.CUIT); // Solo registros válidos\n    \n    if (loteValidado.length > 0) {\n        lotes.push({\n            payload: {\n                api_key: \"Corona1234$\",\n                batch_number: Math.floor(i / LOTE_TAMANO) + 1,\n                total_batches: TOTAL_LOTES,\n                data: loteValidado\n            },\n            headers: {\n                \"Content-Type\": \"application/json\"\n            },\n            lote_actual: Math.floor(i / LOTE_TAMANO) + 1,\n            total_lotes: TOTAL_LOTES\n        });\n    }\n}\n\n// Guardar los lotes pendientes en el contexto\nflow.set(\"lotes_pendientes\", lotes.slice(1));\nflow.set(\"total_lotes\", TOTAL_LOTES);\n\n// Mostrar información del primer lote\nif (lotes.length > 0) {\n    const primerLote = lotes[0];\n    node.warn(`📤 Enviando lote 1/${TOTAL_LOTES} con ${primerLote.payload.data.length} registros válidos`);\n    \n    // Mostrar ejemplo del primer registro para verificar\n    if (primerLote.payload.data.length > 0) {\n        node.warn(\"📝 Ejemplo: \" + JSON.stringify(primerLote.payload.data[0]));\n    }\n    \n    return primerLote;\n} else {\n    node.warn(\"⚠️ No se generaron lotes válidos\");\n    return null;\n}",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 540,
+    "y": 1560,
+    "wires": [
+      [
+        "d711432a5c9281b6"
+      ]
+    ]
+  },
+  {
+    "id": "d711432a5c9281b6",
+    "type": "delay",
+    "z": "bd122a711bad16cc",
+    "name": "Delay 1s entre lotes",
+    "pauseType": "delay",
+    "timeout": "1000",
+    "timeoutUnits": "milliseconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "outputs": 1,
+    "x": 920,
+    "y": 1600,
+    "wires": [
+      [
+        "9db0d43e4dad416f",
+        "bb5ed94a10626342"
+      ]
+    ]
+  },
+  {
+    "id": "9db0d43e4dad416f",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "d": true,
+    "name": "http REQ HOSTING",
+    "method": "POST",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "http://ingeniolacorona.com/coronaweb/extranet/api/sincronizar_proveedores.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 760,
+    "y": 1700,
+    "wires": [
+      [
+        "dae58f86bd091bf4"
+      ]
+    ]
+  },
+  {
+    "id": "bb5ed94a10626342",
+    "type": "http request",
+    "z": "bd122a711bad16cc",
+    "name": "http REQ LOCAL",
+    "method": "POST",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_proveedores.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 810,
+    "y": 1500,
+    "wires": [
+      [
+        "dae58f86bd091bf4"
+      ]
+    ]
+  },
+  {
+    "id": "dae58f86bd091bf4",
+    "type": "function",
+    "z": "bd122a711bad16cc",
+    "name": "Procesar respuesta y continuar",
+    "func": "const respuesta = msg.payload;\nconst lote_actual = msg.lote_actual;\nconst total_lotes = msg.total_lotes;\n\n// Mostrar la respuesta completa para debug\nnode.warn(`📥 Respuesta del servidor (lote ${lote_actual}):`);\nnode.warn(typeof respuesta === 'string' ? respuesta : JSON.stringify(respuesta));\n\n// Si la respuesta es un string, intentar parsearla\nlet respuestaObj = respuesta;\nif (typeof respuesta === 'string') {\n    try {\n        respuestaObj = JSON.parse(respuesta);\n    } catch (e) {\n        node.warn(`❌ Error parseando JSON: ${e.message}`);\n        node.warn(`Respuesta raw: ${respuesta}`);\n        return null;\n    }\n}\n\n// Verificar si la respuesta fue exitosa\nif (!respuestaObj || !respuestaObj.success) {\n    node.warn(`❌ Error en lote ${lote_actual}: ${respuestaObj?.error || 'Error desconocido'}`);\n    node.warn(`Respuesta completa: ${JSON.stringify(respuestaObj)}`);\n    return null;\n}\n\nnode.warn(`✅ Lote ${lote_actual}/${total_lotes} procesado: ${respuestaObj.insertados || 0} insertados, ${respuestaObj.actualizados || 0} actualizados`);\n\nconst lotes_pendientes = flow.get(\"lotes_pendientes\") || [];\n\nif (lotes_pendientes.length > 0) {\n    const siguiente_lote = lotes_pendientes.shift();\n    flow.set(\"lotes_pendientes\", lotes_pendientes);\n    \n    node.warn(`📤 Enviando lote ${siguiente_lote.lote_actual}/${total_lotes} con ${siguiente_lote.payload.data.length} registros...`);\n    \n    return {\n        payload: siguiente_lote.payload,\n        headers: siguiente_lote.headers,\n        lote_actual: siguiente_lote.lote_actual,\n        total_lotes: siguiente_lote.total_lotes\n    };\n    \n} else {\n    node.warn(`🎉 ¡Sincronización completada! Total lotes: ${total_lotes}`);\n    flow.set(\"lotes_pendientes\", null);\n    flow.set(\"total_lotes\", null);\n    return null;\n}",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1150,
+    "y": 1500,
+    "wires": [
+      [
+        "d711432a5c9281b6"
+      ]
+    ]
+  },
+  {
+    "id": "2adb7b4a30459dd4",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "Respuesta API",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1280,
+    "y": 1580,
+    "wires": []
+  },
+  {
+    "id": "a42c11f849bfd880",
+    "type": "debug",
+    "z": "bd122a711bad16cc",
+    "name": "salida POST",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 510,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "06cd86cdcae562dc",
+    "type": "MSSQL",
+    "z": "bd122a711bad16cc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "LIST DETALLE OC",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 3000 V_EZI_PROV_ORDENCOMPRA_DET.ID,V_EZI_PROV_ORDENCOMPRA_DET.OC,NUMEROITEM,CODIGO,NOM_PRODUCTO 'ARTICULO',CANTIDAD,UNI_MED,PU,TOTAL_ITEM,\r\nV_EZI_PROV_ORDENCOMPRA_DET.fechaentrega,CONVERT(date, LEFT(FECHAACTUAL, 8)) 'fecha_oc'\r\n FROM V_EZI_PROV_ORDENCOMPRA_ENC\r\nINNER JOIN V_EZI_PROV_ORDENCOMPRA_DET ON V_EZI_PROV_ORDENCOMPRA_ENC.ID = V_EZI_PROV_ORDENCOMPRA_DET.ID\r\nwhere V_EZI_PROV_ORDENCOMPRA_ENC.DESCRIPCION LIKE '%compra%' AND YEAR(CONVERT(date, LEFT(FECHAACTUAL, 8)))>=2025\r\nORDER BY V_EZI_PROV_ORDENCOMPRA_DET.OC DESC, CONVERT(date, LEFT(FECHAACTUAL, 8)) DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 310,
+    "y": 240,
+    "wires": [
+      [
+        "c753021280162f34"
+      ]
+    ]
+  }
+]

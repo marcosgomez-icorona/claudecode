@@ -1,0 +1,1924 @@
+[
+  {
+    "id": "a6ad2a33eabb6588",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "name": "Instructivo",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "0644782a3231da0c",
+      "713ea33d9c8c1db1",
+      "b280c3cea7d14fc6",
+      "762c6e1182bbf1eb",
+      "89b885e70a80b69d"
+    ],
+    "x": 14,
+    "y": 39,
+    "w": 772,
+    "h": 142
+  },
+  {
+    "id": "0b59972baea65cc7",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "name": "Vapor",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "fc3308f70173de70",
+      "e87351fd2cb8a6fc"
+    ],
+    "x": 8,
+    "y": 213,
+    "w": 984,
+    "h": 234
+  },
+  {
+    "id": "be01918f84e29f21",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "name": "Trapiche",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "9e0e41e655dba5ce",
+      "edd2ab67e5260486"
+    ],
+    "x": 10.85711669921875,
+    "y": 463,
+    "w": 1184,
+    "h": 274
+  },
+  {
+    "id": "7b77cb2362916d72",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "name": "Calderas",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "8de6106dfec2fcca",
+      "f29f70aa8215a0ef"
+    ],
+    "x": 1008,
+    "y": 213,
+    "w": 1044,
+    "h": 234
+  },
+  {
+    "id": "6674230e4b55131b",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "name": "Salon",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "ab04c0d1e950d92c",
+      "b8b1bdae2b9fd895"
+    ],
+    "x": 1208,
+    "y": 473,
+    "w": 1044,
+    "h": 234
+  },
+  {
+    "id": "d7259a9593e339bf",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "name": "Fabrica",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "d9b901a28313b277",
+      "4295b9bd4c4982df"
+    ],
+    "x": 8,
+    "y": 753,
+    "w": 1044,
+    "h": 234
+  },
+  {
+    "id": "77dc77cac33b2c1e",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "name": "Usina",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "99366d710b60d56b",
+      "efc18d1d3dd722c4"
+    ],
+    "x": 1088,
+    "y": 753,
+    "w": 1044,
+    "h": 234
+  },
+  {
+    "id": "b55ffd5d7c0afe43",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "name": "Reporte Gerencial",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "1b26231c75bb144a",
+      "3319e29b450b0151",
+      "870fd130dcbccc28",
+      "40ddc20b883c10c7"
+    ],
+    "x": 1014,
+    "y": 59,
+    "w": 952,
+    "h": 82
+  },
+  {
+    "id": "bef4889aae9d99b8",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "name": "Alarmas Automáticas",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "119402e31258088e",
+      "09e657d2c0c50454",
+      "0e77cf5c386a6642"
+    ],
+    "x": 4,
+    "y": 1019,
+    "w": 842,
+    "h": 82
+  },
+  {
+    "id": "0a7e9b4fdc9764b1",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "name": "Alexa Ingenio",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "76bc96857a67a05d",
+      "bf47c1383cbbfeaf",
+      "df1b7a638a42561b",
+      "bd3c3daf64726fd3",
+      "5fd3198c4574c1da",
+      "5f7a52a1c1a8a62a",
+      "0902f0f78520cf69",
+      "0d98664c238d6fd0",
+      "02db91e259aa4c04",
+      "1cf5d79d83343806",
+      "cbee125b18b4cde3",
+      "9e2a0c5e51ac7b72",
+      "b503a78183212420",
+      "60143f2005407e47",
+      "643240a77e592c0d",
+      "14b7cbcf195a49d1",
+      "12d1d3e6b9b08a52",
+      "03015c6350bf30a5"
+    ],
+    "x": 4,
+    "y": 1119,
+    "w": 992,
+    "h": 762
+  },
+  {
+    "id": "e87351fd2cb8a6fc",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "0b59972baea65cc7",
+    "name": "Entrada KepServer",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "17b864d5b137c8e6",
+      "ff8cd4d60fdade57"
+    ],
+    "x": 34,
+    "y": 239,
+    "w": 472,
+    "h": 82
+  },
+  {
+    "id": "fc3308f70173de70",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "0b59972baea65cc7",
+    "name": "Envio Datos Vapor",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "388e64720ddfea20",
+      "262ade13b2aad492",
+      "e729523cc361fea6",
+      "a9c861ef4fec1e6b"
+    ],
+    "x": 34,
+    "y": 339,
+    "w": 932,
+    "h": 82
+  },
+  {
+    "id": "9e0e41e655dba5ce",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "be01918f84e29f21",
+    "name": "Envio Datos Vapor",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "3408b3a7ef1bcc49",
+      "42fdab0759108638",
+      "351175681af3b190",
+      "723abfb92a43d9c3",
+      "91081f2a1c296f50",
+      "1f4ea2854707585a"
+    ],
+    "x": 36.85711669921875,
+    "y": 589,
+    "w": 1132,
+    "h": 122
+  },
+  {
+    "id": "edd2ab67e5260486",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "be01918f84e29f21",
+    "name": "Entrada KepServer",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "28632466cb487347",
+      "5e034e3b57fc8f14"
+    ],
+    "x": 36.85711669921875,
+    "y": 489,
+    "w": 512,
+    "h": 82
+  },
+  {
+    "id": "8de6106dfec2fcca",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "7b77cb2362916d72",
+    "name": "Envio Datos Caldera",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "cad6b581916c554f",
+      "2e99faf8d1caf354",
+      "80a62ca6ab7eecc5",
+      "5312e630f4cd6fb0"
+    ],
+    "x": 1034,
+    "y": 339,
+    "w": 992,
+    "h": 82
+  },
+  {
+    "id": "f29f70aa8215a0ef",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "7b77cb2362916d72",
+    "name": "Entrada KepServer",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "54dcda0f14a0f349",
+      "31ac58f11b63e60d"
+    ],
+    "x": 1034,
+    "y": 239,
+    "w": 492,
+    "h": 82
+  },
+  {
+    "id": "ab04c0d1e950d92c",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "6674230e4b55131b",
+    "name": "Envio Datos Salon",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "27709ec1d7e93567",
+      "411d9288392bdaa6",
+      "25f75bd25f7fd921",
+      "8ffd5e52a1a05ad0"
+    ],
+    "x": 1234,
+    "y": 599,
+    "w": 992,
+    "h": 82
+  },
+  {
+    "id": "b8b1bdae2b9fd895",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "6674230e4b55131b",
+    "name": "Entrada KepServer",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "b73ef0eee75c180f",
+      "d9a15dd27f8d86b2"
+    ],
+    "x": 1234,
+    "y": 499,
+    "w": 492,
+    "h": 82
+  },
+  {
+    "id": "d9b901a28313b277",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "d7259a9593e339bf",
+    "name": "Envio Datos Fabrica",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "309212d5dcfc8849",
+      "dde3882d3fe93ae0",
+      "236401a755eda064",
+      "3fdaf54a9a14ea3b"
+    ],
+    "x": 34,
+    "y": 879,
+    "w": 992,
+    "h": 82
+  },
+  {
+    "id": "4295b9bd4c4982df",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "d7259a9593e339bf",
+    "name": "Entrada KepServer",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "2eb2da03e7b04995",
+      "37b32c7f99476719"
+    ],
+    "x": 44,
+    "y": 779,
+    "w": 482,
+    "h": 82
+  },
+  {
+    "id": "99366d710b60d56b",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "77dc77cac33b2c1e",
+    "name": "Envio Datos Salon",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "5094707961f8a4b4",
+      "e6149faa9f256b57",
+      "c24d200431d3b700",
+      "c7b8d3ebcdea7cae"
+    ],
+    "x": 1114,
+    "y": 879,
+    "w": 992,
+    "h": 82
+  },
+  {
+    "id": "efc18d1d3dd722c4",
+    "type": "group",
+    "z": "9743a685f64fe521",
+    "g": "77dc77cac33b2c1e",
+    "name": "Entrada KepServer",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "b8fdc5434a0ba072",
+      "e385d47bc0623722"
+    ],
+    "x": 1114,
+    "y": 779,
+    "w": 492,
+    "h": 82
+  },
+  {
+    "id": "17b864d5b137c8e6",
+    "type": "mqtt in",
+    "z": "9743a685f64fe521",
+    "g": "e87351fd2cb8a6fc",
+    "name": "MQTT Vapor",
+    "topic": "corona_kep2025/caldera/claderas/vapor",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "99f867c0609a148c",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 130,
+    "y": 280,
+    "wires": [
+      [
+        "ff8cd4d60fdade57"
+      ]
+    ]
+  },
+  {
+    "id": "ff8cd4d60fdade57",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "e87351fd2cb8a6fc",
+    "name": "Guardar valores escalados",
+    "func": "const scales = {\n  \"vapor.vapor.vapor_alta_presion\":{ rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 25, unit: \"Kg\" },\n  \"vapor.vapor.vapor_auxilio_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 50, unit: \"Tn/H\" },\n  \"vapor.vapor.vapor_baja_presion\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 25, unit: \"Kg\" },\n  \"vapor.vapor.vapor_destileria_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 50, unit: \"Tn/H\" },\n  \"vapor.vapor.vapor_destileria_presion\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 4, unit: \"Kg\" },\n  \"vapor.vapor.vapor_destileria_temp\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 200, unit: \"°C\" },\n  \"vapor.vapor.vapor_escape_aux_presion\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 2, unit: \"Kg\" },\n  \"vapor.vapor.vapor_reducido_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 5, unit: \"Tn/H\" },\n  \"vapor.vapor.vapor_tamiz_presion\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 10, unit: \"Kg\" },\n  \"vapor.vapor.vapor_termo_dest_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 26, unit: \"Tn/H\" },\n  \"vapor.vapor.vapor_trapiche_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 58, unit: \"Tn/H\" },\n  \"vapor.vapor.vapor_usina_alta_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 63, unit: \"Tn/H\" },\n  \"vapor.vapor.vapor_usina_baja_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 57, unit: \"Tn/H\" }\n};\n\nlet valores = flow.get(\"vapor\") || {};\nlet data = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\n\nfor (const p of data) {\n  if (!p) continue;\n\n  const id = p.id || p.name || p.tag || p.topic || msg.topic;\n  const cfg = scales[id];\n\n  const raw = Number(\n    p.value_raw !== undefined ? p.value_raw :\n    p.value !== undefined ? p.value :\n    p.v !== undefined ? p.v :\n    p\n  );\n\n  if (!Number.isFinite(raw)) continue;\n\n  let value = raw;\n  let unit = \"raw\";\n\n  if (cfg) {\n    // Escalado\n    value = ((raw - cfg.rawMin) * (cfg.engMax - cfg.engMin)) / \n            (cfg.rawMax - cfg.rawMin) + cfg.engMin;\n\n    // 🔴 Clamp completo (evita negativos y valores fuera de rango)\n    value = Math.max(cfg.engMin, Math.min(cfg.engMax, value));\n\n    // Redondeo\n    value = Number(value.toFixed(3));\n    unit = cfg.unit;\n  }\n\n  valores[id] = {\n    value: value,\n    raw: raw,\n    unit: unit,\n    timestamp: new Date().toISOString()\n  };\n}\n\nflow.set(\"vapor\", valores);\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 280,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "262ade13b2aad492",
+    "type": "switch",
+    "z": "9743a685f64fe521",
+    "g": "fc3308f70173de70",
+    "name": "Comando Vapor",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "♨️ Vapor",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 340,
+    "y": 380,
+    "wires": [
+      [
+        "e729523cc361fea6"
+      ]
+    ]
+  },
+  {
+    "id": "e729523cc361fea6",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "fc3308f70173de70",
+    "name": "Reporte Telegram Vapor",
+    "func": "let v = flow.get(\"vapor\") || {};\n\nfunction val(tag, dec = 2) {\n  let x = v[tag];\n  if (!x) return \"-\";\n\n  if (typeof x === \"object\") {\n    let value = Number(x.value);\n    if (!Number.isFinite(value)) return \"-\";\n    return value.toFixed(dec) + \" \" + (x.unit || \"\");\n  }\n\n  x = Number(x);\n  if (!Number.isFinite(x)) return \"-\";\n  return x.toFixed(dec);\n}\n\nlet reporte = \"📊 *REPORTE DE VAPOR*\\n\";\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\\n\";\n\n// 🔵 PRESIONES\nreporte += \"🟦 *PRESIONES*\\n\";\nreporte += \"🔹 Alta presión: \" + val(\"vapor.vapor.vapor_alta_presion\") + \"\\n\";\nreporte += \"🔹 Baja presión: \" + val(\"vapor.vapor.vapor_baja_presion\") + \"\\n\";\nreporte += \"🔹 Destilería: \" + val(\"vapor.vapor.vapor_destileria_presion\") + \"\\n\";\nreporte += \"🔹 Escape auxiliar: \" + val(\"vapor.vapor.vapor_escape_aux_presion\") + \"\\n\";\nreporte += \"🔹 Tamiz: \" + val(\"vapor.vapor.vapor_tamiz_presion\") + \"\\n\\n\";\n\n// 🔥 CAUDALES\nreporte += \"🔥 *CAUDALES DE VAPOR*\\n\";\nreporte += \"🏭 Trapiche: \" + val(\"vapor.vapor.vapor_trapiche_caudal\") + \"\\n\";\nreporte += \"⚡ Usina alta: \" + val(\"vapor.vapor.vapor_usina_alta_caudal\") + \"\\n\";\nreporte += \"⚡ Usina baja: \" + val(\"vapor.vapor.vapor_usina_baja_caudal\") + \"\\n\";\nreporte += \"🏗️ Termo dest: \" + val(\"vapor.vapor.vapor_termo_dest_caudal\") + \"\\n\";\nreporte += \"🧪 Destilería: \" + val(\"vapor.vapor.vapor_destileria_caudal\") + \"\\n\";\nreporte += \"🔧 Auxilio: \" + val(\"vapor.vapor.vapor_auxilio_caudal\") + \"\\n\";\nreporte += \"🔻 Reducido: \" + val(\"vapor.vapor.vapor_reducido_caudal\") + \"\\n\\n\";\n\n// 🌡️ TEMPERATURA\nreporte += \"🌡️ *TEMPERATURA*\\n\";\nreporte += \"🔹 Destilería: \" + val(\"vapor.vapor.vapor_destileria_temp\") + \"\\n\\n\";\n\n// ⏱️ ACTUALIZACIÓN\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\";\nreporte += \"🕒 \" + new Date().toLocaleString(\"es-AR\");\n\nmsg.payload = {\n    chatId: \"-4293484523\",\n    type: \"message\",\n    content: reporte,\n    options: { parse_mode: \"Markdown\" }\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 570,
+    "y": 380,
+    "wires": [
+      [
+        "a9c861ef4fec1e6b"
+      ]
+    ]
+  },
+  {
+    "id": "0644782a3231da0c",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "a6ad2a33eabb6588",
+    "name": "Comando Instructivo",
+    "func": "if (msg.payload.content == \"Instructivo\" || \"instructivo\") {\n    msg.payload = {\n        chatId: -4293484523,\n        type: \"message\",\n        content:\n            \"Bienvenido a Industria 4.0\\n\\n\" +\n            \"Indique qué reporte quiere solicitar:\",\n        options: {\n            reply_markup: {\n                keyboard: [\n                    [\"Reporte Gerencial\"],\n                    [\"Trapiche\", \"Caldera\"],\n                    [\"Usina\", \"Vapor\"],\n                    [\"Fábrica\", \"Salon\"]\n                ],\n                resize_keyboard: true,\n                one_time_keyboard: false\n            }\n        }\n    };\n\n    return msg;\n}\n\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 160,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "28632466cb487347",
+    "type": "mqtt in",
+    "z": "9743a685f64fe521",
+    "g": "edd2ab67e5260486",
+    "name": "MQTT Trapiche_Tel",
+    "topic": "corona_kep2025/telegram/trapiche/",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "99f867c0609a148c",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 152.85711669921875,
+    "y": 530,
+    "wires": [
+      [
+        "5e034e3b57fc8f14"
+      ]
+    ]
+  },
+  {
+    "id": "5e034e3b57fc8f14",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "edd2ab67e5260486",
+    "name": "Guardar valores escalados",
+    "func": "const scales = {\n  \"trapiche_cabina.trapiche_cabina.trap_conductor\": { rawMin: 0, rawMax: 1, engMin: 0, engMax: 1, unit: \"\" },\n  \"trapiche_molino.trapiche_molino.trap_molino1_OUT\": { rawMin: 0, rawMax: 10000, engMin: 0, engMax: 1000, unit: \"Rpm\" },\n  \"trapiche_cabina.trapiche_cabina.trap_molino6_presion_este\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 200, unit: \"Kg/cm2\" },\n  \"trapiche_cabina.trapiche_cabina.trap_molino6_presion_oeste\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 200, unit: \"Kg/cm2\" },\n  \"vapor.vapor.vapor_agua_imbibicion_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 53, unit: \"m3\" },\n  \"vapor.vapor.vapor_agua_imbibicion_nivel\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 100, unit: \"%\" },\n  \"vapor.vapor.vapor_agua_imbibicion_temp\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 200, unit: \"°C\" }\n};\n\nlet valores = flow.get(\"trapiche\") || {};\nlet data = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\n\nfor (const p of data) {\n  if (!p) continue;\n\n  const id = p.id || p.name || p.tag || p.topic || msg.topic;\n  const cfg = scales[id];\n\n  const raw = Number(\n    p.value_raw !== undefined ? p.value_raw :\n    p.value !== undefined ? p.value :\n    p.v !== undefined ? p.v :\n    p\n  );\n\n  if (!Number.isFinite(raw)) continue;\n\n  let value = raw;\n  let unit = \"raw\";\n\n  if (cfg) {\n    value = ((raw - cfg.rawMin) * (cfg.engMax - cfg.engMin)) /\n            (cfg.rawMax - cfg.rawMin) + cfg.engMin;\n\n    // Evita negativos y valores mayores al máximo configurado\n    value = Math.max(cfg.engMin, Math.min(cfg.engMax, value));\n\n    value = Number(value.toFixed(3));\n    unit = cfg.unit;\n  }\n\n  valores[id] = {\n    value,\n    raw,\n    unit,\n    timestamp: new Date().toISOString()\n  };\n}\n\nflow.set(\"trapiche\", valores);\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 402.85711669921875,
+    "y": 530,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "42fdab0759108638",
+    "type": "switch",
+    "z": "9743a685f64fe521",
+    "g": "9e0e41e655dba5ce",
+    "name": "Comando Trapiche",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "🏭 Trapiche",
+        "vt": "str"
+      }
+    ],
+    "repair": false,
+    "outputs": 1,
+    "x": 352.85711669921875,
+    "y": 630,
+    "wires": [
+      [
+        "351175681af3b190"
+      ]
+    ]
+  },
+  {
+    "id": "351175681af3b190",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "9e0e41e655dba5ce",
+    "name": "Consulta SQL Bagazo",
+    "func": "msg.topic = `\nSELECT TOP 1\n    polmanual1 AS pol_bagazo,\n    humedad AS humedad_bagazo\nFROM [CORONA].[dbo].[pr_ezi_laboratorio_gral2]\nWHERE codigoproceso = 'Bagazo'\n  AND Peso_final IS NOT NULL\nORDER BY \n    CONVERT(DATE, fechaindustrial, 103) DESC,\n    HORA DESC;\n`;\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 582.8571166992188,
+    "y": 630,
+    "wires": [
+      [
+        "91081f2a1c296f50"
+      ]
+    ]
+  },
+  {
+    "id": "723abfb92a43d9c3",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "9e0e41e655dba5ce",
+    "name": "Reporte Telegram Trapiche",
+    "func": "let v = flow.get(\"trapiche\") || {};\nlet lab = msg.payload[0];\n\nfunction val(tag, dec = 2) {\n  let x = v[tag];\n  if (!x) return \"-\";\n  let n = Number(x.value);\n  return isNaN(n) ? \"-\" : n.toFixed(dec) + \" \" + (x.unit || \"\");\n}\n\nlet reporte = \"🏭 *REPORTE DE TRAPICHE*\\n\";\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\\n\";\n\nlet vel = Number(v[\"trapiche_cabina.trapiche_cabina.trap_conductor\"]?.value || 0);\nreporte += \"🔎 Estado: \" + (vel > 0 ? \"🟢 Funcionando\" : \"🔴 Parado\") + \"\\n\\n\";\n\nreporte += \"⚙️ *MOLIENDA*\\n\";\nreporte += \"🔹 Molino 1: \" + val(\"trapiche_molino.trapiche_molino.trap_molino1_OUT\") + \"\\n\";\nreporte += \"🔹 Flotación Este: \" + val(\"trapiche_cabina.trapiche_cabina.trap_molino6_presion_este\") + \"\\n\";\nreporte += \"🔹 Flotación Oeste: \" + val(\"trapiche_cabina.trapiche_cabina.trap_molino6_presion_oeste\") + \"\\n\\n\";\n\nreporte += \"💧 *IMBIBICIÓN*\\n\";\nreporte += \"🔹 Caudal: \" + val(\"vapor.vapor.vapor_agua_imbibicion_caudal\") + \"\\n\";\nreporte += \"🔹 Nivel: \" + val(\"vapor.vapor.vapor_agua_imbibicion_nivel\") + \"\\n\";\nreporte += \"🔹 Temp: \" + val(\"vapor.vapor.vapor_agua_imbibicion_temp\") + \"\\n\\n\";\n\nreporte += \"🧪 *LABORATORIO*\\n\";\nreporte += \"🔹 Pol: \" + (lab ? lab.pol_bagazo.toFixed(2) + \" %\" : \"-\") + \"\\n\";\nreporte += \"🔹 Humedad: \" + (lab ? lab.humedad_bagazo.toFixed(2) + \" %\" : \"-\") + \"\\n\";\n\nreporte += \"\\n🕒 \" + new Date().toLocaleString(\"es-AR\");\n\nmsg.payload = {\n    chatId: \"-4293484523\",\n    type: \"message\",\n    content: reporte,\n    options: { parse_mode: \"Markdown\" }\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1022.8571166992188,
+    "y": 630,
+    "wires": [
+      [
+        "3408b3a7ef1bcc49"
+      ]
+    ]
+  },
+  {
+    "id": "2e99faf8d1caf354",
+    "type": "switch",
+    "z": "9743a685f64fe521",
+    "g": "8de6106dfec2fcca",
+    "name": "Comando Caldera",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "🔥 Caldera",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1370,
+    "y": 380,
+    "wires": [
+      [
+        "80a62ca6ab7eecc5"
+      ]
+    ]
+  },
+  {
+    "id": "80a62ca6ab7eecc5",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "8de6106dfec2fcca",
+    "name": "Reporte Telegram Caldera",
+    "func": "let v = flow.get(\"caldera\") || {};\n\nfunction val(tag, dec = 2) {\n  let x = v[tag];\n  if (!x) return \"-\";\n\n  if (typeof x === \"object\") {\n    let value = Number(x.value);\n    if (!Number.isFinite(value)) return \"-\";\n    return value.toFixed(dec) + \" \" + (x.unit || \"\");\n  }\n\n  x = Number(x);\n  if (!Number.isFinite(x)) return \"-\";\n  return x.toFixed(dec);\n}\n\nfunction num(tag) {\n  let x = v[tag];\n  if (!x) return 0;\n\n  if (typeof x === \"object\") {\n    let n = Number(x.value);\n    return Number.isFinite(n) ? n : 0;\n  }\n\n  let n = Number(x);\n  return Number.isFinite(n) ? n : 0;\n}\n\nlet gasTotal =\n  num(\"caldera2.caldera2.cald2_gas_caudal\") +\n  num(\"caldera3.caldera3.cald3_gas_caudal\") +\n  num(\"caldera6.caldera6.cald6_gas_caudal\");\n\nlet vaporTotal =\n  num(\"caldera2.caldera2.cald2_vapor_caudal\") +\n  num(\"caldera3.caldera3.cald3_vapor_caudal\") +\n  num(\"caldera6.caldera6.cald6_vapor_caudal\");\n\nlet reporte = \"🔥 *REPORTE DE CALDERAS*\\n\";\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\\n\";\n\nreporte += \"💧 *AGUA DE ALIMENTACIÓN*\\n\";\nreporte += \"🌡️ Temperatura: \" + val(\"caldera.Caldera.cald_agua_aliment_temp\") + \"\\n\";\nreporte += \"⚙️ Presión BB 1: \" + val(\"caldera.Caldera.cald_agua_aliment1_presion\") + \"\\n\";\nreporte += \"🚰 Nivel reserva: \" + val(\"caldera.Caldera.cald_reserva_nivel\") + \"\\n\\n\";\n\nreporte += \"🏭 *CALDERA 2*\\n\";\nreporte += \"⛽ Gas: \" + val(\"caldera2.caldera2.cald2_gas_caudal\") + \"\\n\";\nreporte += \"♨️ Vapor: \" + val(\"caldera2.caldera2.cald2_vapor_caudal\") + \"\\n\\n\";\n\nreporte += \"🏭 *CALDERA 3*\\n\";\nreporte += \"⛽ Gas: \" + val(\"caldera3.caldera3.cald3_gas_caudal\") + \"\\n\";\nreporte += \"♨️ Vapor: \" + val(\"caldera3.caldera3.cald3_vapor_caudal\") + \"\\n\\n\";\n\nreporte += \"🏭 *CALDERA 6*\\n\";\nreporte += \"⛽ Gas: \" + val(\"caldera6.caldera6.cald6_gas_caudal\") + \"\\n\";\nreporte += \"♨️ Vapor: \" + val(\"caldera6.caldera6.cald6_vapor_caudal\") + \"\\n\\n\";\n\nreporte += \"🧯 *LÍNEAS DE VAPOR*\\n\";\nreporte += \"🔴 Alta presión: \" + val(\"vapor.vapor.vapor_alta_presion\") + \"\\n\";\nreporte += \"🔵 Baja presión: \" + val(\"vapor.vapor.vapor_baja_presion\") + \"\\n\\n\";\n\nreporte += \"📊 *TOTALES*\\n\";\nreporte += \"⛽ Caudal gas total: \" + gasTotal.toFixed(2) + \" m3\\n\";\nreporte += \"♨️ Caudal vapor total: \" + vaporTotal.toFixed(2) + \" Tn/H\\n\\n\";\n\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\";\nreporte += \"🕒 \" + new Date().toLocaleString(\"es-AR\");\n\nmsg.payload = {\n  chatId: \"-4293484523\",\n  type: \"message\",\n  content: reporte,\n  options: { parse_mode: \"Markdown\" }\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1620,
+    "y": 380,
+    "wires": [
+      [
+        "5312e630f4cd6fb0"
+      ]
+    ]
+  },
+  {
+    "id": "54dcda0f14a0f349",
+    "type": "mqtt in",
+    "z": "9743a685f64fe521",
+    "g": "f29f70aa8215a0ef",
+    "name": "MQTT Caldera",
+    "topic": "corona_kep2025/telegram/calderas/",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "99f867c0609a148c",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 1140,
+    "y": 280,
+    "wires": [
+      [
+        "31ac58f11b63e60d"
+      ]
+    ]
+  },
+  {
+    "id": "31ac58f11b63e60d",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "f29f70aa8215a0ef",
+    "name": "Guardar valores escalados",
+    "func": "const scales = {\n  \"caldera.Caldera.cald_agua_aliment_temp\":{ rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 150, unit: \"°C\" },\n  \"caldera.Caldera.cald_agua_aliment1_presion\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 50, unit: \"Kg\" },\n  \"caldera.Caldera.cald_reserva_nivel\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 100, unit: \"%\" },\n  \"caldera2.caldera2.cald2_gas_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 7700, unit: \"m3\" },\n  \"caldera2.caldera2.cald2_vapor_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 55, unit: \"Tn/H\" },\n  \"caldera3.caldera3.cald3_gas_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 3700, unit: \"m3\" },\n  \"caldera3.caldera3.cald3_vapor_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 58, unit: \"Tn/H\" },\n  \"caldera6.caldera6.cald6_gas_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 7700, unit: \"m3\" },\n  \"caldera6.caldera6.cald6_vapor_caudal\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 130, unit: \"Tn/H\" },\n  \"vapor.vapor.vapor_alta_presion\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 25, unit: \"Kg\" },\n  \"vapor.vapor.vapor_baja_presion\": { rawMin: 3276, rawMax: 16383, engMin: 0, engMax: 25, unit: \"Kg\" },\n  };\n\nlet valores = flow.get(\"caldera\") || {};\nlet data = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\n\nfor (const p of data) {\n  if (!p) continue;\n\n  const id = p.id || p.name || p.tag || p.topic || msg.topic;\n  const cfg = scales[id];\n\n  const raw = Number(\n    p.value_raw !== undefined ? p.value_raw :\n    p.value !== undefined ? p.value :\n    p.v !== undefined ? p.v :\n    p\n  );\n\n  if (!Number.isFinite(raw)) continue;\n\n  let value = raw;\n  let unit = \"raw\";\n\n  if (cfg) {\n    value = ((raw - cfg.rawMin) * (cfg.engMax - cfg.engMin)) / (cfg.rawMax - cfg.rawMin) + cfg.engMin;\n\n    // Evita negativos y valores mayores al máximo configurado\n    value = Math.max(cfg.engMin, Math.min(cfg.engMax, value));\n\n    value = Number(value.toFixed(3));\n    unit = cfg.unit;\n  }\n\n  valores[id] = {\n    value: value,\n    raw: raw,\n    unit: unit,\n    timestamp: new Date().toISOString()\n  };\n}\n\nflow.set(\"caldera\", valores);\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1380,
+    "y": 280,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "411d9288392bdaa6",
+    "type": "switch",
+    "z": "9743a685f64fe521",
+    "g": "ab04c0d1e950d92c",
+    "name": "Comando Salon",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "🍬 Salon",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1560,
+    "y": 640,
+    "wires": [
+      [
+        "25f75bd25f7fd921"
+      ]
+    ]
+  },
+  {
+    "id": "25f75bd25f7fd921",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "ab04c0d1e950d92c",
+    "name": "Reporte Telegram Caldera",
+    "func": "let v = flow.get(\"salon\") || {};\n\nfunction val(tag, dec = 2) {\n  let x = v[tag];\n  if (!x) return \"-\";\n\n  if (typeof x === \"object\") {\n    let value = Number(x.value);\n    if (!Number.isFinite(value)) return \"-\";\n    return value.toFixed(dec) + \" \" + (x.unit || \"\");\n  }\n\n  x = Number(x);\n  if (!Number.isFinite(x)) return \"-\";\n  return x.toFixed(dec);\n}\n\nfunction num(tag) {\n  let x = v[tag];\n  if (!x) return 0;\n\n  if (typeof x === \"object\") {\n    let n = Number(x.value);\n    return Number.isFinite(n) ? n : 0;\n  }\n\n  let n = Number(x);\n  return Number.isFinite(n) ? n : 0;\n}\n\nlet reporte = \"🍬 *REPORTE DE AZÚCAR*\\n\";\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\\n\";\n\n// 🧪 CALIDAD\nreporte += \"🧪 *CALIDAD*\\n\";\nreporte += \"🔹 Color cinta corta: \" + val(\"laboratorio.analisis_azucar.cinta_corta_color\") + \"\\n\";\nreporte += \"💧 Humedad cinta corta: \" + val(\"laboratorio.analisis_azucar.cinta_corta_humedad\") + \"\\n\";\nreporte += \"🔹 Color cinta larga: \" + val(\"laboratorio.analisis_azucar.cinta_larga_color\") + \"\\n\";\nreporte += \"💧 Humedad cinta larga: \" + val(\"laboratorio.analisis_azucar.cinta_larga_humedad\") + \"\\n\\n\";\n\n// 📦 PRODUCCIÓN\nreporte += \"📦 *PRODUCCIÓN*\\n\";\nreporte += \"🏭 Bolsas producidas (día): \" + val(\"salon.salon.salon.salon_contador_dia\") + \"\\n\\n\";\n\n// ⏱️ ACTUALIZACIÓN\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\";\nreporte += \"🕒 \" + new Date().toLocaleString(\"es-AR\");\n\nmsg.payload = {\n  chatId: \"-4293484523\",\n  type: \"message\",\n  content: reporte,\n  options: { parse_mode: \"Markdown\" }\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1820,
+    "y": 640,
+    "wires": [
+      [
+        "8ffd5e52a1a05ad0"
+      ]
+    ]
+  },
+  {
+    "id": "b73ef0eee75c180f",
+    "type": "mqtt in",
+    "z": "9743a685f64fe521",
+    "g": "b8b1bdae2b9fd895",
+    "name": "MQTT Salon",
+    "topic": "corona_kep2025/telegram/salon/",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "99f867c0609a148c",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 1330,
+    "y": 540,
+    "wires": [
+      [
+        "d9a15dd27f8d86b2"
+      ]
+    ]
+  },
+  {
+    "id": "d9a15dd27f8d86b2",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "b8b1bdae2b9fd895",
+    "name": "Guardar valores escalados",
+    "func": "const scales = {\n  \"laboratorio.analisis_azucar.cinta_corta_color\": { rawMin: 0, rawMax: 20000, engMin: 0, engMax: 20000, unit: \"UI\" },\n  \"laboratorio.analisis_azucar.cinta_corta_humedad\": { rawMin: 0, rawMax: 1000, engMin: 0, engMax: 1000, unit: \"%H\" },\n  \"laboratorio.analisis_azucar.cinta_larga_color\": { rawMin: 0, rawMax: 1000, engMin: 0, engMax: 1000, unit: \"UI\" },\n  \"laboratorio.analisis_azucar.cinta_larga_humedad\": { rawMin: 0, rawMax: 100, engMin: 0, engMax: 100, unit: \"%H\" },\n  \"salon.salon.salon.salon_contador_dia\": { rawMin: 0, rawMax: 15000, engMin: 0, engMax: 15000, unit: \"Bls\" },\n  };\n\nlet valores = flow.get(\"salon\") || {};\nlet data = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\n\nfor (const p of data) {\n  if (!p) continue;\n\n  const id = p.id || p.name || p.tag || p.topic || msg.topic;\n  const cfg = scales[id];\n\n  const raw = Number(\n    p.value_raw !== undefined ? p.value_raw :\n    p.value !== undefined ? p.value :\n    p.v !== undefined ? p.v :\n    p\n  );\n\n  if (!Number.isFinite(raw)) continue;\n\n  let value = raw;\n  let unit = \"raw\";\n\n  if (cfg) {\n    value = ((raw - cfg.rawMin) * (cfg.engMax - cfg.engMin)) / (cfg.rawMax - cfg.rawMin) + cfg.engMin;\n\n    // Evita negativos y valores mayores al máximo configurado\n    value = Math.max(cfg.engMin, Math.min(cfg.engMax, value));\n\n    value = Number(value.toFixed(3));\n    unit = cfg.unit;\n  }\n\n  valores[id] = {\n    value: value,\n    raw: raw,\n    unit: unit,\n    timestamp: new Date().toISOString()\n  };\n}\n\nflow.set(\"salon\", valores);\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1580,
+    "y": 540,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "dde3882d3fe93ae0",
+    "type": "switch",
+    "z": "9743a685f64fe521",
+    "g": "d9b901a28313b277",
+    "name": "Comando Fabrica",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "🏗️ Fábrica",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 370,
+    "y": 920,
+    "wires": [
+      [
+        "236401a755eda064"
+      ]
+    ]
+  },
+  {
+    "id": "236401a755eda064",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "d9b901a28313b277",
+    "name": "Reporte Telegram Caldera",
+    "func": "let v = flow.get(\"fabrica\") || {};\n\nfunction val(tag, dec = 2) {\n  let x = v[tag];\n  if (!x) return \"-\";\n\n  if (typeof x === \"object\") {\n    let value = Number(x.value);\n    if (!Number.isFinite(value)) return \"-\";\n    return value.toFixed(dec) + \" \" + (x.unit || \"\");\n  }\n\n  x = Number(x);\n  if (!Number.isFinite(x)) return \"-\";\n  return x.toFixed(dec);\n}\n\nfunction num(tag) {\n  let x = v[tag];\n  if (!x) return 0;\n\n  if (typeof x === \"object\") {\n    let n = Number(x.value);\n    return Number.isFinite(n) ? n : 0;\n  }\n\n  let n = Number(x);\n  return Number.isFinite(n) ? n : 0;\n}\n\nlet reporte = \"🏭 *REPORTE DE FÁBRICA*\\n\";\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\\n\";\n\n// 🧪 CLARIFICACIÓN\nreporte += \"🧪 *CLARIFICACIÓN*\\n\";\nreporte += \"🔹 Nivel cachaza: \" + val(\"Clarificacion2.Clarificacion2.clar2_cachaza_nivel\") + \"\\n\";\nreporte += \"🧫 pH encalado: \" + val(\"Clarificacion3.Clarificacion3.clar3_encalado_ph\") + \"\\n\";\nreporte += \"🔹 Nivel jugo encalado: \" + val(\"Clarificacion3.Clarificacion3.clar3_jugo_encalado_nivel\") + \"\\n\";\nreporte += \"⚙️ Presión jugo encalado: \" + val(\"Clarificacion3.Clarificacion3.clar3_jugo_encalado_presion\") + \"\\n\";\nreporte += \"🔹 Nivel jugo pesado: \" + val(\"Clarificacion3.Clarificacion3.clar3_jugo_pesado_nivel\") + \"\\n\";\nreporte += \"⚙️ Presión sulfitado: \" + val(\"Clarificacion3.Clarificacion3.clar3_sulfitado_presion\") + \"\\n\";\nreporte += \"🔹 Nivel jugo clarificado: \" + val(\"fabrica.fabrica.Fab_jugo_clarificado_nivel\") + \"\\n\\n\";\n\n// 💧 AGUA / SERVICIOS\nreporte += \"💧 *AGUA Y SERVICIOS*\\n\";\nreporte += \"🔹 Nivel fosa: \" + val(\"fabrica_bb.fabrica_bb.Fab_agua_industrial_nivel\") + \"\\n\\n\";\n\n// 🍯 EVAPORACIÓN / MELADO\nreporte += \"🍯 *EVAPORACIÓN / MELADO*\\n\";\nreporte += \"🔹 Nivel melado evaporación: \" + val(\"fabrica_bb.fabrica_bb.Fab_melado_evaporacion_nivel\") + \"\\n\";\nreporte += \"🔹 Nivel melado Tk1: \" + val(\"Tacho1ra.Tacho1ra.Tacho_melado_tachos_nivel1\") + \"\\n\";\nreporte += \"🔹 Nivel melado Tk2: \" + val(\"Tacho1ra.Tacho1ra.Tacho_melado_tachos_nivel2\") + \"\\n\";\nreporte += \"🔹 Nivel melado tratado: \" + val(\"tacho2da3ra.tacho2da3ra.Tacho_melado_tratado\") + \"\\n\";\nreporte += \"🌡️ Temperatura melado: \" + val(\"tacho2da3ra.tacho2da3ra.Temperatura_melado\") + \"\\n\\n\";\n\n// 🍬 CRISTALIZACIÓN\nreporte += \"🍬 *CRISTALIZACIÓN*\\n\";\nreporte += \"🔹 Nivel cristalizadores: \" + val(\"Tacho1ra.Tacho1ra.Tacho_cristalizador1ra_nivel\") + \"\\n\\n\";\n\n// ⏱️ ACTUALIZACIÓN\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\";\nreporte += \"🕒 \" + new Date().toLocaleString(\"es-AR\");\n\nmsg.payload = {\n  chatId: \"-4293484523\",\n  type: \"message\",\n  content: reporte,\n  options: { parse_mode: \"Markdown\" }\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 620,
+    "y": 920,
+    "wires": [
+      [
+        "3fdaf54a9a14ea3b"
+      ]
+    ]
+  },
+  {
+    "id": "2eb2da03e7b04995",
+    "type": "mqtt in",
+    "z": "9743a685f64fe521",
+    "g": "4295b9bd4c4982df",
+    "name": "MQTT Fabrica",
+    "topic": "corona_kep2025/telegram/fabrica/",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "99f867c0609a148c",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 820,
+    "wires": [
+      [
+        "37b32c7f99476719"
+      ]
+    ]
+  },
+  {
+    "id": "37b32c7f99476719",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "4295b9bd4c4982df",
+    "name": "Guardar valores escalados",
+    "func": "const scales = {\n  \"Clarificacion2.Clarificacion2.clar2_cachaza_nivel\": { rawMin: 6552, rawMax: 14400, engMin: 0, engMax: 100, unit: \"%\" },\n  \"Clarificacion3.Clarificacion3.clar3_encalado_ph\": { rawMin: 6552, rawMax: 32767, engMin: 0, engMax: 14, unit: \"pH\" },\n  \"Clarificacion3.Clarificacion3.clar3_jugo_encalado_nivel\": { rawMin: 6552, rawMax: 32760, engMin: 0, engMax: 100, unit: \"%\" },\n  \"Clarificacion3.Clarificacion3.clar3_jugo_encalado_presion\": { rawMin: 6552, rawMax: 32760, engMin: 0, engMax: 10, unit: \"Kg\" },\n  \"Clarificacion3.Clarificacion3.clar3_jugo_pesado_nivel\": { rawMin: 6552, rawMax: 13000, engMin: 0, engMax: 100, unit: \"%\" },\n  \"Clarificacion3.Clarificacion3.clar3_sulfitado_presion\": { rawMin: 6552, rawMax: 32760, engMin: 0, engMax: 10, unit: \"Kg\" },\n  \"fabrica_bb.fabrica_bb.Fab_agua_industrial_nivel\": { rawMin: 6552, rawMax: 32760, engMin: 0, engMax: 100, unit: \"%\" },\n  \"Tacho1ra.Tacho1ra.Tacho_cristalizador1ra_nivel\": { rawMin: 6552, rawMax: 32760, engMin: 0, engMax: 100, unit: \"%\" },\n  \"fabrica_bb.fabrica_bb.Fab_melado_evaporacion_nivel\": { rawMin: 6552, rawMax: 25500, engMin: 0, engMax: 100, unit: \"%\" },\n  \"Tacho1ra.Tacho1ra.Tacho_melado_tachos_nivel1\": { rawMin: 6552, rawMax: 18500, engMin: 0, engMax: 100, unit: \"%\" },\n  \"Tacho1ra.Tacho1ra.Tacho_melado_tachos_nivel2\": { rawMin: 6552, rawMax: 18500, engMin: 0, engMax: 100, unit: \"%\" },\n  \"tacho2da3ra.tacho2da3ra.Tacho_melado_tratado\": { rawMin: 6552, rawMax: 32760, engMin: 0, engMax: 100, unit: \"%\" },\n  \"tacho2da3ra.tacho2da3ra.Temperatura_melado\": { rawMin: 6552, rawMax: 32760, engMin: 0, engMax: 150, unit: \"°C\" },\n  \"fabrica.fabrica.Fab_jugo_clarificado_nivel\": { rawMin: 3276, rawMax: 5200, engMin: 0, engMax: 100, unit: \"%\" }\n};\n\nlet valores = flow.get(\"fabrica\") || {};\nlet data = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\n\nfor (const p of data) {\n  if (!p) continue;\n\n  const id = p.id || p.name || p.tag || p.topic || msg.topic;\n  const cfg = scales[id];\n\n  const raw = Number(\n    p.value_raw !== undefined ? p.value_raw :\n    p.value !== undefined ? p.value :\n    p.v !== undefined ? p.v :\n    p\n  );\n\n  if (!Number.isFinite(raw)) continue;\n\n  let value = raw;\n  let unit = \"raw\";\n\n  if (cfg) {\n    value = ((raw - cfg.rawMin) * (cfg.engMax - cfg.engMin)) /\n            (cfg.rawMax - cfg.rawMin) + cfg.engMin;\n\n    // Evita negativos y valores por encima del máximo\n    value = Math.max(cfg.engMin, Math.min(cfg.engMax, value));\n\n    value = Number(value.toFixed(3));\n    unit = cfg.unit;\n  }\n\n  valores[id] = {\n    value,\n    raw,\n    unit,\n    timestamp: new Date().toISOString()\n  };\n}\n\nflow.set(\"fabrica\", valores);\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 380,
+    "y": 820,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "e6149faa9f256b57",
+    "type": "switch",
+    "z": "9743a685f64fe521",
+    "g": "99366d710b60d56b",
+    "name": "Comando Salon",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "⚡ Usina",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1440,
+    "y": 920,
+    "wires": [
+      [
+        "c24d200431d3b700"
+      ]
+    ]
+  },
+  {
+    "id": "c24d200431d3b700",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "99366d710b60d56b",
+    "name": "Reporte Telegram Caldera",
+    "func": "let v = flow.get(\"usina\") || {};\n\nfunction val(tag, dec = 2) {\n  let x = v[tag];\n  if (!x) return \"-\";\n\n  if (typeof x === \"object\") {\n    let value = Number(x.value);\n    if (!Number.isFinite(value)) return \"-\";\n    return value.toFixed(dec) + \" \" + (x.unit || \"\");\n  }\n\n  x = Number(x);\n  if (!Number.isFinite(x)) return \"-\";\n  return x.toFixed(dec);\n}\n\nfunction num(tag) {\n  let x = v[tag];\n  if (!x) return 0;\n\n  if (typeof x === \"object\") {\n    let n = Number(x.value);\n    return Number.isFinite(n) ? n : 0;\n  }\n\n  let n = Number(x);\n  return Number.isFinite(n) ? n : 0;\n}\n\nlet potenciaTotal =\n  num(\"siemens.siemens.siemens_potencia_activa\") +\n  num(\"weg.weg.WEG_potencia_activa\");\n\nlet reporte = \"⚡ *REPORTE DE USINA*\\n\";\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\\n\";\n\n// TOTAL ARRIBA\nreporte += \"⚡ *TOTAL GENERADO:* \" + potenciaTotal.toFixed(2) + \" kW\\n\\n\";\n\n// ⚙️ GENERADOR SIEMENS\nreporte += \"⚙️ *SIEMENS*\\n\";\nreporte += \"🔹 Frecuencia: \" + val(\"siemens.siemens.siemens_frecuencia\") + \"\\n\";\nreporte += \"🔹 Intensidad media: \" + val(\"siemens.siemens.siemens_Intensidad_media\") + \"\\n\";\nreporte += \"🔹 Potencia activa: \" + val(\"siemens.siemens.siemens_potencia_activa\") + \"\\n\";\nreporte += \"🔹 Potencia aparente: \" + val(\"siemens.siemens.siemens_potencia_aparente\") + \"\\n\";\nreporte += \"🔹 Potencia reactiva: \" + val(\"siemens.siemens.siemens_potencia_reactiva\") + \"\\n\\n\";\n\n// 🔌 RED EDET\nreporte += \"🔌 *RED EDET*\\n\";\nreporte += \"🔹 Frecuencia: \" + val(\"skoda.skoda.Frecuencia_edet\") + \"\\n\";\nreporte += \"🔹 Intensidad media: \" + val(\"skoda.skoda.Intensidad_Media_edet\") + \"\\n\\n\";\n\n// ⚙️ GENERADOR WEG\nreporte += \"⚙️ *WEG*\\n\";\nreporte += \"🔹 Frecuencia: \" + val(\"weg.weg.WEG_frecuencia\") + \"\\n\";\nreporte += \"🔹 Intensidad media: \" + val(\"weg.weg.WEG_Intensidad_media\") + \"\\n\";\nreporte += \"🔹 Potencia activa: \" + val(\"weg.weg.WEG_potencia_activa\") + \"\\n\";\nreporte += \"🔹 Potencia aparente: \" + val(\"weg.weg.WEG_potencia_aparente\") + \"\\n\";\nreporte += \"🔹 Potencia reactiva: \" + val(\"weg.weg.WEG_potencia_reactiva\") + \"\\n\\n\";\n\n// ⏱️\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\";\nreporte += \"🕒 \" + new Date().toLocaleString(\"es-AR\");\n\nmsg.payload = {\n  chatId: \"-4293484523\",\n  type: \"message\",\n  content: reporte,\n  options: { parse_mode: \"Markdown\" }\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1700,
+    "y": 920,
+    "wires": [
+      [
+        "c7b8d3ebcdea7cae"
+      ]
+    ]
+  },
+  {
+    "id": "b8fdc5434a0ba072",
+    "type": "mqtt in",
+    "z": "9743a685f64fe521",
+    "g": "efc18d1d3dd722c4",
+    "name": "MQTT Usina",
+    "topic": "corona_kep2025/telegram/usina/",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "99f867c0609a148c",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 1210,
+    "y": 820,
+    "wires": [
+      [
+        "e385d47bc0623722"
+      ]
+    ]
+  },
+  {
+    "id": "e385d47bc0623722",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "efc18d1d3dd722c4",
+    "name": "Guardar valores escalados",
+    "func": "const scales = {\n  \"siemens.siemens.siemens_frecuencia\": { rawMin: 0, rawMax: 5500, engMin: 0, engMax: 55, unit: \"Hz\" },\n  \"siemens.siemens.siemens_Intensidad_media\": { rawMin: 0, rawMax: 10000, engMin: 0, engMax: 1000, unit: \"A\" },\n  \"siemens.siemens.siemens_potencia_activa\": { rawMin: 0, rawMax: 5000, engMin: 0, engMax: 500, unit: \"Kw\" },\n  \"siemens.siemens.siemens_potencia_aparente\": { rawMin: 0, rawMax: 500, engMin: 0, engMax: 5000, unit: \"Kva\" },\n  \"siemens.siemens.siemens_potencia_reactiva\": { rawMin: 0, rawMax: 500, engMin: 0, engMax: 5000, unit: \"Kvar\" },\n  \"skoda.skoda.Frecuencia_edet\": { rawMin: 0, rawMax: 5500, engMin: 0, engMax: 55, unit: \"Hz\" },\n  \"skoda.skoda.Intensidad_Media_edet\": { rawMin: 0, rawMax: 100000, engMin: 0, engMax: 10000, unit: \"A\" },\n  \"weg.weg.WEG_frecuencia\": { rawMin: 0, rawMax: 55, engMin: 0, engMax: 55, unit: \"Hz\" },\n  \"weg.weg.WEG_Intensidad_media\": { rawMin: 0, rawMax: 6000, engMin: 0, engMax: 2000, unit: \"A\" },\n  \"weg.weg.WEG_potencia_activa\": { rawMin: 0, rawMax: 500000, engMin: 0, engMax: 5000, unit: \"Kw\" },\n  \"weg.weg.WEG_potencia_aparente\": { rawMin: 0, rawMax: 500000, engMin: 0, engMax: 5000, unit: \"Kva\" },\n  \"weg.weg.WEG_potencia_reactiva\": { rawMin: 0, rawMax: 500000, engMin: 0, engMax: 5000, unit: \"Kvar\" },\n};\n\nlet valores = flow.get(\"usina\") || {};\nlet data = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\n\nfor (const p of data) {\n  if (!p) continue;\n\n  const id = p.id || p.name || p.tag || p.topic || msg.topic;\n  const cfg = scales[id];\n\n  const raw = Number(\n    p.value_raw !== undefined ? p.value_raw :\n    p.value !== undefined ? p.value :\n    p.v !== undefined ? p.v :\n    p\n  );\n\n  if (!Number.isFinite(raw)) continue;\n\n  let value = raw;\n  let unit = \"raw\";\n\n  if (cfg) {\n    value = ((raw - cfg.rawMin) * (cfg.engMax - cfg.engMin)) / (cfg.rawMax - cfg.rawMin) + cfg.engMin;\n\n    // Evita negativos y valores mayores al máximo configurado\n    value = Math.max(cfg.engMin, Math.min(cfg.engMax, value));\n    \n    value = Number(value.toFixed(3));\n    unit = cfg.unit;\n  }\n\n  valores[id] = {\n    value: value,\n    raw: raw,\n    unit: unit,\n    timestamp: new Date().toISOString()\n  };\n}\n\nflow.set(\"usina\", valores);\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1460,
+    "y": 820,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "40ddc20b883c10c7",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "b55ffd5d7c0afe43",
+    "name": "Reporte Gerencial",
+    "func": "let trapiche = flow.get(\"trapiche\") || {};\nlet vapor = flow.get(\"vapor\") || {};\nlet caldera = flow.get(\"caldera\") || {};\nlet usina = flow.get(\"usina\") || {};\nlet fabrica = flow.get(\"fabrica\") || {};\nlet salon = flow.get(\"salon\") || {};\n\nfunction get(area, tag) {\n    let x = area[tag];\n    if (!x) return null;\n\n    if (typeof x === \"object\") {\n        let n = Number(x.value);\n        if (!Number.isFinite(n)) return null;\n        return {\n            value: n,\n            unit: x.unit || \"\",\n            timestamp: x.timestamp || null\n        };\n    }\n\n    let n = Number(x);\n    if (!Number.isFinite(n)) return null;\n    return { value: n, unit: \"\", timestamp: null };\n}\n\nfunction val(area, tag, dec = 2) {\n    let x = get(area, tag);\n    if (!x) return \"-\";\n    return x.value.toFixed(dec) + (x.unit ? \" \" + x.unit : \"\");\n}\n\nfunction num(area, tag) {\n    let x = get(area, tag);\n    return x ? x.value : 0;\n}\n\nfunction estadoTexto(condicion) {\n    return condicion ? \"🟢 Funcionando\" : \"🔴 Parado\";\n}\n\n// =======================\n// ESTADOS GENERALES\n// =======================\n\nlet trapicheON = num(trapiche, \"trapiche_cabina.trapiche_cabina.trap_conductor\") > 0;\nlet usinaON =\n    num(usina, \"siemens.siemens.siemens_potencia_activa\") > 0 ||\n    num(usina, \"weg.weg.WEG_potencia_activa\") > 0;\n\nlet vaporAlta = num(vapor, \"vapor.vapor.vapor_alta_presion\");\nlet vaporBaja = num(vapor, \"vapor.vapor.vapor_baja_presion\");\n\nlet calderaVaporTotal =\n    num(caldera, \"caldera2.caldera2.cald2_vapor_caudal\") +\n    num(caldera, \"caldera3.caldera3.cald3_vapor_caudal\") +\n    num(caldera, \"caldera6.caldera6.cald6_vapor_caudal\");\n\nlet calderaGasTotal =\n    num(caldera, \"caldera2.caldera2.cald2_gas_caudal\") +\n    num(caldera, \"caldera3.caldera3.cald3_gas_caudal\") +\n    num(caldera, \"caldera6.caldera6.cald6_gas_caudal\");\n\nlet potenciaTotal =\n    num(usina, \"siemens.siemens.siemens_potencia_activa\") +\n    num(usina, \"weg.weg.WEG_potencia_activa\");\n\n// =======================\n// REPORTE\n// =======================\n\nlet reporte = \"🏭 *ESTADO GENERAL DE FÁBRICA*\\n\";\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\\n\";\n\nreporte += \"📌 *RESUMEN OPERATIVO*\\n\";\nreporte += \"🏭 Trapiche: \" + estadoTexto(trapicheON) + \"\\n\";\nreporte += \"🔥 Calderas vapor total: \" + calderaVaporTotal.toFixed(2) + \" Tn/H\\n\";\nreporte += \"⚡ Usina: \" + estadoTexto(usinaON) + \"\\n\";\nreporte += \"⚡ Potencia generada: \" + potenciaTotal.toFixed(2) + \" kW\\n\\n\";\n\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\\n\";\n\n// =======================\n// TRAPICHE\n// =======================\n\nreporte += \"🏭 *TRAPICHE*\\n\";\nreporte += \"🔹 Velocidad Molino 1: \" + val(trapiche, \"trapiche_molino.trapiche_molino.trap_molino1_OUT\") + \"\\n\";\nreporte += \"🔹 Flotación 6° Este: \" + val(trapiche, \"trapiche_molino.trapiche_molino.trap_molino6_flotacion_este\") + \"\\n\";\nreporte += \"🔹 Flotación 6° Oeste: \" + val(trapiche, \"trapiche_molino.trapiche_molino.trap_molino6_flotacion_oeste\") + \"\\n\";\nreporte += \"💧 Agua imbibición: \" + val(trapiche, \"vapor.vapor.vapor_agua_imbibicion_caudal\") + \"\\n\\n\";\n\n// =======================\n// VAPOR\n// =======================\n\nreporte += \"♨️ *VAPOR*\\n\";\nreporte += \"🔴 Alta presión: \" + val(vapor, \"vapor.vapor.vapor_alta_presion\") + \"\\n\";\nreporte += \"🔵 Baja presión: \" + val(vapor, \"vapor.vapor.vapor_baja_presion\") + \"\\n\";\nreporte += \"🏭 Trapiche: \" + val(vapor, \"vapor.vapor.vapor_trapiche_caudal\") + \"\\n\";\nreporte += \"⚡ Usina alta: \" + val(vapor, \"vapor.vapor.vapor_usina_alta_caudal\") + \"\\n\";\nreporte += \"⚡ Usina baja: \" + val(vapor, \"vapor.vapor.vapor_usina_baja_caudal\") + \"\\n\";\nreporte += \"🧪 Destilería: \" + val(vapor, \"vapor.vapor.vapor_destileria_caudal\") + \"\\n\\n\";\n\n// =======================\n// CALDERAS\n// =======================\n\nreporte += \"🔥 *CALDERAS*\\n\";\nreporte += \"💧 Agua alimentación temp: \" + val(caldera, \"caldera.Caldera.cald_agua_aliment_temp\") + \"\\n\";\nreporte += \"🚰 Nivel reserva: \" + val(caldera, \"caldera.Caldera.cald_reserva_nivel\") + \"\\n\";\nreporte += \"⛽ Gas total: \" + calderaGasTotal.toFixed(2) + \"\\n\";\nreporte += \"♨️ Vapor total: \" + calderaVaporTotal.toFixed(2) + \" Tn/H\\n\\n\";\n\n// =======================\n// USINA\n// =======================\n\nreporte += \"⚡ *USINA*\\n\";\nreporte += \"⚙️ Siemens potencia: \" + val(usina, \"siemens.siemens.siemens_potencia_activa\") + \"\\n\";\nreporte += \"⚙️ WEG potencia: \" + val(usina, \"weg.weg.WEG_potencia_activa\") + \"\\n\";\nreporte += \"🔌 Frecuencia EDET: \" + val(usina, \"skoda.skoda.Frecuencia_edet\") + \"\\n\";\nreporte += \"⚡ Total generado: \" + potenciaTotal.toFixed(2) + \" kW\\n\\n\";\n\n// =======================\n// FÁBRICA\n// =======================\n\nreporte += \"🍯 *PROCESO FÁBRICA*\\n\";\nreporte += \"🧫 pH encalado: \" + val(fabrica, \"Clarificacion3.Clarificacion3.clar3_encalado_ph\") + \"\\n\";\nreporte += \"🔹 Jugo clarificado nivel: \" + val(fabrica, \"fabrica.fabrica.Fab_jugo_clarificado_nivel\") + \"\\n\";\nreporte += \"🔹 Melado evaporación: \" + val(fabrica, \"fabrica_bb.fabrica_bb.Fab_melado_evaporacion_nivel\") + \"\\n\";\nreporte += \"🌡️ Temperatura melado: \" + val(fabrica, \"tacho2da3ra.tacho2da3ra.Temperatura_melado\") + \"\\n\\n\";\n\n// =======================\n// AZÚCAR\n// =======================\n\nreporte += \"🍬 *AZÚCAR / CALIDAD*\\n\";\nreporte += \"🔹 Color cinta corta: \" + val(salon, \"laboratorio.analisis_azucar.cinta_corta_color\") + \"\\n\";\nreporte += \"💧 Humedad cinta corta: \" + val(salon, \"laboratorio.analisis_azucar.cinta_corta_humedad\") + \"\\n\";\nreporte += \"🔹 Color cinta larga: \" + val(salon, \"laboratorio.analisis_azucar.cinta_larga_color\") + \"\\n\";\nreporte += \"💧 Humedad cinta larga: \" + val(salon, \"laboratorio.analisis_azucar.cinta_larga_humedad\") + \"\\n\";\nreporte += \"📦 Bolsas día: \" + val(salon, \"salon.salon.salon.salon_contador_dia\") + \"\\n\\n\";\n\n// =======================\n// CIERRE\n// =======================\n\nreporte += \"━━━━━━━━━━━━━━━━━━━━━━\\n\";\nreporte += \"🕒 \" + new Date().toLocaleString(\"es-AR\");\n\nmsg.payload = {\n    chatId: \"-4293484523\",\n    type: \"message\",\n    content: reporte,\n    options: { parse_mode: \"Markdown\" }\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1590,
+    "y": 100,
+    "wires": [
+      [
+        "870fd130dcbccc28"
+      ]
+    ]
+  },
+  {
+    "id": "3319e29b450b0151",
+    "type": "switch",
+    "z": "9743a685f64fe521",
+    "g": "b55ffd5d7c0afe43",
+    "name": "Comando Gerencial",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "📊 Reporte Gerencial",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1360,
+    "y": 100,
+    "wires": [
+      [
+        "40ddc20b883c10c7"
+      ]
+    ]
+  },
+  {
+    "id": "b280c3cea7d14fc6",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "a6ad2a33eabb6588",
+    "name": "Comando Instructivo",
+    "func": "let comando = (msg.payload.content || \"\").trim().toLowerCase();\n\nif (comando === \"Instructivo\") {\n    msg.payload = {\n        chatId: -4293484523,\n        type: \"message\",\n        content:\n            \"🤖 *Bienvenido a Industria 4.0*\\n\\n\" +\n            \"Seleccione el reporte que desea solicitar:\",\n        options: {\n            parse_mode: \"Markdown\",\n            reply_markup: {\n                keyboard: [\n                    [{ text: \"📊 Reporte Gerencial\" }],\n                    [{ text: \"🏭 Trapiche\" }, { text: \"🔥 Caldera\" }],\n                    [{ text: \"⚡ Usina\" }, { text: \"♨️ Vapor\" }],\n                    [{ text: \"🏗️ Fábrica\" }, { text: \"🍬 Salon\" }]\n                    [{ text: \"👁️ Camaras\" }],\n                ],\n                resize_keyboard: true,\n                one_time_keyboard: false,\n                is_persistent: true\n            }\n        }\n    };\n\n    return msg;\n}\n\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 380,
+    "y": 80,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "762c6e1182bbf1eb",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "a6ad2a33eabb6588",
+    "name": "Comando Instructivo",
+    "func": "let comando = (msg.payload.content || \"\").trim().toLowerCase();\n\nconst chatId = -4293484523;\n\n// ===============================\n// MENÚ PRINCIPAL\n// ===============================\nfunction menuPrincipal() {\n    msg.payload = {\n        chatId: chatId,\n        type: \"message\",\n        content:\n            \"🤖 *Bienvenido a Industria 4.0*\\n\\n\" +\n            \"Seleccione el reporte que desea solicitar:\",\n        options: {\n            parse_mode: \"Markdown\",\n            reply_markup: {\n                keyboard: [\n                    [{ text: \"📊 Reporte Gerencial\" }],\n                    [{ text: \"🏭 Trapiche\" }, { text: \"🔥 Caldera\" }],\n                    [{ text: \"⚡ Usina\" }, { text: \"♨️ Vapor\" }],\n                    [{ text: \"🏗️ Fábrica\" }, { text: \"🍬 Salon\" }],\n                    [{ text: \"👁️ Cámaras\" }]\n                ],\n                resize_keyboard: true,\n                one_time_keyboard: false,\n                is_persistent: true\n            }\n        }\n    };\n\n    return msg;\n}\n\n// ===============================\n// MENÚ CÁMARAS\n// ===============================\nfunction menuCamaras() {\n    msg.payload = {\n        chatId: chatId,\n        type: \"message\",\n        content:\n            \"👁️ *Menú de Cámaras*\\n\\n\" +\n            \"Seleccione la cámara que desea consultar:\",\n        options: {\n            parse_mode: \"Markdown\",\n            reply_markup: {\n                keyboard: [\n                    [{ text: \"📹 Tolva\" }, { text: \"📹 Molino6\" }],\n                    [{ text: \"📹 Mesa\" }, { text: \"📹 Moega\" }],\n                    [{ text: \"📹 Rastra\" }, { text: \"📹 Ph\" }],\n                    [{ text: \"⬅️ Volver al menú principal\" }]\n                ],\n                resize_keyboard: true,\n                one_time_keyboard: false,\n                is_persistent: true\n            }\n        }\n    };\n\n    return msg;\n}\n\n// ===============================\n// ROUTER DE COMANDOS\n// ===============================\n\nif (comando === \"instructivo\" || comando.includes(\"volver\")) {\n    return menuPrincipal();\n}\n\nif (comando.includes(\"cámaras\") || comando.includes(\"camaras\")) {\n    return menuCamaras();\n}\n\nreturn null;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 140,
+    "wires": [
+      [
+        "713ea33d9c8c1db1"
+      ]
+    ]
+  },
+  {
+    "id": "119402e31258088e",
+    "type": "inject",
+    "z": "9743a685f64fe521",
+    "g": "bef4889aae9d99b8",
+    "name": "Revisar alarmas cada 30 seg",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "1",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "10",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 180,
+    "y": 1060,
+    "wires": [
+      [
+        "09e657d2c0c50454"
+      ]
+    ]
+  },
+  {
+    "id": "09e657d2c0c50454",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "bef4889aae9d99b8",
+    "name": "Alarmas por cambio de estado",
+    "func": "const chatId = -4293484523;\n\nlet trapiche = flow.get(\"trapiche\") || {};\nlet fabrica = flow.get(\"fabrica\") || {};\n\n// Memoria de estados anteriores\nlet estados = flow.get(\"estado_alarmas_auto\") || {};\n\nfunction getValue(area, tag) {\n    let x = area[tag];\n    if (!x) return null;\n\n    if (typeof x === \"object\") {\n        let n = Number(x.value);\n        return Number.isFinite(n) ? n : null;\n    }\n\n    let n = Number(x);\n    return Number.isFinite(n) ? n : null;\n}\n\nfunction enviarTelegram(texto) {\n    node.send({\n        payload: {\n            chatId: chatId,\n            type: \"message\",\n            content: texto,\n            options: {\n                parse_mode: \"Markdown\"\n            }\n        }\n    });\n}\n\nfunction horaActual() {\n    return new Date().toLocaleString(\"es-AR\");\n}\n\n// ===============================\n// TAGS USADOS\n// ===============================\nconst tagTrapiche = \"trapiche_cabina.trapiche_cabina.trap_conductor\";\nconst tagPH = \"Clarificacion3.Clarificacion3.clar3_encalado_ph\";\nconst tagFosa = \"fabrica_bb.fabrica_bb.Fab_agua_industrial_nivel\";\nconst tagMeladoTratado = \"tacho2da3ra.tacho2da3ra.Tacho_melado_tratado\";\n\n// ===============================\n// 1) TRAPICHE FUNCIONANDO / PARADO\n// ===============================\nlet trapicheValor = getValue(trapiche, tagTrapiche);\n\nif (trapicheValor !== null) {\n    let estadoTrapiche = trapicheValor > 0 ? \"funcionando\" : \"parado\";\n\n    if (estados.trapiche !== estadoTrapiche) {\n        if (estadoTrapiche === \"funcionando\") {\n            enviarTelegram(\n                \"🟢 *TRAPICHE FUNCIONANDO*\\n\\n\" +\n                \"El trapiche cambió de estado a: *FUNCIONANDO*.\\n\\n\" +\n                \"🕒 \" + horaActual()\n            );\n        } else {\n            enviarTelegram(\n                \"🔴 *TRAPICHE PARADO*\\n\\n\" +\n                \"El trapiche cambió de estado a: *PARADO*.\\n\\n\" +\n                \"🕒 \" + horaActual()\n            );\n        }\n\n        estados.trapiche = estadoTrapiche;\n    }\n}\n\n// ===============================\n// 2) PH ENCALADO ALTO / BAJO / NORMAL\n// ===============================\nlet ph = getValue(fabrica, tagPH);\n\nif (ph !== null) {\n    let estadoPH = \"normal\";\n\n    if (ph > 7.4) {\n        estadoPH = \"alto\";\n    } else if (ph < 6.5) {\n        estadoPH = \"bajo\";\n    }\n\n    if (estados.ph !== estadoPH) {\n        if (estadoPH === \"alto\") {\n            enviarTelegram(\n                \"🚨 *ALARMA pH ALTO*\\n\\n\" +\n                \"El pH de encalado está por encima del límite.\\n\\n\" +\n                \"🧪 pH actual: *\" + ph.toFixed(2) + \"*\\n\" +\n                \"📌 Límite alto: *7.40*\\n\\n\" +\n                \"🕒 \" + horaActual()\n            );\n        } else if (estadoPH === \"bajo\") {\n            enviarTelegram(\n                \"🚨 *ALARMA pH BAJO*\\n\\n\" +\n                \"El pH de encalado está por debajo del límite.\\n\\n\" +\n                \"🧪 pH actual: *\" + ph.toFixed(2) + \"*\\n\" +\n                \"📌 Límite bajo: *6.50*\\n\\n\" +\n                \"🕒 \" + horaActual()\n            );\n        } else {\n            enviarTelegram(\n                \"✅ *pH NORMALIZADO*\\n\\n\" +\n                \"El pH de encalado volvió al rango normal.\\n\\n\" +\n                \"🧪 pH actual: *\" + ph.toFixed(2) + \"*\\n\" +\n                \"📌 Rango normal: *6.50 a 7.40*\\n\\n\" +\n                \"🕒 \" + horaActual()\n            );\n        }\n\n        estados.ph = estadoPH;\n    }\n}\n\n// ===============================\n// 3) NIVEL FOSA BAJO / NORMAL\n// ===============================\nlet nivelFosa = getValue(fabrica, tagFosa);\n\nif (nivelFosa !== null) {\n    let estadoFosa = nivelFosa < 75 ? \"bajo\" : \"normal\";\n\n    if (estados.fosa !== estadoFosa) {\n        if (estadoFosa === \"bajo\") {\n            enviarTelegram(\n                \"⚠️ *ALARMA NIVEL BAJO DE FOSA*\\n\\n\" +\n                \"El nivel de la fosa está por debajo del límite.\\n\\n\" +\n                \"💧 Nivel actual: *\" + nivelFosa.toFixed(2) + \" %*\\n\" +\n                \"📌 Límite mínimo: *75 %*\\n\\n\" +\n                \"🕒 \" + horaActual()\n            );\n        } else {\n            enviarTelegram(\n                \"✅ *NIVEL DE FOSA NORMALIZADO*\\n\\n\" +\n                \"El nivel de la fosa volvió a condición normal.\\n\\n\" +\n                \"💧 Nivel actual: *\" + nivelFosa.toFixed(2) + \" %*\\n\" +\n                \"📌 Límite mínimo: *75 %*\\n\\n\" +\n                \"🕒 \" + horaActual()\n            );\n        }\n\n        estados.fosa = estadoFosa;\n    }\n}\n\n// ===============================\n// 4) NIVEL MELADO TRATADO ALTO / NORMAL\n// ===============================\nlet nivelMelado = getValue(fabrica, tagMeladoTratado);\n\nif (nivelMelado !== null) {\n    let estadoMelado = nivelMelado > 85 ? \"alto\" : \"normal\";\n\n    if (estados.meladoTratado !== estadoMelado) {\n        if (estadoMelado === \"alto\") {\n            enviarTelegram(\n                \"⚠️ *ALARMA NIVEL ALTO DE MELADO TRATADO*\\n\\n\" +\n                \"El nivel de melado tratado está por encima del límite.\\n\\n\" +\n                \"🍯 Nivel actual: *\" + nivelMelado.toFixed(2) + \" %*\\n\" +\n                \"📌 Límite alto: *85 %*\\n\\n\" +\n                \"🕒 \" + horaActual()\n            );\n        } else {\n            enviarTelegram(\n                \"✅ *NIVEL DE MELADO TRATADO NORMALIZADO*\\n\\n\" +\n                \"El nivel de melado tratado volvió a condición normal.\\n\\n\" +\n                \"🍯 Nivel actual: *\" + nivelMelado.toFixed(2) + \" %*\\n\" +\n                \"📌 Límite alto: *85 %*\\n\\n\" +\n                \"🕒 \" + horaActual()\n            );\n        }\n\n        estados.meladoTratado = estadoMelado;\n    }\n}\n\n// Guardar memoria de estados\nflow.set(\"estado_alarmas_auto\", estados);\n\n// No retornar msg directo porque se usa node.send() solo cuando hay cambio\nreturn null;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 460,
+    "y": 1060,
+    "wires": [
+      [
+        "0e77cf5c386a6642"
+      ]
+    ]
+  },
+  {
+    "id": "76bc96857a67a05d",
+    "type": "inject",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "Alexa - Instructivo",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "instructivo",
+    "payloadType": "str",
+    "x": 140,
+    "y": 1160,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "bf47c1383cbbfeaf",
+    "type": "inject",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "Alexa - Reporte General",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "general",
+    "payloadType": "str",
+    "x": 160,
+    "y": 1200,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "df1b7a638a42561b",
+    "type": "inject",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "Alexa - Trapiche",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "trapiche",
+    "payloadType": "str",
+    "x": 140,
+    "y": 1240,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "bd3c3daf64726fd3",
+    "type": "inject",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "Alexa - Caldera",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "caldera",
+    "payloadType": "str",
+    "x": 140,
+    "y": 1280,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "5fd3198c4574c1da",
+    "type": "inject",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "Alexa - Usina",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "usina",
+    "payloadType": "str",
+    "x": 130,
+    "y": 1320,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "5f7a52a1c1a8a62a",
+    "type": "inject",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "Alexa - Vapor",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "vapor",
+    "payloadType": "str",
+    "x": 130,
+    "y": 1360,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "0902f0f78520cf69",
+    "type": "inject",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "Alexa - Fábrica",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "fabrica",
+    "payloadType": "str",
+    "x": 140,
+    "y": 1400,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "0d98664c238d6fd0",
+    "type": "function",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "Generar informe Alexa por sector",
+    "func": "let sector = String(msg.payload || \"general\").trim().toLowerCase();\n\nlet trapiche = flow.get(\"trapiche\") || {};\nlet vapor = flow.get(\"vapor\") || {};\nlet caldera = flow.get(\"caldera\") || {};\nlet usina = flow.get(\"usina\") || {};\nlet fabrica = flow.get(\"fabrica\") || {};\nlet salon = flow.get(\"salon\") || {};\n\nfunction get(area, tag) {\n    let x = area[tag];\n    if (!x) return null;\n\n    if (typeof x === \"object\") {\n        let n = Number(x.value);\n        if (!Number.isFinite(n)) return null;\n        return {\n            value: n,\n            unit: x.unit || \"\"\n        };\n    }\n\n    let n = Number(x);\n    if (!Number.isFinite(n)) return null;\n    return {\n        value: n,\n        unit: \"\"\n    };\n}\n\nfunction val(area, tag, dec = 1) {\n    let x = get(area, tag);\n    if (!x) return \"sin dato\";\n    return x.value.toFixed(dec) + (x.unit ? \" \" + x.unit : \"\");\n}\n\nfunction num(area, tag) {\n    let x = get(area, tag);\n    return x ? x.value : 0;\n}\n\nfunction estadoTexto(condicion) {\n    return condicion ? \"en funcionamiento\" : \"parado\";\n}\n\nfunction cerrar(texto) {\n    msg.alexaText = texto;\n\n    // Formato más simple para Alexa Routine: usar msg.payload como texto a decir.\n    msg.payload = texto;\n\n    // Formato alternativo por si tu nodo Alexa Routine usa objeto tipo speak.\n    msg.alexaRoutinePayload = {\n        type: \"speak\",\n        payload: {\n            type: \"regular\",\n            text: texto\n        }\n    };\n\n    return msg;\n}\n\n// ===============================\n// CÁLCULOS GENERALES\n// ===============================\n\nlet trapicheON = num(trapiche, \"trapiche_cabina.trapiche_cabina.trap_conductor\") > 0;\n\nlet potenciaTotal =\n    num(usina, \"siemens.siemens.siemens_potencia_activa\") +\n    num(usina, \"weg.weg.WEG_potencia_activa\");\n\nlet usinaON = potenciaTotal > 0;\n\nlet vaporTotalCalderas =\n    num(caldera, \"caldera2.caldera2.cald2_vapor_caudal\") +\n    num(caldera, \"caldera3.caldera3.cald3_vapor_caudal\") +\n    num(caldera, \"caldera6.caldera6.cald6_vapor_caudal\");\n\nlet gasTotalCalderas =\n    num(caldera, \"caldera2.caldera2.cald2_gas_caudal\") +\n    num(caldera, \"caldera3.caldera3.cald3_gas_caudal\") +\n    num(caldera, \"caldera6.caldera6.cald6_gas_caudal\");\n\nlet ph = num(fabrica, \"Clarificacion3.Clarificacion3.clar3_encalado_ph\");\nlet nivelFosa = num(fabrica, \"fabrica_bb.fabrica_bb.Fab_agua_industrial_nivel\");\nlet meladoTratado = num(fabrica, \"tacho2da3ra.tacho2da3ra.Tacho_melado_tratado\");\n\nlet alertas = [];\n\nif (ph > 7.4) {\n    alertas.push(\"pH de encalado alto, con valor de \" + ph.toFixed(2));\n}\n\nif (ph > 0 && ph < 6.5) {\n    alertas.push(\"pH de encalado bajo, con valor de \" + ph.toFixed(2));\n}\n\nif (nivelFosa > 0 && nivelFosa < 75) {\n    alertas.push(\"nivel de fosa bajo, con \" + nivelFosa.toFixed(1) + \" por ciento\");\n}\n\nif (meladoTratado > 85) {\n    alertas.push(\"nivel de melado tratado alto, con \" + meladoTratado.toFixed(1) + \" por ciento\");\n}\n\nfunction textoAlertas() {\n    if (alertas.length === 0) {\n        return \"No se registran alarmas críticas en los puntos supervisados.\";\n    }\n\n    return \"Atención. Se registran las siguientes condiciones: \" + alertas.join(\"; \") + \".\";\n}\n\n// ===============================\n// INSTRUCTIVO\n// ===============================\n\nif (sector === \"instructivo\") {\n    let texto =\n        \"Bienvenido al sistema de informes por voz del Ingenio La Corona. \" +\n        \"Puede ejecutar reportes por sector usando los botones de Node Red. \" +\n        \"Los sectores disponibles son: reporte general, trapiche, caldera, usina, vapor, fábrica y salón. \" +\n        \"Este canal de Alexa está destinado a informes operativos de planta. \" +\n        \"Las cámaras no se muestran en este instructivo.\";\n\n    return cerrar(texto);\n}\n\n// ===============================\n// REPORTE GENERAL\n// ===============================\n\nif (sector === \"general\" || sector === \"gerencial\") {\n    let texto =\n        \"Informe operativo matutino del Ingenio La Corona. \" +\n        \"Estado general de fábrica. \" +\n        \"El trapiche se encuentra \" + estadoTexto(trapicheON) + \". \" +\n        \"La generación total de vapor en calderas es de \" + vaporTotalCalderas.toFixed(1) + \" toneladas por hora. \" +\n        \"El consumo total de gas en calderas es de \" + gasTotalCalderas.toFixed(1) + \" metros cúbicos. \" +\n        \"La usina se encuentra \" + estadoTexto(usinaON) + \", con una potencia total generada de \" + potenciaTotal.toFixed(1) + \" kilovatios. \" +\n        \"La presión de vapor de alta es \" + val(vapor, \"vapor.vapor.vapor_alta_presion\") + \". \" +\n        \"La presión de vapor de baja es \" + val(vapor, \"vapor.vapor.vapor_baja_presion\") + \". \" +\n        \"En fábrica, el pH de encalado es \" + val(fabrica, \"Clarificacion3.Clarificacion3.clar3_encalado_ph\", 2) + \". \" +\n        \"El nivel de fosa es \" + val(fabrica, \"fabrica_bb.fabrica_bb.Fab_agua_industrial_nivel\") + \". \" +\n        \"El nivel de melado tratado es \" + val(fabrica, \"tacho2da3ra.tacho2da3ra.Tacho_melado_tratado\") + \". \" +\n        textoAlertas() + \" \" +\n        \"Fin del informe general.\";\n\n    return cerrar(texto);\n}\n\n// ===============================\n// TRAPICHE\n// ===============================\n\nif (sector === \"trapiche\") {\n    let texto =\n        \"Reporte de trapiche. \" +\n        \"El trapiche se encuentra \" + estadoTexto(trapicheON) + \". \" +\n        \"La velocidad del molino uno es \" + val(trapiche, \"trapiche_molino.trapiche_molino.trap_molino1_OUT\") + \". \" +\n        \"La flotación del sexto molino lado este es \" + val(trapiche, \"trapiche_cabina.trapiche_cabina.trap_molino6_presion_este\") + \". \" +\n        \"La flotación del sexto molino lado oeste es \" + val(trapiche, \"trapiche_cabina.trapiche_cabina.trap_molino6_presion_oeste\") + \". \" +\n        \"El caudal de agua de imbibición es \" + val(trapiche, \"vapor.vapor.vapor_agua_imbibicion_caudal\") + \". \" +\n        \"El nivel de agua de imbibición es \" + val(trapiche, \"vapor.vapor.vapor_agua_imbibicion_nivel\") + \", con temperatura de \" + val(trapiche, \"vapor.vapor.vapor_agua_imbibicion_temp\") + \".\";\n\n    return cerrar(texto);\n}\n\n// ===============================\n// CALDERA\n// ===============================\n\nif (sector === \"caldera\" || sector === \"calderas\") {\n    let texto =\n        \"Reporte de calderas. \" +\n        \"La temperatura de agua de alimentación es \" + val(caldera, \"caldera.Caldera.cald_agua_aliment_temp\") + \". \" +\n        \"La presión de bomba de alimentación uno es \" + val(caldera, \"caldera.Caldera.cald_agua_aliment1_presion\") + \". \" +\n        \"El nivel de reserva es \" + val(caldera, \"caldera.Caldera.cald_reserva_nivel\") + \". \" +\n        \"La caldera dos genera \" + val(caldera, \"caldera2.caldera2.cald2_vapor_caudal\") + \" de vapor. \" +\n        \"La caldera tres genera \" + val(caldera, \"caldera3.caldera3.cald3_vapor_caudal\") + \" de vapor. \" +\n        \"La caldera seis genera \" + val(caldera, \"caldera6.caldera6.cald6_vapor_caudal\") + \" de vapor. \" +\n        \"La generación total estimada es \" + vaporTotalCalderas.toFixed(1) + \" toneladas por hora.\";\n\n    return cerrar(texto);\n}\n\n// ===============================\n// USINA\n// ===============================\n\nif (sector === \"usina\") {\n    let texto =\n        \"Reporte de usina. \" +\n        \"La usina se encuentra \" + estadoTexto(usinaON) + \". \" +\n        \"La potencia total generada es \" + potenciaTotal.toFixed(1) + \" kilovatios. \" +\n        \"La frecuencia del Siemens es \" + val(usina, \"siemens.siemens.siemens_frecuencia\") + \". \" +\n        \"La potencia activa del Siemens es \" + val(usina, \"siemens.siemens.siemens_potencia_activa\") + \". \" +\n        \"La frecuencia de EDET es \" + val(usina, \"skoda.skoda.Frecuencia_edet\") + \". \" +\n        \"La frecuencia del WEG es \" + val(usina, \"weg.weg.WEG_frecuencia\") + \". \" +\n        \"La potencia activa del WEG es \" + val(usina, \"weg.weg.WEG_potencia_activa\") + \".\";\n\n    return cerrar(texto);\n}\n\n// ===============================\n// VAPOR\n// ===============================\n\nif (sector === \"vapor\") {\n    let texto =\n        \"Reporte de vapor. \" +\n        \"La presión de vapor de alta es \" + val(vapor, \"vapor.vapor.vapor_alta_presion\") + \". \" +\n        \"La presión de vapor de baja es \" + val(vapor, \"vapor.vapor.vapor_baja_presion\") + \". \" +\n        \"El caudal de vapor a trapiche es \" + val(vapor, \"vapor.vapor.vapor_trapiche_caudal\") + \". \" +\n        \"El caudal a usina de alta es \" + val(vapor, \"vapor.vapor.vapor_usina_alta_caudal\") + \". \" +\n        \"El caudal a usina de baja es \" + val(vapor, \"vapor.vapor.vapor_usina_baja_caudal\") + \". \" +\n        \"El caudal a destilería es \" + val(vapor, \"vapor.vapor.vapor_destileria_caudal\") + \".\";\n\n    return cerrar(texto);\n}\n\n// ===============================\n// FÁBRICA\n// ===============================\n\nif (sector === \"fabrica\" || sector === \"fábrica\") {\n    let texto =\n        \"Reporte de fábrica. \" +\n        \"El pH de encalado es \" + val(fabrica, \"Clarificacion3.Clarificacion3.clar3_encalado_ph\", 2) + \". \" +\n        \"El nivel de cachaza es \" + val(fabrica, \"Clarificacion2.Clarificacion2.clar2_cachaza_nivel\") + \". \" +\n        \"El nivel de jugo clarificado es \" + val(fabrica, \"fabrica.fabrica.Fab_jugo_clarificado_nivel\") + \". \" +\n        \"El nivel de fosa es \" + val(fabrica, \"fabrica_bb.fabrica_bb.Fab_agua_industrial_nivel\") + \". \" +\n        \"El nivel de melado de evaporación es \" + val(fabrica, \"fabrica_bb.fabrica_bb.Fab_melado_evaporacion_nivel\") + \". \" +\n        \"El nivel de melado tratado es \" + val(fabrica, \"tacho2da3ra.tacho2da3ra.Tacho_melado_tratado\") + \". \" +\n        \"La temperatura de melado es \" + val(fabrica, \"tacho2da3ra.tacho2da3ra.Temperatura_melado\") + \". \" +\n        textoAlertas();\n\n    return cerrar(texto);\n}\n\n// ===============================\n// SALÓN\n// ===============================\n\nif (sector === \"salon\" || sector === \"salón\" || sector === \"azucar\" || sector === \"azúcar\") {\n    let texto =\n        \"Reporte de salón de azúcar. \" +\n        \"El color de cinta corta es \" + val(salon, \"laboratorio.analisis_azucar.cinta_corta_color\") + \". \" +\n        \"La humedad de cinta corta es \" + val(salon, \"laboratorio.analisis_azucar.cinta_corta_humedad\") + \". \" +\n        \"El color de cinta larga es \" + val(salon, \"laboratorio.analisis_azucar.cinta_larga_color\") + \". \" +\n        \"La humedad de cinta larga es \" + val(salon, \"laboratorio.analisis_azucar.cinta_larga_humedad\") + \". \" +\n        \"La producción del día es \" + val(salon, \"salon.salon.salon.salon_contador_dia\") + \".\";\n\n    return cerrar(texto);\n}\n\nreturn cerrar(\"No se reconoció el sector solicitado. Puede ejecutar instructivo, reporte general, trapiche, caldera, usina, vapor, fábrica o salón.\");",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 540,
+    "y": 1300,
+    "wires": [
+      [
+        "02db91e259aa4c04",
+        "1cf5d79d83343806"
+      ]
+    ]
+  },
+  {
+    "id": "cbee125b18b4cde3",
+    "type": "change",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "instructivo",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "instructivo",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 280,
+    "y": 1480,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "9e2a0c5e51ac7b72",
+    "type": "change",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "trapiche",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "trapiche",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 270,
+    "y": 1540,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "b503a78183212420",
+    "type": "change",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "fabrica",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "fabrica",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 270,
+    "y": 1600,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "60143f2005407e47",
+    "type": "change",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "salon",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "salon",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 260,
+    "y": 1660,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "643240a77e592c0d",
+    "type": "change",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "instructivo",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 360,
+    "y": 1720,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "14b7cbcf195a49d1",
+    "type": "change",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "instructivo",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 360,
+    "y": 1780,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "12d1d3e6b9b08a52",
+    "type": "change",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "instructivo",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 360,
+    "y": 1840,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "03015c6350bf30a5",
+    "type": "inject",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "Alexa - Salón",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "salon",
+    "payloadType": "str",
+    "x": 130,
+    "y": 1440,
+    "wires": [
+      [
+        "0d98664c238d6fd0"
+      ]
+    ]
+  },
+  {
+    "id": "91081f2a1c296f50",
+    "type": "MSSQL",
+    "z": "9743a685f64fe521",
+    "g": "9e0e41e655dba5ce",
+    "mssqlCN": "e7179a5e01b3beee",
+    "name": "SQL Server",
+    "outField": "",
+    "returnType": "0",
+    "throwErrors": "0",
+    "query": "",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "topic",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "msg",
+    "rows": "topic",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 792.8571166992188,
+    "y": 630,
+    "wires": [
+      [
+        "723abfb92a43d9c3"
+      ]
+    ]
+  },
+  {
+    "id": "388e64720ddfea20",
+    "type": "telegram receiver",
+    "z": "9743a685f64fe521",
+    "g": "fc3308f70173de70",
+    "name": "Telegram Receiver",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 150,
+    "y": 380,
+    "wires": [
+      [
+        "262ade13b2aad492"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "cad6b581916c554f",
+    "type": "telegram receiver",
+    "z": "9743a685f64fe521",
+    "g": "8de6106dfec2fcca",
+    "name": "Telegram Receiver",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 1150,
+    "y": 380,
+    "wires": [
+      [
+        "2e99faf8d1caf354"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "27709ec1d7e93567",
+    "type": "telegram receiver",
+    "z": "9743a685f64fe521",
+    "g": "ab04c0d1e950d92c",
+    "name": "Telegram Receiver",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 1350,
+    "y": 640,
+    "wires": [
+      [
+        "411d9288392bdaa6"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "309212d5dcfc8849",
+    "type": "telegram receiver",
+    "z": "9743a685f64fe521",
+    "g": "d9b901a28313b277",
+    "name": "Telegram Receiver",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 150,
+    "y": 920,
+    "wires": [
+      [
+        "dde3882d3fe93ae0"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "5094707961f8a4b4",
+    "type": "telegram receiver",
+    "z": "9743a685f64fe521",
+    "g": "99366d710b60d56b",
+    "name": "Telegram Receiver",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 1230,
+    "y": 920,
+    "wires": [
+      [
+        "e6149faa9f256b57"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "1b26231c75bb144a",
+    "type": "telegram receiver",
+    "z": "9743a685f64fe521",
+    "g": "b55ffd5d7c0afe43",
+    "name": "Telegram Receiver",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 1130,
+    "y": 100,
+    "wires": [
+      [
+        "3319e29b450b0151"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "a9c861ef4fec1e6b",
+    "type": "telegram sender",
+    "z": "9743a685f64fe521",
+    "g": "fc3308f70173de70",
+    "name": "Enviar Reporte Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 830,
+    "y": 380,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "713ea33d9c8c1db1",
+    "type": "telegram sender",
+    "z": "9743a685f64fe521",
+    "g": "a6ad2a33eabb6588",
+    "name": "Enviar Reporte Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 650,
+    "y": 80,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "3408b3a7ef1bcc49",
+    "type": "telegram sender",
+    "z": "9743a685f64fe521",
+    "g": "9e0e41e655dba5ce",
+    "name": "Enviar Reporte Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 1032.8571166992188,
+    "y": 670,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "5312e630f4cd6fb0",
+    "type": "telegram sender",
+    "z": "9743a685f64fe521",
+    "g": "8de6106dfec2fcca",
+    "name": "Enviar Reporte Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 1890,
+    "y": 380,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "8ffd5e52a1a05ad0",
+    "type": "telegram sender",
+    "z": "9743a685f64fe521",
+    "g": "ab04c0d1e950d92c",
+    "name": "Enviar Reporte Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 2090,
+    "y": 640,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "3fdaf54a9a14ea3b",
+    "type": "telegram sender",
+    "z": "9743a685f64fe521",
+    "g": "d9b901a28313b277",
+    "name": "Enviar Reporte Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 890,
+    "y": 920,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "c7b8d3ebcdea7cae",
+    "type": "telegram sender",
+    "z": "9743a685f64fe521",
+    "g": "99366d710b60d56b",
+    "name": "Enviar Reporte Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 1970,
+    "y": 920,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "870fd130dcbccc28",
+    "type": "telegram sender",
+    "z": "9743a685f64fe521",
+    "g": "b55ffd5d7c0afe43",
+    "name": "Enviar Reporte Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 1830,
+    "y": 100,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "0e77cf5c386a6642",
+    "type": "telegram sender",
+    "z": "9743a685f64fe521",
+    "g": "bef4889aae9d99b8",
+    "name": "Enviar Alarmas Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 710,
+    "y": 1060,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "02db91e259aa4c04",
+    "type": "alexa-remote-routine",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "",
+    "account": "",
+    "routineNode": {
+      "type": "speakAtVolume",
+      "payload": {
+        "type": "regular",
+        "text": {
+          "type": "msg",
+          "value": "payload"
+        },
+        "volume": {
+          "type": "num",
+          "value": "100"
+        },
+        "mode": "set",
+        "devices": [
+          "45cac5e5c41a45c0add04c9087aacceb"
+        ]
+      }
+    },
+    "x": 860,
+    "y": 1320,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "1cf5d79d83343806",
+    "type": "alexa-remote-routine",
+    "z": "9743a685f64fe521",
+    "g": "0a7e9b4fdc9764b1",
+    "name": "",
+    "account": "",
+    "routineNode": {
+      "type": "speakAtVolume",
+      "payload": {
+        "type": "regular",
+        "text": {
+          "type": "msg",
+          "value": "payload"
+        },
+        "volume": {
+          "type": "num",
+          "value": "100"
+        },
+        "mode": "set",
+        "devices": [
+          "6c57d44abc9f4be1854d9220d2826b9e"
+        ]
+      }
+    },
+    "x": 860,
+    "y": 1260,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "89b885e70a80b69d",
+    "type": "telegram receiver",
+    "z": "9743a685f64fe521",
+    "g": "a6ad2a33eabb6588",
+    "name": "Telegram Receiver",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 130,
+    "y": 80,
+    "wires": [
+      [
+        "762c6e1182bbf1eb"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "1f4ea2854707585a",
+    "type": "telegram receiver",
+    "z": "9743a685f64fe521",
+    "g": "9e0e41e655dba5ce",
+    "name": "Telegram Receiver",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 152.85711669921875,
+    "y": 630,
+    "wires": [
+      [
+        "42fdab0759108638"
+      ],
+      []
+    ]
+  }
+]

@@ -161,7 +161,10 @@ function populateEmpresaFilter() {
 }
 
 function filterByEmpresa() {
+  var cuentaActiva = document.getElementById('select-cuenta')?.value;
   renderAll();
+  // Recargar Mayor si habia una cuenta seleccionada (fix BUG 7)
+  if (cuentaActiva) cargarMayor(cuentaActiva);
 }
 
 function getFilteredData() {
@@ -170,20 +173,25 @@ function getFilteredData() {
   var empresa = (document.getElementById('filter-empresa') && document.getElementById('filter-empresa').value || '').trim();
   if (!empresa) return data;
 
-  var filtered = {
-    sumasSaldos: (data.sumasSaldos || []).filter(function(r){
+  function filterByUnidad(arr) {
+    return (arr || []).filter(function(r){
       return (r.unidad || '').toString().trim() === empresa;
-    }),
-    mayor: data.mayor || [],
-    libroDiario: data.libroDiario || [],
-    imputaciones: data.imputaciones || [],
-    egresos: data.egresos || [],
-    ingresos: data.ingresos || [],
-    proveedoresSaldos: data.proveedoresSaldos || [],
-    proveedoresPendientes: data.proveedoresPendientes || [],
-    interempresas: data.interempresas || [],
+    });
+  }
+
+  var filtered = {
+    sumasSaldos: filterByUnidad(data.sumasSaldos),
+    mayor: filterByUnidad(data.mayor),
+    libroDiario: filterByUnidad(data.libroDiario),
+    imputaciones: filterByUnidad(data.imputaciones),
+    egresos: filterByUnidad(data.egresos),
+    ingresos: filterByUnidad(data.ingresos),
+    proveedoresSaldos: filterByUnidad(data.proveedoresSaldos),
+    proveedoresPendientes: filterByUnidad(data.proveedoresPendientes),
+    interempresas: filterByUnidad(data.interempresas),
     evolucion: data.evolucion || { labels: [], caja: [], ventas: [], costos: [] },
     alertas: data.alertas || [],
+    variaciones: data.variaciones || null,
     _metadata: data._metadata
   };
   return filtered;

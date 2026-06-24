@@ -1,0 +1,1890 @@
+[
+  {
+    "id": "120d2a833696c4f5",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 110,
+    "y": 80,
+    "wires": [
+      [
+        "6de6ab1f1cbb6f1a"
+      ]
+    ]
+  },
+  {
+    "id": "8fe8d65a85a0740c",
+    "type": "ui-button",
+    "z": "cc8e7d066de53905",
+    "group": "2ddb7a3875bc1c00",
+    "name": "",
+    "label": "Actualizar",
+    "order": 3,
+    "width": "0",
+    "height": "0",
+    "emulateClick": false,
+    "tooltip": "",
+    "color": "",
+    "bgcolor": "",
+    "className": "",
+    "icon": "refresh",
+    "iconPosition": "left",
+    "payload": "true",
+    "payloadType": "bool",
+    "topic": "topic",
+    "topicType": "msg",
+    "buttonColor": "",
+    "textColor": "",
+    "iconColor": "",
+    "x": 110,
+    "y": 120,
+    "wires": [
+      [
+        "8e8e316534f4e4c7",
+        "6de6ab1f1cbb6f1a"
+      ]
+    ]
+  },
+  {
+    "id": "6cc829659e631130",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2024' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 650,
+    "y": 80,
+    "wires": [
+      [
+        "5b229c6bf0836b6e"
+      ]
+    ]
+  },
+  {
+    "id": "5b229c6bf0836b6e",
+    "type": "ui-chart",
+    "z": "cc8e7d066de53905",
+    "group": "2ddb7a3875bc1c00",
+    "name": "Molienda Diaria",
+    "label": "DIARIO",
+    "order": 1,
+    "chartType": "line",
+    "category": "codigoproceso",
+    "categoryType": "property",
+    "xAxisLabel": "N° Parte Diario",
+    "xAxisProperty": "parte",
+    "xAxisPropertyType": "property",
+    "xAxisType": "linear",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "xmin": "",
+    "xmax": "",
+    "yAxisLabel": "Tn/Diarias",
+    "yAxisProperty": "diario",
+    "yAxisPropertyType": "property",
+    "ymin": "",
+    "ymax": "",
+    "bins": "",
+    "action": "replace",
+    "stackSeries": true,
+    "pointShape": "circle",
+    "pointRadius": "3",
+    "showLegend": true,
+    "removeOlder": "186",
+    "removeOlderUnit": "86400",
+    "removeOlderPoints": "186",
+    "colors": [
+      "#0095ff",
+      "#ff0000",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": "6",
+    "height": "8",
+    "className": "",
+    "x": 860,
+    "y": 100,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "8207073939a5e78e",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 110,
+    "y": 220,
+    "wires": [
+      [
+        "ac871b2ff32f3664"
+      ]
+    ]
+  },
+  {
+    "id": "ac871b2ff32f3664",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Gas 3 Periodos Total SQL (188Dias)",
+    "func": "let gasConsumo = `\nSELECT \n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\n    'Gas 2024' AS codigoproceso,\n    [gasnor] AS 'GasDiario',\n    '2024' AS 'anio'\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 155\n\nUNION ALL\n\nSELECT \n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\n    'Gas 2023' AS codigoproceso,\n    [gasnor] AS 'GasDiario',\n    '2023' AS 'anio'\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 190\n\nUNION ALL\n\nSELECT \n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\n    'Gas 2022' AS codigoproceso,\n    [gasnor] AS 'GasDiario',\n    '2022' AS 'anio'\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 150\nORDER BY \n    anio ASC, parte ASC;\n`;\n\nmsg.payload = gasConsumo;  // Asigna la consulta SQL al payload\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 370,
+    "y": 240,
+    "wires": [
+      [
+        "3fb4c93212c05b9d"
+      ]
+    ]
+  },
+  {
+    "id": "454ddcbac88a06c8",
+    "type": "ui-button",
+    "z": "cc8e7d066de53905",
+    "group": "7f0dfcd6b49fa26e",
+    "name": "",
+    "label": "Actualizar",
+    "order": 3,
+    "width": 0,
+    "height": 0,
+    "emulateClick": false,
+    "tooltip": "",
+    "color": "",
+    "bgcolor": "",
+    "className": "",
+    "icon": "refresh",
+    "iconPosition": "left",
+    "payload": "true",
+    "payloadType": "bool",
+    "topic": "topic",
+    "topicType": "msg",
+    "buttonColor": "",
+    "textColor": "",
+    "iconColor": "",
+    "x": 110,
+    "y": 260,
+    "wires": [
+      [
+        "ac871b2ff32f3664",
+        "db1effe842fd0b73"
+      ]
+    ]
+  },
+  {
+    "id": "3fb4c93212c05b9d",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2024' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 670,
+    "y": 220,
+    "wires": [
+      [
+        "5e436f75c76ccbba"
+      ]
+    ]
+  },
+  {
+    "id": "5e436f75c76ccbba",
+    "type": "ui-chart",
+    "z": "cc8e7d066de53905",
+    "group": "7f0dfcd6b49fa26e",
+    "name": "Gas Diario",
+    "label": "DIARIO",
+    "order": 1,
+    "chartType": "line",
+    "category": "codigoproceso",
+    "categoryType": "property",
+    "xAxisLabel": "N° Parte Diario",
+    "xAxisProperty": "parte",
+    "xAxisPropertyType": "property",
+    "xAxisType": "linear",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "yAxisLabel": "m3/Diarios",
+    "yAxisProperty": "GasDiario",
+    "ymin": "",
+    "ymax": "",
+    "action": "replace",
+    "stackSeries": true,
+    "pointShape": "circle",
+    "pointRadius": "3",
+    "showLegend": true,
+    "removeOlder": "200",
+    "removeOlderUnit": "86400",
+    "removeOlderPoints": "200",
+    "colors": [
+      "#0095ff",
+      "#ff0000",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": "6",
+    "height": "8",
+    "className": "",
+    "x": 870,
+    "y": 240,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "57726418a7f7c91f",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 110,
+    "y": 360,
+    "wires": [
+      [
+        "b9576ba5165e445f"
+      ]
+    ]
+  },
+  {
+    "id": "b9576ba5165e445f",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Color Azucar 3 Periodos Total SQL (188Dias)",
+    "func": "let colorAzucar = `\nSELECT \n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\n    'Color Azucar 2024' AS codigoproceso, \n    ROUND(AVG(Color), 2) AS 'color'\nFROM \n    pr_ezi_especiales2\nWHERE \n    codigoproceso = 'Embolsado' \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\n    AND YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\n    AND Color IS NOT NULL\nGROUP BY \n    fechaindustrial\n\nUNION ALL\n\nSELECT \n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\n    'Color Azucar 2023' AS codigoproceso, \n    ROUND(AVG(Color), 2) AS 'color'\nFROM \n    pr_ezi_especiales2\nWHERE \n    codigoproceso = 'Embolsado' \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\n    AND YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\n    AND Color IS NOT NULL\nGROUP BY \n    fechaindustrial\n\nUNION ALL\n\nSELECT \n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\n    'Color Azucar 2022' AS codigoproceso, \n    ROUND(AVG(Color), 2) AS 'color'\nFROM \n    pr_ezi_especiales2\nWHERE \n    codigoproceso = 'Embolsado' \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\n    AND YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\n    AND Color IS NOT NULL\nGROUP BY \n    fechaindustrial\n\nORDER BY \n    parte ASC;\n\n\n`;\n\nmsg.payload = colorAzucar;  // Asigna la consulta SQL al payload\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 380,
+    "wires": [
+      [
+        "eaad5d28899dee4c"
+      ]
+    ]
+  },
+  {
+    "id": "fbadb8cb24a8c9ec",
+    "type": "ui-button",
+    "z": "cc8e7d066de53905",
+    "group": "07b2889b4f18f8c0",
+    "name": "",
+    "label": "Actualizar",
+    "order": 3,
+    "width": 0,
+    "height": 0,
+    "emulateClick": false,
+    "tooltip": "",
+    "color": "",
+    "bgcolor": "",
+    "className": "",
+    "icon": "refresh",
+    "iconPosition": "left",
+    "payload": "true",
+    "payloadType": "bool",
+    "topic": "topic",
+    "topicType": "msg",
+    "buttonColor": "",
+    "textColor": "",
+    "iconColor": "",
+    "x": 110,
+    "y": 400,
+    "wires": [
+      [
+        "b9576ba5165e445f",
+        "5fe6bc42cc4d645f"
+      ]
+    ]
+  },
+  {
+    "id": "eaad5d28899dee4c",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2024' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 710,
+    "y": 360,
+    "wires": [
+      [
+        "f70ac807b450cf42"
+      ]
+    ]
+  },
+  {
+    "id": "f70ac807b450cf42",
+    "type": "ui-chart",
+    "z": "cc8e7d066de53905",
+    "group": "07b2889b4f18f8c0",
+    "name": "Color de Azucar",
+    "label": "DIARIO",
+    "order": 1,
+    "chartType": "line",
+    "category": "codigoproceso",
+    "categoryType": "property",
+    "xAxisLabel": "N° Parte Diario",
+    "xAxisProperty": "parte",
+    "xAxisPropertyType": "property",
+    "xAxisType": "linear",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "yAxisLabel": "m3/Diarios",
+    "yAxisProperty": "color",
+    "ymin": "",
+    "ymax": "",
+    "action": "replace",
+    "stackSeries": true,
+    "pointShape": "circle",
+    "pointRadius": "3",
+    "showLegend": true,
+    "removeOlder": "200",
+    "removeOlderUnit": "86400",
+    "removeOlderPoints": "200",
+    "colors": [
+      "#0095ff",
+      "#ff0000",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": "6",
+    "height": "8",
+    "className": "",
+    "x": 930,
+    "y": 380,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "8db6eb81f0b537e6",
+    "type": "ui-chart",
+    "z": "cc8e7d066de53905",
+    "group": "2ddb7a3875bc1c00",
+    "name": "Molienda Acumulada",
+    "label": "ACUMULADO",
+    "order": 2,
+    "chartType": "line",
+    "category": "codigoproceso",
+    "categoryType": "property",
+    "xAxisLabel": "N° Parte Diario",
+    "xAxisProperty": "parte",
+    "xAxisPropertyType": "property",
+    "xAxisType": "linear",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "yAxisLabel": "Tn/Diarias",
+    "yAxisProperty": "acumulado",
+    "ymin": "",
+    "ymax": "",
+    "action": "replace",
+    "stackSeries": true,
+    "pointShape": "circle",
+    "pointRadius": "3",
+    "showLegend": true,
+    "removeOlder": "186",
+    "removeOlderUnit": "86400",
+    "removeOlderPoints": "186",
+    "colors": [
+      "#0095ff",
+      "#ff0000",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": "6",
+    "height": "8",
+    "className": "",
+    "x": 880,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "45a59df95dd3afb8",
+    "type": "ui-chart",
+    "z": "cc8e7d066de53905",
+    "group": "07b2889b4f18f8c0",
+    "name": "Color de Azucar",
+    "label": "ACUMULADO",
+    "order": 2,
+    "chartType": "line",
+    "category": "codigoproceso",
+    "categoryType": "property",
+    "xAxisLabel": "N° Parte Diario",
+    "xAxisProperty": "parte",
+    "xAxisPropertyType": "property",
+    "xAxisType": "linear",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "yAxisLabel": "m3/Diarios",
+    "yAxisProperty": "acumulado",
+    "ymin": "",
+    "ymax": "",
+    "action": "replace",
+    "stackSeries": true,
+    "pointShape": "circle",
+    "pointRadius": "3",
+    "showLegend": true,
+    "removeOlder": "200",
+    "removeOlderUnit": "86400",
+    "removeOlderPoints": "200",
+    "colors": [
+      "#0095ff",
+      "#ff0000",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": "6",
+    "height": "8",
+    "className": "",
+    "x": 930,
+    "y": 420,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "82a9a197c17ca81e",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 110,
+    "y": 160,
+    "wires": [
+      [
+        "8e8e316534f4e4c7"
+      ]
+    ]
+  },
+  {
+    "id": "8e8e316534f4e4c7",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Zafras 3 Periodos Total SQL (188Dias)",
+    "func": "let moliendaTotal = `\n-- Crear tabla temporal común para almacenar los resultados intermedios de varios años\nIF OBJECT_ID('tempdb..#TempMolienda') IS NOT NULL\n    DROP TABLE #TempMolienda;\n\nCREATE TABLE #TempMolienda (\n    parte INT,\n    codigoproceso VARCHAR(20),\n    diario DECIMAL(18, 2),\n    fechaindustrial DATE,\n    anio INT\n);\n\n-- Insertar los datos del año 2024\nINSERT INTO #TempMolienda (parte, codigoproceso, diario, fechaindustrial, anio)\nSELECT \n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Molienda 2024' AS codigoproceso,\n    (molienda) / 1000 AS diario,\n    CONVERT(DATE, fechaindustrial, 103) AS fechaindustrial,\n    2024 AS anio\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 150;  -- Limitar días para 2024\n\n-- Insertar los datos del año 2023\nINSERT INTO #TempMolienda (parte, codigoproceso, diario, fechaindustrial, anio)\nSELECT \n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Molienda 2023' AS codigoproceso,\n    (molienda) / 1000 AS diario,\n    CONVERT(DATE, fechaindustrial, 103) AS fechaindustrial,\n    2023 AS anio\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 186;  -- Limitar días para 2023\n\n-- Insertar los datos del año 2022\nINSERT INTO #TempMolienda (parte, codigoproceso, diario, fechaindustrial, anio)\nSELECT \n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Molienda 2022' AS codigoproceso,\n    (molienda) / 1000 AS diario,\n    CONVERT(DATE, fechaindustrial, 103) AS fechaindustrial,\n    2022 AS anio\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 147;  -- Limitar días para 2022\n\n-- Seleccionar los datos con el acumulado separado por año\nSELECT \n    parte,\n    codigoproceso,\n    diario,\n    (SELECT SUM(t2.diario) \n     FROM #TempMolienda t2\n     WHERE t2.fechaindustrial <= t1.fechaindustrial\n     AND t2.anio = t1.anio  -- Acumulado solo para el mismo año\n    ) AS acumulado,\n    CONVERT(VARCHAR(10), t1.fechaindustrial, 101) AS fechaindustrial,\n    t1.anio\nFROM \n    #TempMolienda t1\nORDER BY parte ASC, codigoproceso ASC;\n\n-- Eliminar la tabla temporal\nDROP TABLE #TempMolienda;\n`;\n\nmsg.payload = moliendaTotal;  // Asigna la consulta SQL al payload\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 140,
+    "wires": [
+      [
+        "909ca3cc181b362f"
+      ]
+    ]
+  },
+  {
+    "id": "909ca3cc181b362f",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2024' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 650,
+    "y": 160,
+    "wires": [
+      [
+        "8db6eb81f0b537e6"
+      ]
+    ]
+  },
+  {
+    "id": "6de6ab1f1cbb6f1a",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Zafras 3 Periodos Total SQL (188Dias)",
+    "func": "let moliendaTotal = `\nSELECT \n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Molienda 2024' AS codigoproceso,\n    (molienda) / 1000 AS diario,\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 150\n\nUNION ALL\n\nSELECT \n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Molienda 2023' AS codigoproceso,\n    (molienda) / 1000 AS diario,\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 186\n\nUNION ALL\n\nSELECT \n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Molienda 2022' AS codigoproceso,\n    (molienda) / 1000 AS diario,\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 147\n\nORDER BY parte ASC, codigoproceso ASC;\n`;\n\nmsg.payload = moliendaTotal;  // Asigna la consulta SQL al payload\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 100,
+    "wires": [
+      [
+        "6cc829659e631130"
+      ]
+    ]
+  },
+  {
+    "id": "db1effe842fd0b73",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Gas 3 Periodos Total SQL (188Dias)",
+    "func": "let gasConsumo = `\n-- Crear tabla temporal para almacenar los resultados intermedios\nIF OBJECT_ID('tempdb..#TempGas') IS NOT NULL\n    DROP TABLE #TempGas;\n\nCREATE TABLE #TempGas (\n    parte INT,\n    codigoproceso VARCHAR(20),\n    GasDiario DECIMAL(18, 2),\n    fechaindustrial DATE,\n    anio INT\n);\n\n-- Insertar los datos del año 2024\nINSERT INTO #TempGas (parte, codigoproceso, GasDiario, fechaindustrial, anio)\nSELECT \n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Gas 2024' AS codigoproceso,\n    gasnor AS GasDiario,\n    CONVERT(DATE, fechaindustrial, 103) AS fechaindustrial,\n    2024 AS anio\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 155;\n\n-- Insertar los datos del año 2023\nINSERT INTO #TempGas (parte, codigoproceso, GasDiario, fechaindustrial, anio)\nSELECT \n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Gas 2023' AS codigoproceso,\n    gasnor AS GasDiario,\n    CONVERT(DATE, fechaindustrial, 103) AS fechaindustrial,\n    2023 AS anio\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 190;\n\n-- Insertar los datos del año 2022\nINSERT INTO #TempGas (parte, codigoproceso, GasDiario, fechaindustrial, anio)\nSELECT \n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Gas 2022' AS codigoproceso,\n    gasnor AS GasDiario,\n    CONVERT(DATE, fechaindustrial, 103) AS fechaindustrial,\n    2022 AS anio\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 150;\n\n-- Seleccionar los datos con el acumulado discriminado por año\nSELECT \n    parte,\n    codigoproceso,\n    GasDiario,\n    (SELECT SUM(t2.GasDiario)\n     FROM #TempGas t2\n     WHERE t2.fechaindustrial <= t1.fechaindustrial\n     AND t2.anio = t1.anio -- Acumulado solo para el mismo año\n    ) AS acumulado,\n    CONVERT(VARCHAR(10), t1.fechaindustrial, 101) AS fechaindustrial,\n    t1.anio\nFROM \n    #TempGas t1\nORDER BY \n    t1.anio ASC, parte ASC;\n\n-- Eliminar la tabla temporal\nDROP TABLE #TempGas;\n\n`;\n\nmsg.payload = gasConsumo;  // Asigna la consulta SQL al payload\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 370,
+    "y": 280,
+    "wires": [
+      [
+        "107af482d2023555"
+      ]
+    ]
+  },
+  {
+    "id": "0ba8877418e3b1cd",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 110,
+    "y": 300,
+    "wires": [
+      [
+        "db1effe842fd0b73"
+      ]
+    ]
+  },
+  {
+    "id": "107af482d2023555",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2024' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 670,
+    "y": 300,
+    "wires": [
+      [
+        "b705a839679c5e81"
+      ]
+    ]
+  },
+  {
+    "id": "b705a839679c5e81",
+    "type": "ui-chart",
+    "z": "cc8e7d066de53905",
+    "group": "7f0dfcd6b49fa26e",
+    "name": "Gas Acumulado",
+    "label": "ACUMULADO",
+    "order": 2,
+    "chartType": "line",
+    "category": "codigoproceso",
+    "categoryType": "property",
+    "xAxisLabel": "N° Parte Diario",
+    "xAxisProperty": "parte",
+    "xAxisPropertyType": "property",
+    "xAxisType": "linear",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "yAxisLabel": "m3/Diarios",
+    "yAxisProperty": "acumulado",
+    "ymin": "",
+    "ymax": "",
+    "action": "replace",
+    "stackSeries": true,
+    "pointShape": "circle",
+    "pointRadius": "3",
+    "showLegend": true,
+    "removeOlder": "200",
+    "removeOlderUnit": "86400",
+    "removeOlderPoints": "200",
+    "colors": [
+      "#0095ff",
+      "#ff0000",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": "6",
+    "height": "8",
+    "className": "",
+    "x": 890,
+    "y": 280,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "4919f549ee1a190f",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 110,
+    "y": 440,
+    "wires": [
+      [
+        "5fe6bc42cc4d645f"
+      ]
+    ]
+  },
+  {
+    "id": "5fe6bc42cc4d645f",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Color Azucar 3 Periodos Total SQL (188Dias)",
+    "func": "let colorAzucar = `\n-- Crear tabla temporal para almacenar los resultados intermedios\nIF OBJECT_ID('tempdb..#TempColor') IS NOT NULL\n    DROP TABLE #TempColor;\n\nCREATE TABLE #TempColor (\n    parte INT,\n    codigoproceso VARCHAR(50),\n    color DECIMAL(18, 2),\n    fechaindustrial DATE,\n    anio INT\n);\n\n-- Insertar los datos del año 2024\nINSERT INTO #TempColor (parte, codigoproceso, color, fechaindustrial, anio)\nSELECT \n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Color Azucar 2024' AS codigoproceso,\n    ROUND(AVG(Color), 2) AS color,\n    CONVERT(DATE, fechaindustrial, 103) AS fechaindustrial,\n    2024 AS anio\nFROM \n    pr_ezi_especiales2\nWHERE \n    codigoproceso = 'Embolsado' \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\n    AND YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\n    AND Color IS NOT NULL\nGROUP BY \n    fechaindustrial;\n\n-- Insertar los datos del año 2023\nINSERT INTO #TempColor (parte, codigoproceso, color, fechaindustrial, anio)\nSELECT \n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Color Azucar 2023' AS codigoproceso,\n    ROUND(AVG(Color), 2) AS color,\n    CONVERT(DATE, fechaindustrial, 103) AS fechaindustrial,\n    2023 AS anio\nFROM \n    pr_ezi_especiales2\nWHERE \n    codigoproceso = 'Embolsado' \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\n    AND YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\n    AND Color IS NOT NULL\nGROUP BY \n    fechaindustrial;\n\n-- Insertar los datos del año 2022\nINSERT INTO #TempColor (parte, codigoproceso, color, fechaindustrial, anio)\nSELECT \n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\n    'Color Azucar 2022' AS codigoproceso,\n    ROUND(AVG(Color), 2) AS color,\n    CONVERT(DATE, fechaindustrial, 103) AS fechaindustrial,\n    2022 AS anio\nFROM \n    pr_ezi_especiales2\nWHERE \n    codigoproceso = 'Embolsado' \n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\n    AND YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\n    AND Color IS NOT NULL\nGROUP BY \n    fechaindustrial;\n\n-- Seleccionar los datos con el acumulado discriminado por año\nSELECT \n    parte,\n    codigoproceso,\n    color,\n    (SELECT SUM(t2.color)\n     FROM #TempColor t2\n     WHERE t2.fechaindustrial <= t1.fechaindustrial\n     AND t2.anio = t1.anio  -- Acumulado solo para el mismo año\n    ) AS acumulado,\n    CONVERT(VARCHAR(10), t1.fechaindustrial, 101) AS fechaindustrial,\n    t1.anio\nFROM \n    #TempColor t1\nORDER BY \n    t1.anio ASC, parte ASC;\n\n-- Eliminar la tabla temporal\nDROP TABLE #TempColor;\n`;\n\nmsg.payload = colorAzucar;  // Asigna la consulta SQL al payload\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 420,
+    "wires": [
+      [
+        "ddd3947c36455272"
+      ]
+    ]
+  },
+  {
+    "id": "ddd3947c36455272",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2024' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 710,
+    "y": 440,
+    "wires": [
+      [
+        "45a59df95dd3afb8"
+      ]
+    ]
+  },
+  {
+    "id": "4495d039518f2c51",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 110,
+    "y": 520,
+    "wires": [
+      [
+        "92211159a3abf0dc"
+      ]
+    ]
+  },
+  {
+    "id": "92211159a3abf0dc",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Pol Cachaza SQL",
+    "func": "let colorAzucar = `\n-- Consulta original para los datos reales\nSELECT \n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte','Pol Bagazo' AS codigoproceso,[polb] AS 'pol'\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\n    AND YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 150\n\nUNION ALL\n\n-- Fila adicional para el objetivo\nSELECT \n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\n    'Objetivo' AS codigoproceso,  -- Codigoproceso con el valor \"Objetivo\"\n    3 AS 'pol'  -- Valor del objetivo en la columna pol\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\n    AND YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 150\n\nORDER BY \n    codigoproceso ASC, parte ASC;\n`;\n\nmsg.payload = colorAzucar;  // Asigna la consulta SQL al payload\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 310,
+    "y": 540,
+    "wires": [
+      [
+        "e2a3baa2b6cc4400"
+      ]
+    ]
+  },
+  {
+    "id": "e2a3baa2b6cc4400",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2024' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 530,
+    "y": 520,
+    "wires": [
+      [
+        "19d1c4c80219cba6"
+      ]
+    ]
+  },
+  {
+    "id": "19d1c4c80219cba6",
+    "type": "ui-chart",
+    "z": "cc8e7d066de53905",
+    "group": "1a17e3c0173e18d9",
+    "name": "Pol Cachaza",
+    "label": "BAGAZO",
+    "order": 1,
+    "chartType": "line",
+    "category": "codigoproceso",
+    "categoryType": "property",
+    "xAxisLabel": "N° Parte Diario",
+    "xAxisProperty": "parte",
+    "xAxisPropertyType": "property",
+    "xAxisType": "linear",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "yAxisLabel": "m3/Diarios",
+    "yAxisProperty": "pol",
+    "ymin": "",
+    "ymax": "",
+    "action": "replace",
+    "stackSeries": true,
+    "pointShape": "circle",
+    "pointRadius": "3",
+    "showLegend": true,
+    "removeOlder": "160",
+    "removeOlderUnit": "86400",
+    "removeOlderPoints": "160",
+    "colors": [
+      "#11ee2d",
+      "#ff0000",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": "6",
+    "height": "8",
+    "className": "",
+    "x": 730,
+    "y": 540,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "ab3c0978ece36e3c",
+    "type": "ui-button",
+    "z": "cc8e7d066de53905",
+    "group": "1a17e3c0173e18d9",
+    "name": "",
+    "label": "Actualizar",
+    "order": 3,
+    "width": 0,
+    "height": 0,
+    "emulateClick": false,
+    "tooltip": "",
+    "color": "",
+    "bgcolor": "",
+    "className": "",
+    "icon": "refresh",
+    "iconPosition": "left",
+    "payload": "true",
+    "payloadType": "bool",
+    "topic": "topic",
+    "topicType": "msg",
+    "buttonColor": "",
+    "textColor": "",
+    "iconColor": "",
+    "x": 110,
+    "y": 560,
+    "wires": [
+      [
+        "92211159a3abf0dc",
+        "5aecdeb8c93db04b"
+      ]
+    ]
+  },
+  {
+    "id": "5aecdeb8c93db04b",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Pol Pagazo SQL",
+    "func": "let colorAzucar = `\n-- Consulta original para los datos reales\nSELECT \n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\n    'Pol Cachaza' AS codigoproceso,\n    [polc] AS 'pol'\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\n    AND YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 150\n\nUNION ALL\n\n-- Fila adicional para el objetivo\nSELECT \n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\n    'Objetivo' AS codigoproceso,  -- Codigoproceso con el valor \"Objetivo\"\n    3 AS 'pol'  -- Valor del objetivo en la columna pol\nFROM \n    [CORONA].[dbo].[v_pr_informe_general]\nWHERE \n    CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\n    AND YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\n    AND gasnor IS NOT NULL\n    AND (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) <= 150\n\nORDER BY \n    codigoproceso ASC, parte ASC;\n`;\n\nmsg.payload = colorAzucar;  // Asigna la consulta SQL al payload\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 580,
+    "wires": [
+      [
+        "484b1b2992d4ab08"
+      ]
+    ]
+  },
+  {
+    "id": "484b1b2992d4ab08",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2024' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 530,
+    "y": 600,
+    "wires": [
+      [
+        "8e96b924a2046c4a"
+      ]
+    ]
+  },
+  {
+    "id": "8e96b924a2046c4a",
+    "type": "ui-chart",
+    "z": "cc8e7d066de53905",
+    "group": "1a17e3c0173e18d9",
+    "name": "Pol Bagazo",
+    "label": "CACHAZA",
+    "order": 2,
+    "chartType": "line",
+    "category": "codigoproceso",
+    "categoryType": "property",
+    "xAxisLabel": "N° Parte Diario",
+    "xAxisProperty": "parte",
+    "xAxisPropertyType": "property",
+    "xAxisType": "linear",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "yAxisLabel": "m3/Diarios",
+    "yAxisProperty": "pol",
+    "ymin": "",
+    "ymax": "",
+    "action": "replace",
+    "stackSeries": true,
+    "pointShape": "circle",
+    "pointRadius": "3",
+    "showLegend": true,
+    "removeOlder": "160",
+    "removeOlderUnit": "86400",
+    "removeOlderPoints": "160",
+    "colors": [
+      "#11ee2d",
+      "#ff0000",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": "6",
+    "height": "8",
+    "className": "",
+    "x": 730,
+    "y": 580,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "191e0e7b99ac80cf",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 110,
+    "y": 600,
+    "wires": [
+      [
+        "5aecdeb8c93db04b"
+      ]
+    ]
+  },
+  {
+    "id": "78b32eb38c91632e",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Analisis Azucar (Laboratorio)",
+    "func": "let analisisAzucar = `\nselect \nid,\ncodigoproceso,\nfecharegistro,\nHORA,Color,\nTurbidez,\nHumedad,\nCenizas,\nGranulometria_20,\nGranulometria_30,\nSediment_Test,\nDestino from pr_ezi_especiales where id= (select max(id)\nfrom pr_ezi_especiales where codigoproceso='Cinta Corta' AND Color IS NOT NULL)\nUNION select id,\ncodigoproceso,\nfecharegistro,\nHORA,\nColor,\nTurbidez,\nHumedad,\nCenizas,\nGranulometria_20,\nGranulometria_30,\nSediment_Test,\nDestino from pr_ezi_especiales where id= (select max(id) from pr_ezi_especiales \nwhere codigoproceso='Cinta Larga' AND Color IS NOT NULL)\nUNION select id,\ncodigoproceso,\nfecharegistro,\nHORA,\nColor,\nTurbidez,\nHumedad,\nCenizas,\nGranulometria_20,\nGranulometria_30,\nSediment_Test,\nDestino from pr_ezi_especiales where id= (select max(id) from pr_ezi_especiales \nwhere codigoproceso='Embolsado' AND Color IS NOT NULL)  ORDER BY codigoproceso;\n`;\n\nmsg.payload = analisisAzucar;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 820,
+    "wires": [
+      [
+        "ca3ea85e865a73a4"
+      ]
+    ]
+  },
+  {
+    "id": "434b14683bc11861",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 160,
+    "y": 820,
+    "wires": [
+      [
+        "78b32eb38c91632e"
+      ]
+    ]
+  },
+  {
+    "id": "ca3ea85e865a73a4",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2024' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 590,
+    "y": 820,
+    "wires": [
+      [
+        "264943c9e670a61d"
+      ]
+    ]
+  },
+  {
+    "id": "264943c9e670a61d",
+    "type": "debug",
+    "z": "cc8e7d066de53905",
+    "name": "debug 84",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 760,
+    "y": 820,
+    "wires": []
+  },
+  {
+    "id": "f82cf333c7a76c01",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Analisis Jugo (Laboratorio)",
+    "func": "let analisisJugo = `\nselect id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nhoraregistro,\nHORA,KILOS,\nbrixmanual,\ntemperaturamanual,\npolmanual,\nphmanual,\nbrixautomatico,\npolautomatico,\npureza from pr_ezi_laboratorio_gral where id= (select max(id) from pr_ezi_laboratorio_gral\nwhere codigoproceso='Jugo Mixto' AND brixmanual IS NOT NULL)\nUNION select id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nhoraregistro,\nHORA,\nKILOS,\nbrixmanual,\ntemperaturamanual,\npolmanual,\nphmanual,\nbrixautomatico,\npolautomatico,\npureza from pr_ezi_laboratorio_gral where id= (select max(id) from pr_ezi_laboratorio_gral\nwhere codigoproceso='1Era Presión' AND brixmanual IS NOT NULL)\nUNION select id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nhoraregistro,\nHORA,\nKILOS,\nbrixmanual,\ntemperaturamanual,\npolmanual,\nphmanual,\nbrixautomatico,\npolautomatico,\npureza from pr_ezi_laboratorio_gral where id= (select max(id) from pr_ezi_laboratorio_gral\nwhere codigoproceso='Última Presión' AND brixmanual IS NOT NULL)\nUNION select id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nhoraregistro,\nHORA,\nKILOS,\nbrixmanual,\ntemperaturamanual,\npolmanual,\nphmanual,\nbrixautomatico,\npolautomatico,\npureza from pr_ezi_laboratorio_gral where id= (select max(id) from pr_ezi_laboratorio_gral\nwhere codigoproceso='Clarificado' AND brixmanual IS NOT NULL)\nUNION select id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nhoraregistro,\nHORA,\nKILOS,\nbrixmanual,\ntemperaturamanual,\npolmanual,\nphmanual,\nbrixautomatico,\npolautomatico,\npureza from pr_ezi_laboratorio_gral where id= (select max(id) from pr_ezi_laboratorio_gral\nwhere codigoproceso='Melado' AND brixmanual IS NOT NULL) \nUNION select id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nhoraregistro,\nHORA,\nKILOS,\nbrixmanual,\ntemperaturamanual,\npolmanual,\nphmanual,\nbrixautomatico,\npolautomatico,\npureza from pr_ezi_laboratorio_gral where id= (select max(id) from pr_ezi_laboratorio_gral\nwhere codigoproceso='Jarabe Clarificado' AND brixmanual IS NOT NULL) \nORDER BY codigoproceso;\n`;\n\nmsg.payload = analisisJugo;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 880,
+    "wires": [
+      [
+        "b1f1dd577de83468"
+      ]
+    ]
+  },
+  {
+    "id": "b89f63e770687c51",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 160,
+    "y": 880,
+    "wires": [
+      [
+        "f82cf333c7a76c01"
+      ]
+    ]
+  },
+  {
+    "id": "b1f1dd577de83468",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2024' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 590,
+    "y": 880,
+    "wires": [
+      [
+        "a5803a9042a34518"
+      ]
+    ]
+  },
+  {
+    "id": "a5803a9042a34518",
+    "type": "debug",
+    "z": "cc8e7d066de53905",
+    "name": "debug 85",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 760,
+    "y": 880,
+    "wires": []
+  },
+  {
+    "id": "6c016f9cb4ed6de7",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Analisis Bagazo (Laboratorio)",
+    "func": "let analisisBagazo = `\nselect TOP 5 id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nHORA,\nPeso_final,\nTara,\npolmanual1,\nhumedad,\npesoliquido,\nbrixautomatico,\npolautomatico,\nfibra FROM [CORONA].[dbo].[pr_ezi_laboratorio_gral2]\nwhere codigoproceso='Bagazo' and Peso_final is not null order by CONVERT(DATE, fechaindustrial, 103) desc, HORA desc;\n`;\n\nmsg.payload = analisisBagazo;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 340,
+    "y": 940,
+    "wires": [
+      [
+        "646831d0d45b71ac"
+      ]
+    ]
+  },
+  {
+    "id": "b16b498745a324f3",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 130,
+    "y": 940,
+    "wires": [
+      [
+        "6c016f9cb4ed6de7"
+      ]
+    ]
+  },
+  {
+    "id": "646831d0d45b71ac",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2024' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 590,
+    "y": 940,
+    "wires": [
+      [
+        "6657c67854090149"
+      ]
+    ]
+  },
+  {
+    "id": "6657c67854090149",
+    "type": "debug",
+    "z": "cc8e7d066de53905",
+    "name": "debug 86",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 760,
+    "y": 940,
+    "wires": []
+  },
+  {
+    "id": "46591d8cc7e32734",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Analisis Cachaza (Laboratorio)",
+    "func": "let analisisBagazo = `\nselect id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nhoraregistro,\nHORA,\npolmanual1,\npolmanual2,\npolmanual3,\npolmanual4,\nhumedad,\npolautomatico from pr_ezi_laboratorio_gral2 where id= (select max(id) from pr_ezi_laboratorio_gral2\nwhere codigoproceso='Cachaza' AND polautomatico IS NOT NULL AND YEAR(fecharegistro)=YEAR(GETDATE()));\n`;\n\nmsg.payload = analisisBagazo;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 1000,
+    "wires": [
+      [
+        "66cb90c10f2925f5"
+      ]
+    ]
+  },
+  {
+    "id": "b7370479734ca386",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 140,
+    "y": 1000,
+    "wires": [
+      [
+        "46591d8cc7e32734"
+      ]
+    ]
+  },
+  {
+    "id": "66cb90c10f2925f5",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2024' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 600,
+    "y": 1000,
+    "wires": [
+      [
+        "462ac1b45c46b5f9"
+      ]
+    ]
+  },
+  {
+    "id": "462ac1b45c46b5f9",
+    "type": "debug",
+    "z": "cc8e7d066de53905",
+    "name": "debug 87",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 920,
+    "y": 1000,
+    "wires": []
+  },
+  {
+    "id": "c13b8acc9d92871a",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 130,
+    "y": 1060,
+    "wires": [
+      [
+        "4c8faffb5585f7ca"
+      ]
+    ]
+  },
+  {
+    "id": "4c8faffb5585f7ca",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Analisis Masa Cocida (Laboratorio)",
+    "func": "let analisisMasaCocida = `\nselect id,codigoproceso,fechaindustrial,fecharegistro,horaregistro,HORA,KILOS,brixmanual,temperaturamanual,polmanual,phmanual,brixautomatico,polautomatico,pureza from pr_ezi_laboratorio_gral where id= (select max(id) from   pr_ezi_laboratorio_gral where codigoproceso='Masa Cocida de 1era' AND brixmanual IS NOT NULL) union select id,codigoproceso,fechaindustrial,fecharegistro,horaregistro,HORA,KILOS,brixmanual,temperaturamanual,polmanual,phmanual,brixautomatico,polautomatico,pureza from pr_ezi_laboratorio_gral where id= (select max(id) from pr_ezi_laboratorio_gral where codigoproceso='Masa Cocida de 2da' AND brixmanual IS NOT NULL ) union select id,codigoproceso,fechaindustrial,fecharegistro,horaregistro,HORA,KILOS,brixmanual,temperaturamanual,polmanual,phmanual,brixautomatico,polautomatico,pureza from pr_ezi_laboratorio_gral where id= (select max(id) from pr_ezi_laboratorio_gral where codigoproceso='Masa Cocida de 3era' AND brixmanual IS NOT NULL)   ORDER BY codigoproceso;\n`;\n\nmsg.payload = analisisMasaCocida;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 1060,
+    "wires": [
+      [
+        "6e1d33203f49af38"
+      ]
+    ]
+  },
+  {
+    "id": "6e1d33203f49af38",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2024' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 610,
+    "y": 1060,
+    "wires": [
+      [
+        "8f129e7344f98253"
+      ]
+    ]
+  },
+  {
+    "id": "8f129e7344f98253",
+    "type": "debug",
+    "z": "cc8e7d066de53905",
+    "name": "debug 88",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 780,
+    "y": 1060,
+    "wires": []
+  },
+  {
+    "id": "6b7508c074210c5f",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 130,
+    "y": 1120,
+    "wires": [
+      [
+        "7c33134324dc33c5"
+      ]
+    ]
+  },
+  {
+    "id": "7c33134324dc33c5",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Analisis Melaza (Laboratorio)",
+    "func": "let analisisMelaza = `\nselect id,codigoproceso,fechaindustrial,fecharegistro,horaregistro,HORA,KILOS,brixmanual,temperaturamanual,polmanual,phmanual,brixautomatico,polautomatico,pureza from pr_ezi_laboratorio_gral where id= (select max(id) from   pr_ezi_laboratorio_gral where codigoproceso='Melaza' AND brixmanual IS NOT NULL AND YEAR(fecharegistro)=YEAR(GETDATE()));\n`;\n\nmsg.payload = analisisMelaza;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 1120,
+    "wires": [
+      [
+        "7bdf1452e7d40fd7"
+      ]
+    ]
+  },
+  {
+    "id": "7bdf1452e7d40fd7",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2024' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 610,
+    "y": 1120,
+    "wires": [
+      [
+        "2dc80ee1280b232e"
+      ]
+    ]
+  },
+  {
+    "id": "2dc80ee1280b232e",
+    "type": "debug",
+    "z": "cc8e7d066de53905",
+    "name": "debug 89",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 920,
+    "y": 1120,
+    "wires": []
+  },
+  {
+    "id": "43a9e502611a777a",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 130,
+    "y": 1180,
+    "wires": [
+      [
+        "532ed4cef67f43d9"
+      ]
+    ]
+  },
+  {
+    "id": "532ed4cef67f43d9",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Molienda Ultima Hora (Laboratorio)",
+    "func": "let molienda = `\nselect id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nhoraregistro,\nHORA,\nKILOS,\nbrixmanual,\ntemperaturamanual,\npolmanual,\nphmanual,\nbrixautomatico,\npolautomatico,\npureza from pr_ezi_laboratorio_gral where id= (select max(id) from pr_ezi_laboratorio_gral\nwhere codigoproceso='Molienda' AND KILOS IS NOT NULL);`;\n\nmsg.payload = molienda;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 1180,
+    "wires": [
+      [
+        "4286bc0cb84aedea"
+      ]
+    ]
+  },
+  {
+    "id": "4286bc0cb84aedea",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2024' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 610,
+    "y": 1180,
+    "wires": [
+      [
+        "39e8715d54521edb"
+      ]
+    ]
+  },
+  {
+    "id": "39e8715d54521edb",
+    "type": "debug",
+    "z": "cc8e7d066de53905",
+    "name": "debug 90",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 780,
+    "y": 1180,
+    "wires": []
+  },
+  {
+    "id": "837ab949f0877843",
+    "type": "inject",
+    "z": "cc8e7d066de53905",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "14400",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 130,
+    "y": 1240,
+    "wires": [
+      [
+        "60a5404d852da5ee"
+      ]
+    ]
+  },
+  {
+    "id": "60a5404d852da5ee",
+    "type": "function",
+    "z": "cc8e7d066de53905",
+    "name": "Sulfitado (Laboratorio)",
+    "func": "let sulfitado = `\nselect id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nhoraregistro,\nHORA,\nphmanual,\nPPMS02manual,\nbrixautomatico,\npolautomatico,\nfibra from pr_ezi_laboratorio_gral2\nwhere id= (select max(id) from pr_ezi_laboratorio_gral2\nwhere codigoproceso='Sulfitado' AND phmanual IS NOT NULL);`\n;\n\nmsg.payload = sulfitado;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 320,
+    "y": 1240,
+    "wires": [
+      [
+        "bd0ad2628b4ac3b9"
+      ]
+    ]
+  },
+  {
+    "id": "bd0ad2628b4ac3b9",
+    "type": "MSSQL",
+    "z": "cc8e7d066de53905",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2024-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2024' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2024 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2024-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 550,
+    "y": 1240,
+    "wires": [
+      [
+        "2a7a56ebbfca9689"
+      ]
+    ]
+  },
+  {
+    "id": "2a7a56ebbfca9689",
+    "type": "debug",
+    "z": "cc8e7d066de53905",
+    "name": "debug 91",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 740,
+    "y": 1240,
+    "wires": []
+  }
+]

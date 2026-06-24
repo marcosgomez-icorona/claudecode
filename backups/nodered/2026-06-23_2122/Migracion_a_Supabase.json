@@ -1,0 +1,3751 @@
+[
+  {
+    "id": "889579f8919f6407",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "name": "Migracion a Supabase",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "566e076140e96661",
+      "e2cdd863ad6bc5f6",
+      "7e322c8bd3cd4e8c",
+      "9388111c741aba36",
+      "b062d71bff62fae2",
+      "5e529e950179aeef",
+      "ee14f8683cca0946",
+      "a9aa3797b1ed73d4",
+      "1995aaf914f8fa47",
+      "571a789d3eedc14d"
+    ],
+    "x": 8,
+    "y": 73,
+    "w": 3284,
+    "h": 1314
+  },
+  {
+    "id": "b062d71bff62fae2",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "889579f8919f6407",
+    "name": "Laboratorio General",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "1bbbdb06070aa655",
+      "244151f33e157259",
+      "0b9670c3601abcb6",
+      "c06fae42401ffbf6",
+      "337972c955f7da9e",
+      "37a1293d5c146c9f",
+      "c23fb0d4e4eda2f9",
+      "c6e097c664f394c4",
+      "74eb46928c07ab7e",
+      "0d18ac879eb32841",
+      "ac1a4db021dde870",
+      "4212bbffafd783c2",
+      "db715a54fac078c1",
+      "88c14cd73b80347d",
+      "98e2a19da6bd4fce",
+      "012e1d335373a1f5",
+      "43d0128af287b3dc"
+    ],
+    "x": 34,
+    "y": 319,
+    "w": 1072,
+    "h": 322
+  },
+  {
+    "id": "566e076140e96661",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "889579f8919f6407",
+    "name": "Historico Especiales",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "c6fcc2a5e0085295",
+      "f1c0174d05d21476",
+      "74a17b04558955d8",
+      "51f20609acbd5db5",
+      "0d14403fcdf632ad",
+      "860b42e258ee0ffb",
+      "afcd7b6ff29de32c",
+      "cf406d2b06668ba6",
+      "50b669cfc5489bcb",
+      "7f42b8135d78e4bc",
+      "c845122b0d963b66",
+      "6651f4473f9aee6d",
+      "e9938c205346d1bf",
+      "b86b640905e3f36c",
+      "f301147e659e13f0",
+      "b0c224151059aa08",
+      "09fbe32244aef7f7"
+    ],
+    "x": 1134,
+    "y": 99,
+    "w": 1072,
+    "h": 322
+  },
+  {
+    "id": "571a789d3eedc14d",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "889579f8919f6407",
+    "name": "Muestra Lab 3",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "m3_n_inject_cron",
+      "m3_n_inject_manual",
+      "m3_n_read_watermark",
+      "m3_n_build_mssql_query",
+      "m3_n_mssql_query",
+      "m3_n_transform",
+      "m3_n_check_empty",
+      "m3_n_build_upsert",
+      "m3_n_pg_upsert",
+      "m3_n_update_watermark",
+      "m3_n_pg_watermark_run",
+      "m3_n_check_continue",
+      "m3_n_dbg_caught_up",
+      "m3_n_catch",
+      "m3_n_log_err",
+      "m3_n_pg_err",
+      "m3_n_dbg_err"
+    ],
+    "x": 34,
+    "y": 659,
+    "w": 1032,
+    "h": 342
+  },
+  {
+    "id": "7e322c8bd3cd4e8c",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "889579f8919f6407",
+    "name": "Lectura Pol / Brix",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "lpb_n_inject_cron",
+      "lpb_n_inject_manual",
+      "lpb_n_read_watermark",
+      "lpb_n_build_mssql_query",
+      "lpb_n_mssql_query",
+      "lpb_n_transform",
+      "lpb_n_check_empty",
+      "lpb_n_build_upsert",
+      "lpb_n_pg_upsert",
+      "lpb_n_update_watermark",
+      "lpb_n_pg_watermark_run",
+      "lpb_n_check_continue",
+      "lpb_n_dbg_caught_up",
+      "lpb_n_catch",
+      "lpb_n_log_err",
+      "lpb_n_pg_err",
+      "lpb_n_dbg_err"
+    ],
+    "x": 1134,
+    "y": 799,
+    "w": 1032,
+    "h": 322
+  },
+  {
+    "id": "9388111c741aba36",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "889579f8919f6407",
+    "name": "Destileria Cubas",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "dc_n_inject_cron",
+      "dc_n_inject_manual",
+      "dc_n_read_watermark",
+      "dc_n_build_mssql_query",
+      "dc_n_mssql_query",
+      "dc_n_transform",
+      "dc_n_check_empty",
+      "dc_n_build_upsert",
+      "dc_n_pg_upsert",
+      "dc_n_update_watermark",
+      "dc_n_pg_watermark_run",
+      "dc_n_check_continue",
+      "dc_n_dbg_caught_up",
+      "dc_n_catch",
+      "dc_n_log_err",
+      "dc_n_pg_err",
+      "dc_n_dbg_err"
+    ],
+    "x": 2194,
+    "y": 439,
+    "w": 1052,
+    "h": 322
+  },
+  {
+    "id": "e2cdd863ad6bc5f6",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "889579f8919f6407",
+    "name": "Muestra Lab 2",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "m2_n_inject_cron",
+      "m2_n_inject_manual",
+      "m2_n_read_watermark",
+      "m2_n_build_mssql_query",
+      "m2_n_mssql_query",
+      "m2_n_transform",
+      "m2_n_check_empty",
+      "m2_n_build_upsert",
+      "m2_n_pg_upsert",
+      "m2_n_update_watermark",
+      "m2_n_pg_watermark_run",
+      "m2_n_check_continue",
+      "m2_n_dbg_caught_up",
+      "m2_n_catch",
+      "m2_n_log_err",
+      "m2_n_pg_err",
+      "m2_n_dbg_err"
+    ],
+    "x": 2234,
+    "y": 99,
+    "w": 1032,
+    "h": 322
+  },
+  {
+    "id": "5e529e950179aeef",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "889579f8919f6407",
+    "name": "Individuales V2",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "iv2_n_inject_cron",
+      "iv2_n_inject_manual",
+      "iv2_n_read_watermark",
+      "iv2_n_build_mssql_query",
+      "iv2_n_mssql_query",
+      "iv2_n_transform",
+      "iv2_n_check_empty",
+      "iv2_n_build_upsert",
+      "iv2_n_pg_upsert",
+      "iv2_n_update_watermark",
+      "iv2_n_pg_watermark_run",
+      "iv2_n_check_continue",
+      "iv2_n_dbg_caught_up",
+      "iv2_n_catch",
+      "iv2_n_log_err",
+      "iv2_n_pg_err",
+      "iv2_n_dbg_err"
+    ],
+    "x": 1134,
+    "y": 439,
+    "w": 1032,
+    "h": 322
+  },
+  {
+    "id": "ee14f8683cca0946",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "889579f8919f6407",
+    "name": "Lab General 2",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "859075b34be9e6fc",
+      "deafc8f99af67e8d",
+      "b65735c7591f1e1f",
+      "9661019ff65dae55",
+      "95c5a6046d716348",
+      "a970f974136fec18",
+      "2652e1bd46597e89",
+      "514a954e376f8262",
+      "934975a15af9866c",
+      "020b5ac878da2bf6",
+      "c161cdbc6b861103",
+      "ff48ec51041b1ff0",
+      "d3549bceea866fb1",
+      "97aa78a7f1dfa57d",
+      "e28c8900e34ec8ed",
+      "8ef4383a682f9c10",
+      "22ae89318deda67f"
+    ],
+    "x": 2194,
+    "y": 799,
+    "w": 1072,
+    "h": 322
+  },
+  {
+    "id": "a9aa3797b1ed73d4",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "889579f8919f6407",
+    "name": "Movimiento de Camiones",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "c09af886f74d8f2d",
+      "17c0fed8a09c8b19",
+      "7d5ac45669994c63",
+      "9c5f336d02286743",
+      "e14ac732d2d9817b",
+      "0ddfc59921bb880c",
+      "894041b19509c9c2",
+      "93f47b0ead05927c",
+      "337e436e9698996f",
+      "2afa50f28a84ed37",
+      "a403d08bc1a4a167",
+      "937436f393be659d",
+      "16a6cf5184d729df",
+      "2a7f3c994e3ccea6",
+      "fe42ba06747b1e3f",
+      "d4d260302445b02a",
+      "cf5db2e18417751d"
+    ],
+    "x": 34,
+    "y": 1039,
+    "w": 1072,
+    "h": 322
+  },
+  {
+    "id": "1995aaf914f8fa47",
+    "type": "group",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "889579f8919f6407",
+    "name": "Canchon",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "cc32c36757e769a1",
+      "797556bca1bb13c4",
+      "0d0ea49da99e6929",
+      "b0c96235d23bd9a4",
+      "ebdefff249d59424",
+      "1b4f41526593ff22",
+      "ff8e8dd1837c861f",
+      "8c147b4689e11554",
+      "b7eb04fc3b44d76f",
+      "920595ed640f9fab",
+      "50c6f540ec008254"
+    ],
+    "x": 34,
+    "y": 99,
+    "w": 972,
+    "h": 202
+  },
+  {
+    "id": "cc32c36757e769a1",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "name": "Cron 1min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 140,
+    "wires": [
+      [
+        "0d0ea49da99e6929"
+      ]
+    ]
+  },
+  {
+    "id": "797556bca1bb13c4",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "name": "Manual",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 200,
+    "wires": [
+      [
+        "0d0ea49da99e6929"
+      ]
+    ]
+  },
+  {
+    "id": "0d0ea49da99e6929",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "name": "Consulta",
+    "func": "const d = new Date();\nd.setDate(d.getDate() - 2);\nconst dd = String(d.getDate()).padStart(2, '0');\nconst mm = String(d.getMonth() + 1).padStart(2, '0');\nconst yyyy = d.getFullYear();\nconst sinceYmd = `${yyyy}${mm}${dd}`;\n\nif (!/^\\d{8}$/.test(sinceYmd)) {\n  node.error('sinceYmd inválido: ' + sinceYmd, msg);\n  return null;\n}\n\nmsg.query = `\n  SELECT\n    id_movimiento, numero_ingreso, patente, camion, chofer, transporte,\n    razon_social, id_caniero, codfinca, sector,\n    peso_bruto, tara, neto_cana, trash,\n    fecha_entrada, hora_entrada,\n    fecha_pesada, hora_pesada,                                                                                     fechaindustrial, estado, mesa, observaciones                                                                 FROM pr_ezi_movimientos\n  WHERE (fecha_salida IS NULL OR fecha_salida = '')\n    AND fecha_entrada IS NOT NULL\n    AND LEN(fecha_entrada) >= 10\n    AND (SUBSTRING(fecha_entrada,7,4)\n       + SUBSTRING(fecha_entrada,4,2)\n       + SUBSTRING(fecha_entrada,1,2)) >= '${sinceYmd}';\n  `;\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 320,
+    "y": 140,
+    "wires": [
+      [
+        "b0c96235d23bd9a4"
+      ]
+    ]
+  },
+  {
+    "id": "b0c96235d23bd9a4",
+    "type": "MSSQL",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Conexion Calipso DB",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": true,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "msg",
+    "queryOpt": "query",
+    "queryOptType": "msg",
+    "paramsOpt": "params",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 520,
+    "y": 140,
+    "wires": [
+      [
+        "ebdefff249d59424"
+      ]
+    ]
+  },
+  {
+    "id": "ebdefff249d59424",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "name": "Trasformacion de Filas",
+    "func": "const parseDate = (s) => {\n  if (!s || typeof s !== 'string') return null;\n  const m = s.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})/);\n  return m ? `${m[3]}-${m[2]}-${m[1]}` : null;\n};\n\nconst parseDateTime = (d, h) => {\n  const dt = parseDate(d);\n  if (!dt) return null;\n  let hh = (h && typeof h === 'string' && h.trim() !== '') ? h.trim() : '00:00:00';\n  if (/^\\d{2}:\\d{2}$/.test(hh)) hh += ':00';\n  if (!/^\\d{2}:\\d{2}:\\d{2}$/.test(hh)) return null;\n  return `${dt} ${hh}`;\n};\n\nconst rows = Array.isArray(msg.payload) ? msg.payload : [];\n\nconst snapshot = rows.map(r => ({\n  id_movimiento:    r.id_movimiento,\n  numero_ingreso:   r.numero_ingreso,\n  patente:          r.patente,\n  camion:           r.camion,\n  chofer:           r.chofer,\n  transporte:       r.transporte,\n  caniero_razon:    r.razon_social,\n  caniero_id:       r.id_caniero || null,\n  codigo_finca:     r.codfinca,\n  sector:           r.sector,\n  variedad:         null,\n  peso_bruto:       r.peso_bruto,\n  tara:             r.tara,\n  neto_cana:        r.neto_cana,\n  trash:            r.trash,\n  entrada_at:       parseDateTime(r.fecha_entrada, r.hora_entrada),\n  pesada_at:        parseDateTime(r.fecha_pesada,  r.hora_pesada),\n  fecha_industrial: parseDate(r.fechaindustrial),\n  estado:           r.estado,\n  mesa:             r.mesa,\n  observaciones:    r.observaciones\n}));\n\nflow.set('snapshot_json', JSON.stringify(snapshot));\nflow.set('snapshot_count', snapshot.length);\nmsg.query = 'TRUNCATE production.canchon_snapshot;';\nmsg.params = [];\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 760,
+    "y": 140,
+    "wires": [
+      [
+        "1b4f41526593ff22"
+      ]
+    ]
+  },
+  {
+    "id": "1b4f41526593ff22",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "name": "Supabase",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 340,
+    "y": 200,
+    "wires": [
+      [
+        "ff8e8dd1837c861f"
+      ]
+    ]
+  },
+  {
+    "id": "ff8e8dd1837c861f",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "name": "Query Insert",
+    "func": "const json = flow.get('snapshot_json');\nconst count = flow.get('snapshot_count');\nif (!json || count === 0) {\n  node.status({fill:'yellow', shape:'ring', text:'0 camiones (TRUNCATE-only)'});\n  return null;\n}\nmsg.query = `\nINSERT INTO production.canchon_snapshot (\n  id_movimiento, numero_ingreso, patente, camion, chofer, transporte,\n  caniero_razon, caniero_id, codigo_finca, sector, variedad,\n  peso_bruto, tara, neto_cana, trash,\n  entrada_at, pesada_at, fecha_industrial,\n  estado, mesa, observaciones\n)\nSELECT\n  id_movimiento, numero_ingreso, patente, camion, chofer, transporte,\n  caniero_razon, caniero_id, codigo_finca, sector, variedad,\n  peso_bruto, tara, neto_cana, trash,\n  entrada_at, pesada_at, fecha_industrial,\n  estado, mesa, observaciones\nFROM json_populate_recordset(NULL::production.canchon_snapshot, $1::json);\n`;\nmsg.params = [json];\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 510,
+    "y": 200,
+    "wires": [
+      [
+        "8c147b4689e11554"
+      ]
+    ]
+  },
+  {
+    "id": "8c147b4689e11554",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "name": "Supabase",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 680,
+    "y": 200,
+    "wires": [
+      [
+        "b7eb04fc3b44d76f"
+      ]
+    ]
+  },
+  {
+    "id": "b7eb04fc3b44d76f",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "name": "✓ snapshot done",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "$count(payload) & ' camiones'",
+    "statusType": "jsonata",
+    "x": 870,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "920595ed640f9fab",
+    "type": "catch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "name": "catch errors",
+    "scope": [
+      "0d0ea49da99e6929",
+      "b0c96235d23bd9a4",
+      "ebdefff249d59424",
+      "1b4f41526593ff22",
+      "ff8e8dd1837c861f",
+      "8c147b4689e11554"
+    ],
+    "uncaught": false,
+    "x": 410,
+    "y": 260,
+    "wires": [
+      [
+        "50c6f540ec008254"
+      ]
+    ]
+  },
+  {
+    "id": "50c6f540ec008254",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "1995aaf914f8fa47",
+    "name": "✗ error",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "error.message",
+    "statusType": "auto",
+    "x": 620,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "c6fcc2a5e0085295",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "cron 1min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 1250,
+    "y": 140,
+    "wires": [
+      [
+        "74a17b04558955d8"
+      ]
+    ]
+  },
+  {
+    "id": "f1c0174d05d21476",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "manual / self-trigger",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 1280,
+    "y": 200,
+    "wires": [
+      [
+        "74a17b04558955d8"
+      ]
+    ]
+  },
+  {
+    "id": "74a17b04558955d8",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "read watermark",
+    "query": "SELECT COALESCE(last_id, 0)::bigint AS last_id FROM legacy.sync_watermarks WHERE tabla_origen = 'pr_ezi_especiales' AND enabled = true;",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1480,
+    "y": 160,
+    "wires": [
+      [
+        "51f20609acbd5db5"
+      ]
+    ]
+  },
+  {
+    "id": "51f20609acbd5db5",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "build mssql query",
+    "func": "const row = msg.payload && msg.payload[0];\nif (!row) { node.warn('sync deshabilitado'); return null; }\nconst lastId = Number(row.last_id) || 0;\nif (!Number.isInteger(lastId) || lastId < 0) { node.error('last_id inválido: ' + lastId, msg); return null; }\nflow.set('esp_last_id_in', lastId);\nconst d = new Date(); d.setDate(d.getDate() - 2);\nconst sinceYmd = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;\nconst hoyD = new Date();\nconst hoyYmd = `${hoyD.getFullYear()}${String(hoyD.getMonth()+1).padStart(2,'0')}${String(hoyD.getDate()).padStart(2,'0')}`;\nmsg.query = `SELECT TOP 5000 * FROM pr_ezi_especiales WHERE (id > ${lastId} OR (LEN(fechaindustrial) >= 10 AND (SUBSTRING(fechaindustrial,7,4)+SUBSTRING(fechaindustrial,4,2)+SUBSTRING(fechaindustrial,1,2)) >= '${sinceYmd}' AND (SUBSTRING(fechaindustrial,7,4)+SUBSTRING(fechaindustrial,4,2)+SUBSTRING(fechaindustrial,1,2)) <= '${hoyYmd}')) AND SUBSTRING(fechaindustrial,7,4) >= '2024' ORDER BY id ASC;`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1690,
+    "y": 160,
+    "wires": [
+      [
+        "0d14403fcdf632ad"
+      ]
+    ]
+  },
+  {
+    "id": "0d14403fcdf632ad",
+    "type": "MSSQL",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "mssql fetch",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": true,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "msg",
+    "queryOpt": "query",
+    "queryOptType": "msg",
+    "paramsOpt": "params",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 1900,
+    "y": 160,
+    "wires": [
+      [
+        "860b42e258ee0ffb"
+      ]
+    ]
+  },
+  {
+    "id": "860b42e258ee0ffb",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "transform rows",
+    "func": "const parseDate = (s) => {\n  if (!s || typeof s !== 'string') return null;\n  const m = s.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})/);\n  return m ? `${m[3]}-${m[2]}-${m[1]}` : null;\n};\nconst parseTime = (s) => {\n  if (!s || typeof s !== 'string' || s.trim() === '') return null;\n  let h = s.trim();\n  if (/^\\d{2}:\\d{2}$/.test(h)) h += ':00';\n  return /^\\d{2}:\\d{2}:\\d{2}$/.test(h) ? h : null;\n};\nconst toBool = (v) => v === 1 || v === true || v === '1';\nconst rows = Array.isArray(msg.payload) ? msg.payload : [];\nconst lastIdIn = flow.get('esp_last_id_in') || 0;\n\nconst out = rows.map(r => ({\n  id_especiales:       r.id,\n  proceso_codigo:      r.codigoproceso,\n  fecha_industrial:    parseDate(r.fechaindustrial),\n  fecha_registro:      parseDate(r.fecharegistro),\n  usuario_registro:    r.usuario,\n  hora_registro:       r.horaregistro,\n  hora_lectura:        parseTime(r.HORA),\n  color_icumsa:        r.Color,\n  turbidez:            r.Turbidez,\n  humedad:             r.Humedad,\n  cenizas:             r.Cenizas,\n  granulometria_20:    r.Granulometria_20,\n  granulometria_30:    r.Granulometria_30,\n  sediment_test:       r.Sediment_Test,\n  calidad:             r.Calidad,\n  silo:                r.Silo,\n  so2_ppm:             r.SO2,\n  campo_libre_11:      r.campo11,\n  destino:             r.Destino,\n  solicitante:         r.Solicitante,\n  numero_muestra:      r.Muestra,\n  descripcion_paradas: r.Paradas,\n  cerrado:             toBool(r.cerrado)\n}));\n\nlet maxId = lastIdIn;\nfor (const r of rows) { if (r.id && r.id > maxId) maxId = r.id; }\nflow.set('esp_max_id_out', maxId);\nflow.set('esp_rows_count', out.length);\nflow.set('esp_batch_full', out.length >= 5000);\nmsg.payload = out;\nmsg.skip = out.length === 0;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2100,
+    "y": 160,
+    "wires": [
+      [
+        "afcd7b6ff29de32c"
+      ]
+    ]
+  },
+  {
+    "id": "afcd7b6ff29de32c",
+    "type": "switch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "tiene filas?",
+    "property": "skip",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "false"
+      },
+      {
+        "t": "true"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 2,
+    "x": 1270,
+    "y": 260,
+    "wires": [
+      [
+        "cf406d2b06668ba6"
+      ],
+      [
+        "e9938c205346d1bf"
+      ]
+    ]
+  },
+  {
+    "id": "cf406d2b06668ba6",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "build INSERT",
+    "func": "var rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) return null;\nmsg.params = [JSON.stringify(rows)];\nmsg.query = \"INSERT INTO legacy.especiales (id_especiales, proceso_codigo, fecha_industrial, fecha_registro, usuario_registro, hora_registro, hora_lectura, color_icumsa, turbidez, humedad, cenizas, granulometria_20, granulometria_30, sediment_test, calidad, silo, so2_ppm, campo_libre_11, destino, solicitante, numero_muestra, descripcion_paradas, cerrado) SELECT src.id_especiales, src.proceso_codigo, src.fecha_industrial, src.fecha_registro, src.usuario_registro, src.hora_registro, src.hora_lectura, src.color_icumsa, src.turbidez, src.humedad, src.cenizas, src.granulometria_20, src.granulometria_30, src.sediment_test, src.calidad, src.silo, src.so2_ppm, src.campo_libre_11, src.destino, src.solicitante, src.numero_muestra, src.descripcion_paradas, src.cerrado FROM json_populate_recordset(NULL::legacy.especiales, $1::json) AS src ON CONFLICT (id_especiales) DO UPDATE SET proceso_codigo=EXCLUDED.proceso_codigo, fecha_industrial=EXCLUDED.fecha_industrial, fecha_registro=EXCLUDED.fecha_registro, usuario_registro=EXCLUDED.usuario_registro, hora_registro=EXCLUDED.hora_registro, hora_lectura=EXCLUDED.hora_lectura, color_icumsa=EXCLUDED.color_icumsa, turbidez=EXCLUDED.turbidez, humedad=EXCLUDED.humedad, cenizas=EXCLUDED.cenizas, granulometria_20=EXCLUDED.granulometria_20, granulometria_30=EXCLUDED.granulometria_30, sediment_test=EXCLUDED.sediment_test, calidad=EXCLUDED.calidad, silo=EXCLUDED.silo, so2_ppm=EXCLUDED.so2_ppm, campo_libre_11=EXCLUDED.campo_libre_11, destino=EXCLUDED.destino, solicitante=EXCLUDED.solicitante, numero_muestra=EXCLUDED.numero_muestra, descripcion_paradas=EXCLUDED.descripcion_paradas, cerrado=EXCLUDED.cerrado, imported_at=now();\";\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1300,
+    "y": 320,
+    "wires": [
+      [
+        "50b669cfc5489bcb"
+      ]
+    ]
+  },
+  {
+    "id": "50b669cfc5489bcb",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "pg INSERT",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1490,
+    "y": 320,
+    "wires": [
+      [
+        "7f42b8135d78e4bc"
+      ]
+    ]
+  },
+  {
+    "id": "7f42b8135d78e4bc",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "build update wm",
+    "func": "msg.params = [flow.get('esp_max_id_out'), flow.get('esp_rows_count')];\nmsg.query = `\nUPDATE legacy.sync_watermarks\nSET last_id=GREATEST(COALESCE(last_id,0), $1::bigint),\n    last_synced_at=now(), last_rows_added=$2::int,\n    last_status='ok', last_error=NULL,\n    total_synced=total_synced+$2::int, updated_at=now()\nWHERE tabla_origen='pr_ezi_especiales';\n`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1700,
+    "y": 320,
+    "wires": [
+      [
+        "c845122b0d963b66"
+      ]
+    ]
+  },
+  {
+    "id": "c845122b0d963b66",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "pg update wm",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1900,
+    "y": 320,
+    "wires": [
+      [
+        "6651f4473f9aee6d"
+      ]
+    ]
+  },
+  {
+    "id": "6651f4473f9aee6d",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "drenar?",
+    "func": "const batchFull = flow.get('esp_batch_full');\nconst count = flow.get('esp_rows_count');\nconst maxId = flow.get('esp_max_id_out');\nnode.status({ fill: 'green', shape: 'dot', text: `${count} filas @ id=${maxId}` });\nif (batchFull) {\n  setTimeout(() => { node.send({ payload: 'self-trigger' }); }, 2000);\n}\nreturn null;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1720,
+    "y": 260,
+    "wires": [
+      [
+        "74a17b04558955d8"
+      ]
+    ]
+  },
+  {
+    "id": "e9938c205346d1bf",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "✓ caught up",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "'caught up'",
+    "statusType": "str",
+    "x": 1490,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "b86b640905e3f36c",
+    "type": "catch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "catch",
+    "scope": [
+      "74a17b04558955d8",
+      "51f20609acbd5db5",
+      "0d14403fcdf632ad",
+      "860b42e258ee0ffb",
+      "afcd7b6ff29de32c",
+      "cf406d2b06668ba6",
+      "50b669cfc5489bcb",
+      "7f42b8135d78e4bc",
+      "c845122b0d963b66",
+      "6651f4473f9aee6d"
+    ],
+    "uncaught": false,
+    "x": 1250,
+    "y": 380,
+    "wires": [
+      [
+        "f301147e659e13f0"
+      ]
+    ]
+  },
+  {
+    "id": "f301147e659e13f0",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "build error",
+    "func": "const err = String((msg.error && msg.error.message) || msg.error || msg.payload || 'unknown').substring(0, 2000);\nmsg.params = [err];\nmsg.query = `UPDATE legacy.sync_watermarks SET last_status='error', last_error=$1, updated_at=now() WHERE tabla_origen='pr_ezi_especiales';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1410,
+    "y": 380,
+    "wires": [
+      [
+        "b0c224151059aa08"
+      ]
+    ]
+  },
+  {
+    "id": "b0c224151059aa08",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "pg err",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1580,
+    "y": 380,
+    "wires": [
+      [
+        "09fbe32244aef7f7"
+      ]
+    ]
+  },
+  {
+    "id": "09fbe32244aef7f7",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "566e076140e96661",
+    "name": "✗ error",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "error.message",
+    "statusType": "auto",
+    "x": 1740,
+    "y": 380,
+    "wires": []
+  },
+  {
+    "id": "m2_n_inject_cron",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "cron 1min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 2350,
+    "y": 140,
+    "wires": [
+      [
+        "m2_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_inject_manual",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "manual / self-trigger",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 2380,
+    "y": 200,
+    "wires": [
+      [
+        "m2_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_read_watermark",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "read watermark",
+    "query": "SELECT COALESCE(last_id, 0)::bigint AS last_id FROM legacy.sync_watermarks WHERE tabla_origen='pr_ezi_muestralab2' AND enabled=true;",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2580,
+    "y": 160,
+    "wires": [
+      [
+        "m2_n_build_mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_build_mssql_query",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "build mssql",
+    "func": "const row = msg.payload && msg.payload[0];\nif (!row) return null;\nconst lastId = Number(row.last_id) || 0;\nif (!Number.isInteger(lastId) || lastId < 0) { node.error('last_id inválido', msg); return null; }\nflow.set('m2_last_id_in', lastId);\nconst d = new Date(); d.setDate(d.getDate() - 2);\nconst sinceYmd = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;\nconst hoyD = new Date();\nconst hoyYmd = `${hoyD.getFullYear()}${String(hoyD.getMonth()+1).padStart(2,'0')}${String(hoyD.getDate()).padStart(2,'0')}`;\nmsg.query = `SELECT TOP 5000 * FROM pr_ezi_muestralab2 WHERE (id_muestralab2 > ${lastId} OR (LEN(fechaindustrial) >= 10 AND (SUBSTRING(fechaindustrial,7,4)+SUBSTRING(fechaindustrial,4,2)+SUBSTRING(fechaindustrial,1,2)) >= '${sinceYmd}' AND (SUBSTRING(fechaindustrial,7,4)+SUBSTRING(fechaindustrial,4,2)+SUBSTRING(fechaindustrial,1,2)) <= '${hoyYmd}')) AND SUBSTRING(fechaindustrial,7,4) >= '2024' ORDER BY id_muestralab2 ASC;`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2780,
+    "y": 160,
+    "wires": [
+      [
+        "m2_n_mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_mssql_query",
+    "type": "MSSQL",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "mssql fetch",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": true,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "msg",
+    "queryOpt": "query",
+    "queryOptType": "msg",
+    "paramsOpt": "params",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 2980,
+    "y": 160,
+    "wires": [
+      [
+        "m2_n_transform"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_transform",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "transform",
+    "func": "const parseDate = (s) => { if (!s || typeof s !== 'string') return null; const m = s.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})/); return m ? `${m[3]}-${m[2]}-${m[1]}` : null; };\nconst parseDT = (d, h) => { const dt = parseDate(d); if (!dt) return null; let hh = (h && typeof h === 'string' && h.trim() !== '') ? h.trim() : '00:00:00'; if (/^\\d{2}:\\d{2}$/.test(hh)) hh += ':00'; return /^\\d{2}:\\d{2}:\\d{2}$/.test(hh) ? `${dt} ${hh}` : null; };\nconst rows = Array.isArray(msg.payload) ? msg.payload : [];\nconst lastIdIn = flow.get('m2_last_id_in') || 0;\n\nconst out = rows.map(r => ({\n  id_muestra: r.id_muestralab2, version_origen: '2',\n  caniero_id: r.id_caniero || null, transportista_id: r.id_transportista || null,\n  tipo_cana_id: r.id_tipo_cana || null, tipo_contrato_id: r.tipocontrato || null,\n  movimiento_id: r.idmovimiento,\n  razon_social: r.razon_social, transporte: r.transporte, patente: r.patente,\n  chofer: r.chofer, camion: r.camion, variedad: r.variedad,\n  observaciones: r.observaciones, grupo: r.grupo,\n  numero_pesada: r.numero_pesada, numero_analisis: r.numeroanalisis,\n  prepesada_flag: r.prepesada,\n  peso_bruto: r.peso_bruto, peso_neto: r.peso_neto, tara: r.tara,\n  trash: r.trash, neto_cana: r.neto_cana,\n  trash_real: r.trashReal, neto_cana_real: r.netoCanaReal,\n  mlimpia: r.mlimpia, msucia: r.msucia,\n  despunte: r.despunte, despunte_porcentaje: r.despunteporcentaje,\n  entrada_at: parseDT(r.fecha_entrada, r.hora_entrada),\n  pesada_at: parseDT(r.fecha_pesada, r.hora_pesada),\n  salida_at: parseDT(r.fecha_salida, r.hora_salida),\n  fecha_industrial: parseDate(r.fechaindustrial),\n  tipo_pesada: r.tipo_pesada, tipo_pesada_alt: r.tipopesada, tipo_tara: r.tipotara,\n  usuario_registro: r.usuario, usuario_pesada: r.usuariopesada,\n  usuario_salida: r.usuario_salida, usuario_manual: r.usuariomanual,\n  remito: r.remito,\n  pol: r.Pol, brix: r.Brix, temperatura: r.Temperatura,\n  pol_porciento: r.Polporciento, brix_porciento: r.Brixporciento, pureza: r.Pureza,\n  kr_pol: r.KRPol, kr_brix: r.KRBrix,\n  rendimiento: r.Rendimiento, rendimiento_real: r.RendimientoReal,\n  azucar_producido: r.azucarproducido, azucar_producido_comercial: r.azucarproducidocomercial,\n  azucar_caniero: r.azucarcaniero, azucar_caniero_neto: r.azucarcaniertoneto,\n  azucar_blanco_caniero: r.azucarblancoceniero, precio_bolsa: r.preciobolsa,\n  eeaoc: r.EEAOC, ib: r.IB, ciasis: r.CIASIS, ipaa: r.IPAA, sp: r.SP,\n  dif_20: r.Dif20, coef_corr_temperatura: r.CoefCorrTemperatura,\n  increm: r.Increm, brix_corregido: r.BrixCorregido, pol_porciento_jugo: r.PolPorcientoJugo,\n  parcial_1: r.Parcial1, parcial_2: r.Parcial2, parcial_3: r.Parcial3,\n  parcial_4: r.Parcial4, parcial_5: r.Parcial5, parcial_6: r.Parcial6,\n  java: r.Java, c11: r.C11, c12: r.C12, c13: r.C13, c14: r.C14, c15: r.C15,\n  cerrado: r.cerrar, nrocierre: r.nrocierre,\n  maquila_pesos: null, maquila_pesos_ret: null, fletes: null, fletes_pesos: null, devengado_2: null\n}));\n\nlet maxId = lastIdIn;\nfor (const r of rows) { if (r.id_muestralab2 && r.id_muestralab2 > maxId) maxId = r.id_muestralab2; }\nflow.set('m2_max_id_out', maxId);\nflow.set('m2_rows_count', out.length);\nflow.set('m2_batch_full', out.length >= 5000);\nmsg.payload = out;\nmsg.skip = out.length === 0;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 3180,
+    "y": 160,
+    "wires": [
+      [
+        "m2_n_check_empty"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_check_empty",
+    "type": "switch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "tiene filas?",
+    "property": "skip",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "false"
+      },
+      {
+        "t": "true"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 2,
+    "x": 2390,
+    "y": 260,
+    "wires": [
+      [
+        "m2_n_build_upsert"
+      ],
+      [
+        "m2_n_dbg_caught_up"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_build_upsert",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "build INSERT",
+    "func": "var rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) return null;\nmsg.params = [JSON.stringify(rows)];\nmsg.query = \"INSERT INTO legacy.muestras_lab (id_muestra, version_origen, caniero_id, transportista_id, tipo_cana_id, tipo_contrato_id, movimiento_id, razon_social, transporte, patente, chofer, camion, variedad, observaciones, grupo, numero_pesada, numero_analisis, prepesada_flag, peso_bruto, peso_neto, tara, trash, neto_cana, trash_real, neto_cana_real, mlimpia, msucia, despunte, despunte_porcentaje, entrada_at, pesada_at, salida_at, fecha_industrial, tipo_pesada, tipo_pesada_alt, tipo_tara, usuario_registro, usuario_pesada, usuario_salida, usuario_manual, remito, pol, brix, temperatura, pol_porciento, brix_porciento, pureza, kr_pol, kr_brix, rendimiento, rendimiento_real, azucar_producido, azucar_producido_comercial, azucar_caniero, azucar_caniero_neto, azucar_blanco_caniero, precio_bolsa, eeaoc, ib, ciasis, ipaa, sp, dif_20, coef_corr_temperatura, increm, brix_corregido, pol_porciento_jugo, parcial_1, parcial_2, parcial_3, parcial_4, parcial_5, parcial_6, java, c11, c12, c13, c14, c15, cerrado, nrocierre, maquila_pesos, maquila_pesos_ret, fletes, fletes_pesos, devengado_2) SELECT src.id_muestra, src.version_origen, src.caniero_id, src.transportista_id, src.tipo_cana_id, src.tipo_contrato_id, src.movimiento_id, src.razon_social, src.transporte, src.patente, src.chofer, src.camion, src.variedad, src.observaciones, src.grupo, src.numero_pesada, src.numero_analisis, src.prepesada_flag, src.peso_bruto, src.peso_neto, src.tara, src.trash, src.neto_cana, src.trash_real, src.neto_cana_real, src.mlimpia, src.msucia, src.despunte, src.despunte_porcentaje, src.entrada_at, src.pesada_at, src.salida_at, src.fecha_industrial, src.tipo_pesada, src.tipo_pesada_alt, src.tipo_tara, src.usuario_registro, src.usuario_pesada, src.usuario_salida, src.usuario_manual, src.remito, src.pol, src.brix, src.temperatura, src.pol_porciento, src.brix_porciento, src.pureza, src.kr_pol, src.kr_brix, src.rendimiento, src.rendimiento_real, src.azucar_producido, src.azucar_producido_comercial, src.azucar_caniero, src.azucar_caniero_neto, src.azucar_blanco_caniero, src.precio_bolsa, src.eeaoc, src.ib, src.ciasis, src.ipaa, src.sp, src.dif_20, src.coef_corr_temperatura, src.increm, src.brix_corregido, src.pol_porciento_jugo, src.parcial_1, src.parcial_2, src.parcial_3, src.parcial_4, src.parcial_5, src.parcial_6, src.java, src.c11, src.c12, src.c13, src.c14, src.c15, src.cerrado, src.nrocierre, src.maquila_pesos, src.maquila_pesos_ret, src.fletes, src.fletes_pesos, src.devengado_2 FROM json_populate_recordset(NULL::legacy.muestras_lab, $1::json) AS src ON CONFLICT (version_origen, id_muestra) DO UPDATE SET caniero_id=EXCLUDED.caniero_id, transportista_id=EXCLUDED.transportista_id, tipo_cana_id=EXCLUDED.tipo_cana_id, tipo_contrato_id=EXCLUDED.tipo_contrato_id, movimiento_id=EXCLUDED.movimiento_id, razon_social=EXCLUDED.razon_social, transporte=EXCLUDED.transporte, patente=EXCLUDED.patente, chofer=EXCLUDED.chofer, camion=EXCLUDED.camion, variedad=EXCLUDED.variedad, observaciones=EXCLUDED.observaciones, grupo=EXCLUDED.grupo, numero_pesada=EXCLUDED.numero_pesada, numero_analisis=EXCLUDED.numero_analisis, prepesada_flag=EXCLUDED.prepesada_flag, peso_bruto=EXCLUDED.peso_bruto, peso_neto=EXCLUDED.peso_neto, tara=EXCLUDED.tara, trash=EXCLUDED.trash, neto_cana=EXCLUDED.neto_cana, trash_real=EXCLUDED.trash_real, neto_cana_real=EXCLUDED.neto_cana_real, mlimpia=EXCLUDED.mlimpia, msucia=EXCLUDED.msucia, despunte=EXCLUDED.despunte, despunte_porcentaje=EXCLUDED.despunte_porcentaje, entrada_at=EXCLUDED.entrada_at, pesada_at=EXCLUDED.pesada_at, salida_at=EXCLUDED.salida_at, fecha_industrial=EXCLUDED.fecha_industrial, tipo_pesada=EXCLUDED.tipo_pesada, tipo_pesada_alt=EXCLUDED.tipo_pesada_alt, tipo_tara=EXCLUDED.tipo_tara, usuario_registro=EXCLUDED.usuario_registro, usuario_pesada=EXCLUDED.usuario_pesada, usuario_salida=EXCLUDED.usuario_salida, usuario_manual=EXCLUDED.usuario_manual, remito=EXCLUDED.remito, pol=EXCLUDED.pol, brix=EXCLUDED.brix, temperatura=EXCLUDED.temperatura, pol_porciento=EXCLUDED.pol_porciento, brix_porciento=EXCLUDED.brix_porciento, pureza=EXCLUDED.pureza, kr_pol=EXCLUDED.kr_pol, kr_brix=EXCLUDED.kr_brix, rendimiento=EXCLUDED.rendimiento, rendimiento_real=EXCLUDED.rendimiento_real, azucar_producido=EXCLUDED.azucar_producido, azucar_producido_comercial=EXCLUDED.azucar_producido_comercial, azucar_caniero=EXCLUDED.azucar_caniero, azucar_caniero_neto=EXCLUDED.azucar_caniero_neto, azucar_blanco_caniero=EXCLUDED.azucar_blanco_caniero, precio_bolsa=EXCLUDED.precio_bolsa, eeaoc=EXCLUDED.eeaoc, ib=EXCLUDED.ib, ciasis=EXCLUDED.ciasis, ipaa=EXCLUDED.ipaa, sp=EXCLUDED.sp, dif_20=EXCLUDED.dif_20, coef_corr_temperatura=EXCLUDED.coef_corr_temperatura, increm=EXCLUDED.increm, brix_corregido=EXCLUDED.brix_corregido, pol_porciento_jugo=EXCLUDED.pol_porciento_jugo, parcial_1=EXCLUDED.parcial_1, parcial_2=EXCLUDED.parcial_2, parcial_3=EXCLUDED.parcial_3, parcial_4=EXCLUDED.parcial_4, parcial_5=EXCLUDED.parcial_5, parcial_6=EXCLUDED.parcial_6, java=EXCLUDED.java, c11=EXCLUDED.c11, c12=EXCLUDED.c12, c13=EXCLUDED.c13, c14=EXCLUDED.c14, c15=EXCLUDED.c15, cerrado=EXCLUDED.cerrado, nrocierre=EXCLUDED.nrocierre, maquila_pesos=EXCLUDED.maquila_pesos, maquila_pesos_ret=EXCLUDED.maquila_pesos_ret, fletes=EXCLUDED.fletes, fletes_pesos=EXCLUDED.fletes_pesos, devengado_2=EXCLUDED.devengado_2, imported_at=now();\";\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2420,
+    "y": 320,
+    "wires": [
+      [
+        "m2_n_pg_upsert"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_pg_upsert",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "pg INSERT",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2610,
+    "y": 320,
+    "wires": [
+      [
+        "m2_n_update_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_update_watermark",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "build update wm",
+    "func": "msg.params = [flow.get('m2_max_id_out'), flow.get('m2_rows_count')];\nmsg.query = `UPDATE legacy.sync_watermarks SET last_id=GREATEST(COALESCE(last_id,0), $1::bigint), last_synced_at=now(), last_rows_added=$2::int, last_status='ok', last_error=NULL, total_synced=total_synced+$2::int, updated_at=now() WHERE tabla_origen='pr_ezi_muestralab2';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2800,
+    "y": 320,
+    "wires": [
+      [
+        "m2_n_pg_watermark_run"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_pg_watermark_run",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "pg update wm",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 3000,
+    "y": 320,
+    "wires": [
+      [
+        "m2_n_check_continue"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_check_continue",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "drenar?",
+    "func": "const batchFull = flow.get('m2_batch_full');\nconst count = flow.get('m2_rows_count');\nconst maxId = flow.get('m2_max_id_out');\nnode.status({ fill: 'green', shape: 'dot', text: `${count} filas @ id=${maxId}` });\nif (batchFull) setTimeout(() => node.send({ payload: 'self-trigger' }), 2000);\nreturn null;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2820,
+    "y": 260,
+    "wires": [
+      [
+        "m2_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_dbg_caught_up",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "✓ caught up",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "'caught up'",
+    "statusType": "str",
+    "x": 2610,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "m2_n_catch",
+    "type": "catch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "catch",
+    "scope": [
+      "m2_n_read_watermark",
+      "m2_n_build_mssql_query",
+      "m2_n_mssql_query",
+      "m2_n_transform",
+      "m2_n_check_empty",
+      "m2_n_build_upsert",
+      "m2_n_pg_upsert",
+      "m2_n_update_watermark",
+      "m2_n_pg_watermark_run",
+      "m2_n_check_continue"
+    ],
+    "uncaught": false,
+    "x": 2370,
+    "y": 380,
+    "wires": [
+      [
+        "m2_n_log_err"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_log_err",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "build error",
+    "func": "const err = String((msg.error && msg.error.message) || msg.error || msg.payload || 'unknown').substring(0, 2000);\nmsg.params = [err];\nmsg.query = `UPDATE legacy.sync_watermarks SET last_status='error', last_error=$1, updated_at=now() WHERE tabla_origen='pr_ezi_muestralab2';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2530,
+    "y": 380,
+    "wires": [
+      [
+        "m2_n_pg_err"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_pg_err",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "pg err",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2700,
+    "y": 380,
+    "wires": [
+      [
+        "m2_n_dbg_err"
+      ]
+    ]
+  },
+  {
+    "id": "m2_n_dbg_err",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "e2cdd863ad6bc5f6",
+    "name": "✗ error",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "error.message",
+    "statusType": "auto",
+    "x": 2860,
+    "y": 380,
+    "wires": []
+  },
+  {
+    "id": "m3_n_inject_cron",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "cron 1min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 700,
+    "wires": [
+      [
+        "m3_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_inject_manual",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "manual / self-trigger",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 180,
+    "y": 760,
+    "wires": [
+      [
+        "m3_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_read_watermark",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "read watermark",
+    "query": "SELECT COALESCE(last_id, 0)::bigint AS last_id FROM legacy.sync_watermarks WHERE tabla_origen='pr_ezi_muestralab3' AND enabled=true;",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 380,
+    "y": 720,
+    "wires": [
+      [
+        "m3_n_build_mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_build_mssql_query",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "build mssql",
+    "func": "const row = msg.payload && msg.payload[0];\nif (!row) return null;\nconst lastId = Number(row.last_id) || 0;\nif (!Number.isInteger(lastId) || lastId < 0) { node.error('last_id inválido', msg); return null; }\nflow.set('m3_last_id_in', lastId);\nconst d = new Date(); d.setDate(d.getDate() - 2);\nconst sinceYmd = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;\nconst hoyD = new Date();\nconst hoyYmd = `${hoyD.getFullYear()}${String(hoyD.getMonth()+1).padStart(2,'0')}${String(hoyD.getDate()).padStart(2,'0')}`;\nmsg.query = `SELECT TOP 5000 * FROM pr_ezi_muestralab3 WHERE (id_muestralab3 > ${lastId} OR (LEN(fechaindustrial) >= 10 AND (SUBSTRING(fechaindustrial,7,4)+SUBSTRING(fechaindustrial,4,2)+SUBSTRING(fechaindustrial,1,2)) >= '${sinceYmd}' AND (SUBSTRING(fechaindustrial,7,4)+SUBSTRING(fechaindustrial,4,2)+SUBSTRING(fechaindustrial,1,2)) <= '${hoyYmd}')) AND SUBSTRING(fechaindustrial,7,4) >= '2024' ORDER BY id_muestralab3 ASC;`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 580,
+    "y": 720,
+    "wires": [
+      [
+        "m3_n_mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_mssql_query",
+    "type": "MSSQL",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "mssql fetch",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": true,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "msg",
+    "queryOpt": "query",
+    "queryOptType": "msg",
+    "paramsOpt": "params",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 780,
+    "y": 720,
+    "wires": [
+      [
+        "m3_n_transform"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_transform",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "transform",
+    "func": "const parseDate = (s) => { if (!s || typeof s !== 'string') return null; const m = s.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})/); return m ? `${m[3]}-${m[2]}-${m[1]}` : null; };\nconst parseDT = (d, h) => { const dt = parseDate(d); if (!dt) return null; let hh = (h && typeof h === 'string' && h.trim() !== '') ? h.trim() : '00:00:00'; if (/^\\d{2}:\\d{2}$/.test(hh)) hh += ':00'; return /^\\d{2}:\\d{2}:\\d{2}$/.test(hh) ? `${dt} ${hh}` : null; };\nconst rows = Array.isArray(msg.payload) ? msg.payload : [];\nconst lastIdIn = flow.get('m3_last_id_in') || 0;\n\nconst out = rows.map(r => ({\n  id_muestra: r.id_muestralab3, version_origen: '3',\n  caniero_id: r.id_caniero || null, transportista_id: r.id_transportista || null,\n  tipo_cana_id: r.id_tipo_cana || null, tipo_contrato_id: r.tipocontrato || null,\n  movimiento_id: r.idmovimiento,\n  razon_social: r.razon_social, transporte: r.transporte, patente: r.patente,\n  chofer: r.chofer, camion: r.camion, variedad: r.variedad,\n  observaciones: r.observaciones, grupo: r.grupo,\n  numero_pesada: r.numero_pesada, numero_analisis: r.numeroanalisis,\n  prepesada_flag: r.prepesada,\n  peso_bruto: r.peso_bruto, peso_neto: r.peso_neto, tara: r.tara,\n  trash: r.trash, neto_cana: r.neto_cana,\n  trash_real: r.trashReal, neto_cana_real: r.netoCanaReal,\n  mlimpia: r.mlimpia, msucia: r.msucia,\n  despunte: r.despunte, despunte_porcentaje: r.despunteporcentaje,\n  entrada_at: parseDT(r.fecha_entrada, r.hora_entrada),\n  pesada_at: parseDT(r.fecha_pesada, r.hora_pesada),\n  salida_at: parseDT(r.fecha_salida, r.hora_salida),\n  fecha_industrial: parseDate(r.fechaindustrial),\n  tipo_pesada: r.tipo_pesada, tipo_pesada_alt: r.tipopesada, tipo_tara: r.tipotara,\n  usuario_registro: r.usuario, usuario_pesada: r.usuariopesada,\n  usuario_salida: r.usuario_salida, usuario_manual: r.usuariomanual,\n  remito: r.remito,\n  pol: r.Pol, brix: r.Brix, temperatura: r.Temperatura,\n  pol_porciento: r.Polporciento, brix_porciento: null, pureza: r.Pureza,\n  kr_pol: r.KRPol, kr_brix: r.KRBrix,\n  rendimiento: r.Rendimiento, rendimiento_real: r.RendimientoReal,\n  azucar_producido: r.azucarproducido, azucar_producido_comercial: r.azucarproducidocomercial,\n  azucar_caniero: r.azucarcaniero, azucar_caniero_neto: r.azucarcaniertoneto,\n  azucar_blanco_caniero: r.azucarblancoceniero, precio_bolsa: r.preciobolsa,\n  eeaoc: r.EEAOC, ib: r.IB, ciasis: r.CIASIS, ipaa: r.IPAA, sp: r.SP,\n  dif_20: r.Dif20, coef_corr_temperatura: r.CoefCorrTemperatura,\n  increm: r.Increm, brix_corregido: r.BrixCorregido, pol_porciento_jugo: r.PolPorcientoJugo,\n  parcial_1: r.Parcial1, parcial_2: r.Parcial2, parcial_3: r.Parcial3,\n  parcial_4: r.Parcial4, parcial_5: r.Parcial5, parcial_6: r.Parcial6,\n  java: r.Java, c11: r.C11, c12: r.C12, c13: r.C13, c14: r.C14, c15: r.C15,\n  cerrado: null, nrocierre: null,\n  maquila_pesos: r.maquilapesos, maquila_pesos_ret: r.maquilapesosret,\n  fletes: r.fletes, fletes_pesos: r.fletespesos, devengado_2: r.devengado2\n}));\n\nlet maxId = lastIdIn;\nfor (const r of rows) { if (r.id_muestralab3 && r.id_muestralab3 > maxId) maxId = r.id_muestralab3; }\nflow.set('m3_max_id_out', maxId);\nflow.set('m3_rows_count', out.length);\nflow.set('m3_batch_full', out.length >= 5000);\nmsg.payload = out;\nmsg.skip = out.length === 0;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 980,
+    "y": 720,
+    "wires": [
+      [
+        "m3_n_check_empty"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_check_empty",
+    "type": "switch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "tiene filas?",
+    "property": "skip",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "false"
+      },
+      {
+        "t": "true"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 2,
+    "x": 210,
+    "y": 820,
+    "wires": [
+      [
+        "m3_n_build_upsert"
+      ],
+      [
+        "m3_n_dbg_caught_up"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_build_upsert",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "build INSERT",
+    "func": "const cols = ['id_muestra','version_origen','caniero_id','transportista_id','tipo_cana_id','tipo_contrato_id','movimiento_id','razon_social','transporte','patente','chofer','camion','variedad','observaciones','grupo','numero_pesada','numero_analisis','prepesada_flag','peso_bruto','peso_neto','tara','trash','neto_cana','trash_real','neto_cana_real','mlimpia','msucia','despunte','despunte_porcentaje','entrada_at','pesada_at','salida_at','fecha_industrial','tipo_pesada','tipo_pesada_alt','tipo_tara','usuario_registro','usuario_pesada','usuario_salida','usuario_manual','remito','pol','brix','temperatura','pol_porciento','brix_porciento','pureza','kr_pol','kr_brix','rendimiento','rendimiento_real','azucar_producido','azucar_producido_comercial','azucar_caniero','azucar_caniero_neto','azucar_blanco_caniero','precio_bolsa','eeaoc','ib','ciasis','ipaa','sp','dif_20','coef_corr_temperatura','increm','brix_corregido','pol_porciento_jugo','parcial_1','parcial_2','parcial_3','parcial_4','parcial_5','parcial_6','java','c11','c12','c13','c14','c15','cerrado','nrocierre','maquila_pesos','maquila_pesos_ret','fletes','fletes_pesos','devengado_2'];\nconst colList = cols.join(', ');\nconst selectList = cols.map(c => 'src.' + c).join(', ');\nmsg.params = [JSON.stringify(msg.payload)];\nmsg.query = `\nINSERT INTO legacy.muestras_lab (${colList})\nSELECT ${selectList}\nFROM json_populate_recordset(NULL::legacy.muestras_lab, $1::json) AS src\nON CONFLICT (version_origen, id_muestra) DO UPDATE SET caniero_id=EXCLUDED.caniero_id, transportista_id=EXCLUDED.transportista_id, tipo_cana_id=EXCLUDED.tipo_cana_id, tipo_contrato_id=EXCLUDED.tipo_contrato_id, movimiento_id=EXCLUDED.movimiento_id, razon_social=EXCLUDED.razon_social, transporte=EXCLUDED.transporte, patente=EXCLUDED.patente, chofer=EXCLUDED.chofer, camion=EXCLUDED.camion, variedad=EXCLUDED.variedad, observaciones=EXCLUDED.observaciones, grupo=EXCLUDED.grupo, numero_pesada=EXCLUDED.numero_pesada, numero_analisis=EXCLUDED.numero_analisis, prepesada_flag=EXCLUDED.prepesada_flag, peso_bruto=EXCLUDED.peso_bruto, peso_neto=EXCLUDED.peso_neto, tara=EXCLUDED.tara, trash=EXCLUDED.trash, neto_cana=EXCLUDED.neto_cana, trash_real=EXCLUDED.trash_real, neto_cana_real=EXCLUDED.neto_cana_real, mlimpia=EXCLUDED.mlimpia, msucia=EXCLUDED.msucia, despunte=EXCLUDED.despunte, despunte_porcentaje=EXCLUDED.despunte_porcentaje, entrada_at=EXCLUDED.entrada_at, pesada_at=EXCLUDED.pesada_at, salida_at=EXCLUDED.salida_at, fecha_industrial=EXCLUDED.fecha_industrial, tipo_pesada=EXCLUDED.tipo_pesada, tipo_pesada_alt=EXCLUDED.tipo_pesada_alt, tipo_tara=EXCLUDED.tipo_tara, usuario_registro=EXCLUDED.usuario_registro, usuario_pesada=EXCLUDED.usuario_pesada, usuario_salida=EXCLUDED.usuario_salida, usuario_manual=EXCLUDED.usuario_manual, remito=EXCLUDED.remito, pol=EXCLUDED.pol, brix=EXCLUDED.brix, temperatura=EXCLUDED.temperatura, pol_porciento=EXCLUDED.pol_porciento, brix_porciento=EXCLUDED.brix_porciento, pureza=EXCLUDED.pureza, kr_pol=EXCLUDED.kr_pol, kr_brix=EXCLUDED.kr_brix, rendimiento=EXCLUDED.rendimiento, rendimiento_real=EXCLUDED.rendimiento_real, azucar_producido=EXCLUDED.azucar_producido, azucar_producido_comercial=EXCLUDED.azucar_producido_comercial, azucar_caniero=EXCLUDED.azucar_caniero, azucar_caniero_neto=EXCLUDED.azucar_caniero_neto, azucar_blanco_caniero=EXCLUDED.azucar_blanco_caniero, precio_bolsa=EXCLUDED.precio_bolsa, eeaoc=EXCLUDED.eeaoc, ib=EXCLUDED.ib, ciasis=EXCLUDED.ciasis, ipaa=EXCLUDED.ipaa, sp=EXCLUDED.sp, dif_20=EXCLUDED.dif_20, coef_corr_temperatura=EXCLUDED.coef_corr_temperatura, increm=EXCLUDED.increm, brix_corregido=EXCLUDED.brix_corregido, pol_porciento_jugo=EXCLUDED.pol_porciento_jugo, parcial_1=EXCLUDED.parcial_1, parcial_2=EXCLUDED.parcial_2, parcial_3=EXCLUDED.parcial_3, parcial_4=EXCLUDED.parcial_4, parcial_5=EXCLUDED.parcial_5, parcial_6=EXCLUDED.parcial_6, java=EXCLUDED.java, c11=EXCLUDED.c11, c12=EXCLUDED.c12, c13=EXCLUDED.c13, c14=EXCLUDED.c14, c15=EXCLUDED.c15, cerrado=EXCLUDED.cerrado, nrocierre=EXCLUDED.nrocierre, maquila_pesos=EXCLUDED.maquila_pesos, maquila_pesos_ret=EXCLUDED.maquila_pesos_ret, fletes=EXCLUDED.fletes, fletes_pesos=EXCLUDED.fletes_pesos, devengado_2=EXCLUDED.devengado_2, imported_at=now();\n`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 440,
+    "y": 840,
+    "wires": [
+      [
+        "m3_n_pg_upsert"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_pg_upsert",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "pg INSERT",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 630,
+    "y": 840,
+    "wires": [
+      [
+        "m3_n_update_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_update_watermark",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "build update wm",
+    "func": "msg.params = [flow.get('m3_max_id_out'), flow.get('m3_rows_count')];\nmsg.query = `UPDATE legacy.sync_watermarks SET last_id=GREATEST(COALESCE(last_id,0), $1::bigint), last_synced_at=now(), last_rows_added=$2::int, last_status='ok', last_error=NULL, total_synced=total_synced+$2::int, updated_at=now() WHERE tabla_origen='pr_ezi_muestralab3';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 820,
+    "y": 840,
+    "wires": [
+      [
+        "m3_n_pg_watermark_run"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_pg_watermark_run",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "pg update wm",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 660,
+    "y": 900,
+    "wires": [
+      [
+        "m3_n_check_continue"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_check_continue",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "drenar?",
+    "func": "const batchFull = flow.get('m3_batch_full');\nconst count = flow.get('m3_rows_count');\nconst maxId = flow.get('m3_max_id_out');\nnode.status({ fill: 'green', shape: 'dot', text: `${count} filas @ id=${maxId}` });\nif (batchFull) setTimeout(() => node.send({ payload: 'self-trigger' }), 2000);\nreturn null;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 400,
+    "y": 900,
+    "wires": [
+      [
+        "m3_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_dbg_caught_up",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "✓ caught up",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "'caught up'",
+    "statusType": "str",
+    "x": 130,
+    "y": 860,
+    "wires": []
+  },
+  {
+    "id": "m3_n_catch",
+    "type": "catch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "catch",
+    "scope": [
+      "m3_n_read_watermark",
+      "m3_n_build_mssql_query",
+      "m3_n_mssql_query",
+      "m3_n_transform",
+      "m3_n_check_empty",
+      "m3_n_build_upsert",
+      "m3_n_pg_upsert",
+      "m3_n_update_watermark",
+      "m3_n_pg_watermark_run",
+      "m3_n_check_continue"
+    ],
+    "uncaught": false,
+    "x": 110,
+    "y": 960,
+    "wires": [
+      [
+        "m3_n_log_err"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_log_err",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "build error",
+    "func": "const err = String((msg.error && msg.error.message) || msg.error || msg.payload || 'unknown').substring(0, 2000);\nmsg.params = [err];\nmsg.query = `UPDATE legacy.sync_watermarks SET last_status='error', last_error=$1, updated_at=now() WHERE tabla_origen='pr_ezi_muestralab3';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 270,
+    "y": 960,
+    "wires": [
+      [
+        "m3_n_pg_err"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_pg_err",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "pg err",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 440,
+    "y": 960,
+    "wires": [
+      [
+        "m3_n_dbg_err"
+      ]
+    ]
+  },
+  {
+    "id": "m3_n_dbg_err",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "571a789d3eedc14d",
+    "name": "✗ error",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "error.message",
+    "statusType": "auto",
+    "x": 600,
+    "y": 960,
+    "wires": []
+  },
+  {
+    "id": "dc_n_inject_cron",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "cron 1min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 2310,
+    "y": 480,
+    "wires": [
+      [
+        "dc_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_inject_manual",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "manual / self-trigger",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 2340,
+    "y": 540,
+    "wires": [
+      [
+        "dc_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_read_watermark",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "read watermark",
+    "query": "SELECT COALESCE(last_id, 0)::bigint AS last_id FROM legacy.sync_watermarks WHERE tabla_origen='pr_ezi_destileria_cubas' AND enabled=true;",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2540,
+    "y": 500,
+    "wires": [
+      [
+        "dc_n_build_mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_build_mssql_query",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "build mssql",
+    "func": "const row = msg.payload && msg.payload[0];\nif (!row) return null;\nconst lastId = Number(row.last_id) || 0;\nif (!Number.isInteger(lastId) || lastId < 0) { node.error('last_id inválido', msg); return null; }\nflow.set('dc_last_id_in', lastId);\nconst d = new Date(); d.setDate(d.getDate() - 2);\nconst since = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;\nconst hoyIso = `${new Date().getFullYear()}-${String(new Date().getMonth()+1).padStart(2,'0')}-${String(new Date().getDate()).padStart(2,'0')}`;\nmsg.query = `SELECT TOP 5000 * FROM pr_ezi_destileria_cubas WHERE (id > ${lastId} OR fechaprod >= '${since}' AND fechaprod <= '${hoyIso}') AND YEAR(fechaprod) >= 2024 ORDER BY id ASC;`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2740,
+    "y": 500,
+    "wires": [
+      [
+        "dc_n_mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_mssql_query",
+    "type": "MSSQL",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "mssql fetch",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": true,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "msg",
+    "queryOpt": "query",
+    "queryOptType": "msg",
+    "paramsOpt": "params",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 2940,
+    "y": 500,
+    "wires": [
+      [
+        "dc_n_transform"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_transform",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "transform",
+    "func": "const toISODate = (d) => {\n  if (d == null) return null;\n  if (d instanceof Date) return d.toISOString().substring(0,10);\n  if (typeof d === 'string') {\n    if (/^\\d{4}-\\d{2}-\\d{2}/.test(d)) return d.substring(0,10);\n    const m = d.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})/);\n    if (m) return `${m[3]}-${m[2]}-${m[1]}`;\n    const parsed = new Date(d);\n    if (!isNaN(parsed)) return parsed.toISOString().substring(0,10);\n  }\n  return null;\n};\nconst rows = Array.isArray(msg.payload) ? msg.payload : [];\nconst lastIdIn = flow.get('dc_last_id_in') || 0;\n\nconst out = rows.map(r => {\n  const extras = {};\n  for (let i = 9; i <= 50; i++) {\n    const k = 'campo' + i;\n    if (r[k] !== null && r[k] !== undefined && r[k] !== '') extras[k] = r[k];\n  }\n  return {\n    id: r.id,\n    numero_cuba: r.numero,\n    fecha_prod: toISODate(r.fechaprod),\n    hora: r.hora,\n    turno: r.campo1,\n    brix_leido: r.campo2,\n    pol_leida: r.campo3,\n    temperatura: r.campo4,\n    brix_porciento: r.campo5,\n    pol_porciento: r.campo6,\n    pureza_porciento: r.campo7,\n    art_porciento: r.campo8,\n    campos_extra: Object.keys(extras).length ? JSON.stringify(extras) : null\n  };\n});\n\nlet maxId = lastIdIn;\nfor (const r of rows) { if (r.id && r.id > maxId) maxId = r.id; }\nflow.set('dc_max_id_out', maxId);\nflow.set('dc_rows_count', out.length);\nflow.set('dc_batch_full', out.length >= 5000);\nmsg.payload = out;\nmsg.skip = out.length === 0;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 3140,
+    "y": 500,
+    "wires": [
+      [
+        "dc_n_check_empty"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_check_empty",
+    "type": "switch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "tiene filas?",
+    "property": "skip",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "false"
+      },
+      {
+        "t": "true"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 2,
+    "x": 2350,
+    "y": 600,
+    "wires": [
+      [
+        "dc_n_build_upsert"
+      ],
+      [
+        "dc_n_dbg_caught_up"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_build_upsert",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "build INSERT",
+    "func": "// destileria_cubas tiene 'es_header' como GENERATED ALWAYS — NO incluir.\nconst cols = ['id','numero_cuba','fecha_prod','hora','turno','brix_leido','pol_leida','temperatura','brix_porciento','pol_porciento','pureza_porciento','art_porciento','campos_extra'];\nconst colList = cols.join(', ');\n// json_populate_recordset con campos_extra que es jsonb: pasar como string JSON\nconst selectList = cols.map(c => c === 'campos_extra' ? 'src.campos_extra::jsonb' : 'src.' + c).join(', ');\nmsg.params = [JSON.stringify(msg.payload)];\nmsg.query = `\nINSERT INTO legacy.destileria_cubas (${colList})\nSELECT ${selectList}\nFROM json_populate_recordset(NULL::legacy.destileria_cubas, $1::json) AS src\nON CONFLICT (id) DO UPDATE SET numero_cuba=EXCLUDED.numero_cuba, fecha_prod=EXCLUDED.fecha_prod, hora=EXCLUDED.hora, turno=EXCLUDED.turno, brix_leido=EXCLUDED.brix_leido, pol_leida=EXCLUDED.pol_leida, temperatura=EXCLUDED.temperatura, brix_porciento=EXCLUDED.brix_porciento, pol_porciento=EXCLUDED.pol_porciento, pureza_porciento=EXCLUDED.pureza_porciento, art_porciento=EXCLUDED.art_porciento, campos_extra=EXCLUDED.campos_extra, imported_at=now();\n`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2340,
+    "y": 660,
+    "wires": [
+      [
+        "dc_n_pg_upsert"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_pg_upsert",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "pg INSERT",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2590,
+    "y": 660,
+    "wires": [
+      [
+        "dc_n_update_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_update_watermark",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "build update wm",
+    "func": "msg.params = [flow.get('dc_max_id_out'), flow.get('dc_rows_count')];\nmsg.query = `UPDATE legacy.sync_watermarks SET last_id=GREATEST(COALESCE(last_id,0), $1::bigint), last_synced_at=now(), last_rows_added=$2::int, last_status='ok', last_error=NULL, total_synced=total_synced+$2::int, updated_at=now() WHERE tabla_origen='pr_ezi_destileria_cubas';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2780,
+    "y": 660,
+    "wires": [
+      [
+        "dc_n_pg_watermark_run"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_pg_watermark_run",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "pg update wm",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2980,
+    "y": 660,
+    "wires": [
+      [
+        "dc_n_check_continue"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_check_continue",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "drenar?",
+    "func": "const batchFull = flow.get('dc_batch_full');\nconst count = flow.get('dc_rows_count');\nconst maxId = flow.get('dc_max_id_out');\nnode.status({ fill: 'green', shape: 'dot', text: `${count} filas @ id=${maxId}` });\nif (batchFull) setTimeout(() => node.send({ payload: 'self-trigger' }), 2000);\nreturn null;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 3160,
+    "y": 660,
+    "wires": [
+      [
+        "dc_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_dbg_caught_up",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "✓ caught up",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "'caught up'",
+    "statusType": "str",
+    "x": 2590,
+    "y": 600,
+    "wires": []
+  },
+  {
+    "id": "dc_n_catch",
+    "type": "catch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "catch",
+    "scope": [
+      "dc_n_read_watermark",
+      "dc_n_build_mssql_query",
+      "dc_n_mssql_query",
+      "dc_n_transform",
+      "dc_n_check_empty",
+      "dc_n_build_upsert",
+      "dc_n_pg_upsert",
+      "dc_n_update_watermark",
+      "dc_n_pg_watermark_run",
+      "dc_n_check_continue"
+    ],
+    "uncaught": false,
+    "x": 2310,
+    "y": 720,
+    "wires": [
+      [
+        "dc_n_log_err"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_log_err",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "build error",
+    "func": "const err = String((msg.error && msg.error.message) || msg.error || msg.payload || 'unknown').substring(0, 2000);\nmsg.params = [err];\nmsg.query = `UPDATE legacy.sync_watermarks SET last_status='error', last_error=$1, updated_at=now() WHERE tabla_origen='pr_ezi_destileria_cubas';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2470,
+    "y": 720,
+    "wires": [
+      [
+        "dc_n_pg_err"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_pg_err",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "pg err",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2640,
+    "y": 720,
+    "wires": [
+      [
+        "dc_n_dbg_err"
+      ]
+    ]
+  },
+  {
+    "id": "dc_n_dbg_err",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "9388111c741aba36",
+    "name": "✗ error",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "error.message",
+    "statusType": "auto",
+    "x": 2800,
+    "y": 720,
+    "wires": []
+  },
+  {
+    "id": "iv2_n_inject_cron",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "cron 1min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 1250,
+    "y": 480,
+    "wires": [
+      [
+        "iv2_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_inject_manual",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "manual / self-trigger",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 1280,
+    "y": 540,
+    "wires": [
+      [
+        "iv2_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_read_watermark",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "read watermark",
+    "query": "SELECT COALESCE(last_id, 0)::bigint AS last_id FROM legacy.sync_watermarks WHERE tabla_origen='pr_ezi_individuales2' AND enabled=true;",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1480,
+    "y": 500,
+    "wires": [
+      [
+        "iv2_n_build_mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_build_mssql_query",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "build mssql",
+    "func": "const row = msg.payload && msg.payload[0];\nif (!row) return null;\nconst lastId = Number(row.last_id) || 0;\nif (!Number.isInteger(lastId) || lastId < 0) { node.error('last_id inválido', msg); return null; }\nflow.set('iv2_last_id_in', lastId);\nconst d = new Date(); d.setDate(d.getDate() - 2);\nconst since = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;\nconst hoyIso = `${new Date().getFullYear()}-${String(new Date().getMonth()+1).padStart(2,'0')}-${String(new Date().getDate()).padStart(2,'0')}`;\nmsg.query = `SELECT TOP 5000 * FROM pr_ezi_individuales2 WHERE (id > ${lastId} OR fechaprod >= '${since}' AND fechaprod <= '${hoyIso}') AND YEAR(fechaprod) >= 2024 ORDER BY id ASC;`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1680,
+    "y": 500,
+    "wires": [
+      [
+        "iv2_n_mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_mssql_query",
+    "type": "MSSQL",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "mssql fetch",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": true,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "msg",
+    "queryOpt": "query",
+    "queryOptType": "msg",
+    "paramsOpt": "params",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 1880,
+    "y": 500,
+    "wires": [
+      [
+        "iv2_n_transform"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_transform",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "transform",
+    "func": "function toISODate(d){if(d==null)return null;if(d instanceof Date){return d.toISOString().substring(0,10);}if(typeof d==='string'){if(/^\\d{4}-\\d{2}-\\d{2}/.test(d)){return d.substring(0,10);}var m=d.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})/);if(m){return m[3]+'-'+m[2]+'-'+m[1];}var parsed=new Date(d);if(!isNaN(parsed)){return parsed.toISOString().substring(0,10);}}return null;}\nvar rows=Array.isArray(msg.payload)?msg.payload:[];\nvar lastIdIn=flow.get('iv2_last_id_in')||0;\nvar out=rows.map(function(r){var campos={};for(var i=1;i<=50;i++){var k='campo'+i;var v=r[k];if(v!==null&&v!==undefined){var trimmed=(typeof v==='string')?v.trim():v;if(trimmed!=='')campos[k]=trimmed;}}return{id:r.id,fecha:toISODate(r.fecha),hora:r.hora,fecha_prod:toISODate(r.fechaprod),campos:campos};});\nvar maxId=lastIdIn;for(var j=0;j<rows.length;j++){if(rows[j].id&&rows[j].id>maxId)maxId=rows[j].id;}\nflow.set('iv2_max_id_out',maxId);\nflow.set('iv2_rows_count',out.length);\nflow.set('iv2_batch_full',out.length>=5000);\nmsg.payload=out;\nmsg.skip=out.length===0;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2080,
+    "y": 500,
+    "wires": [
+      [
+        "iv2_n_check_empty"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_check_empty",
+    "type": "switch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "tiene filas?",
+    "property": "skip",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "false"
+      },
+      {
+        "t": "true"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 2,
+    "x": 1290,
+    "y": 600,
+    "wires": [
+      [
+        "iv2_n_build_upsert"
+      ],
+      [
+        "iv2_n_dbg_caught_up"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_build_upsert",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "build INSERT",
+    "func": "const cols = ['id','fecha','hora','fecha_prod','campos'];\nconst colList = cols.join(', ');\nconst selectList = cols.map(c => c === 'campos' ? 'src.campos::jsonb' : 'src.' + c).join(', ');\nmsg.params = [JSON.stringify(msg.payload)];\nmsg.query = `\nINSERT INTO legacy.individuales_v2 (${colList})\nSELECT ${selectList}\nFROM json_populate_recordset(NULL::legacy.individuales_v2, $1::json) AS src\nON CONFLICT (id) DO UPDATE SET fecha = EXCLUDED.fecha, hora = EXCLUDED.hora, fecha_prod = EXCLUDED.fecha_prod, campos = EXCLUDED.campos, imported_at = now();\n`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1300,
+    "y": 660,
+    "wires": [
+      [
+        "iv2_n_pg_upsert"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_pg_upsert",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "pg INSERT",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1510,
+    "y": 660,
+    "wires": [
+      [
+        "iv2_n_update_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_update_watermark",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "build update wm",
+    "func": "msg.params = [flow.get('iv2_max_id_out'), flow.get('iv2_rows_count')];\nmsg.query = `UPDATE legacy.sync_watermarks SET last_id=GREATEST(COALESCE(last_id,0), $1::bigint), last_synced_at=now(), last_rows_added=$2::int, last_status='ok', last_error=NULL, total_synced=total_synced+$2::int, updated_at=now() WHERE tabla_origen='pr_ezi_individuales2';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1720,
+    "y": 660,
+    "wires": [
+      [
+        "iv2_n_pg_watermark_run"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_pg_watermark_run",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "pg update wm",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1920,
+    "y": 660,
+    "wires": [
+      [
+        "iv2_n_check_continue"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_check_continue",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "drenar?",
+    "func": "const batchFull = flow.get('iv2_batch_full');\nconst count = flow.get('iv2_rows_count');\nconst maxId = flow.get('iv2_max_id_out');\nnode.status({ fill: 'green', shape: 'dot', text: `${count} filas @ id=${maxId}` });\nif (batchFull) setTimeout(() => node.send({ payload: 'self-trigger' }), 2000);\nreturn null;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1780,
+    "y": 600,
+    "wires": [
+      [
+        "iv2_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_dbg_caught_up",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "✓ caught up",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "'caught up'",
+    "statusType": "str",
+    "x": 1530,
+    "y": 600,
+    "wires": []
+  },
+  {
+    "id": "iv2_n_catch",
+    "type": "catch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "catch",
+    "scope": [
+      "iv2_n_read_watermark",
+      "iv2_n_build_mssql_query",
+      "iv2_n_mssql_query",
+      "iv2_n_transform",
+      "iv2_n_check_empty",
+      "iv2_n_build_upsert",
+      "iv2_n_pg_upsert",
+      "iv2_n_update_watermark",
+      "iv2_n_pg_watermark_run",
+      "iv2_n_check_continue"
+    ],
+    "uncaught": false,
+    "x": 1250,
+    "y": 720,
+    "wires": [
+      [
+        "iv2_n_log_err"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_log_err",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "build error",
+    "func": "const err = String((msg.error && msg.error.message) || msg.error || msg.payload || 'unknown').substring(0, 2000);\nmsg.params = [err];\nmsg.query = `UPDATE legacy.sync_watermarks SET last_status='error', last_error=$1, updated_at=now() WHERE tabla_origen='pr_ezi_individuales2';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1410,
+    "y": 720,
+    "wires": [
+      [
+        "iv2_n_pg_err"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_pg_err",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "pg err",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1580,
+    "y": 720,
+    "wires": [
+      [
+        "iv2_n_dbg_err"
+      ]
+    ]
+  },
+  {
+    "id": "iv2_n_dbg_err",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "5e529e950179aeef",
+    "name": "✗ error",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "error.message",
+    "statusType": "auto",
+    "x": 1740,
+    "y": 720,
+    "wires": []
+  },
+  {
+    "id": "lpb_n_inject_cron",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "cron 1min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 1250,
+    "y": 840,
+    "wires": [
+      [
+        "lpb_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_inject_manual",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "manual / self-trigger",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 1280,
+    "y": 900,
+    "wires": [
+      [
+        "lpb_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_read_watermark",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "read watermark",
+    "query": "SELECT COALESCE(last_id, 0)::bigint AS last_id FROM legacy.sync_watermarks WHERE tabla_origen='pr_ezi_lecturapolbrix' AND enabled=true;",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1480,
+    "y": 860,
+    "wires": [
+      [
+        "lpb_n_build_mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_build_mssql_query",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "build mssql",
+    "func": "const row = msg.payload && msg.payload[0];\nif (!row) return null;\nconst lastId = Number(row.last_id) || 0;\nif (!Number.isInteger(lastId) || lastId < 0) { node.error('last_id inválido: ' + lastId, msg); return null; }\nflow.set('lpb_last_id_in', lastId);\nconst d = new Date(); d.setDate(d.getDate() - 2);\nconst sinceYmd = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;\nconst hoyD = new Date();\nconst hoyYmd = `${hoyD.getFullYear()}${String(hoyD.getMonth()+1).padStart(2,'0')}${String(hoyD.getDate()).padStart(2,'0')}`;\nmsg.query = `SELECT TOP 5000 * FROM pr_ezi_lecturapolbrix WHERE (idmuestralab > ${lastId} OR (LEN(fecha) >= 10 AND (SUBSTRING(fecha,7,4)+SUBSTRING(fecha,4,2)+SUBSTRING(fecha,1,2)) >= '${sinceYmd}' AND (SUBSTRING(fecha,7,4)+SUBSTRING(fecha,4,2)+SUBSTRING(fecha,1,2)) <= '${hoyYmd}')) AND SUBSTRING(fecha,7,4) >= '2024' ORDER BY idmuestralab ASC;`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1680,
+    "y": 860,
+    "wires": [
+      [
+        "lpb_n_mssql_query"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_mssql_query",
+    "type": "MSSQL",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "mssql fetch",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": true,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "msg",
+    "queryOpt": "query",
+    "queryOptType": "msg",
+    "paramsOpt": "params",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 1880,
+    "y": 860,
+    "wires": [
+      [
+        "lpb_n_transform"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_transform",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "transform",
+    "func": "function parseDate(s){if(!s||typeof s!=='string')return null;var m=s.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})/);return m?(m[3]+'-'+m[2]+'-'+m[1]):null;}\nfunction parseTime(s){if(!s||typeof s!=='string'||s.trim()==='')return null;var h=s.trim();if(/^\\d{2}:\\d{2}$/.test(h))h+=':00';return /^\\d{2}:\\d{2}:\\d{2}$/.test(h)?h:null;}\nvar rows=Array.isArray(msg.payload)?msg.payload:[];\nvar lastIdIn=flow.get('lpb_last_id_in')||0;\nvar out=rows.map(function(r){return{marca:r.marca,id_muestra_lab:r.idmuestralab,caniero_id:r.id_caniero||null,temperatura:r.temperatura,brix:r.brix,pol:r.pol,usuario:r.usuario,fecha:parseDate(r.fecha),hora:parseTime(r.hora)};});\nvar maxId=lastIdIn;for(var i=0;i<rows.length;i++){if(rows[i].idmuestralab&&rows[i].idmuestralab>maxId)maxId=rows[i].idmuestralab;}\nflow.set('lpb_max_id_out',maxId);\nflow.set('lpb_rows_count',out.length);\nflow.set('lpb_batch_full',out.length>=5000);\nmsg.payload=out;\nmsg.skip=out.length===0;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2080,
+    "y": 860,
+    "wires": [
+      [
+        "lpb_n_check_empty"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_check_empty",
+    "type": "switch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "tiene filas?",
+    "property": "skip",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "false"
+      },
+      {
+        "t": "true"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 2,
+    "x": 1290,
+    "y": 960,
+    "wires": [
+      [
+        "lpb_n_build_upsert"
+      ],
+      [
+        "lpb_n_dbg_caught_up"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_build_upsert",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "build INSERT",
+    "func": "const cols = ['marca','id_muestra_lab','caniero_id','temperatura','brix','pol','usuario','fecha','hora'];\nconst colList = cols.join(', ');\nconst selectList = cols.map(c => 'src.' + c).join(', ');\nmsg.params = [JSON.stringify(msg.payload)];\nmsg.query = `\nINSERT INTO legacy.lecturas_polbrix (${colList})\nSELECT ${selectList}\nFROM json_populate_recordset(NULL::legacy.lecturas_polbrix, $1::json) AS src\nON CONFLICT (marca, id_muestra_lab) DO UPDATE SET caniero_id = EXCLUDED.caniero_id, temperatura = EXCLUDED.temperatura, brix = EXCLUDED.brix, pol = EXCLUDED.pol, usuario = EXCLUDED.usuario, fecha = EXCLUDED.fecha, hora = EXCLUDED.hora, imported_at = now();\n`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1300,
+    "y": 1020,
+    "wires": [
+      [
+        "lpb_n_pg_upsert"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_pg_upsert",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "pg INSERT",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1490,
+    "y": 1020,
+    "wires": [
+      [
+        "lpb_n_update_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_update_watermark",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "build update wm",
+    "func": "msg.params=[flow.get('lpb_max_id_out'),flow.get('lpb_rows_count')];\nmsg.query=`UPDATE legacy.sync_watermarks SET last_id=GREATEST(COALESCE(last_id,0), $1::bigint), last_synced_at=now(), last_rows_added=$2::int, last_status='ok', last_error=NULL, total_synced=total_synced+$2::int, updated_at=now() WHERE tabla_origen='pr_ezi_lecturapolbrix';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1700,
+    "y": 1020,
+    "wires": [
+      [
+        "lpb_n_pg_watermark_run"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_pg_watermark_run",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "pg update wm",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1900,
+    "y": 1020,
+    "wires": [
+      [
+        "lpb_n_check_continue"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_check_continue",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "drenar?",
+    "func": "var batchFull=flow.get('lpb_batch_full');\nvar count=flow.get('lpb_rows_count');\nvar maxId=flow.get('lpb_max_id_out');\nnode.status({fill:'green',shape:'dot',text:count+' filas @ id='+maxId});\nif(batchFull)setTimeout(function(){node.send({payload:'self-trigger'});},2000);\nreturn null;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1740,
+    "y": 960,
+    "wires": [
+      [
+        "lpb_n_read_watermark"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_dbg_caught_up",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "✓ caught up",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "'caught up'",
+    "statusType": "str",
+    "x": 1530,
+    "y": 960,
+    "wires": []
+  },
+  {
+    "id": "lpb_n_catch",
+    "type": "catch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "catch",
+    "scope": [
+      "lpb_n_read_watermark",
+      "lpb_n_build_mssql_query",
+      "lpb_n_mssql_query",
+      "lpb_n_transform",
+      "lpb_n_check_empty",
+      "lpb_n_build_upsert",
+      "lpb_n_pg_upsert",
+      "lpb_n_update_watermark",
+      "lpb_n_pg_watermark_run",
+      "lpb_n_check_continue"
+    ],
+    "uncaught": false,
+    "x": 1270,
+    "y": 1080,
+    "wires": [
+      [
+        "lpb_n_log_err"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_log_err",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "build error",
+    "func": "const err = String((msg.error && msg.error.message) || msg.error || msg.payload || 'unknown').substring(0, 2000);\nmsg.params = [err];\nmsg.query = `UPDATE legacy.sync_watermarks SET last_status='error', last_error=$1, updated_at=now() WHERE tabla_origen='pr_ezi_lecturapolbrix';`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1430,
+    "y": 1080,
+    "wires": [
+      [
+        "lpb_n_pg_err"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_pg_err",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "pg err",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 1600,
+    "y": 1080,
+    "wires": [
+      [
+        "lpb_n_dbg_err"
+      ]
+    ]
+  },
+  {
+    "id": "lpb_n_dbg_err",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "7e322c8bd3cd4e8c",
+    "name": "✗ error",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "error.message",
+    "statusType": "auto",
+    "x": 1760,
+    "y": 1080,
+    "wires": []
+  },
+  {
+    "id": "c09af886f74d8f2d",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "cron 1min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 1080,
+    "wires": [
+      [
+        "7d5ac45669994c63"
+      ]
+    ]
+  },
+  {
+    "id": "17c0fed8a09c8b19",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "manual / self-trigger",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 180,
+    "y": 1140,
+    "wires": [
+      [
+        "7d5ac45669994c63"
+      ]
+    ]
+  },
+  {
+    "id": "7d5ac45669994c63",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "read watermark",
+    "query": "SELECT COALESCE(last_id, 0)::bigint AS last_id FROM legacy.sync_watermarks WHERE tabla_origen = 'pr_ezi_movimientos' AND enabled = true;",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 380,
+    "y": 1100,
+    "wires": [
+      [
+        "9c5f336d02286743"
+      ]
+    ]
+  },
+  {
+    "id": "9c5f336d02286743",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "build mssql query",
+    "func": "const row = msg.payload && msg.payload[0];\nif (!row) { node.warn('sync deshabilitado para pr_ezi_movimientos'); return null; }\nconst lastId = Number(row.last_id) || 0;\nif (!Number.isInteger(lastId) || lastId < 0) { node.error('last_id inválido: ' + lastId, msg); return null; }\nflow.set('mov_last_id_in', lastId);\nconst BATCH = 5000;\nconst d = new Date();\nd.setDate(d.getDate() - 2);\nconst dd = String(d.getDate()).padStart(2,'0');\nconst mm = String(d.getMonth()+1).padStart(2,'0');\nconst yyyy = d.getFullYear();\nconst sinceYmd = `${yyyy}${mm}${dd}`;\nconst hoyD = new Date();\nconst hoyDd = String(hoyD.getDate()).padStart(2,'0');\nconst hoyMm = String(hoyD.getMonth()+1).padStart(2,'0');\nconst hoyYyyy = hoyD.getFullYear();\nconst hoyYmd = `${hoyYyyy}${hoyMm}${hoyDd}`;\nmsg.query = `SELECT TOP ${BATCH} * FROM pr_ezi_movimientos WHERE (id_movimiento > ${lastId} OR (LEN(fecha_entrada) >= 10 AND (SUBSTRING(fecha_entrada,7,4)+SUBSTRING(fecha_entrada,4,2)+SUBSTRING(fecha_entrada,1,2)) >= '${sinceYmd}' AND (SUBSTRING(fecha_entrada,7,4)+SUBSTRING(fecha_entrada,4,2)+SUBSTRING(fecha_entrada,1,2)) <= '${hoyYmd}')) AND SUBSTRING(fecha_entrada,7,4) >= '2024' ORDER BY id_movimiento ASC;`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 590,
+    "y": 1100,
+    "wires": [
+      [
+        "e14ac732d2d9817b"
+      ]
+    ]
+  },
+  {
+    "id": "e14ac732d2d9817b",
+    "type": "MSSQL",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "mssql fetch",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": true,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "msg",
+    "queryOpt": "query",
+    "queryOptType": "msg",
+    "paramsOpt": "params",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 800,
+    "y": 1100,
+    "wires": [
+      [
+        "0ddfc59921bb880c"
+      ]
+    ]
+  },
+  {
+    "id": "0ddfc59921bb880c",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "transform rows",
+    "func": "const parseDate = (s) => {\n  if (!s || typeof s !== 'string') return null;\n  const m = s.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})/);\n  return m ? `${m[3]}-${m[2]}-${m[1]}` : null;\n};\nconst parseDateTime = (d, h) => {\n  const dt = parseDate(d);\n  if (!dt) return null;\n  let hh = (h && typeof h === 'string' && h.trim() !== '') ? h.trim() : null;\n  if (!hh) return null;\n  if (/^\\d{2}:\\d{2}$/.test(hh)) hh += ':00';\n  if (!/^\\d{2}:\\d{2}:\\d{2}$/.test(hh)) return null;\n  return `${dt} ${hh}`;\n};\nconst zeroUuid = '00000000-0000-0000-0000-000000000000';\nconst uuid = (v) => (v && typeof v === 'string' && v.toLowerCase() !== zeroUuid && v.trim() !== '') ? v : null;\nconst txt = (v) => (typeof v === 'string') ? v.trim() : v;\nconst rows = Array.isArray(msg.payload) ? msg.payload : [];\nconst lastIdIn = flow.get('mov_last_id_in') || 0;\nconst out = rows.map(r => ({\n  id_movimiento:       r.id_movimiento,\n  numero_ingreso:      r.numero_ingreso,\n  numero_pesada:       r.numero_pesada,\n  patente:             txt(r.patente),\n  camion:              txt(r.camion),\n  chofer:              txt(r.chofer),\n  transporte:          txt(r.transporte),\n  caniero_razon:       txt(r.razon_social),\n  caniero_id:          uuid(r.id_caniero),\n  transportista_id:    uuid(r.id_transportista),\n  tipo_cana_id:        uuid(r.id_tipo_cana),\n  peso_bruto:          r.peso_bruto,\n  peso_neto:           r.peso_neto,\n  tara:                r.tara,\n  trash:               r.trash,\n  neto_cana:           r.neto_cana,\n  trash_real:          r.trashReal,\n  neto_cana_real:      r.netoCanaReal,\n  mlimpia:             r.mlimpia,\n  msucia:              r.msucia,\n  despunte:            r.despunte,\n  despunte_porcentaje: r.despunteporcentaje,\n  cant_pesadas:        r.cantpesadas,\n  pesada_1:            r.pesada1,\n  pesada_2:            r.pesada2,\n  tara_1:              r.tara1,\n  tara_2:              r.tara2,\n  entrada_at:          parseDateTime(r.fecha_entrada, r.hora_entrada),\n  pesada_at:           parseDateTime(r.fecha_pesada,  r.hora_pesada),\n  salida_at:           parseDateTime(r.fecha_salida,  r.hora_salida),\n  fecha_industrial:    parseDate(r.fechaindustrial),\n  estado:              txt(r.estado),\n  mesa:                r.mesa,\n  prepesada:           txt(r.prepesada),\n  tipo_pesada:         txt(r.tipo_pesada),\n  tipo_pesada_alt:     txt(r.tipopesada),\n  tipo_tara:           txt(r.tipotara),\n  destino:             txt(r.destino),\n  destino_descripcion: txt(r.descripcion),\n  observaciones:       txt(r.observaciones),\n  remito:              txt(r.remito),\n  codigo_finca:        txt(r.codfinca),\n  sector:              txt(r.sector),\n  nro_frente:          txt(r.nrofrente),\n  nro_maquina:         txt(r.nromaquina),\n  usuario_registro:    txt(r.usuario),\n  usuario_pesada:      txt(r.usuariopesada),\n  usuario_salida:      txt(r.usuario_salida),\n  usuario_manual:      txt(r.usuariomanual)\n}));\nlet maxId = lastIdIn;\nfor (const r of rows) { if (r.id_movimiento && r.id_movimiento > maxId) maxId = r.id_movimiento; }\nflow.set('mov_max_id_out', maxId);\nflow.set('mov_rows_count', out.length);\nflow.set('mov_batch_full', out.length >= 5000);\nmsg.payload = out;\nmsg.skip = out.length === 0;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1000,
+    "y": 1100,
+    "wires": [
+      [
+        "894041b19509c9c2"
+      ]
+    ]
+  },
+  {
+    "id": "894041b19509c9c2",
+    "type": "switch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "tiene filas?",
+    "property": "skip",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "false"
+      },
+      {
+        "t": "true"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 2,
+    "x": 190,
+    "y": 1200,
+    "wires": [
+      [
+        "93f47b0ead05927c"
+      ],
+      [
+        "16a6cf5184d729df"
+      ]
+    ]
+  },
+  {
+    "id": "93f47b0ead05927c",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "build INSERT ON CONFLICT DO UPDATE",
+    "func": "var rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) return null;\nmsg.params = [JSON.stringify(rows)];\nmsg.query = \"INSERT INTO legacy.movimientos (id_movimiento, numero_ingreso, numero_pesada, patente, camion, chofer, transporte, caniero_razon, caniero_id, transportista_id, tipo_cana_id, peso_bruto, peso_neto, tara, trash, neto_cana, trash_real, neto_cana_real, mlimpia, msucia, despunte, despunte_porcentaje, cant_pesadas, pesada_1, pesada_2, tara_1, tara_2, entrada_at, pesada_at, salida_at, fecha_industrial, estado, mesa, prepesada, tipo_pesada, tipo_pesada_alt, tipo_tara, destino, destino_descripcion, observaciones, remito, codigo_finca, sector, nro_frente, nro_maquina, usuario_registro, usuario_pesada, usuario_salida, usuario_manual) SELECT src.id_movimiento, src.numero_ingreso, src.numero_pesada, src.patente, src.camion, src.chofer, src.transporte, src.caniero_razon, src.caniero_id, src.transportista_id, src.tipo_cana_id, src.peso_bruto, src.peso_neto, src.tara, src.trash, src.neto_cana, src.trash_real, src.neto_cana_real, src.mlimpia, src.msucia, src.despunte, src.despunte_porcentaje, src.cant_pesadas, src.pesada_1, src.pesada_2, src.tara_1, src.tara_2, src.entrada_at, src.pesada_at, src.salida_at, src.fecha_industrial, src.estado, src.mesa, src.prepesada, src.tipo_pesada, src.tipo_pesada_alt, src.tipo_tara, src.destino, src.destino_descripcion, src.observaciones, src.remito, src.codigo_finca, src.sector, src.nro_frente, src.nro_maquina, src.usuario_registro, src.usuario_pesada, src.usuario_salida, src.usuario_manual FROM json_populate_recordset(NULL::legacy.movimientos, $1::json) AS src ON CONFLICT (id_movimiento) DO UPDATE SET numero_ingreso=EXCLUDED.numero_ingreso, numero_pesada=EXCLUDED.numero_pesada, patente=EXCLUDED.patente, camion=EXCLUDED.camion, chofer=EXCLUDED.chofer, transporte=EXCLUDED.transporte, caniero_razon=EXCLUDED.caniero_razon, caniero_id=EXCLUDED.caniero_id, transportista_id=EXCLUDED.transportista_id, tipo_cana_id=EXCLUDED.tipo_cana_id, peso_bruto=EXCLUDED.peso_bruto, peso_neto=EXCLUDED.peso_neto, tara=EXCLUDED.tara, trash=EXCLUDED.trash, neto_cana=EXCLUDED.neto_cana, trash_real=EXCLUDED.trash_real, neto_cana_real=EXCLUDED.neto_cana_real, mlimpia=EXCLUDED.mlimpia, msucia=EXCLUDED.msucia, despunte=EXCLUDED.despunte, despunte_porcentaje=EXCLUDED.despunte_porcentaje, cant_pesadas=EXCLUDED.cant_pesadas, pesada_1=EXCLUDED.pesada_1, pesada_2=EXCLUDED.pesada_2, tara_1=EXCLUDED.tara_1, tara_2=EXCLUDED.tara_2, entrada_at=EXCLUDED.entrada_at, pesada_at=EXCLUDED.pesada_at, salida_at=EXCLUDED.salida_at, fecha_industrial=EXCLUDED.fecha_industrial, estado=EXCLUDED.estado, mesa=EXCLUDED.mesa, prepesada=EXCLUDED.prepesada, tipo_pesada=EXCLUDED.tipo_pesada, tipo_pesada_alt=EXCLUDED.tipo_pesada_alt, tipo_tara=EXCLUDED.tipo_tara, destino=EXCLUDED.destino, destino_descripcion=EXCLUDED.destino_descripcion, observaciones=EXCLUDED.observaciones, remito=EXCLUDED.remito, codigo_finca=EXCLUDED.codigo_finca, sector=EXCLUDED.sector, nro_frente=EXCLUDED.nro_frente, nro_maquina=EXCLUDED.nro_maquina, usuario_registro=EXCLUDED.usuario_registro, usuario_pesada=EXCLUDED.usuario_pesada, usuario_salida=EXCLUDED.usuario_salida, usuario_manual=EXCLUDED.usuario_manual, imported_at=now();\";\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 510,
+    "y": 1240,
+    "wires": [
+      [
+        "337e436e9698996f"
+      ]
+    ]
+  },
+  {
+    "id": "337e436e9698996f",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "pg INSERT (DO UPDATE)",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 840,
+    "y": 1240,
+    "wires": [
+      [
+        "2afa50f28a84ed37"
+      ]
+    ]
+  },
+  {
+    "id": "2afa50f28a84ed37",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "build update watermark",
+    "func": "const maxId = flow.get('mov_max_id_out');\nconst count = flow.get('mov_rows_count');\nmsg.query = `UPDATE legacy.sync_watermarks SET last_id = GREATEST(COALESCE(last_id, 0), $1::bigint), last_synced_at = now(), last_rows_added = $2::int, last_status = 'ok', last_error = NULL, total_synced = total_synced + $2::int, updated_at = now() WHERE tabla_origen = 'pr_ezi_movimientos';`;\nmsg.params = [maxId, count];\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 490,
+    "y": 1180,
+    "wires": [
+      [
+        "a403d08bc1a4a167"
+      ]
+    ]
+  },
+  {
+    "id": "a403d08bc1a4a167",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "pg update watermark",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 760,
+    "y": 1180,
+    "wires": [
+      [
+        "937436f393be659d"
+      ]
+    ]
+  },
+  {
+    "id": "937436f393be659d",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "drenar bulk?",
+    "func": "const batchFull = flow.get('mov_batch_full');\nconst count = flow.get('mov_rows_count');\nconst maxId = flow.get('mov_max_id_out');\nnode.status({ fill: 'green', shape: 'dot', text: `${count} filas @ id=${maxId}` });\nif (batchFull) { setTimeout(() => { node.send({ payload: 'self-trigger', _self: true }); }, 2000); }\nreturn null;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 970,
+    "y": 1180,
+    "wires": [
+      [
+        "7d5ac45669994c63"
+      ]
+    ]
+  },
+  {
+    "id": "16a6cf5184d729df",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "✓ caught up",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "'caught up - sin nuevos'",
+    "statusType": "str",
+    "x": 190,
+    "y": 1260,
+    "wires": []
+  },
+  {
+    "id": "2a7f3c994e3ccea6",
+    "type": "catch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "catch errors",
+    "scope": [
+      "7d5ac45669994c63",
+      "9c5f336d02286743",
+      "e14ac732d2d9817b",
+      "0ddfc59921bb880c",
+      "894041b19509c9c2",
+      "93f47b0ead05927c",
+      "337e436e9698996f",
+      "2afa50f28a84ed37",
+      "a403d08bc1a4a167",
+      "937436f393be659d"
+    ],
+    "uncaught": false,
+    "x": 150,
+    "y": 1320,
+    "wires": [
+      [
+        "fe42ba06747b1e3f"
+      ]
+    ]
+  },
+  {
+    "id": "fe42ba06747b1e3f",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "build error update",
+    "func": "const err = String((msg.error && msg.error.message) || msg.error || msg.payload || 'unknown').substring(0, 2000);\nmsg.query = `UPDATE legacy.sync_watermarks SET last_status='error', last_error=$1, updated_at=now() WHERE tabla_origen='pr_ezi_movimientos';`;\nmsg.params = [err];\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 350,
+    "y": 1320,
+    "wires": [
+      [
+        "d4d260302445b02a"
+      ]
+    ]
+  },
+  {
+    "id": "d4d260302445b02a",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "pg log error",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 550,
+    "y": 1320,
+    "wires": [
+      [
+        "cf5db2e18417751d"
+      ]
+    ]
+  },
+  {
+    "id": "cf5db2e18417751d",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "a9aa3797b1ed73d4",
+    "name": "✗ error",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "error.message",
+    "statusType": "auto",
+    "x": 740,
+    "y": 1320,
+    "wires": []
+  },
+  {
+    "id": "1bbbdb06070aa655",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "cron 1min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 360,
+    "wires": [
+      [
+        "0b9670c3601abcb6"
+      ]
+    ]
+  },
+  {
+    "id": "244151f33e157259",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "manual / self-trigger",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 180,
+    "y": 420,
+    "wires": [
+      [
+        "0b9670c3601abcb6"
+      ]
+    ]
+  },
+  {
+    "id": "0b9670c3601abcb6",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "read watermark",
+    "query": "SELECT COALESCE(last_id, 0)::bigint AS last_id FROM legacy.sync_watermarks WHERE tabla_origen = 'pr_ezi_laboratorio_gral' AND enabled = true;",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 380,
+    "y": 380,
+    "wires": [
+      [
+        "c06fae42401ffbf6"
+      ]
+    ]
+  },
+  {
+    "id": "c06fae42401ffbf6",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "build mssql query",
+    "func": "const row = msg.payload && msg.payload[0];\nif (!row) { node.warn('sync deshabilitado para pr_ezi_laboratorio_gral'); return null; }\nconst lastId = Number(row.last_id) || 0;\nif (!Number.isInteger(lastId) || lastId < 0) { node.error('last_id inválido: ' + lastId, msg); return null; }\nflow.set('lab_last_id_in', lastId);\n\nconst BATCH = 5000;\n// Ventana re-fetch: últimos 2 días (capta updates de KILOS sobre slots pre-creados)\nconst d = new Date();\nd.setDate(d.getDate() - 2);\nconst dd = String(d.getDate()).padStart(2,'0');\nconst mm = String(d.getMonth()+1).padStart(2,'0');\nconst yyyy = d.getFullYear();\nconst sinceYmd = `${yyyy}${mm}${dd}`;\nconst hoyD = new Date();\nconst hoyDd = String(hoyD.getDate()).padStart(2,'0');\nconst hoyMm = String(hoyD.getMonth()+1).padStart(2,'0');\nconst hoyYyyy = hoyD.getFullYear();\nconst hoyYmd = `${hoyYyyy}${hoyMm}${hoyDd}`;\n\n// Captura: filas nuevas (id > lastId) Y filas recientes (últimos 3 días) para detectar UPDATEs\nmsg.query = `SELECT TOP ${BATCH} * FROM pr_ezi_laboratorio_gral WHERE (id > ${lastId} OR (LEN(fechaindustrial) >= 10 AND (SUBSTRING(fechaindustrial,7,4)+SUBSTRING(fechaindustrial,4,2)+SUBSTRING(fechaindustrial,1,2)) >= '${sinceYmd}' AND (SUBSTRING(fechaindustrial,7,4)+SUBSTRING(fechaindustrial,4,2)+SUBSTRING(fechaindustrial,1,2)) <= '${hoyYmd}')) AND SUBSTRING(fechaindustrial,7,4) >= '2024' ORDER BY id ASC;`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 590,
+    "y": 380,
+    "wires": [
+      [
+        "337972c955f7da9e"
+      ]
+    ]
+  },
+  {
+    "id": "337972c955f7da9e",
+    "type": "MSSQL",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "mssql fetch",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": true,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "msg",
+    "queryOpt": "query",
+    "queryOptType": "msg",
+    "paramsOpt": "params",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 800,
+    "y": 380,
+    "wires": [
+      [
+        "37a1293d5c146c9f"
+      ]
+    ]
+  },
+  {
+    "id": "37a1293d5c146c9f",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "transform rows",
+    "func": "const parseDate = (s) => {\n  if (!s || typeof s !== 'string') return null;\n  const m = s.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})/);\n  return m ? `${m[3]}-${m[2]}-${m[1]}` : null;\n};\nconst parseTime = (s) => {\n  if (!s || typeof s !== 'string' || s.trim() === '') return null;\n  let h = s.trim();\n  if (/^\\d{2}:\\d{2}$/.test(h)) h += ':00';\n  return /^\\d{2}:\\d{2}:\\d{2}$/.test(h) ? h : null;\n};\nconst toBool = (v) => v === 1 || v === true || v === '1';\n\nconst rows = Array.isArray(msg.payload) ? msg.payload : [];\nconst lastIdIn = flow.get('lab_last_id_in') || 0;\n\nconst out = rows.map(r => ({\n  id_lab_general:      r.id,\n  proceso_codigo:      r.codigoproceso,\n  fecha_industrial:    parseDate(r.fechaindustrial),\n  fecha_registro:      parseDate(r.fecharegistro),\n  usuario_registro:    r.usuario,\n  hora_registro:       r.horaregistro,\n  hora_lectura:        parseTime(r.HORA),\n  kilos:               r.KILOS,\n  brix_manual:         r.brixmanual,\n  temperatura_manual:  r.temperaturamanual,\n  pol_manual:          r.polmanual,\n  ph_manual:           r.phmanual,\n  brix_automatico:     r.brixautomatico,\n  pol_automatico:      r.polautomatico,\n  pureza:              r.pureza,\n  origen_id:           r.origenid || null,\n  desde_hora:          parseTime(r.desdehora),\n  hasta_hora:          parseTime(r.hastahora),\n  origen_descripcion:  r.origen,\n  maquina:             r.maquina,\n  motivo:              r.motivo,\n  densidad_automatico: r.densidadautomatico,\n  kilos_automatico:    r.kilosautomatico,\n  cerrado:             toBool(r.cerrado)\n}));\n\nlet maxId = lastIdIn;\nfor (const r of rows) {\n  if (r.id && r.id > maxId) maxId = r.id;\n}\nflow.set('lab_max_id_out', maxId);\nflow.set('lab_rows_count', out.length);\nflow.set('lab_batch_full', out.length >= 5000);\n\nmsg.payload = out;\nmsg.skip = out.length === 0;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1000,
+    "y": 380,
+    "wires": [
+      [
+        "c23fb0d4e4eda2f9"
+      ]
+    ]
+  },
+  {
+    "id": "c23fb0d4e4eda2f9",
+    "type": "switch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "tiene filas?",
+    "property": "skip",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "false"
+      },
+      {
+        "t": "true"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 2,
+    "x": 190,
+    "y": 480,
+    "wires": [
+      [
+        "c6e097c664f394c4"
+      ],
+      [
+        "db715a54fac078c1"
+      ]
+    ]
+  },
+  {
+    "id": "c6e097c664f394c4",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "build INSERT ON CONFLICT DO UPDATE",
+    "func": "var rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) return null;\nmsg.params = [JSON.stringify(rows)];\nmsg.query = \"INSERT INTO legacy.lab_general (id_lab_general, proceso_codigo, fecha_industrial, fecha_registro, usuario_registro, hora_registro, hora_lectura, kilos, brix_manual, temperatura_manual, pol_manual, ph_manual, brix_automatico, pol_automatico, pureza, origen_id, desde_hora, hasta_hora, origen_descripcion, maquina, motivo, densidad_automatico, kilos_automatico, cerrado) SELECT src.id_lab_general, src.proceso_codigo, src.fecha_industrial, src.fecha_registro, src.usuario_registro, src.hora_registro, src.hora_lectura, src.kilos, src.brix_manual, src.temperatura_manual, src.pol_manual, src.ph_manual, src.brix_automatico, src.pol_automatico, src.pureza, src.origen_id, src.desde_hora, src.hasta_hora, src.origen_descripcion, src.maquina, src.motivo, src.densidad_automatico, src.kilos_automatico, src.cerrado FROM json_populate_recordset(NULL::legacy.lab_general, $1::json) AS src ON CONFLICT (id_lab_general) DO UPDATE SET proceso_codigo=EXCLUDED.proceso_codigo, fecha_registro=EXCLUDED.fecha_registro, usuario_registro=EXCLUDED.usuario_registro, hora_registro=EXCLUDED.hora_registro, hora_lectura=EXCLUDED.hora_lectura, kilos=EXCLUDED.kilos, brix_manual=EXCLUDED.brix_manual, temperatura_manual=EXCLUDED.temperatura_manual, pol_manual=EXCLUDED.pol_manual, ph_manual=EXCLUDED.ph_manual, brix_automatico=EXCLUDED.brix_automatico, pol_automatico=EXCLUDED.pol_automatico, pureza=EXCLUDED.pureza, origen_id=EXCLUDED.origen_id, desde_hora=EXCLUDED.desde_hora, hasta_hora=EXCLUDED.hasta_hora, origen_descripcion=EXCLUDED.origen_descripcion, maquina=EXCLUDED.maquina, motivo=EXCLUDED.motivo, densidad_automatico=EXCLUDED.densidad_automatico, kilos_automatico=EXCLUDED.kilos_automatico, cerrado=EXCLUDED.cerrado, imported_at=now();\";\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 510,
+    "y": 520,
+    "wires": [
+      [
+        "74eb46928c07ab7e"
+      ]
+    ]
+  },
+  {
+    "id": "74eb46928c07ab7e",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "pg INSERT (DO UPDATE)",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 840,
+    "y": 520,
+    "wires": [
+      [
+        "0d18ac879eb32841"
+      ]
+    ]
+  },
+  {
+    "id": "0d18ac879eb32841",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "build update watermark",
+    "func": "const maxId = flow.get('lab_max_id_out');\nconst count = flow.get('lab_rows_count');\nmsg.query = `\nUPDATE legacy.sync_watermarks\nSET last_id          = GREATEST(COALESCE(last_id, 0), $1::bigint),\n    last_synced_at   = now(),\n    last_rows_added  = $2::int,\n    last_status      = 'ok',\n    last_error       = NULL,\n    total_synced     = total_synced + $2::int,\n    updated_at       = now()\nWHERE tabla_origen = 'pr_ezi_laboratorio_gral';\n`;\nmsg.params = [maxId, count];\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 490,
+    "y": 460,
+    "wires": [
+      [
+        "ac1a4db021dde870"
+      ]
+    ]
+  },
+  {
+    "id": "ac1a4db021dde870",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "pg update watermark",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 740,
+    "y": 460,
+    "wires": [
+      [
+        "4212bbffafd783c2"
+      ]
+    ]
+  },
+  {
+    "id": "4212bbffafd783c2",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "drenar bulk?",
+    "func": "// Si batch fue full (5000), hay más data → self-trigger inmediato (sin esperar cron).\n// Si fue parcial < 5000 → caught up, esperar próximo cron.\nconst batchFull = flow.get('lab_batch_full');\nconst count = flow.get('lab_rows_count');\nconst maxId = flow.get('lab_max_id_out');\nnode.status({ fill: 'green', shape: 'dot', text: `${count} filas @ id=${maxId}` });\nif (batchFull) {\n  // self-trigger: enviar al inject manual via setTimeout\n  setTimeout(() => {\n    node.send({ payload: 'self-trigger', _self: true });\n  }, 2000);\n}\nreturn null;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 950,
+    "y": 460,
+    "wires": [
+      [
+        "0b9670c3601abcb6"
+      ]
+    ]
+  },
+  {
+    "id": "db715a54fac078c1",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "✓ caught up",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "'caught up - sin nuevos'",
+    "statusType": "str",
+    "x": 190,
+    "y": 540,
+    "wires": []
+  },
+  {
+    "id": "88c14cd73b80347d",
+    "type": "catch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "catch errors",
+    "scope": [
+      "0b9670c3601abcb6",
+      "c06fae42401ffbf6",
+      "337972c955f7da9e",
+      "37a1293d5c146c9f",
+      "c23fb0d4e4eda2f9",
+      "c6e097c664f394c4",
+      "74eb46928c07ab7e",
+      "0d18ac879eb32841",
+      "ac1a4db021dde870",
+      "4212bbffafd783c2"
+    ],
+    "uncaught": false,
+    "x": 170,
+    "y": 600,
+    "wires": [
+      [
+        "98e2a19da6bd4fce"
+      ]
+    ]
+  },
+  {
+    "id": "98e2a19da6bd4fce",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "build error update",
+    "func": "const err = String((msg.error && msg.error.message) || msg.error || msg.payload || 'unknown').substring(0, 2000);\nmsg.query = `\nUPDATE legacy.sync_watermarks\nSET last_status='error', last_error=$1, updated_at=now()\nWHERE tabla_origen='pr_ezi_laboratorio_gral';\n`;\nmsg.params = [err];\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 370,
+    "y": 600,
+    "wires": [
+      [
+        "012e1d335373a1f5"
+      ]
+    ]
+  },
+  {
+    "id": "012e1d335373a1f5",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "pg log error",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 570,
+    "y": 600,
+    "wires": [
+      [
+        "43d0128af287b3dc"
+      ]
+    ]
+  },
+  {
+    "id": "43d0128af287b3dc",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "b062d71bff62fae2",
+    "name": "✗ error",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "error.message",
+    "statusType": "auto",
+    "x": 760,
+    "y": 600,
+    "wires": []
+  },
+  {
+    "id": "859075b34be9e6fc",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "cron 1min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 2310,
+    "y": 840,
+    "wires": [
+      [
+        "b65735c7591f1e1f"
+      ]
+    ]
+  },
+  {
+    "id": "deafc8f99af67e8d",
+    "type": "inject",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "manual / self-trigger",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 2340,
+    "y": 900,
+    "wires": [
+      [
+        "b65735c7591f1e1f"
+      ]
+    ]
+  },
+  {
+    "id": "b65735c7591f1e1f",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "read watermark",
+    "query": "SELECT COALESCE(last_id, 0)::bigint AS last_id FROM legacy.sync_watermarks WHERE tabla_origen = 'pr_ezi_laboratorio_gral2' AND enabled = true;",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2540,
+    "y": 860,
+    "wires": [
+      [
+        "9661019ff65dae55"
+      ]
+    ]
+  },
+  {
+    "id": "9661019ff65dae55",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "build mssql query",
+    "func": "const row = msg.payload && msg.payload[0];\nif (!row) { node.warn('sync deshabilitado para pr_ezi_laboratorio_gral2'); return null; }\nconst lastId = Number(row.last_id) || 0;\nif (!Number.isInteger(lastId) || lastId < 0) { node.error('last_id inválido: ' + lastId, msg); return null; }\nflow.set('lg2_last_id_in', lastId);\nconst BATCH = 5000;\nconst d = new Date();\nd.setDate(d.getDate() - 2);\nconst dd = String(d.getDate()).padStart(2,'0');\nconst mm = String(d.getMonth()+1).padStart(2,'0');\nconst yyyy = d.getFullYear();\nconst sinceYmd = `${yyyy}${mm}${dd}`;\nconst hoyD = new Date();\nconst hoyDd = String(hoyD.getDate()).padStart(2,'0');\nconst hoyMm = String(hoyD.getMonth()+1).padStart(2,'0');\nconst hoyYyyy = hoyD.getFullYear();\nconst hoyYmd = `${hoyYyyy}${hoyMm}${hoyDd}`;\nmsg.query = `SELECT TOP ${BATCH} * FROM pr_ezi_laboratorio_gral2 WHERE (id > ${lastId} OR (LEN(fechaindustrial) >= 10 AND (SUBSTRING(fechaindustrial,7,4)+SUBSTRING(fechaindustrial,4,2)+SUBSTRING(fechaindustrial,1,2)) >= '${sinceYmd}' AND (SUBSTRING(fechaindustrial,7,4)+SUBSTRING(fechaindustrial,4,2)+SUBSTRING(fechaindustrial,1,2)) <= '${hoyYmd}')) AND SUBSTRING(fechaindustrial,7,4) >= '2024' ORDER BY id ASC;`;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2750,
+    "y": 860,
+    "wires": [
+      [
+        "95c5a6046d716348"
+      ]
+    ]
+  },
+  {
+    "id": "95c5a6046d716348",
+    "type": "MSSQL",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "mssql fetch",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": true,
+    "query": "",
+    "modeOpt": "queryMode",
+    "modeOptType": "msg",
+    "queryOpt": "query",
+    "queryOptType": "msg",
+    "paramsOpt": "params",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 2960,
+    "y": 860,
+    "wires": [
+      [
+        "a970f974136fec18"
+      ]
+    ]
+  },
+  {
+    "id": "a970f974136fec18",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "transform rows",
+    "func": "const parseDate = (s) => {\n  if (!s || typeof s !== 'string') return null;\n  const m = s.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})/);\n  return m ? `${m[3]}-${m[2]}-${m[1]}` : null;\n};\nconst parseTime = (s) => {\n  if (!s || typeof s !== 'string' || s.trim() === '') return null;\n  let h = s.trim();\n  if (/^\\d{2}:\\d{2}$/.test(h)) h += ':00';\n  return /^\\d{2}:\\d{2}:\\d{2}$/.test(h) ? h : null;\n};\nconst toBool = (v) => v === 1 || v === true || v === '1';\nconst rows = Array.isArray(msg.payload) ? msg.payload : [];\nconst lastIdIn = flow.get('lg2_last_id_in') || 0;\nconst out = rows.map(r => ({\n  id_lab_general2:  r.id,\n  proceso_codigo:   r.codigoproceso,\n  fecha_industrial: parseDate(r.fechaindustrial),\n  fecha_registro:   parseDate(r.fecharegistro),\n  usuario_registro: r.usuario,\n  hora_registro:    r.horaregistro,\n  hora_lectura:     parseTime(r.HORA),\n  peso_final:       r.Peso_final,\n  tara:             r.Tara,\n  pol_manual_1:     r.polmanual1,\n  pol_manual_2:     r.polmanual2,\n  pol_manual_3:     r.polmanual3,\n  pol_manual_4:     r.polmanual4,\n  humedad:          r.humedad,\n  peso_liquido:     r.pesoliquido,\n  ph_manual:        r.phmanual,\n  ppm_so2_manual:   r.PPMS02manual,\n  brix_automatico:  r.brixautomatico,\n  pol_automatico:   r.polautomatico,\n  fibra:            r.fibra,\n  cerrado:          toBool(r.cerrado)\n}));\nlet maxId = lastIdIn;\nfor (const r of rows) {\n  if (r.id && r.id > maxId) maxId = r.id;\n}\nflow.set('lg2_max_id_out', maxId);\nflow.set('lg2_rows_count', out.length);\nflow.set('lg2_batch_full', out.length >= 5000);\nmsg.payload = out;\nmsg.skip = out.length === 0;\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 3160,
+    "y": 860,
+    "wires": [
+      [
+        "2652e1bd46597e89"
+      ]
+    ]
+  },
+  {
+    "id": "2652e1bd46597e89",
+    "type": "switch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "tiene filas?",
+    "property": "skip",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "false"
+      },
+      {
+        "t": "true"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 2,
+    "x": 2330,
+    "y": 960,
+    "wires": [
+      [
+        "514a954e376f8262"
+      ],
+      [
+        "d3549bceea866fb1"
+      ]
+    ]
+  },
+  {
+    "id": "514a954e376f8262",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "build INSERT ON CONFLICT DO UPDATE",
+    "func": "var rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) return null;\nmsg.params = [JSON.stringify(rows)];\nmsg.query = \"INSERT INTO legacy.laboratorio_general2 (id_lab_general2, proceso_codigo, fecha_industrial, fecha_registro, usuario_registro, hora_registro, hora_lectura, peso_final, tara, pol_manual_1, pol_manual_2, pol_manual_3, pol_manual_4, humedad, peso_liquido, ph_manual, ppm_so2_manual, brix_automatico, pol_automatico, fibra, cerrado) SELECT src.id_lab_general2, src.proceso_codigo, src.fecha_industrial, src.fecha_registro, src.usuario_registro, src.hora_registro, src.hora_lectura, src.peso_final, src.tara, src.pol_manual_1, src.pol_manual_2, src.pol_manual_3, src.pol_manual_4, src.humedad, src.peso_liquido, src.ph_manual, src.ppm_so2_manual, src.brix_automatico, src.pol_automatico, src.fibra, src.cerrado FROM json_populate_recordset(NULL::legacy.laboratorio_general2, $1::json) AS src ON CONFLICT (id_lab_general2) DO UPDATE SET proceso_codigo=EXCLUDED.proceso_codigo, fecha_industrial=EXCLUDED.fecha_industrial, fecha_registro=EXCLUDED.fecha_registro, usuario_registro=EXCLUDED.usuario_registro, hora_registro=EXCLUDED.hora_registro, hora_lectura=EXCLUDED.hora_lectura, peso_final=EXCLUDED.peso_final, tara=EXCLUDED.tara, pol_manual_1=EXCLUDED.pol_manual_1, pol_manual_2=EXCLUDED.pol_manual_2, pol_manual_3=EXCLUDED.pol_manual_3, pol_manual_4=EXCLUDED.pol_manual_4, humedad=EXCLUDED.humedad, peso_liquido=EXCLUDED.peso_liquido, ph_manual=EXCLUDED.ph_manual, ppm_so2_manual=EXCLUDED.ppm_so2_manual, brix_automatico=EXCLUDED.brix_automatico, pol_automatico=EXCLUDED.pol_automatico, fibra=EXCLUDED.fibra, cerrado=EXCLUDED.cerrado, imported_at=now();\";\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2650,
+    "y": 980,
+    "wires": [
+      [
+        "934975a15af9866c"
+      ]
+    ]
+  },
+  {
+    "id": "934975a15af9866c",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "pg INSERT (DO UPDATE)",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2980,
+    "y": 980,
+    "wires": [
+      [
+        "020b5ac878da2bf6"
+      ]
+    ]
+  },
+  {
+    "id": "020b5ac878da2bf6",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "build update watermark",
+    "func": "const maxId = flow.get('lg2_max_id_out');\nconst count = flow.get('lg2_rows_count');\nmsg.query = `UPDATE legacy.sync_watermarks SET last_id = GREATEST(COALESCE(last_id, 0), $1::bigint), last_synced_at = now(), last_rows_added = $2::int, last_status = 'ok', last_error = NULL, total_synced = total_synced + $2::int, updated_at = now() WHERE tabla_origen = 'pr_ezi_laboratorio_gral2';`;\nmsg.params = [maxId, count];\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2630,
+    "y": 920,
+    "wires": [
+      [
+        "c161cdbc6b861103"
+      ]
+    ]
+  },
+  {
+    "id": "c161cdbc6b861103",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "pg update watermark",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2900,
+    "y": 920,
+    "wires": [
+      [
+        "ff48ec51041b1ff0"
+      ]
+    ]
+  },
+  {
+    "id": "ff48ec51041b1ff0",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "drenar bulk?",
+    "func": "const batchFull = flow.get('lg2_batch_full');\nconst count = flow.get('lg2_rows_count');\nconst maxId = flow.get('lg2_max_id_out');\nnode.status({ fill: 'green', shape: 'dot', text: `${count} filas @ id=${maxId}` });\nif (batchFull) { setTimeout(() => { node.send({ payload: 'self-trigger', _self: true }); }, 2000); }\nreturn null;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 3130,
+    "y": 920,
+    "wires": [
+      [
+        "b65735c7591f1e1f"
+      ]
+    ]
+  },
+  {
+    "id": "d3549bceea866fb1",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "✓ caught up",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "'caught up - sin nuevos'",
+    "statusType": "str",
+    "x": 2330,
+    "y": 1020,
+    "wires": []
+  },
+  {
+    "id": "97aa78a7f1dfa57d",
+    "type": "catch",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "catch errors",
+    "scope": [
+      "b65735c7591f1e1f",
+      "9661019ff65dae55",
+      "95c5a6046d716348",
+      "a970f974136fec18",
+      "2652e1bd46597e89",
+      "514a954e376f8262",
+      "934975a15af9866c",
+      "020b5ac878da2bf6",
+      "c161cdbc6b861103",
+      "ff48ec51041b1ff0"
+    ],
+    "uncaught": false,
+    "x": 2310,
+    "y": 1080,
+    "wires": [
+      [
+        "e28c8900e34ec8ed"
+      ]
+    ]
+  },
+  {
+    "id": "e28c8900e34ec8ed",
+    "type": "function",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "build error update",
+    "func": "const err = String((msg.error && msg.error.message) || msg.error || msg.payload || 'unknown').substring(0, 2000);\nmsg.query = `UPDATE legacy.sync_watermarks SET last_status='error', last_error=$1, updated_at=now() WHERE tabla_origen='pr_ezi_laboratorio_gral2';`;\nmsg.params = [err];\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 2510,
+    "y": 1080,
+    "wires": [
+      [
+        "8ef4383a682f9c10"
+      ]
+    ]
+  },
+  {
+    "id": "8ef4383a682f9c10",
+    "type": "postgresql",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "pg log error",
+    "query": "",
+    "postgreSQLConfig": "cfg_pg_supabase",
+    "split": false,
+    "rowsPerMsg": 1,
+    "outputs": 1,
+    "x": 2710,
+    "y": 1080,
+    "wires": [
+      [
+        "22ae89318deda67f"
+      ]
+    ]
+  },
+  {
+    "id": "22ae89318deda67f",
+    "type": "debug",
+    "z": "7f1ce9e98d9da3e9",
+    "g": "ee14f8683cca0946",
+    "name": "✗ error",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": true,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "error.message",
+    "statusType": "auto",
+    "x": 2900,
+    "y": 1080,
+    "wires": []
+  }
+]

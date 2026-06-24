@@ -54,8 +54,8 @@ function renderKPIs() {
     const alertCount = ss.filter(r => r.estado !== 'ok').length;
     const avgVar = ss.length ? ss.reduce((a,r) => a + Math.abs(r.variacion), 0) / ss.length : 0;
 
-    const ev = STATE.data.egresos || [];
-    const iv = STATE.data.ingresos || [];
+    const ev = (STATE.filteredData || STATE.data).egresos || [];
+    const iv = (STATE.filteredData || STATE.data).ingresos || [];
     const totalEg = ev.reduce((a,r) => a + (r.importe || 0), 0);
     const totalIv = iv.reduce((a,r) => a + (r.importe || 0), 0);
 
@@ -182,7 +182,7 @@ async function cargarMayor(codigo) {
     var movs = data.movimientos;
     var empresa = (document.getElementById('filter-empresa') && document.getElementById('filter-empresa').value || '').trim();
     if (empresa) {
-      movs = movs.filter(function(r){ return (r.unidad || '') === empresa; });
+      movs = movs.filter(function(r){ return (r.unidad || '').toString().trim() === empresa; });
     }
 
     // Guardar en cache para filtrado local
@@ -217,21 +217,6 @@ function filtrarMayorLocal() {
   var fProv = (document.getElementById('mayor-filtro-proveedor')?.value || '').toLowerCase().trim();
   var algunFiltro = fAsiento || fDesc || fProv;
 
-  var visible = 0;
-  var saldoAcum = 0;
-  var html = '';
-
-  STATE_MAYOR.movimientos.forEach(function(r){
-    // Recorrer en orden ASC para saldo (los datos vienen en orden DESC de la API)
-    // No — ya vienen en orden DESC. Reconstruimos el HTML y aplicamos filtro.
-    var match = true;
-    if (fAsiento && (r.asiento || '').toString().toLowerCase().indexOf(fAsiento) === -1) match = false;
-    if (fDesc && (r.descripcion || '').toString().toLowerCase().indexOf(fDesc) === -1) match = false;
-    if (fProv && (r.proveedor || '').toString().toLowerCase().indexOf(fProv) === -1) match = false;
-    if (!match) return;
-    visible++;
-  });
-
   // Reconstruir: desde el array original en orden ASC de fecha para calcular saldo,
   // luego invertir para mostrar más reciente primero.
   // Estado interno: los datos vienen de la API en orden DESC (más reciente primero).
@@ -242,15 +227,15 @@ function filtrarMayorLocal() {
 
   for (var i = 0; i < ordenAsc.length; i++) {
     var r = ordenAsc[i];
-    saldoAcc += (r.debe || 0) - (r.haber || 0);
 
-    // Aplicar filtro
+    // Aplicar filtro ANTES de acumular saldo (fix BUG 5)
     var match = true;
     if (fAsiento && (r.asiento || '').toString().toLowerCase().indexOf(fAsiento) === -1) match = false;
     if (fDesc && (r.descripcion || '').toString().toLowerCase().indexOf(fDesc) === -1) match = false;
     if (fProv && (r.proveedor || '').toString().toLowerCase().indexOf(fProv) === -1) match = false;
     if (!match) continue;
 
+    saldoAcc += (r.debe || 0) - (r.haber || 0);
     filas.push({ r: r, saldoAtThisPoint: saldoAcc });
   }
 
@@ -271,7 +256,8 @@ function filtrarMayorLocal() {
 
   tbody.innerHTML = html || '<tr><td colspan="6"><div class="empty-state"><h3>Sin coincidencias</h3><p>Probá con otros filtros</p></div></td></tr>';
 
-  // Actualizar contadores
+  // Actualizar contadores (filas.length despues del segundo loop en vez de variable duplicada)
+  var visible = filas.length;
   var visEl = document.getElementById('mayor-visible');
   if (visEl) {
     visEl.textContent = algunFiltro ? visible + ' (filtrado)' : visible;
@@ -317,7 +303,7 @@ async function cargarLibroDiario() {
     var items = data.items;
     var empresa = (document.getElementById('filter-empresa') && document.getElementById('filter-empresa').value || '').trim();
     if (empresa) {
-      items = items.filter(function(r){ return (r.unidad || '') === empresa; });
+      items = items.filter(function(r){ return (r.unidad || '').toString().trim() === empresa; });
     }
 
     tbody.innerHTML = items.map(function(r){
@@ -376,7 +362,7 @@ function renderImputaciones(tipo) {
 
   // Filtro de empresa
   var empresa = (document.getElementById('filter-empresa') && document.getElementById('filter-empresa').value || '').trim();
-  if (empresa) items = items.filter(function(r){ return (r.unidad || '') === empresa; });
+  if (empresa) items = items.filter(function(r){ return (r.unidad || '').toString().trim() === empresa; });
   if (tipo) items = items.filter(function(r){ return r.tipo === tipo; });
 
   var tbody = document.getElementById('imput-body');
@@ -420,7 +406,7 @@ async function cargarEgresos() {
     }
     var items = data.items;
     var empresa = (document.getElementById('filter-empresa') && document.getElementById('filter-empresa').value || '').trim();
-    if (empresa) items = items.filter(function(r){ return (r.unidad || '') === empresa; });
+    if (empresa) items = items.filter(function(r){ return (r.unidad || '').toString().trim() === empresa; });
     tbody.innerHTML = items.map(function(r){
       return '<tr>' +
         '<td class="code">' + fmtDate(r.fecha) + '</td>' +
@@ -459,7 +445,7 @@ async function cargarIngresos() {
     }
     var items = data.items;
     var empresa = (document.getElementById('filter-empresa') && document.getElementById('filter-empresa').value || '').trim();
-    if (empresa) items = items.filter(function(r){ return (r.unidad || '') === empresa; });
+    if (empresa) items = items.filter(function(r){ return (r.unidad || '').toString().trim() === empresa; });
     tbody.innerHTML = items.map(function(r){
       return '<tr>' +
         '<td class="code">' + fmtDate(r.fecha) + '</td>' +
@@ -493,7 +479,7 @@ async function cargarProveedoresSaldos() {
     }
     var items = data.items;
     var empresa = (document.getElementById('filter-empresa') && document.getElementById('filter-empresa').value || '').trim();
-    if (empresa) items = items.filter(function(r){ return (r.unidad || '') === empresa; });
+    if (empresa) items = items.filter(function(r){ return (r.unidad || '').toString().trim() === empresa; });
     tbody.innerHTML = items.map(function(r){
       return '<tr>' +
         '<td class="code">' + (r.cuit || '') + '</td>' +
@@ -537,7 +523,7 @@ async function cargarProveedoresPendientes() {
 function renderProveedoresPendientes(estado) {
   var items = STATE_PEND.items || [];
   var empresa = (document.getElementById('filter-empresa') && document.getElementById('filter-empresa').value || '').trim();
-  if (empresa) items = items.filter(function(r){ return (r.unidad || '') === empresa; });
+  if (empresa) items = items.filter(function(r){ return (r.unidad || '').toString().trim() === empresa; });
   if (estado) items = items.filter(function(r){ return r.estado === estado; });
 
   var tbody = document.getElementById('prov-pend-body');
@@ -592,7 +578,7 @@ function renderInterempresas() {
 
   // Filtro de empresa
   var empresa = (document.getElementById('filter-empresa') && document.getElementById('filter-empresa').value || '').trim();
-  if (empresa) items = items.filter(function(r){ return (r.unidad || '') === empresa; });
+  if (empresa) items = items.filter(function(r){ return (r.unidad || '').toString().trim() === empresa; });
 
   const container = document.getElementById('inter-body');
   if (!container) return;
@@ -622,7 +608,7 @@ function renderInterempresas() {
 
 /* ─── ALERTAS ─── */
 function renderAlertas(severity) {
-  const d = STATE.data;
+  const d = STATE.filteredData || STATE.data;
   const alerts = [];
 
   // Cuentas críticas

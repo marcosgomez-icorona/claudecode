@@ -31,7 +31,7 @@
 
 ## Próximos pasos
 
-1. **Crear tabs en Google Sheet** `1jY6_A6z5dS43Gh8y2Qz62Fy2ti0x4Mq0rVZp6QWbwcc`:
+1. **Crear tabs en Google Sheet** `<SPREADSHEET_ID>` (configurada en el proyecto, no versionada):
    - Tab `Imputaciones` con headers: FECHA | TIPO | COMPROBANTE | ENTE | CLASIFICADOR | NETO | IVA | TOTAL | UNIDAD_NEGOCIO | SYNC_UUID
    - Tab `Interempresas` con headers: FECHA | DESDE | HACIA | CONCEPTO | COMPROBANTE | IMPORTE | TIPO | MONEDA | UNIDAD_NEGOCIO | SYNC_UUID
 2. Importar en Node-RED 192.168.0.23:1880 los 3 flows nuevos

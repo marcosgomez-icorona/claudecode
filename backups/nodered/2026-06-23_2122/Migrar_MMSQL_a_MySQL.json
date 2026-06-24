@@ -1,0 +1,4467 @@
+[
+  {
+    "id": "62d3eb0602d1c011",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "name": "Migrar a MySQL",
+    "style": {
+      "stroke": "#000000",
+      "label": true,
+      "color": "#000000",
+      "fill": "#3f93cf"
+    },
+    "nodes": [
+      "2e4640176f66704c",
+      "b23c00b95ffba0f0",
+      "de3467299811aff9"
+    ],
+    "x": 168,
+    "y": 93,
+    "w": 2104,
+    "h": 554
+  },
+  {
+    "id": "4fc06ea9c4e1ca86",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "name": "Datos y Analisis de Produccion x Hora",
+    "style": {
+      "label": true,
+      "stroke": "#000000",
+      "fill": "#3f93cf",
+      "color": "#000000"
+    },
+    "nodes": [
+      "809f8c1504dffb52",
+      "580e838a8315a7b1",
+      "386ce17aec8490f7",
+      "fa9c067f2582c01a",
+      "194f7b999a3646ef",
+      "9ac029cdc058fecc",
+      "4fb5d81c3b39eb14",
+      "09cbaf35a2f80fe3",
+      "77015e129e81f3aa"
+    ],
+    "x": 158,
+    "y": 673,
+    "w": 2074,
+    "h": 1174
+  },
+  {
+    "id": "665f85a24694f2cd",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "name": "Datos Generales de Molienda (Hora x Hora)",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "eacf409096df32ae",
+      "3946b45092a33628",
+      "045dd65b96612dc4",
+      "e302e8008c72680a",
+      "3472f06d74cb55f7",
+      "e3d4214a59493d1c",
+      "0c99b3f20ae63a20",
+      "a3d3ec542a928c6a",
+      "1e986b7a67a12966",
+      "124350056f40022b",
+      "188e62f56486a0dd",
+      "4737b5d1f4f072e1"
+    ],
+    "x": 2374,
+    "y": 1659,
+    "w": 1032,
+    "h": 242
+  },
+  {
+    "id": "2e4640176f66704c",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "62d3eb0602d1c011",
+    "name": "Paradas de Fabrica",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "a0916bc758d59a20",
+      "7b1c9bd85c8dbb62",
+      "db4394a8b6de98fb",
+      "21f9bc50b9999d3c",
+      "e8a3b2ef6609154e",
+      "3032937016b1f1bb",
+      "a4ed57e3949cfa8c",
+      "09bc915cc6592b7f",
+      "337b67d8b6af63b9",
+      "21eb38e51e0138b3",
+      "cb39a8e5e02c6352",
+      "4c16b3f1625b9b73"
+    ],
+    "x": 214,
+    "y": 119,
+    "w": 1032,
+    "h": 222
+  },
+  {
+    "id": "b23c00b95ffba0f0",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "62d3eb0602d1c011",
+    "name": "Paradas Destileria",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "a539326d4de4326b",
+      "da5b78372849dc39",
+      "38150f4902d340e1",
+      "cff798cd7586a3af",
+      "2471e02e427f36c3",
+      "a60ad022ab47d16c",
+      "b415373ee97eb02e",
+      "3b28716d60470c76",
+      "4b818b2509dbc0b3",
+      "9ccab809dec5d83b",
+      "3a0309dd3427423e",
+      "30ac04714ecd2a73"
+    ],
+    "x": 194,
+    "y": 399,
+    "w": 1032,
+    "h": 222
+  },
+  {
+    "id": "de3467299811aff9",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "62d3eb0602d1c011",
+    "name": "Datos Generales de Molienda (Hora x Hora)",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "3f2adfaac2c2bef7",
+      "0d6bb1e848400f2b",
+      "df5e54cf60fe1ddb",
+      "ae5ae188d535df41",
+      "9d6eb3a49fd956ef",
+      "3baa90c533f02a2a",
+      "f7fd23fc4287fd13",
+      "bad7dfbfd237c7c1",
+      "39e0f33821b38218",
+      "261b76b58c1def1a",
+      "0d5eb42f2fe9235d",
+      "29aeba0c9df2bc35"
+    ],
+    "x": 1234,
+    "y": 179,
+    "w": 1012,
+    "h": 222
+  },
+  {
+    "id": "809f8c1504dffb52",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "4fc06ea9c4e1ca86",
+    "name": "calidadMieles_xHora",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "6dad92b8090f6fea",
+      "1552e296d27dc92e",
+      "e1a05487b14ac3ce",
+      "e357fac504a0e574",
+      "43a8f6be67f59ecb",
+      "8334505577a79328",
+      "c9871f8ca667a4a5",
+      "27a173e8228d6cd5",
+      "c78b1cc1e72e8353",
+      "d5bf48138f42a2df",
+      "992e563d9c0df91c",
+      "9f5c3b09d09e7827"
+    ],
+    "x": 1274,
+    "y": 699,
+    "w": 932,
+    "h": 222
+  },
+  {
+    "id": "580e838a8315a7b1",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "4fc06ea9c4e1ca86",
+    "name": "calidadAzucar_xHora",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "676097aca81355b8",
+      "400c2e6eb5cace9f",
+      "62883408beb5822e",
+      "f011015c8ec67330",
+      "2ca7edfd356fd4a9",
+      "1341414f9f09f6da",
+      "e36640ba8779a3f7",
+      "89eaa786182cc212",
+      "15e8b35b893b82d8",
+      "a69e0a4cad11d7ad"
+    ],
+    "x": 234,
+    "y": 699,
+    "w": 952,
+    "h": 202
+  },
+  {
+    "id": "386ce17aec8490f7",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "4fc06ea9c4e1ca86",
+    "name": "calidadBagazo_xHora",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "ac5ac4b92320bbc7",
+      "702854b3e8b46067",
+      "dcf8cc7a1f96d55d",
+      "e7745945658bd0d0",
+      "766c3c08cd3e0b42",
+      "0cf33563fb8e802a",
+      "7324d5f8f3650463",
+      "7c819feb48d6ac6d",
+      "da9d8b0b058da551",
+      "66d5a97178aa8b2a",
+      "0e1543f195f6c038",
+      "71e939a297de3678"
+    ],
+    "x": 1234,
+    "y": 919,
+    "w": 892,
+    "h": 242
+  },
+  {
+    "id": "fa9c067f2582c01a",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "4fc06ea9c4e1ca86",
+    "name": "calidadCachaza_xHora",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "a26fc91bfd674788",
+      "c86d7d85a9215098",
+      "7d6b83d55e70ddea",
+      "e52d6ddbfedfc73e",
+      "fa609c410aa4e7f3",
+      "9edffb70b04017e2",
+      "f0699effdc2d97a0",
+      "58c9ec4bd204f460",
+      "f6f61e276b48f2f5",
+      "462b57d034beef14",
+      "6727c644c6942f14",
+      "fb8659a27b385705"
+    ],
+    "x": 234,
+    "y": 1139,
+    "w": 952,
+    "h": 222
+  },
+  {
+    "id": "194f7b999a3646ef",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "4fc06ea9c4e1ca86",
+    "name": "calidadJugo_xHora",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "f7f6af644bcec9c4",
+      "bdd9080258214c4b",
+      "18e9b8eea52b47e1",
+      "423b55d8a2718b34",
+      "313315ec821953fe",
+      "cf9eed54886e109d",
+      "ddf6e2c0fbd10372",
+      "095e46c81cb8e6c7",
+      "01548c9fe8db03a9",
+      "f86754edf7417280",
+      "184900832df68374",
+      "45e46a6c35d2492b"
+    ],
+    "x": 234,
+    "y": 919,
+    "w": 972,
+    "h": 242
+  },
+  {
+    "id": "9ac029cdc058fecc",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "4fc06ea9c4e1ca86",
+    "name": "calidadMasaCocida_xHora",
+    "style": {
+      "label": true,
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "color": "#000000"
+    },
+    "nodes": [
+      "504f1b938082e632",
+      "2002978385f93e1a",
+      "7355654195a28497",
+      "27042cabb6759cf0",
+      "81d461fe7da30300",
+      "58a3c81a62a66041",
+      "1bfb5058d8abd5db",
+      "6a8d774301625124",
+      "140fd592a88bdd92",
+      "0209eb21d966f725",
+      "61f5805cec93cb49",
+      "f65a1f44a9de6039"
+    ],
+    "x": 1234,
+    "y": 1139,
+    "w": 952,
+    "h": 222
+  },
+  {
+    "id": "4fb5d81c3b39eb14",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "4fc06ea9c4e1ca86",
+    "name": "calidadMelaza_xHora",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "edddb6b690f652ea",
+      "b3b2c8dda8de53d2",
+      "0750b7f31c27bc76",
+      "6231f2adf2bd9043",
+      "887cb73c8fbd109e",
+      "da8ec841d4623096",
+      "216ddea220dd27f1",
+      "43c1e014a55b3ced",
+      "61af5901eb3e1d9d",
+      "5c79a03e09091a27",
+      "3e3c4fe7fbcfa015",
+      "9cd178afdd587570"
+    ],
+    "x": 234,
+    "y": 1339,
+    "w": 972,
+    "h": 242
+  },
+  {
+    "id": "09cbaf35a2f80fe3",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "4fc06ea9c4e1ca86",
+    "name": "calidadSulfitado_xHora",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "29abf24fd3bbdd57",
+      "bb7bf19e22334557",
+      "888a3980461a2583",
+      "9ab402187dde2971",
+      "a9602649af357e8e",
+      "27a499b1e5998b90",
+      "ea6456f6a0e272d5",
+      "c3115fe08027df07",
+      "61a7a2684f735a19",
+      "7e3a1360ff74c6d6",
+      "c0bf5418e4910cd9",
+      "c029d1c45682309d"
+    ],
+    "x": 1214,
+    "y": 1339,
+    "w": 972,
+    "h": 242
+  },
+  {
+    "id": "77015e129e81f3aa",
+    "type": "group",
+    "z": "1389840a43cc0448",
+    "g": "4fc06ea9c4e1ca86",
+    "name": "datos_Cania",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "57fe28b636a3e225",
+      "ccba03dc007632af",
+      "6f38b016555cde59",
+      "edbf58f0adc7ce47",
+      "567aeaeb904e6103",
+      "cf0a543f23004a16",
+      "fdca5061173ffd67",
+      "0917ec8093fdbc63",
+      "0aa692e88636d0e5",
+      "aa5b2a524afa5b79",
+      "8d2c4fd7c4cdf1f3",
+      "263365a01b9ce497"
+    ],
+    "x": 184,
+    "y": 1579,
+    "w": 1062,
+    "h": 242
+  },
+  {
+    "id": "44191a09c5c992c9",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Molienda Ultima Hora (Laboratorio)",
+    "func": "let molienda = `\nSELECT\n    CONVERT(DATE, fecharegistro, 103) AS fechaRegistro,\n    horaregistro,\n    HORA,\n    KILOS\nFROM pr_ezi_laboratorio_gral\nWHERE codigoproceso = 'Molienda'\n  AND KILOS IS NOT NULL\n  AND ISDATE(fecharegistro) = 1\nORDER BY\n    CONVERT(DATE, fecharegistro, 103) DESC,\n    HORA DESC,\n    id DESC;\n\n`;\n\nmsg.payload = molienda;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2740,
+    "y": 620,
+    "wires": [
+      [
+        "b2c14ef2d34f6427"
+      ]
+    ]
+  },
+  {
+    "id": "b2c14ef2d34f6427",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 3010,
+    "y": 620,
+    "wires": [
+      [
+        "966d0cea9d8331c2"
+      ]
+    ]
+  },
+  {
+    "id": "966d0cea9d8331c2",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "name": "debug 105",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3200,
+    "y": 620,
+    "wires": []
+  },
+  {
+    "id": "1011a795e9dedea2",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/15 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 2500,
+    "y": 620,
+    "wires": [
+      [
+        "44191a09c5c992c9"
+      ]
+    ]
+  },
+  {
+    "id": "7e3dca75e185a841",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Insercion en MySQL",
+    "func": "const rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) return null;\n\nfunction parseDateDMY(str) {\n    if (!str) return null;\n    const [d,m,y] = str.split('/');\n    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n}\n\nconst sql = `\nINSERT INTO produccion_porHora (\n    fechaindustrial, hora, gas, kilos, humedad, bolsas\n)\nVALUES (?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    gas = VALUES(gas),\n    kilos = VALUES(kilos),\n    humedad = VALUES(humedad),\n    bolsas = VALUES(bolsas);\n`;\n\nconst msgs = [];\n\nfor (const r of rows) {\n    const fecha = parseDateDMY(r.fechaindustrial);\n    if (!fecha || !r.hora) continue;\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            fecha,\n            r.hora,\n            Number(r.gas) || 0,\n            Number(r.kilos) || 0,\n            Number(r.humedad) || 0,\n            Number(r.bolsas) || 0\n        ]\n    });\n}\n\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2660,
+    "y": 360,
+    "wires": [
+      [
+        "7a806b3b782da0fc"
+      ]
+    ]
+  },
+  {
+    "id": "8df6aefb1414ef49",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3130,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "e20e5e246d3d57bf",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Crear Tabla (produccion_porHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS produccion_porHora (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n\n    fechaindustrial DATE NOT NULL,\n    hora TIME NOT NULL,\n\n    gas DECIMAL(12,2) DEFAULT 0,\n    kilos DECIMAL(12,2) DEFAULT 0,\n    humedad DECIMAL(6,2) DEFAULT 0,\n    bolsas INT DEFAULT 0,\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    UNIQUE KEY uq_produccion (fechaindustrial, hora),\n\n    INDEX idx_fecha (fechaindustrial),\n    INDEX idx_hora (hora)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2650,
+    "y": 420,
+    "wires": [
+      [
+        "84ee89bb605ee8af"
+      ]
+    ]
+  },
+  {
+    "id": "a95e2acb605c5b74",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3180,
+    "y": 420,
+    "wires": []
+  },
+  {
+    "id": "c51425cdf50616e8",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Consumo gas por hora (Molienda)",
+    "func": "let gasXhora= `\nSELECT\n    CONVERT(DATE, fecharegistro, 103) AS fechaRegistro,\n    horaregistro,\n    HORA,\n    KILOS AS consumoGasHora\nFROM pr_ezi_laboratorio_gral\nWHERE codigoproceso = 'Gas'\n  AND KILOS IS NOT NULL\n  AND ISDATE(fecharegistro) = 1\nORDER BY\n    CONVERT(DATE, fecharegistro, 103) DESC,\n    HORA DESC,\n    id DESC;\n\n`;\n\nmsg.payload = gasXhora;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2740,
+    "y": 680,
+    "wires": [
+      [
+        "3f1178ccbc7a3ff3"
+      ]
+    ]
+  },
+  {
+    "id": "3f1178ccbc7a3ff3",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 3010,
+    "y": 680,
+    "wires": [
+      [
+        "c4362f4302de1459"
+      ]
+    ]
+  },
+  {
+    "id": "c4362f4302de1459",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "name": "debug 108",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3200,
+    "y": 680,
+    "wires": []
+  },
+  {
+    "id": "42e206e678d288a0",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/15 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 2500,
+    "y": 680,
+    "wires": [
+      [
+        "c51425cdf50616e8"
+      ]
+    ]
+  },
+  {
+    "id": "3b553d7b562c2368",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Insercion en MySQL",
+    "func": "const rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) return null;\n\nfunction parseDateDMY(str) {\n    if (!str) return null;\n    const [d,m,y] = str.split('/');\n    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n}\n\nconst sql = `\nINSERT INTO produccion_porHora (\n    fechaindustrial, hora, gas, kilos, humedad, bolsas\n)\nVALUES (?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    gas = VALUES(gas),\n    kilos = VALUES(kilos),\n    humedad = VALUES(humedad),\n    bolsas = VALUES(bolsas);\n`;\n\nconst msgs = [];\n\nfor (const r of rows) {\n    const fecha = parseDateDMY(r.fechaindustrial);\n    if (!fecha || !r.hora) continue;\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            fecha,\n            r.hora,\n            Number(r.gas) || 0,\n            Number(r.kilos) || 0,\n            Number(r.humedad) || 0,\n            Number(r.bolsas) || 0\n        ]\n    });\n}\n\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2640,
+    "y": 740,
+    "wires": [
+      [
+        "68caf1eb71d6887a",
+        "9f3ad83ed9d4b0d1"
+      ]
+    ]
+  },
+  {
+    "id": "d894d942109a30b8",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3130,
+    "y": 740,
+    "wires": []
+  },
+  {
+    "id": "4df73df42dd10dd8",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Crear Tabla (produccion_porHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS produccion_porHora (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n\n    fechaindustrial DATE NOT NULL,\n    hora TIME NOT NULL,\n\n    gas DECIMAL(12,2) DEFAULT 0,\n    kilos DECIMAL(12,2) DEFAULT 0,\n    humedad DECIMAL(6,2) DEFAULT 0,\n    bolsas INT DEFAULT 0,\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    UNIQUE KEY uq_produccion (fechaindustrial, hora),\n\n    INDEX idx_fecha (fechaindustrial),\n    INDEX idx_hora (hora)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2630,
+    "y": 840,
+    "wires": [
+      [
+        "e380de9351c78b01",
+        "e5d2f0a6bbc215b5"
+      ]
+    ]
+  },
+  {
+    "id": "59b44d0648d2803b",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3180,
+    "y": 840,
+    "wires": []
+  },
+  {
+    "id": "d863be80e966378d",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Molienda Ultima Hora (Laboratorio)",
+    "func": "let molienda = `\nSELECT\n    CONVERT(DATE, fecharegistro, 103) AS fechaRegistro,\n    horaregistro,\n    HORA,\n    KILOS AS produccion_Vapor\nFROM pr_ezi_laboratorio_gral\nWHERE codigoproceso = 'Jugo Mixto Kg'\n  AND KILOS IS NOT NULL\n  AND ISDATE(fecharegistro) = 1\nORDER BY\n    CONVERT(DATE, fecharegistro, 103) DESC,\n    HORA DESC,\n    id DESC;\n\n`;\n\nmsg.payload = molienda;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2740,
+    "y": 560,
+    "wires": [
+      [
+        "d01fbd4acdafb464"
+      ]
+    ]
+  },
+  {
+    "id": "d01fbd4acdafb464",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 3010,
+    "y": 560,
+    "wires": [
+      [
+        "e904d73ccf992271"
+      ]
+    ]
+  },
+  {
+    "id": "e904d73ccf992271",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "name": "debug 110",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3200,
+    "y": 560,
+    "wires": []
+  },
+  {
+    "id": "dea6bfb234183d8a",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/15 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 2500,
+    "y": 560,
+    "wires": [
+      [
+        "d863be80e966378d"
+      ]
+    ]
+  },
+  {
+    "id": "f48fa12839224efe",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "name": "Cada 5 Minutos",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "300",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 2450,
+    "y": 980,
+    "wires": [
+      [
+        "73bf6354a2b63eb0"
+      ]
+    ]
+  },
+  {
+    "id": "73bf6354a2b63eb0",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "CONSUMO POR HORA",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": "0",
+    "query": ";WITH ConsultaBase AS (\n    SELECT\n        CONVERT(VARCHAR(10), CONVERT(DATE, base.fechaindustrial, 103), 103) AS fechaindustrial,\n        base.hora,\n        COALESCE(k.KILOS,   0) AS kilos,\n        COALESCE(g.kilos,   0) AS gas,\n        COALESCE(h.humedad, 0) AS humedad,\n        COALESCE(e.bolsas,  0) AS bolsas\n    FROM (\n        SELECT DISTINCT fechaindustrial, HORA AS hora\n        FROM pr_ezi_laboratorio_gral\n        WHERE codigoproceso = 'Molienda'\n          AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n          AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n          AND KILOS > 0\n\n        UNION\n\n        SELECT DISTINCT fechaindustrial, HORA AS hora\n        FROM pr_ezi_laboratorio_gral\n        WHERE codigoproceso = 'Gas'\n          AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n          AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n          AND KILOS > 0\n\n        UNION\n\n        SELECT DISTINCT fechaindustrial, HORA AS hora\n        FROM pr_ezi_laboratorio_gral2\n        WHERE codigoproceso = 'Bagazo'\n          AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n          AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n          AND humedad > 0\n\n        UNION\n\n        SELECT DISTINCT fechaindustrial, LEFT(HORA, 2) + ':00' AS hora\n        FROM CORONA.dbo.pr_ezi_especiales2\n        WHERE codigoproceso = 'Embolsado'\n          AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n          AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n          AND CantBolsas > 0\n          AND CONVERT(DATE, fechaindustrial, 103) <= CAST(GETDATE() AS DATE)\n    ) AS base\n    LEFT JOIN (\n        SELECT fechaindustrial, HORA, COALESCE(KILOS, 0) AS KILOS\n        FROM pr_ezi_laboratorio_gral\n        WHERE codigoproceso = 'Molienda'\n          AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n    ) AS k ON base.fechaindustrial = k.fechaindustrial AND base.hora = k.HORA\n    LEFT JOIN (\n        SELECT fechaindustrial, HORA AS hora, COALESCE(KILOS, 0) AS kilos\n        FROM pr_ezi_laboratorio_gral\n        WHERE codigoproceso = 'Gas'\n          AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n    ) AS g ON base.fechaindustrial = g.fechaindustrial AND base.hora = g.hora\n    LEFT JOIN (\n        SELECT fechaindustrial, HORA AS hora, COALESCE(humedad, 0) AS humedad\n        FROM pr_ezi_laboratorio_gral2\n        WHERE codigoproceso = 'Bagazo'\n          AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n    ) AS h ON base.fechaindustrial = h.fechaindustrial AND base.hora = h.hora\n    LEFT JOIN (\n        SELECT\n            fechaindustrial,\n            LEFT(HORA, 2) + ':00' AS hora,\n            SUM(COALESCE(CantBolsas, 0)) AS bolsas\n        FROM CORONA.dbo.pr_ezi_especiales2\n        WHERE codigoproceso = 'Embolsado'\n          AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n        GROUP BY fechaindustrial, LEFT(HORA, 2)\n    ) AS e ON base.fechaindustrial = e.fechaindustrial AND base.hora = e.hora\n),\nFechaIndustrialActual AS (\n    SELECT TOP 1 fechaindustrial\n    FROM ConsultaBase\n    ORDER BY CONVERT(DATE, fechaindustrial, 103) DESC\n),\nMovConvertidos AS (\n    SELECT\n        mov.peso_neto AS cania_bruta,\n        DATEADD(\n            SECOND,\n            DATEDIFF(SECOND, 0, CONVERT(DATETIME, CONVERT(VARCHAR(8), mov.hora_salida, 108), 108)),\n            CONVERT(DATETIME, CONVERT(VARCHAR(10), mov.fecha_pesada, 103), 103)\n        ) AS fecha_hora_salida\n    FROM pr_ezi_movimientos mov\n    WHERE\n        ISDATE(CONVERT(VARCHAR(10), mov.fecha_pesada, 103)) = 1\n        AND ISDATE(CONVERT(VARCHAR(8), mov.hora_salida, 108)) = 1\n),\nUltimoRegistro AS (\n    SELECT MAX(fecha_hora_salida) AS ultima_fecha_hora\n    FROM MovConvertidos\n),\nRangoHora AS (\n    SELECT\n        DATEADD(HOUR, DATEDIFF(HOUR, 0, ultima_fecha_hora), 0) AS desde,\n        DATEADD(HOUR, DATEDIFF(HOUR, 0, ultima_fecha_hora) + 1, 0) AS hasta\n    FROM UltimoRegistro\n),\nCaniaHoraCurso AS (\n    SELECT\n        f.fechaindustrial,\n        RIGHT('0' + CAST(DATEPART(HOUR, r.hasta) AS VARCHAR(2)), 2) + ':00' AS hora,\n        SUM(m.cania_bruta) AS kilos,\n        0 AS gas,\n        0 AS humedad,\n        0 AS bolsas\n    FROM MovConvertidos m\n    CROSS JOIN RangoHora r\n    CROSS JOIN FechaIndustrialActual f\n    WHERE\n        m.fecha_hora_salida >= r.desde\n        AND m.fecha_hora_salida < r.hasta\n    GROUP BY\n        f.fechaindustrial,\n        r.hasta\n),\nResultado AS (\n    SELECT fechaindustrial, hora, kilos, gas, humedad, bolsas\n    FROM ConsultaBase\n\n    UNION ALL\n\n    SELECT fechaindustrial, hora, kilos, gas, humedad, bolsas\n    FROM CaniaHoraCurso ch\n    WHERE\n        ch.kilos > 0\n        AND ch.hora > (\n            SELECT MAX(cb.hora)\n            FROM ConsultaBase cb\n            WHERE cb.fechaindustrial = ch.fechaindustrial\n        )\n)\nSELECT\n    fechaindustrial,\n    hora,\n    kilos,\n    gas,\n    humedad,\n    bolsas\nFROM Resultado\nORDER BY\n    CONVERT(DATE, fechaindustrial, 103) DESC,\n    hora DESC; ",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 2670,
+    "y": 980,
+    "wires": [
+      [
+        "ad69a45ae48eaa97",
+        "60cae5cd5ae7f9f4"
+      ]
+    ]
+  },
+  {
+    "id": "ad69a45ae48eaa97",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción/actualización.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Función simple para convertir fecha de dd/mm/yyyy a yyyy-mm-dd\nfunction convertirFecha(fechaStr) {\n    if (!fechaStr) return '';\n    \n    const fecha = fechaStr.toString().trim();\n    \n    // Si ya está en formato yyyy-mm-dd, retornar tal cual\n    if (/^\\d{4}-\\d{2}-\\d{2}$/.test(fecha)) {\n        return fecha;\n    }\n    \n    // Convertir de dd/mm/yyyy a yyyy-mm-dd\n    const partes = fecha.split('/');\n    if (partes.length === 3) {\n        const dia = partes[0].padStart(2, '0');\n        const mes = partes[1].padStart(2, '0');\n        const año = partes[2];\n        return `${año}-${mes}-${dia}`;\n    }\n    \n    return fecha; // Si no coincide, mantener original\n}\n\n// Cambiado a INSERT ... ON DUPLICATE KEY UPDATE\nconst insertSql = `\n    INSERT INTO consumos_x_hora (fechaindustrial, hora, gas, kilos, humedad, bolsas)\n    VALUES (?, ?, ?, ?, ?, ?)\n    ON DUPLICATE KEY UPDATE \n        fechaindustrial = VALUES(fechaindustrial),\n        hora = VALUES(hora),\n        gas = VALUES(gas),\n        kilos = VALUES(kilos),\n        humedad = VALUES(humedad),\n        bolsas = VALUES(bolsas)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Convertir fecha de dd/mm/yyyy a yyyy-mm-dd\n    const fechaindustrial = convertirFecha(row.fechaindustrial) || '';\n    const hora = row.hora || '';\n    const gas = row.gas || 0;\n    const kilos = row.kilos || 0;\n    const humedad = row.humedad || 0;\n    const bolsas = row.bolsas || 0;\n\n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [fechaindustrial, hora, gas, kilos, humedad, bolsas];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql,\n        // También puedes incluir la fila original para debugging\n        _originalRow: row\n    });\n}\n\n// Devolver los mensajes para el nodo MySQL\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2950,
+    "y": 980,
+    "wires": [
+      [
+        "mysql_consumos_x_hora_ins",
+        "27136084f5a0bb75"
+      ]
+    ]
+  },
+  {
+    "id": "60cae5cd5ae7f9f4",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "name": "debug 112",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3430,
+    "y": 980,
+    "wires": []
+  },
+  {
+    "id": "2c4bec3aa6a61644",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Molienda Ultima Hora (Laboratorio)",
+    "func": "let molienda = `\nSELECT\n    CONVERT(VARCHAR(10), CONVERT(DATE, base.fechaindustrial, 103), 103) AS fechaindustrial,\n    base.hora,\n    COALESCE(k.KILOS,   0) AS kilos,\n    COALESCE(g.kilos,   0) AS gas,\n    COALESCE(h.humedad, 0) AS humedad,\n    COALESCE(e.bolsas,  0) AS bolsas\nFROM (\n    SELECT DISTINCT fechaindustrial, HORA AS hora\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Molienda'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND KILOS > 0\n    UNION\n    SELECT DISTINCT fechaindustrial, HORA AS hora\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Gas'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND KILOS > 0\n    UNION\n    SELECT DISTINCT fechaindustrial, HORA AS hora\n    FROM pr_ezi_laboratorio_gral2\n    WHERE codigoproceso = 'Bagazo'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND humedad > 0\n    UNION\n    SELECT DISTINCT fechaindustrial, LEFT(HORA, 2) + ':00' AS hora\n    FROM CORONA.dbo.pr_ezi_especiales2\n    WHERE codigoproceso = 'Embolsado'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND CantBolsas > 0\n      AND CONVERT(DATE, fechaindustrial, 103) <= CAST(GETDATE() AS DATE)\n) AS base\nLEFT JOIN (\n    SELECT fechaindustrial, HORA, COALESCE(KILOS, 0) AS KILOS\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Molienda'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n) AS k ON base.fechaindustrial = k.fechaindustrial AND base.hora = k.HORA\nLEFT JOIN (\n    SELECT fechaindustrial, HORA AS hora, COALESCE(KILOS, 0) AS kilos\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Gas'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n) AS g ON base.fechaindustrial = g.fechaindustrial AND base.hora = g.hora\nLEFT JOIN (\n    SELECT fechaindustrial, HORA AS hora, COALESCE(humedad, 0) AS humedad\n    FROM pr_ezi_laboratorio_gral2\n    WHERE codigoproceso = 'Bagazo'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n) AS h ON base.fechaindustrial = h.fechaindustrial AND base.hora = h.hora\nLEFT JOIN (\n    SELECT\n        fechaindustrial,\n        LEFT(HORA, 2) + ':00' AS hora,\n        SUM(COALESCE(CantBolsas, 0)) AS bolsas\n    FROM CORONA.dbo.pr_ezi_especiales2\n    WHERE codigoproceso = 'Embolsado'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n    GROUP BY fechaindustrial, LEFT(HORA, 2)\n) AS e ON base.fechaindustrial = e.fechaindustrial AND base.hora = e.hora\nORDER BY\n    CONVERT(DATE, base.fechaindustrial, 103) DESC,\n    base.hora DESC;\n`;\n\nmsg.payload = molienda;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2620,
+    "y": 1220,
+    "wires": [
+      [
+        "4ce723f3c6aac3e7"
+      ]
+    ]
+  },
+  {
+    "id": "4ce723f3c6aac3e7",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 2890,
+    "y": 1220,
+    "wires": [
+      [
+        "02cb1b5d40db4b30"
+      ]
+    ]
+  },
+  {
+    "id": "02cb1b5d40db4b30",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "name": "debug 113",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3150,
+    "y": 1220,
+    "wires": []
+  },
+  {
+    "id": "63c16dddb9dc4ee4",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/15 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 2380,
+    "y": 1220,
+    "wires": [
+      [
+        "2c4bec3aa6a61644"
+      ]
+    ]
+  },
+  {
+    "id": "38c5517238e3fd3f",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/15 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 2500,
+    "y": 300,
+    "wires": [
+      [
+        "b8bc90aa332fadac"
+      ]
+    ]
+  },
+  {
+    "id": "b8bc90aa332fadac",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Molienda Ultima Hora (Laboratorio)",
+    "func": "let molienda = `\nSELECT DISTINCT codigoproceso\nFROM pr_ezi_laboratorio_gral\nORDER BY codigoproceso;\n\n`;\n\nmsg.payload = molienda;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2740,
+    "y": 300,
+    "wires": [
+      [
+        "50eeaf6debdaca66"
+      ]
+    ]
+  },
+  {
+    "id": "50eeaf6debdaca66",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 3010,
+    "y": 300,
+    "wires": [
+      [
+        "72509fd60eb10e6b"
+      ]
+    ]
+  },
+  {
+    "id": "72509fd60eb10e6b",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "name": "debug 109",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3200,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "0349fed68e798185",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "name": "Molienda Ultima Hora (Laboratorio)",
+    "func": "let molienda = `\nSELECT\n    DATE(CONVERT_TZ(fechaindustrial, '+00:00', '-03:00')) + INTERVAL 0 HOUR AS time,\n    SUM(gas) AS consumo_gas\nFROM molienda_xHora\nWHERE fechaindustrial >= '2025-05-10'\n  AND fechaindustrial < '2025-9-15'\nGROUP BY time\nORDER BY time;\n\n`;\n\nmsg.payload = molienda;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2680,
+    "y": 1500,
+    "wires": [
+      [
+        "ce377b10e30804ad"
+      ]
+    ]
+  },
+  {
+    "id": "b4c274d5961f2283",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "name": "debug 116",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3210,
+    "y": 1500,
+    "wires": []
+  },
+  {
+    "id": "f0c88242ea92f690",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/15 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 2440,
+    "y": 1500,
+    "wires": [
+      [
+        "0349fed68e798185"
+      ]
+    ]
+  },
+  {
+    "id": "e380de9351c78b01",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 2950,
+    "y": 840,
+    "wires": [
+      [
+        "59b44d0648d2803b"
+      ]
+    ]
+  },
+  {
+    "id": "68caf1eb71d6887a",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 2890,
+    "y": 740,
+    "wires": [
+      [
+        "d894d942109a30b8"
+      ]
+    ]
+  },
+  {
+    "id": "84ee89bb605ee8af",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 2950,
+    "y": 420,
+    "wires": [
+      [
+        "a95e2acb605c5b74"
+      ]
+    ]
+  },
+  {
+    "id": "7a806b3b782da0fc",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 2910,
+    "y": 360,
+    "wires": [
+      [
+        "8df6aefb1414ef49"
+      ]
+    ]
+  },
+  {
+    "id": "ce377b10e30804ad",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 2970,
+    "y": 1500,
+    "wires": [
+      [
+        "b4c274d5961f2283"
+      ]
+    ]
+  },
+  {
+    "id": "9f3ad83ed9d4b0d1",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 2870,
+    "y": 780,
+    "wires": [
+      [
+        "d894d942109a30b8"
+      ]
+    ]
+  },
+  {
+    "id": "e5d2f0a6bbc215b5",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 2930,
+    "y": 900,
+    "wires": [
+      [
+        "59b44d0648d2803b"
+      ]
+    ]
+  },
+  {
+    "id": "f40ca1927f176b8c",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "name": "Startup + cada hora",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "3600",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 2,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 320,
+    "y": 1900,
+    "wires": [
+      [
+        "dca7894aa051657a"
+      ]
+    ]
+  },
+  {
+    "id": "dca7894aa051657a",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Armar SQL config",
+    "func": "msg.topic = \"SELECT id, anio, fecha_inicio, nombre_zafra FROM config_zafra WHERE id = 1 LIMIT 1\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 520,
+    "y": 1900,
+    "wires": [
+      [
+        "c1c60e86c36445ec"
+      ]
+    ]
+  },
+  {
+    "id": "c1c60e86c36445ec",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "Lee config_zafra",
+    "x": 720,
+    "y": 1900,
+    "wires": [
+      [
+        "f0406dd24768b98f"
+      ]
+    ]
+  },
+  {
+    "id": "f0406dd24768b98f",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "name": "Set global context",
+    "func": "const rows = msg.payload;\nif (!rows || rows.length === 0) {\n    node.warn('config_zafra: sin resultados');\n    return null;\n}\nconst cfg = rows[0];\n\n// fecha_inicio viene como Date de MySQL: 2026-05-18T03:00:00.000Z\nconst d = new Date(cfg.fecha_inicio);\nconst yyyy = d.getFullYear();\nconst mm   = String(d.getMonth() + 1).padStart(2, '0');\nconst dd   = String(d.getDate()).padStart(2, '0');\n\n// Formatos que usan las queries SQL Server\nglobal.set('zafra_inicio_dmY',    `${dd}/${mm}/${yyyy}`);   // '18/05/2026'\nglobal.set('zafra_inicio_Ymd',    `${yyyy}-${mm}-${dd}`);   // '2026-05-18'\nglobal.set('zafra_inicio_mes_Ymd',`${yyyy}-${mm}-01`);      // '2026-05-01'\nglobal.set('zafra_anio',           cfg.anio);\nglobal.set('zafra_nombre',         cfg.nombre_zafra);\n\nnode.log(`Config zafra cargada: ${cfg.nombre_zafra} | inicio: ${dd}/${mm}/${yyyy}`);\nreturn null;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 930,
+    "y": 1900,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "a0916bc758d59a20",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "name": "Paradas_Fabrica-MMSQL",
+    "func": "const fechaInicio = global.get('zafra_inicio_dmY') || '18/05/2026';\n\nlet Consuslta = `\nSELECT\n    [DESDE],\n    [HASTA],\n    [T_Neto],\n    [origen],\n    [maquina],\n    [motivo],\n    [fechaindustrial],\n    [id]\nFROM [CORONA].[dbo].[v_pr_ezi_paradas]\nWHERE\n    fechaindustrial >= '${fechaInicio}'\n    AND fechaindustrial <= (\n        SELECT MAX(fechaindustrial)\n        FROM [CORONA].[dbo].[v_pr_ezi_paradas]\n    )\nORDER BY\n    CONVERT(DATE, fechaindustrial, 103) DESC,\n    [DESDE] DESC;\n`;\n\nmsg.payload = Consuslta;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 530,
+    "y": 160,
+    "wires": [
+      [
+        "7b1c9bd85c8dbb62"
+      ]
+    ]
+  },
+  {
+    "id": "7b1c9bd85c8dbb62",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2026' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 770,
+    "y": 160,
+    "wires": [
+      [
+        "db4394a8b6de98fb",
+        "21f9bc50b9999d3c"
+      ]
+    ]
+  },
+  {
+    "id": "db4394a8b6de98fb",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "name": "Rev MMSQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 970,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "21f9bc50b9999d3c",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "name": "Insercion en MySQL",
+    "func": "// =====================\n// FUNCIONES AUXILIARES\n// =====================\nfunction parseDateDMY(str) {\n    if (!str) return null;\n    const [d, m, y] = str.split('/');\n    if (!d || !m || !y) return null;\n    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n}\n\nfunction normalizeTime(str) {\n    if (!str) return null;\n    const parts = str.split(':');\n    if (parts.length < 2) return null; // debe tener al menos HH:MM\n    const h = String(parts[0] || 0).padStart(2,'0');\n    const m = String(parts[1] || 0).padStart(2,'0');\n    const s = parts[2] ? String(parts[2]).padStart(2,'0') : '00';\n    return `${h}:${m}:${s}`;\n}\n\nfunction tNetoToMinutes(str) {\n    if (!str) return 0;\n    const parts = str.split(':');\n    const h = parseInt(parts[0]) || 0;\n    const m = parseInt(parts[1]) || 0;\n    return h * 60 + m;\n}\n\n// =====================\n// PROCESAMIENTO\n// =====================\nconst rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay datos de paradas para insertar\");\n    return null;\n}\n\n// =====================\n// CONSULTA MYSQL\n// =====================\nconst sql = `\nINSERT INTO paradas_fabrica (\n    fechaindustrial,\n    desde,\n    hasta,\n    t_neto,\n    t_neto_minutos,\n    origen,\n    maquina,\n    motivo,\n    id_mssql\n)\nVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    hasta = VALUES(hasta),\n    t_neto = VALUES(t_neto),\n    t_neto_minutos = VALUES(t_neto_minutos),\n    motivo = VALUES(motivo),\n    origen = VALUES(origen);\n`;\n\n// =====================\n// PREPARACIÓN DE MENSAJES\n// =====================\nconst msgs = [];\n\nfor (const r of rows) {\n    const fecha = parseDateDMY(r.fechaindustrial);\n    const desde = normalizeTime(r.DESDE);\n    const hasta = normalizeTime(r.HASTA);\n    const t_neto = normalizeTime(r.T_Neto);\n    const t_neto_minutos = tNetoToMinutes(r.T_Neto);\n\n    if (!fecha) {\n        node.warn(\"Fila descartada sin fecha\");\n        continue;\n    }\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            fecha,\n            desde || null,\n            hasta || null,\n            t_neto || null,\n            t_neto_minutos,\n            r.origen || null,\n            r.maquina || null,\n            r.motivo || null,\n            r.id || null\n        ],\n        _debug: r\n    });\n}\n\nnode.warn(`Registros listos para insertar: ${msgs.length}`);\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 420,
+    "y": 220,
+    "wires": [
+      [
+        "337b67d8b6af63b9",
+        "4c16b3f1625b9b73"
+      ]
+    ]
+  },
+  {
+    "id": "e8a3b2ef6609154e",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "name": "Crear Tabla (paradas_fabrica) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS produccion_porHora (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n\n    fechaindustrial DATE NOT NULL,\n    hora TIME NOT NULL,\n\n    gas DECIMAL(12,2) DEFAULT 0,\n    kilos DECIMAL(12,2) DEFAULT 0,\n    humedad DECIMAL(6,2) DEFAULT 0,\n    bolsas INT DEFAULT 0,\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    UNIQUE KEY uq_produccion (fechaindustrial, hora),\n\n    INDEX idx_fecha (fechaindustrial),\n    INDEX idx_hora (hora)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 560,
+    "y": 280,
+    "wires": [
+      [
+        "21eb38e51e0138b3",
+        "cb39a8e5e02c6352"
+      ]
+    ]
+  },
+  {
+    "id": "3032937016b1f1bb",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1100,
+    "y": 280,
+    "wires": []
+  },
+  {
+    "id": "a4ed57e3949cfa8c",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 970,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "09bc915cc6592b7f",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/4 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 320,
+    "y": 160,
+    "wires": [
+      [
+        "a0916bc758d59a20"
+      ]
+    ]
+  },
+  {
+    "id": "337b67d8b6af63b9",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 730,
+    "y": 200,
+    "wires": [
+      [
+        "a4ed57e3949cfa8c"
+      ]
+    ]
+  },
+  {
+    "id": "21eb38e51e0138b3",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 850,
+    "y": 260,
+    "wires": [
+      [
+        "3032937016b1f1bb"
+      ]
+    ]
+  },
+  {
+    "id": "cb39a8e5e02c6352",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 830,
+    "y": 300,
+    "wires": [
+      [
+        "3032937016b1f1bb"
+      ]
+    ]
+  },
+  {
+    "id": "4c16b3f1625b9b73",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "2e4640176f66704c",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 630,
+    "y": 240,
+    "wires": [
+      [
+        "a4ed57e3949cfa8c"
+      ]
+    ]
+  },
+  {
+    "id": "a539326d4de4326b",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "name": "Paradas_Destileria-MMSQL",
+    "func": "const fechaInicio = global.get('zafra_inicio_dmY') || '18/05/2026';\n\nlet Consuslta = `\nSELECT TOP 1000\n    [DESDE],\n    [HASTA],\n    [T_Neto],\n    [origen],\n    [maquina],\n    [motivo],\n    [fechaindustrial],\n    [codigoproceso]\nFROM [CORONA].[dbo].[v_pr_ezi_paradas_destileria]\nWHERE \n    CONVERT(DATETIME, fechaindustrial, 103) >= CONVERT(DATETIME, '${fechaInicio}', 103)\nORDER BY \n    CONVERT(DATETIME, fechaindustrial, 103) DESC;\n`;\n\nmsg.payload = Consuslta;  // Asigna la consulta SQL al payload\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 520,
+    "y": 440,
+    "wires": [
+      [
+        "da5b78372849dc39"
+      ]
+    ]
+  },
+  {
+    "id": "da5b78372849dc39",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2026' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 770,
+    "y": 440,
+    "wires": [
+      [
+        "38150f4902d340e1",
+        "cff798cd7586a3af"
+      ]
+    ]
+  },
+  {
+    "id": "38150f4902d340e1",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "name": "Rev MMSQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 970,
+    "y": 440,
+    "wires": []
+  },
+  {
+    "id": "cff798cd7586a3af",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "name": "Insercion en MySQL",
+    "func": "// =====================\n// FUNCIONES AUXILIARES\n// =====================\n\n// Convierte \"17/10/2025\" → \"2025-10-17\"\nfunction parseDateDMY(str) {\n    if (!str) return null;\n    const [d, m, y] = str.split('/');\n    if (!d || !m || !y) return null;\n    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n}\n\n// Convierte \"04:20\" → \"04:20:00\" (formato TIME MySQL)\nfunction formatTimeMySQL(str) {\n    if (!str) return null;\n    const parts = str.split(':');\n    if (parts.length < 2) return null;\n    const h = parts[0].padStart(2,'0');\n    const m = parts[1].padStart(2,'0');\n    return `${h}:${m}:00`;\n}\n\n// Convierte \"04:20\" → minutos (260)\nfunction timeToMinutes(str) {\n    if (!str) return 0;\n    const parts = str.split(':').map(Number);\n    return (parts[0] || 0) * 60 + (parts[1] || 0);\n}\n\n// =====================\n// PROCESAMIENTO\n// =====================\nconst rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay datos desde MSSQL\");\n    return null;\n}\n\n// =====================\n// CONSULTA MYSQL\n// =====================\nconst sql = `\nINSERT INTO paradas_destileria (\n    fechaindustrial,\n    desde,\n    hasta,\n    t_neto,\n    t_neto_minutos,\n    origen,\n    maquina,\n    motivo,\n    codigoproceso\n)\nVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    hasta = VALUES(hasta),\n    t_neto = VALUES(t_neto),\n    t_neto_minutos = VALUES(t_neto_minutos),\n    motivo = VALUES(motivo),\n    origen = VALUES(origen);\n`;\n\n// =====================\n// PREPARACIÓN DE MENSAJES\n// =====================\nconst msgs = [];\n\nfor (const r of rows) {\n    const fecha = parseDateDMY(r.fechaindustrial);\n    if (!fecha) {\n        node.warn(\"Fila descartada por falta de fecha\",);\n        continue;\n    }\n\n    const desde = formatTimeMySQL(r.DESDE);\n    const hasta = formatTimeMySQL(r.HASTA) || null;\n    const t_neto = formatTimeMySQL(r.T_Neto);\n    const t_neto_minutos = timeToMinutes(r.T_Neto);\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            fecha,\n            desde,\n            hasta,\n            t_neto,\n            t_neto_minutos,\n            r.origen || null,\n            r.maquina || null,\n            r.motivo || null,\n            r.codigoproceso || null\n        ],\n        _debug: r\n    });\n}\n\nnode.warn(`Registros listos para insertar: ${msgs.length}`);\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 460,
+    "y": 500,
+    "wires": [
+      [
+        "4b818b2509dbc0b3",
+        "30ac04714ecd2a73"
+      ]
+    ]
+  },
+  {
+    "id": "2471e02e427f36c3",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "name": "Crear Tabla (paradas_destileria) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS paradas_destileria (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n\n    fechaindustrial DATE NOT NULL,\n    desde TIME NOT NULL,\n    hasta TIME NOT NULL,\n\n    t_neto INT,\n\n    origen VARCHAR(100),\n    maquina VARCHAR(100),\n    motivo VARCHAR(255),\n    codigoproceso VARCHAR(100),\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    UNIQUE KEY uq_parada (\n        fechaindustrial,\n        desde,\n        maquina,\n        codigoproceso\n    ),\n\n    INDEX idx_fecha (fechaindustrial),\n    INDEX idx_maquina (maquina)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 530,
+    "y": 560,
+    "wires": [
+      [
+        "9ccab809dec5d83b",
+        "3a0309dd3427423e"
+      ]
+    ]
+  },
+  {
+    "id": "a60ad022ab47d16c",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1080,
+    "y": 560,
+    "wires": []
+  },
+  {
+    "id": "b415373ee97eb02e",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "name": "Rev Insert MySQL",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 970,
+    "y": 500,
+    "wires": []
+  },
+  {
+    "id": "3b28716d60470c76",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/10 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 300,
+    "y": 440,
+    "wires": [
+      [
+        "a539326d4de4326b"
+      ]
+    ]
+  },
+  {
+    "id": "4b818b2509dbc0b3",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 710,
+    "y": 480,
+    "wires": [
+      [
+        "b415373ee97eb02e"
+      ]
+    ]
+  },
+  {
+    "id": "9ccab809dec5d83b",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 850,
+    "y": 580,
+    "wires": [
+      [
+        "a60ad022ab47d16c"
+      ]
+    ]
+  },
+  {
+    "id": "3a0309dd3427423e",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 870,
+    "y": 540,
+    "wires": [
+      [
+        "a60ad022ab47d16c"
+      ]
+    ]
+  },
+  {
+    "id": "30ac04714ecd2a73",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "b23c00b95ffba0f0",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 670,
+    "y": 520,
+    "wires": [
+      [
+        "b415373ee97eb02e"
+      ]
+    ]
+  },
+  {
+    "id": "3f2adfaac2c2bef7",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "name": "Molienda_Laboratrio-MMSQL",
+    "func": "let Consuslta = `\nSELECT\n    CONVERT(VARCHAR(10), CONVERT(DATE, base.fechaindustrial, 103), 103) AS fechaindustrial,\n    base.hora,\n    COALESCE(k.KILOS,   0) AS kilos,\n    COALESCE(g.kilos,   0) AS gas,\n    COALESCE(h.humedad, 0) AS humedad,\n    COALESCE(e.bolsas,  0) AS bolsas\nFROM (\n    SELECT DISTINCT fechaindustrial, HORA AS hora\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Molienda'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND KILOS > 0\n    UNION\n    SELECT DISTINCT fechaindustrial, HORA AS hora\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Gas'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND KILOS > 0\n    UNION\n    SELECT DISTINCT fechaindustrial, HORA AS hora\n    FROM pr_ezi_laboratorio_gral2\n    WHERE codigoproceso = 'Bagazo'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND humedad > 0\n    UNION\n    SELECT DISTINCT fechaindustrial, LEFT(HORA, 2) + ':00' AS hora\n    FROM CORONA.dbo.pr_ezi_especiales2\n    WHERE codigoproceso = 'Embolsado'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND CantBolsas > 0\n      AND CONVERT(DATE, fechaindustrial, 103) <= CAST(GETDATE() AS DATE)\n) AS base\nLEFT JOIN (\n    SELECT fechaindustrial, HORA, COALESCE(KILOS, 0) AS KILOS\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Molienda'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n) AS k ON base.fechaindustrial = k.fechaindustrial AND base.hora = k.HORA\nLEFT JOIN (\n    SELECT fechaindustrial, HORA AS hora, COALESCE(KILOS, 0) AS kilos\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Gas'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n) AS g ON base.fechaindustrial = g.fechaindustrial AND base.hora = g.hora\nLEFT JOIN (\n    SELECT fechaindustrial, HORA AS hora, COALESCE(humedad, 0) AS humedad\n    FROM pr_ezi_laboratorio_gral2\n    WHERE codigoproceso = 'Bagazo'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n) AS h ON base.fechaindustrial = h.fechaindustrial AND base.hora = h.hora\nLEFT JOIN (\n    SELECT\n        fechaindustrial,\n        LEFT(HORA, 2) + ':00' AS hora,\n        SUM(COALESCE(CantBolsas, 0)) AS bolsas\n    FROM CORONA.dbo.pr_ezi_especiales2\n    WHERE codigoproceso = 'Embolsado'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n    GROUP BY fechaindustrial, LEFT(HORA, 2)\n) AS e ON base.fechaindustrial = e.fechaindustrial AND base.hora = e.hora\nORDER BY\n    CONVERT(DATE, base.fechaindustrial, 103) DESC,\n    base.hora DESC;\n`;\n\nmsg.payload = Consuslta;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1570,
+    "y": 220,
+    "wires": [
+      [
+        "0d6bb1e848400f2b"
+      ]
+    ]
+  },
+  {
+    "id": "0d6bb1e848400f2b",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2026' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 1830,
+    "y": 220,
+    "wires": [
+      [
+        "df5e54cf60fe1ddb",
+        "ae5ae188d535df41"
+      ]
+    ]
+  },
+  {
+    "id": "df5e54cf60fe1ddb",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "name": "Rev MMSQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 2030,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "ae5ae188d535df41",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "name": "Insercion en MySQL",
+    "func": "const rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) return null;\n\nfunction parseDateDMY(str) {\n    if (!str) return null;\n    const [d,m,y] = str.split('/');\n    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n}\n\nconst sql = `\nINSERT INTO molienda_xHora (\n    fechaindustrial, hora, gas, kilos, humedad, bolsas\n)\nVALUES (?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    gas = VALUES(gas),\n    kilos = VALUES(kilos),\n    humedad = VALUES(humedad),\n    bolsas = VALUES(bolsas);\n`;\n\nconst msgs = [];\n\nfor (const r of rows) {\n    const fecha = parseDateDMY(r.fechaindustrial);\n    if (!fecha || !r.hora) continue;\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            fecha,\n            r.hora,\n            Number(r.gas) || 0,\n            Number(r.kilos) || 0,\n            Number(r.humedad) || 0,\n            Number(r.bolsas) || 0\n        ]\n    });\n}\n\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1440,
+    "y": 280,
+    "wires": [
+      [
+        "39e0f33821b38218",
+        "29aeba0c9df2bc35"
+      ]
+    ]
+  },
+  {
+    "id": "9d6eb3a49fd956ef",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "name": "Crear Tabla (produccion_porHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS produccion_porHora (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n\n    fechaindustrial DATE NOT NULL,\n    hora TIME NOT NULL,\n\n    gas DECIMAL(12,2) DEFAULT 0,\n    kilos DECIMAL(12,2) DEFAULT 0,\n    humedad DECIMAL(6,2) DEFAULT 0,\n    bolsas INT DEFAULT 0,\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    UNIQUE KEY uq_produccion (fechaindustrial, hora),\n\n    INDEX idx_fecha (fechaindustrial),\n    INDEX idx_hora (hora)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1530,
+    "y": 340,
+    "wires": [
+      [
+        "261b76b58c1def1a",
+        "0d5eb42f2fe9235d"
+      ]
+    ]
+  },
+  {
+    "id": "3baa90c533f02a2a",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 2100,
+    "y": 340,
+    "wires": []
+  },
+  {
+    "id": "f7fd23fc4287fd13",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1930,
+    "y": 280,
+    "wires": []
+  },
+  {
+    "id": "bad7dfbfd237c7c1",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/5 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 1340,
+    "y": 220,
+    "wires": [
+      [
+        "3f2adfaac2c2bef7"
+      ]
+    ]
+  },
+  {
+    "id": "39e0f33821b38218",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 1710,
+    "y": 260,
+    "wires": [
+      [
+        "f7fd23fc4287fd13"
+      ]
+    ]
+  },
+  {
+    "id": "261b76b58c1def1a",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 1870,
+    "y": 360,
+    "wires": [
+      [
+        "3baa90c533f02a2a"
+      ]
+    ]
+  },
+  {
+    "id": "0d5eb42f2fe9235d",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 1850,
+    "y": 320,
+    "wires": [
+      [
+        "3baa90c533f02a2a"
+      ]
+    ]
+  },
+  {
+    "id": "29aeba0c9df2bc35",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "de3467299811aff9",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 1650,
+    "y": 300,
+    "wires": [
+      [
+        "f7fd23fc4287fd13"
+      ]
+    ]
+  },
+  {
+    "id": "6dad92b8090f6fea",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "name": "Mieles_Destileria-MMSQL",
+    "func": "let Consuslta = `\nSELECT\n    id,\n    codigoproceso,\n    CONVERT(DATETIME, fechaindustrial, 103) AS fechaindustrial_dt,\n    fecharegistro,\n    horaregistro,\n    HORA,\n    brixmanual,\n    temperaturamanual,\n    polmanual,\n    phmanual,\n    brixautomatico,\n    polautomatico,\n    pureza\nFROM pr_ezi_laboratorio_gral\nWHERE\n    codigoproceso IN (\n        'Miel Rica de Primera',\n        'Miel Pobre de Primera',\n        'Miel de Segunda',\n        'Jarabe de Segunda',\n        'Magma de 3era',\n        'Azúcar de 3era'\n    )\n    AND brixmanual IS NOT NULL\n    AND CONVERT(DATETIME, fechaindustrial, 103) >= CONVERT(DATETIME, '01/01/2026', 103)\n    AND CONVERT(DATETIME, fechaindustrial, 103) <= GETDATE()\nORDER BY\n    fechaindustrial_dt DESC,\n    HORA ASC;\n`;\n\nmsg.payload = Consuslta;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1610,
+    "y": 740,
+    "wires": [
+      [
+        "1552e296d27dc92e"
+      ]
+    ]
+  },
+  {
+    "id": "1552e296d27dc92e",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2026' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 1870,
+    "y": 740,
+    "wires": [
+      [
+        "e1a05487b14ac3ce",
+        "e357fac504a0e574"
+      ]
+    ]
+  },
+  {
+    "id": "e1a05487b14ac3ce",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "name": "Rev MMSQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 2070,
+    "y": 740,
+    "wires": []
+  },
+  {
+    "id": "e357fac504a0e574",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "name": "Insercion en MySQL",
+    "func": "// =====================\n// FUNCIONES AUXILIARES\n// =====================\n\n// Convierte Date | \"17/10/2025\" | \"2025-10-17\" → \"YYYY-MM-DD\"\nfunction parseDateMySQL(str) {\n    if (!str) return null;\n\n    if (str instanceof Date) {\n        if (isNaN(str)) return null;\n        return str.toISOString().slice(0, 10);\n    }\n\n    const s = String(str);\n\n    if (s.includes('/')) {\n        const [d, m, y] = s.split('/');\n        if (!d || !m || !y) return null;\n        return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;\n    }\n\n    if (s.includes('-')) {\n        return s.slice(0, 10);\n    }\n\n    return null;\n}\n\n// Convierte \"7\" | \"07\" | \"07:00\" | \"07:00:00\" → \"HH:MM:SS\"\nfunction parseTimeMySQL(str) {\n    if (str === null || str === undefined) return null;\n\n    const s = String(str).trim();\n    if (!s) return null;\n\n    if (!s.includes(':')) {\n        const h = s.padStart(2, '0');\n        return `${h}:00:00`;\n    }\n\n    const parts = s.split(':');\n    const h = parts[0].padStart(2, '0');\n    const m = (parts[1] || '00').padStart(2, '0');\n    const sec = (parts[2] || '00').padStart(2, '0');\n\n    return `${h}:${m}:${sec}`;\n}\n\n// =====================\n// DATOS DE ENTRADA\n// =====================\nconst rows = msg.payload;\n\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay datos desde MSSQL\");\n    return null;\n}\n\n// =====================\n// SQL MYSQL (SIN KILOS)\n// =====================\nconst sql = `\nINSERT INTO calidadMieles_xHora (\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    horaregistro,\n    hora,\n    brixmanual,\n    temperaturamanual,\n    polmanual,\n    brixautomatico,\n    polautomatico,\n    pureza\n)\nVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    fecharegistro      = VALUES(fecharegistro),\n    horaregistro       = VALUES(horaregistro),\n    brixmanual         = VALUES(brixmanual),\n    temperaturamanual  = VALUES(temperaturamanual),\n    polmanual          = VALUES(polmanual),\n    brixautomatico     = VALUES(brixautomatico),\n    polautomatico      = VALUES(polautomatico),\n    pureza             = VALUES(pureza);\n`;\n\n// =====================\n// PREPARAR INSERTS\n// =====================\nconst msgs = [];\n\nfor (const r of rows) {\n\n    const fechaIndustrial = parseDateMySQL(r.fechaindustrial || r.fechaindustrial_dt);\n    const hora = parseTimeMySQL(r.HORA);\n\n    const fechaRegistro = r.fecharegistro\n        ? parseDateMySQL(r.fecharegistro)\n        : null;\n\n    const horaRegistro = r.horaregistro\n        ? parseTimeMySQL(r.horaregistro)\n        : null;\n\n    if (!fechaIndustrial || !hora) {\n        node.warn({\n            motivo: \"Fila descartada\",\n            fechaindustrial: r.fechaindustrial,\n            HORA: r.HORA,\n            codigoproceso: r.codigoproceso\n        });\n        continue;\n    }\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            r.codigoproceso || null,\n            fechaIndustrial,\n            fechaRegistro ? `${fechaRegistro} ${horaRegistro || '00:00:00'}` : null,\n            horaRegistro,\n            hora,\n            Number(r.brixmanual) || 0,\n            Number(r.temperaturamanual) || 0,\n            Number(r.polmanual) || 0,\n            Number(r.brixautomatico) || 0,\n            Number(r.polautomatico) || 0,\n            Number(r.pureza) || 0\n        ],\n        _debug: {\n            proceso: r.codigoproceso,\n            fechaindustrial: fechaIndustrial,\n            hora: hora\n        }\n    });\n}\n\nnode.warn(`Registros listos para insertar: ${msgs.length}`);\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1420,
+    "y": 800,
+    "wires": [
+      [
+        "c78b1cc1e72e8353",
+        "9f5c3b09d09e7827"
+      ]
+    ]
+  },
+  {
+    "id": "43a8f6be67f59ecb",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1950,
+    "y": 800,
+    "wires": []
+  },
+  {
+    "id": "8334505577a79328",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "name": "Crear Tabla (calidadMieles_xHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS miel_analisis (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    codigoproceso VARCHAR(50) NOT NULL,\n    fechaindustrial DATE NOT NULL,\n    fecharegistro DATETIME NULL,\n    horaregistro TIME NULL,\n    hora TIME NOT NULL,\n    kilos DECIMAL(10,2) DEFAULT 0,\n    brixmanual DECIMAL(10,2) DEFAULT 0,\n    temperaturamanual DECIMAL(10,2) DEFAULT 0,\n    polmanual DECIMAL(10,2) DEFAULT 0,\n    phmanual DECIMAL(10,2) DEFAULT 0,\n    brixautomatico DECIMAL(10,2) DEFAULT 0,\n    polautomatico DECIMAL(10,2) DEFAULT 0,\n    pureza DECIMAL(10,2) DEFAULT 0,\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    UNIQUE KEY uq_laboratorio (fechaindustrial, hora, codigoproceso)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1480,
+    "y": 860,
+    "wires": [
+      [
+        "d5bf48138f42a2df",
+        "992e563d9c0df91c"
+      ]
+    ]
+  },
+  {
+    "id": "c9871f8ca667a4a5",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 2060,
+    "y": 860,
+    "wires": []
+  },
+  {
+    "id": "27a173e8228d6cd5",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/6 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 1400,
+    "y": 740,
+    "wires": [
+      [
+        "6dad92b8090f6fea"
+      ]
+    ]
+  },
+  {
+    "id": "c78b1cc1e72e8353",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 1670,
+    "y": 780,
+    "wires": [
+      [
+        "43a8f6be67f59ecb"
+      ]
+    ]
+  },
+  {
+    "id": "d5bf48138f42a2df",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 1830,
+    "y": 840,
+    "wires": [
+      [
+        "c9871f8ca667a4a5"
+      ]
+    ]
+  },
+  {
+    "id": "992e563d9c0df91c",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 1810,
+    "y": 880,
+    "wires": [
+      [
+        "c9871f8ca667a4a5"
+      ]
+    ]
+  },
+  {
+    "id": "9f5c3b09d09e7827",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "809f8c1504dffb52",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 1610,
+    "y": 820,
+    "wires": [
+      [
+        "43a8f6be67f59ecb"
+      ]
+    ]
+  },
+  {
+    "id": "676097aca81355b8",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "580e838a8315a7b1",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1000,
+    "y": 860,
+    "wires": []
+  },
+  {
+    "id": "400c2e6eb5cace9f",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "580e838a8315a7b1",
+    "name": "Rev log MMSQL",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1060,
+    "y": 800,
+    "wires": []
+  },
+  {
+    "id": "62883408beb5822e",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "580e838a8315a7b1",
+    "name": "Crear Tabla (calidadAzucar_xHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS calidadAzucar_xHora (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n\n    codigoproceso VARCHAR(50) NOT NULL,\n    parte INT NOT NULL,\n\n    fecharegistro DATE NOT NULL,\n    hora TIME NOT NULL,\n\n    color DECIMAL(10,2),\n    color_objetivo DECIMAL(10,2),\n\n    turbidez DECIMAL(10,2),\n\n    humedad DECIMAL(10,2),\n    humedad_objetivo DECIMAL(10,2),\n\n    cenizas DECIMAL(10,2),\n    cenizas_objetivo DECIMAL(10,2),\n\n    granulometria_20 DECIMAL(10,2),\n    granulometria_30 DECIMAL(10,2),\n\n    sediment_test DECIMAL(10,2),\n    destino VARCHAR(50),\n\n    fecha DATE,\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    UNIQUE KEY uq_calidad (\n        codigoproceso,\n        fecharegistro,\n        hora,\n        parte\n    ),\n\n    INDEX idx_fecha (fecha),\n    INDEX idx_proceso (codigoproceso),\n    INDEX idx_parte (parte)\n);\n\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 460,
+    "y": 860,
+    "wires": [
+      [
+        "a69e0a4cad11d7ad"
+      ]
+    ]
+  },
+  {
+    "id": "f011015c8ec67330",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "580e838a8315a7b1",
+    "name": "Insercion en MySQL",
+    "func": "const rows = msg.payload;\n\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay datos para insertar\");\n    return null;\n}\n\n// =====================\n// FUNCIONES AUXILIARES\n// =====================\nfunction parseDate(value) {\n    if (!value) return null;\n\n    if (value instanceof Date) {\n        return value.toISOString().slice(0, 10);\n    }\n\n    // DD/MM/YYYY\n    if (/^\\d{2}\\/\\d{2}\\/\\d{4}$/.test(value)) {\n        const [d, m, y] = value.split(\"/\");\n        return `${y}-${m}-${d}`;\n    }\n\n    // YYYY-MM-DD\n    if (/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) {\n        return value;\n    }\n\n    return null;\n}\n\nfunction normHora(h) {\n    if (!h) return null;\n\n    const v = String(h).trim();\n\n    if (/^\\d{1,2}$/.test(v)) return v.padStart(2,'0') + ':00:00';\n    if (/^\\d{1,2}:\\d{2}$/.test(v)) return v.padStart(5,'0') + ':00';\n    if (/^\\d{1,2}:\\d{2}:\\d{2}$/.test(v)) return v.padStart(8,'0');\n\n    return null;\n}\n\n// =====================\n// SQL\n// =====================\nconst insertSql = `\nINSERT IGNORE INTO calidadAzucar_xHora (\n    codigoproceso,\n    fechaindustrial,\n    hora,\n    color,\n    turbidez,\n    humedad,\n    cenizas,\n    granulometria_20,\n    granulometria_30,\n    sediment_test,\n    so2\n)\nVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);\n`;\n\n// =====================\n// PROCESAMIENTO\n// =====================\nconst messages = [];\n\nfor (const r of rows) {\n\n    const fechaindustrial = parseDate(r.fechaindustrial);\n    const hora = normHora(r.HORA ?? r.hora);\n\n    if (!r.codigoproceso || !fechaindustrial || !hora) {\n        node.warn(\"Fila descartada\");\n        continue;\n    }\n\n    messages.push({\n        topic: insertSql,\n        payload: [\n            r.codigoproceso,\n            fechaindustrial,\n            hora,\n            r.Color ?? null,\n            r.Turbidez ?? null,\n            r.Humedad ?? null,\n            r.Cenizas ?? null,\n            r.Gran_20 ?? null,\n            r.Gran_30 ?? null,\n            r.sedimento ?? null,\n            r.SO2 ?? null\n        ]\n    });\n}\n\nnode.warn(`Registros listos para insertar: ${messages.length}`);\nreturn [messages];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 840,
+    "y": 800,
+    "wires": [
+      [
+        "15e8b35b893b82d8"
+      ]
+    ]
+  },
+  {
+    "id": "2ca7edfd356fd4a9",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "580e838a8315a7b1",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 590,
+    "y": 800,
+    "wires": []
+  },
+  {
+    "id": "1341414f9f09f6da",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "580e838a8315a7b1",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/5 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 360,
+    "y": 740,
+    "wires": [
+      [
+        "e36640ba8779a3f7"
+      ]
+    ]
+  },
+  {
+    "id": "e36640ba8779a3f7",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "580e838a8315a7b1",
+    "name": "Calidad_Azucar (Cinta larga, Cinta corta) MMSQL",
+    "func": "let Consuslta = `\nSELECT\n    id,\n    fechaindustrial,\n    codigoproceso,\n    (SUBSTRING(fecharegistro, 7, 4) + '-' +\n     SUBSTRING(fecharegistro, 4, 2) + '-' +\n     SUBSTRING(fecharegistro, 1, 2)) AS fecharegistro,\n    HORA,\n    Color,\n    Turbidez,\n    ROUND(Humedad * 100, 2) AS Humedad,\n    ROUND(Cenizas * 100, 2) AS Cenizas,\n    Granulometria_20 AS Gran_20,\n    Granulometria_30 AS Gran_30,\n    Sediment_Test AS sedimento,\n    SO2\nFROM pr_ezi_especiales\nWHERE codigoproceso IN ('Cinta Corta', 'Cinta Larga', 'Embolsado')\n  AND Color IS NOT NULL\n  AND SUBSTRING(fecharegistro, 7, 4) >= YEAR(GETDATE()) - 1\n\nUNION ALL\n\nSELECT\n    id,\n    fechaindustrial,\n    codigoproceso,\n    (SUBSTRING(fecharegistro, 7, 4) + '-' +\n     SUBSTRING(fecharegistro, 4, 2) + '-' +\n     SUBSTRING(fecharegistro, 1, 2)) AS fecharegistro,\n    HORA,\n    Color,\n    Turbidez,\n    ROUND(Humedad * 100, 2) AS Humedad,\n    ROUND(Cenizas * 100, 2) AS Cenizas,\n    Gran_20,\n    Gran_30,\n    Sedim_Test AS sedimento,\n    SO2\nFROM pr_ezi_especiales2\nWHERE codigoproceso IN ('Embolsado', 'Crudo')\n  AND Color IS NOT NULL\n  AND SUBSTRING(fechaindustrial, 7, 4) >= YEAR(GETDATE()) - 1\n\nORDER BY\n    fecharegistro DESC,\n    HORA DESC;\n`;\n\nmsg.payload = Consuslta;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 650,
+    "y": 740,
+    "wires": [
+      [
+        "89eaa786182cc212"
+      ]
+    ]
+  },
+  {
+    "id": "89eaa786182cc212",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "580e838a8315a7b1",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2026' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 970,
+    "y": 740,
+    "wires": [
+      [
+        "400c2e6eb5cace9f",
+        "f011015c8ec67330"
+      ]
+    ]
+  },
+  {
+    "id": "15e8b35b893b82d8",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "580e838a8315a7b1",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 370,
+    "y": 800,
+    "wires": [
+      [
+        "2ca7edfd356fd4a9"
+      ]
+    ]
+  },
+  {
+    "id": "a69e0a4cad11d7ad",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "580e838a8315a7b1",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 770,
+    "y": 860,
+    "wires": [
+      [
+        "676097aca81355b8"
+      ]
+    ]
+  },
+  {
+    "id": "ac5ac4b92320bbc7",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "name": "Analisis Bagazo (Laboratorio)",
+    "func": "let analisisBagazo = `\nselect TOP 50 id,\ncodigoproceso,\nfechaindustrial,\nfecharegistro,\nHORA,\nPeso_final,\nTara,\npolmanual1,\nhumedad,\npesoliquido,\nbrixautomatico,\npolautomatico,\nfibra FROM [CORONA].[dbo].[pr_ezi_laboratorio_gral2]\nwhere codigoproceso='Bagazo' and Peso_final is not null order by CONVERT(DATE, fechaindustrial, 103) desc, HORA desc;\n`;\n\nmsg.payload = analisisBagazo;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1570,
+    "y": 960,
+    "wires": [
+      [
+        "702854b3e8b46067"
+      ]
+    ]
+  },
+  {
+    "id": "702854b3e8b46067",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 1810,
+    "y": 960,
+    "wires": [
+      [
+        "dcf8cc7a1f96d55d",
+        "7324d5f8f3650463"
+      ]
+    ]
+  },
+  {
+    "id": "dcf8cc7a1f96d55d",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "name": "Insercion en MySQL",
+    "func": "// =========================\n// FUNCIONES AUXILIARES\n// =========================\nfunction parseDateMySQL(str) {\n    if (!str) return null;\n\n    // Caso Date\n    if (str instanceof Date) {\n        return str.toISOString().slice(0, 10);\n    }\n\n    // Caso \"DD/MM/YYYY\"\n    if (typeof str === \"string\" && str.includes(\"/\")) {\n        const [d, m, y] = str.split(\"/\");\n        return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;\n    }\n\n    return null;\n}\n\nfunction parseTimeMySQL(str) {\n    if (!str) return null;\n\n    // Asegura formato HH:MM:SS\n    const parts = String(str).split(\":\");\n    const h = parts[0]?.padStart(2, '0') ?? \"00\";\n    const m = parts[1]?.padStart(2, '0') ?? \"00\";\n    const s = parts[2]?.padStart(2, '0') ?? \"00\";\n\n    return `${h}:${m}:${s}`;\n}\n\n// =========================\n// VALIDACIÓN DE ENTRADA\n// =========================\nconst rows = msg.payload;\n\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null;\n}\n\n// =========================\n// SQL DE INSERCIÓN\n// =========================\nconst insertSql = `\nINSERT INTO calidadBagazo_xHora (\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    hora,\n    peso_final,\n    tara,\n    polmanual,\n    humedad,\n    pesoliquido,\n    brixautomatico,\n    polautomatico,\n    fibra\n)\nVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    fecharegistro   = VALUES(fecharegistro),\n    peso_final      = VALUES(peso_final),\n    tara            = VALUES(tara),\n    polmanual       = VALUES(polmanual),\n    humedad         = VALUES(humedad),\n    pesoliquido     = VALUES(pesoliquido),\n    brixautomatico  = VALUES(brixautomatico),\n    polautomatico   = VALUES(polautomatico),\n    fibra           = VALUES(fibra);\n`;\n\nconst messages = [];\n\n// =========================\n// PROCESAMIENTO DE FILAS\n// =========================\nfor (const r of rows) {\n\n    const fechaIndustrial = parseDateMySQL(r.fechaindustrial);\n    const fechaRegistro   = parseDateMySQL(r.fecharegistro);\n    const hora            = parseTimeMySQL(r.HORA);\n\n    // Validación mínima\n    if (!r.codigoproceso || !fechaIndustrial || !hora) {\n        node.warn(\"Fila descartada por datos incompletos\",);\n        continue;\n    }\n\n    messages.push({\n        topic: insertSql,\n        payload: [\n            r.codigoproceso,\n            fechaIndustrial,\n            fechaRegistro ? `${fechaRegistro} 00:00:00` : null,\n            hora,\n            Number(r.Peso_final)     || 0,\n            Number(r.Tara)           || 0,\n            Number(r.polmanual1)     || 0,\n            r.humedad !== null ? Number(r.humedad) : null,\n            Number(r.pesoliquido)    || 0,\n            Number(r.brixautomatico) || 0,\n            Number(r.polautomatico)  || 0,\n            Number(r.fibra)          || 0\n        ],\n        _debug: {\n            proceso: r.codigoproceso,\n            fecha: fechaIndustrial,\n            hora: hora\n        }\n    });\n}\n\nnode.warn(`Registros Bagazo listos para insertar: ${messages.length}`);\nreturn [messages];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1480,
+    "y": 1020,
+    "wires": [
+      [
+        "da9d8b0b058da551",
+        "0e1543f195f6c038"
+      ]
+    ]
+  },
+  {
+    "id": "e7745945658bd0d0",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/6 0-23 * * *",
+    "once": true,
+    "onceDelay": "0.2",
+    "topic": "",
+    "x": 1360,
+    "y": 960,
+    "wires": [
+      [
+        "ac5ac4b92320bbc7"
+      ]
+    ]
+  },
+  {
+    "id": "766c3c08cd3e0b42",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "name": "Crear Tabla (calidadBagazo_xHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE calidadBagazo_xHora (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n\n    codigoproceso VARCHAR(50) NOT NULL,\n\n    fechaindustrial DATE NOT NULL,\n    fecharegistro DATETIME NULL,\n\n    hora TIME NOT NULL,\n\n    peso_final DECIMAL(10,2) NOT NULL DEFAULT 0,\n    tara DECIMAL(10,2) NOT NULL DEFAULT 0,\n    polmanual DECIMAL(6,3) NOT NULL DEFAULT 0,\n    humedad DECIMAL(6,2) NULL,\n    pesoliquido DECIMAL(10,2) NOT NULL DEFAULT 0,\n    brixautomatico DECIMAL(6,3) NOT NULL DEFAULT 0,\n    polautomatico DECIMAL(6,3) NOT NULL DEFAULT 0,\n    fibra DECIMAL(6,2) NOT NULL DEFAULT 0,\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    -- 🚫 Evita duplicados\n    UNIQUE KEY uk_bagazo (codigoproceso, fechaindustrial, hora),\n\n    -- 🔎 Índices para consultas\n    INDEX idx_fecha (fechaindustrial),\n    INDEX idx_proceso (codigoproceso)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1440,
+    "y": 1080,
+    "wires": [
+      [
+        "66d5a97178aa8b2a",
+        "71e939a297de3678"
+      ]
+    ]
+  },
+  {
+    "id": "0cf33563fb8e802a",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1980,
+    "y": 1080,
+    "wires": []
+  },
+  {
+    "id": "7324d5f8f3650463",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "name": "Rev MMSQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 2010,
+    "y": 960,
+    "wires": []
+  },
+  {
+    "id": "7c819feb48d6ac6d",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1930,
+    "y": 1020,
+    "wires": []
+  },
+  {
+    "id": "da9d8b0b058da551",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 1710,
+    "y": 1000,
+    "wires": [
+      [
+        "7c819feb48d6ac6d"
+      ]
+    ]
+  },
+  {
+    "id": "66d5a97178aa8b2a",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 1750,
+    "y": 1080,
+    "wires": [
+      [
+        "0cf33563fb8e802a"
+      ]
+    ]
+  },
+  {
+    "id": "0e1543f195f6c038",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 1690,
+    "y": 1040,
+    "wires": [
+      [
+        "7c819feb48d6ac6d"
+      ]
+    ]
+  },
+  {
+    "id": "71e939a297de3678",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "386ce17aec8490f7",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 1730,
+    "y": 1120,
+    "wires": [
+      [
+        "0cf33563fb8e802a"
+      ]
+    ]
+  },
+  {
+    "id": "a26fc91bfd674788",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1040,
+    "y": 1300,
+    "wires": []
+  },
+  {
+    "id": "c86d7d85a9215098",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "name": "Crear Tabla (calidadCachaza_xHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE calidadCachaza_xHora (\n    id_mssql           INT NOT NULL,\n    codigoproceso      VARCHAR(50) NOT NULL,\n    fechaindustrial    DATE NOT NULL,\n    fecharegistro      DATETIME NULL,\n    horaregistro       TIME NULL,\n    hora               TIME NOT NULL,\n\n    polmanual1         DECIMAL(6,2) NULL,\n    polmanual2         DECIMAL(6,2) NULL,\n    polmanual3         DECIMAL(6,2) NULL,\n    polmanual4         DECIMAL(6,2) NULL,\n    humedad            DECIMAL(6,2) NULL,\n    polautomatico      DECIMAL(6,2) NULL,\n\n    created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    -- Clave primaria técnica\n    PRIMARY KEY (id_mssql),\n\n    -- Clave única lógica (ANTI DUPLICADOS)\n    UNIQUE KEY uk_cachaza_proc_fecha_hora (\n        codigoproceso,\n        fechaindustrial,\n        hora\n    )\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 1300,
+    "wires": [
+      [
+        "462b57d034beef14",
+        "6727c644c6942f14"
+      ]
+    ]
+  },
+  {
+    "id": "7d6b83d55e70ddea",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "name": "Analisis Cachaza (Laboratorio)",
+    "func": "let analisisBagazo = `\nSELECT TOP 20\n    id,\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    horaregistro,\n    HORA,\n    polmanual1,\n    polmanual2,\n    polmanual3,\n    polmanual4,\n    humedad,\n    polautomatico\nFROM pr_ezi_laboratorio_gral2\nWHERE codigoproceso = 'Cachaza'\n  AND polautomatico IS NOT NULL\nORDER BY \n    id DESC;\n`;\n\nmsg.payload = analisisBagazo;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 570,
+    "y": 1180,
+    "wires": [
+      [
+        "e52d6ddbfedfc73e"
+      ]
+    ]
+  },
+  {
+    "id": "e52d6ddbfedfc73e",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 820,
+    "y": 1180,
+    "wires": [
+      [
+        "fa609c410aa4e7f3",
+        "9edffb70b04017e2"
+      ]
+    ]
+  },
+  {
+    "id": "fa609c410aa4e7f3",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "name": "debug 102",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1030,
+    "y": 1180,
+    "wires": []
+  },
+  {
+    "id": "9edffb70b04017e2",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "name": "Insercion en MySQL",
+    "func": "// =====================\n// FUNCIONES AUXILIARES\n// =====================\n\n// \"17/10/2025\" → \"2025-10-17\"\nfunction parseDateDMY(str) {\n    if (!str) return null;\n    const [d, m, y] = str.split('/');\n    if (!d || !m || !y) return null;\n    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n}\n\n// \"22:00\" → \"22:00:00\"\nfunction formatTimeMySQL(str) {\n    if (!str) return null;\n    const [h, m] = str.split(':');\n    if (!h || !m) return null;\n    return `${h.padStart(2,'0')}:${m.padStart(2,'0')}:00`;\n}\n\n// =====================\n// PROCESAMIENTO\n// =====================\nconst rows = msg.payload;\n\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay datos desde MSSQL\");\n    return null;\n}\n\n// =====================\n// CONSULTA MYSQL\n// =====================\nconst sql = `\nINSERT INTO calidadCachaza_xHora (\n    id_mssql,\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    hora,\n    polmanual1,\n    polmanual2,\n    polmanual3,\n    polmanual4,\n    humedad,\n    polautomatico\n)\nVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    fecharegistro = VALUES(fecharegistro),\n    polmanual1    = VALUES(polmanual1),\n    polmanual2    = VALUES(polmanual2),\n    polmanual3    = VALUES(polmanual3),\n    polmanual4    = VALUES(polmanual4),\n    humedad       = VALUES(humedad),\n    polautomatico = VALUES(polautomatico);\n`;\n\n// =====================\n// PREPARACIÓN MENSAJES\n// =====================\nconst msgs = [];\n\nfor (const r of rows) {\n\n    const fechaindustrial = parseDateDMY(r.fechaindustrial);\n    const fecharegistro  = parseDateDMY(r.fecharegistro);\n    const hora           = formatTimeMySQL(r.HORA);\n\n    if (!fechaindustrial || !hora) {\n        node.warn(\"Fila descartada por fecha u hora inválida\",);\n        continue;\n    }\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            r.id,\n            r.codigoproceso,\n            fechaindustrial,\n            fecharegistro,\n            hora,\n            r.polmanual1 ?? null,\n            r.polmanual2 ?? null,\n            r.polmanual3 ?? null,\n            r.polmanual4 ?? null,\n            r.humedad ?? null,\n            r.polautomatico ?? null\n        ],\n        _debug: r\n    });\n}\n\nnode.warn(`Registros Cachaza listos para insertar: ${msgs.length}`);\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 380,
+    "y": 1240,
+    "wires": [
+      [
+        "f6f61e276b48f2f5",
+        "fb8659a27b385705"
+      ]
+    ]
+  },
+  {
+    "id": "f0699effdc2d97a0",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 850,
+    "y": 1240,
+    "wires": []
+  },
+  {
+    "id": "58c9ec4bd204f460",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/6 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 340,
+    "y": 1180,
+    "wires": [
+      [
+        "7d6b83d55e70ddea"
+      ]
+    ]
+  },
+  {
+    "id": "f6f61e276b48f2f5",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 630,
+    "y": 1220,
+    "wires": [
+      [
+        "f0699effdc2d97a0"
+      ]
+    ]
+  },
+  {
+    "id": "462b57d034beef14",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 810,
+    "y": 1280,
+    "wires": [
+      [
+        "a26fc91bfd674788"
+      ]
+    ]
+  },
+  {
+    "id": "6727c644c6942f14",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 790,
+    "y": 1320,
+    "wires": [
+      [
+        "a26fc91bfd674788"
+      ]
+    ]
+  },
+  {
+    "id": "fb8659a27b385705",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "fa9c067f2582c01a",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 590,
+    "y": 1260,
+    "wires": [
+      [
+        "f0699effdc2d97a0"
+      ]
+    ]
+  },
+  {
+    "id": "f7f6af644bcec9c4",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "name": "Rev MMSQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1090,
+    "y": 960,
+    "wires": []
+  },
+  {
+    "id": "bdd9080258214c4b",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1050,
+    "y": 1020,
+    "wires": []
+  },
+  {
+    "id": "18e9b8eea52b47e1",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "name": "Crear Tabla (callidadJugo_xHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE calidadJugo_xHora (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n\n    codigoproceso VARCHAR(50) NOT NULL,\n\n    fechaindustrial DATE NOT NULL,\n    fecharegistro DATE NULL,\n\n    horaregistro TIME NULL,\n    hora VARCHAR(5) NOT NULL,\n\n    kilos DECIMAL(10,2) NULL,\n\n    brix_manual DECIMAL(6,2) NULL,\n    temperatura_manual DECIMAL(6,2) NULL,\n    pol_manual DECIMAL(6,2) NULL,\n    ph_manual DECIMAL(5,2) NULL,\n\n    brix_automatico DECIMAL(6,2) NULL,\n    pol_automatico DECIMAL(6,2) NULL,\n    pureza DECIMAL(6,2) NULL,\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    -- 🔐 CLAVE ÚNICA PARA EVITAR DUPLICADOS\n    UNIQUE KEY uk_calidadJugo (\n        codigoproceso,\n        fechaindustrial,\n        hora\n    )\n);\n\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 510,
+    "y": 1080,
+    "wires": [
+      [
+        "f86754edf7417280",
+        "184900832df68374"
+      ]
+    ]
+  },
+  {
+    "id": "423b55d8a2718b34",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1060,
+    "y": 1080,
+    "wires": []
+  },
+  {
+    "id": "313315ec821953fe",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/5 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 340,
+    "y": 960,
+    "wires": [
+      [
+        "cf9eed54886e109d"
+      ]
+    ]
+  },
+  {
+    "id": "cf9eed54886e109d",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "name": "Analisis Jugo Ultima Hora (Laboratorio)",
+    "func": "let analisisJugo = `\nWITH cte AS (\n    SELECT\n        id,\n        codigoproceso,\n        fechaindustrial,\n        fecharegistro,\n        horaregistro,\n        HORA,\n        brixmanual,\n        temperaturamanual,\n        polmanual,\n        phmanual,\n        brixautomatico,\n        polautomatico,\n        pureza,\n        ROW_NUMBER() OVER (\n            PARTITION BY codigoproceso\n            ORDER BY\n                CONVERT(DATE, fecharegistro, 103) DESC,\n                HORA DESC,\n                id DESC\n        ) AS rn\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso IN (\n        'Jugo Mixto',\n        '1Era Presión',\n        'Última Presión',\n        'Clarificado',\n        'Melado',\n        'Jarabe Clarificado'\n    )\n    AND brixmanual IS NOT NULL\n    AND ISDATE(fecharegistro) = 1\n)\n\nSELECT\n    id,\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    horaregistro,\n    HORA,\n    brixmanual,\n    temperaturamanual,\n    polmanual,\n    phmanual,\n    brixautomatico,\n    polautomatico,\n    pureza\nFROM cte\nWHERE rn <= 20\nORDER BY codigoproceso, fecharegistro DESC, HORA DESC, id DESC;\n`;\n\nmsg.payload = analisisJugo;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 600,
+    "y": 960,
+    "wires": [
+      [
+        "ddf6e2c0fbd10372"
+      ]
+    ]
+  },
+  {
+    "id": "ddf6e2c0fbd10372",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 890,
+    "y": 960,
+    "wires": [
+      [
+        "f7f6af644bcec9c4",
+        "095e46c81cb8e6c7"
+      ]
+    ]
+  },
+  {
+    "id": "095e46c81cb8e6c7",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "name": "Insercion en MySQL",
+    "func": "const rows = msg.payload;\n\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay datos para insertar\");\n    return null;\n}\n\nfunction parseDateDMY(dateStr) {\n    if (!dateStr) return null;\n\n    if (dateStr instanceof Date) {\n        return dateStr.toISOString().slice(0, 10);\n    }\n\n    if (typeof dateStr === \"string\" && dateStr.includes(\"/\")) {\n        const [d, m, y] = dateStr.split(\"/\");\n        return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n    }\n\n    return null;\n}\n\nconst insertSql = `\nINSERT IGNORE INTO calidadJugo_xHora (\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    horaregistro,\n    hora,\n    brix_manual,\n    temperatura_manual,\n    pol_manual,\n    ph_manual,\n    brix_automatico,\n    pol_automatico,\n    pureza\n)\nVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);\n`;\n\nconst messages = [];\n\nfor (const r of rows) {\n\n    const fechaindustrial = parseDateDMY(r.fechaindustrial);\n    const fecharegistro  = parseDateDMY(r.fecharegistro);\n\n    if (!r.codigoproceso || !fechaindustrial || !r.HORA) {\n        node.warn(\"Fila descartada por datos insuficientes\",);\n        continue;\n    }\n\n    const params = [\n        r.codigoproceso,\n        fechaindustrial,\n        fecharegistro,\n        r.horaregistro ?? null,\n        r.HORA,\n        r.brixmanual ?? null,\n        r.temperaturamanual ?? null,\n        r.polmanual ?? null,\n        r.phmanual ?? null,\n        r.brixautomatico ?? null,\n        r.polautomatico ?? null,\n        r.pureza ?? null\n    ];\n\n    messages.push({\n        topic: insertSql,\n        payload: params,\n        _debug: {\n            proceso: r.codigoproceso,\n            fechaindustrial,\n            hora: r.HORA\n        }\n    });\n}\n\nnode.warn(`Registros listos para insertar: ${messages.length}`);\nreturn [messages];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 580,
+    "y": 1020,
+    "wires": [
+      [
+        "01548c9fe8db03a9",
+        "45e46a6c35d2492b"
+      ]
+    ]
+  },
+  {
+    "id": "01548c9fe8db03a9",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 810,
+    "y": 1000,
+    "wires": [
+      [
+        "bdd9080258214c4b"
+      ]
+    ]
+  },
+  {
+    "id": "f86754edf7417280",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 830,
+    "y": 1080,
+    "wires": [
+      [
+        "423b55d8a2718b34"
+      ]
+    ]
+  },
+  {
+    "id": "184900832df68374",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 810,
+    "y": 1120,
+    "wires": [
+      [
+        "423b55d8a2718b34"
+      ]
+    ]
+  },
+  {
+    "id": "45e46a6c35d2492b",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "194f7b999a3646ef",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 790,
+    "y": 1040,
+    "wires": [
+      [
+        "bdd9080258214c4b"
+      ]
+    ]
+  },
+  {
+    "id": "504f1b938082e632",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "name": "Analisis Masa Cocida (Laboratorio)",
+    "func": "let analisisMasaCocida = `\nWITH cte AS (\n    SELECT\n        id,\n        codigoproceso,\n        fechaindustrial,\n        fecharegistro,\n        horaregistro,\n        HORA,\n        KILOS,\n        brixmanual,\n        temperaturamanual,\n        polmanual,\n        phmanual,\n        brixautomatico,\n        polautomatico,\n        pureza,\n        ROW_NUMBER() OVER (\n            PARTITION BY codigoproceso\n            ORDER BY\n                CONVERT(DATE, fechaindustrial, 103) DESC,\n                HORA DESC,\n                id DESC\n        ) AS rn\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso IN (\n        'Masa Cocida de 1era',\n        'Masa Cocida de 2da',\n        'Masa Cocida de 3era'\n    )\n    AND brixmanual IS NOT NULL\n)\nSELECT\n    id,\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    horaregistro,\n    HORA,\n    KILOS,\n    brixmanual,\n    temperaturamanual,\n    polmanual,\n    phmanual,\n    brixautomatico,\n    polautomatico,\n    pureza\nFROM cte\nWHERE rn <= 15\nORDER BY codigoproceso, fechaindustrial DESC, HORA DESC;\n\n`;\n\nmsg.payload = analisisMasaCocida;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1580,
+    "y": 1180,
+    "wires": [
+      [
+        "2002978385f93e1a"
+      ]
+    ]
+  },
+  {
+    "id": "2002978385f93e1a",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 1840,
+    "y": 1180,
+    "wires": [
+      [
+        "7355654195a28497",
+        "27042cabb6759cf0"
+      ]
+    ]
+  },
+  {
+    "id": "7355654195a28497",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "name": "debug 103",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 2040,
+    "y": 1180,
+    "wires": []
+  },
+  {
+    "id": "27042cabb6759cf0",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "name": "Insercion en MySQL",
+    "func": "// =====================\n// FUNCIONES AUXILIARES\n// =====================\n\n// Convierte \"17/10/2025\" → \"2025-10-17\"\nfunction parseDateDMY(str) {\n    if (!str) return null;\n    const [d, m, y] = str.split('/');\n    if (!d || !m || !y) return null;\n    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n}\n\n// Convierte \"04:20\" → \"04:20:00\" (TIME MySQL)\nfunction formatTimeMySQL(str) {\n    if (!str) return null;\n    const parts = str.split(':');\n    if (parts.length < 2) return null;\n    const h = parts[0].padStart(2,'0');\n    const m = parts[1].padStart(2,'0');\n    return `${h}:${m}:00`;\n}\n\n// =====================\n// PROCESAMIENTO\n// =====================\nconst rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay datos desde MSSQL\");\n    return null;\n}\n\n// =====================\n// CONSULTA MYSQL\n// =====================\nconst sql = `\nINSERT INTO calidadMasaCocida_xHora (\n    id_mssql,\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    horaregistro,\n    hora,\n    kilos,\n    brixmanual,\n    temperaturamanual,\n    polmanual,\n    phmanual,\n    brixautomatico,\n    polautomatico,\n    pureza\n)\nVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    fecharegistro     = VALUES(fecharegistro),\n    horaregistro      = VALUES(horaregistro),\n    hora              = VALUES(hora),\n    kilos             = VALUES(kilos),\n    brixmanual        = VALUES(brixmanual),\n    temperaturamanual = VALUES(temperaturamanual),\n    polmanual         = VALUES(polmanual),\n    phmanual          = VALUES(phmanual),\n    brixautomatico    = VALUES(brixautomatico),\n    polautomatico     = VALUES(polautomatico),\n    pureza            = VALUES(pureza);\n`;\n\n// =====================\n// PREPARACIÓN DE MENSAJES\n// =====================\nconst msgs = [];\n\nfor (const r of rows) {\n\n    const fechaIndustrial = parseDateDMY(r.fechaindustrial);\n    const fechaRegistro  = parseDateDMY(r.fecharegistro);\n    const horaRegistro   = formatTimeMySQL(r.horaregistro);\n    const hora           = formatTimeMySQL(r.HORA);\n\n    if (!r.id || !r.codigoproceso || !fechaIndustrial || !hora) {\n        node.warn(\"Fila descartada por datos incompletos\");\n        continue;\n    }\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            r.id,                           // id_mssql\n            r.codigoproceso,\n            fechaIndustrial,\n            fechaRegistro ? `${fechaRegistro} ${horaRegistro || '00:00:00'}` : null,\n            horaRegistro,\n            hora,\n            Number(r.KILOS) || 0,\n            Number(r.brixmanual) || 0,\n            Number(r.temperaturamanual) || 0,\n            Number(r.polmanual) || 0,\n            Number(r.phmanual) || 0,\n            Number(r.brixautomatico) || 0,\n            Number(r.polautomatico) || 0,\n            Number(r.pureza) || 0\n        ],\n        _debug: r\n    });\n}\n\nnode.warn(`Registros Masa Cocida listos para insertar: ${msgs.length}`);\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1380,
+    "y": 1240,
+    "wires": [
+      [
+        "140fd592a88bdd92",
+        "61f5805cec93cb49"
+      ]
+    ]
+  },
+  {
+    "id": "81d461fe7da30300",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1850,
+    "y": 1240,
+    "wires": []
+  },
+  {
+    "id": "58a3c81a62a66041",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "name": "Crear Tabla (calidadMasaCocida_xHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE calidadMasaCocida_xHora  (\n    id               BIGINT AUTO_INCREMENT PRIMARY KEY,\n    id_mssql         INT NOT NULL,\n    codigoproceso    VARCHAR(50) NOT NULL,\n\n    fechaindustrial  DATE NOT NULL,\n    fecharegistro    DATETIME NULL,\n    horaregistro     TIME NULL,\n    hora             TIME NOT NULL,\n\n    kilos             DECIMAL(10,2) DEFAULT 0,\n    brixmanual        DECIMAL(10,3) DEFAULT 0,\n    temperaturamanual DECIMAL(10,2) DEFAULT 0,\n    polmanual         DECIMAL(10,3) DEFAULT 0,\n    phmanual          DECIMAL(10,3) DEFAULT 0,\n    brixautomatico    DECIMAL(10,3) DEFAULT 0,\n    polautomatico     DECIMAL(10,3) DEFAULT 0,\n    pureza            DECIMAL(10,3) DEFAULT 0,\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n\n    UNIQUE KEY uk_masa_cocida (id_mssql, codigoproceso)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1470,
+    "y": 1300,
+    "wires": [
+      [
+        "0209eb21d966f725",
+        "f65a1f44a9de6039"
+      ]
+    ]
+  },
+  {
+    "id": "1bfb5058d8abd5db",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 2040,
+    "y": 1300,
+    "wires": []
+  },
+  {
+    "id": "6a8d774301625124",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/6 0-23 * * *",
+    "once": true,
+    "onceDelay": "0.5",
+    "topic": "",
+    "x": 1340,
+    "y": 1180,
+    "wires": [
+      [
+        "504f1b938082e632"
+      ]
+    ]
+  },
+  {
+    "id": "140fd592a88bdd92",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 1630,
+    "y": 1220,
+    "wires": [
+      [
+        "81d461fe7da30300"
+      ]
+    ]
+  },
+  {
+    "id": "0209eb21d966f725",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 1790,
+    "y": 1320,
+    "wires": [
+      [
+        "1bfb5058d8abd5db"
+      ]
+    ]
+  },
+  {
+    "id": "61f5805cec93cb49",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 1610,
+    "y": 1260,
+    "wires": [
+      [
+        "81d461fe7da30300"
+      ]
+    ]
+  },
+  {
+    "id": "f65a1f44a9de6039",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "9ac029cdc058fecc",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 1790,
+    "y": 1280,
+    "wires": [
+      [
+        "1bfb5058d8abd5db"
+      ]
+    ]
+  },
+  {
+    "id": "edddb6b690f652ea",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "name": "Analisis Melaza (Laboratorio)",
+    "func": "let analisisMelaza = `\nSELECT TOP (20)\n    id,\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    horaregistro,\n    HORA,\n    brixmanual,\n    temperaturamanual,\n    polmanual,\n    brixautomatico,\n    polautomatico,\n    pureza\nFROM pr_ezi_laboratorio_gral\nWHERE codigoproceso = 'Melaza'\n  AND brixmanual IS NOT NULL\n  AND ISDATE(fecharegistro) = 1\nORDER BY\n    CONVERT(DATE, fecharegistro, 103) DESC,\n    HORA DESC,\n    id DESC;\n\n`;\n\nmsg.payload = analisisMelaza;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 540,
+    "y": 1400,
+    "wires": [
+      [
+        "b3b2c8dda8de53d2"
+      ]
+    ]
+  },
+  {
+    "id": "b3b2c8dda8de53d2",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 770,
+    "y": 1380,
+    "wires": [
+      [
+        "0750b7f31c27bc76",
+        "887cb73c8fbd109e"
+      ]
+    ]
+  },
+  {
+    "id": "0750b7f31c27bc76",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "name": "debug 104",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 990,
+    "y": 1400,
+    "wires": []
+  },
+  {
+    "id": "6231f2adf2bd9043",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/6 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 340,
+    "y": 1400,
+    "wires": [
+      [
+        "edddb6b690f652ea"
+      ]
+    ]
+  },
+  {
+    "id": "887cb73c8fbd109e",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "name": "Insercion en MySQL",
+    "func": "// =====================\n// FUNCIONES AUXILIARES\n// =====================\nfunction parseDateDMY(str) {\n    if (!str) return null;\n\n    if (str instanceof Date) {\n        return str.toISOString().slice(0, 10);\n    }\n\n    if (typeof str === \"string\" && str.includes(\"/\")) {\n        const [d, m, y] = str.split(\"/\");\n        return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n    }\n\n    return null;\n}\n\nfunction parseTime(str) {\n    if (!str) return null;\n    const p = String(str).split(\":\");\n    if (p.length < 2) return null;\n    return `${p[0].padStart(2,'0')}:${p[1].padStart(2,'0')}:00`;\n}\n\n// =====================\n// DATOS DE ENTRADA\n// =====================\nconst rows = msg.payload;\n\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay datos para insertar\");\n    return null;\n}\n\n// =====================\n// SQL\n// =====================\nconst sql = `\nINSERT INTO calidadMelaza_xHora (\n    id_mssql,\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    horaregistro,\n    hora,\n    brixmanual,\n    temperaturamanual,\n    polmanual,\n    brixautomatico,\n    polautomatico,\n    pureza\n)\nVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    fecharegistro = VALUES(fecharegistro),\n    horaregistro = VALUES(horaregistro),\n    hora = VALUES(hora),\n    brixmanual = VALUES(brixmanual),\n    temperaturamanual = VALUES(temperaturamanual),\n    polmanual = VALUES(polmanual),\n    brixautomatico = VALUES(brixautomatico),\n    polautomatico = VALUES(polautomatico),\n    pureza = VALUES(pureza);\n`;\n\nconst msgs = [];\n\n// =====================\n// PROCESAMIENTO\n// =====================\nfor (const r of rows) {\n\n    const fechaindustrial = parseDateDMY(r.fechaindustrial);\n    const fecharegistro  = parseDateDMY(r.fecharegistro);\n    const hora           = parseTime(r.HORA);\n    const horaregistro   = parseTime(r.horaregistro);\n\n    if (!r.id || !fechaindustrial || !hora || !r.codigoproceso) {\n        node.warn(\"Fila descartada por datos incompletos\",);\n        continue;\n    }\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            r.id,                      // id_mssql\n            r.codigoproceso,\n            fechaindustrial,\n            fecharegistro ? `${fecharegistro} ${horaregistro || '00:00:00'}` : null,\n            horaregistro,\n            hora,\n            r.brixmanual ?? null,\n            r.temperaturamanual ?? null,\n            r.polmanual ?? null,\n            r.brixautomatico ?? null,\n            r.polautomatico ?? null,\n            r.pureza ?? null\n        ]\n    });\n}\n\nnode.warn(`Melaza → registros preparados: ${msgs.length}`);\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 1460,
+    "wires": [
+      [
+        "61af5901eb3e1d9d",
+        "3e3c4fe7fbcfa015"
+      ]
+    ]
+  },
+  {
+    "id": "da8ec841d4623096",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 850,
+    "y": 1460,
+    "wires": []
+  },
+  {
+    "id": "216ddea220dd27f1",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1060,
+    "y": 1520,
+    "wires": []
+  },
+  {
+    "id": "43c1e014a55b3ced",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "name": "Crear Tabla (calidadMelaza_xHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE analisisMelaza_xHora (\n    id               BIGINT AUTO_INCREMENT PRIMARY KEY,\n\n    id_mssql         BIGINT NOT NULL,\n    codigoproceso    VARCHAR(50) NOT NULL,\n\n    fechaindustrial  DATE NOT NULL,\n    fecharegistro    DATETIME NULL,\n    horaregistro     TIME NULL,\n    hora             TIME NOT NULL,\n\n    kilos             DECIMAL(10,2),\n    brixmanual        DECIMAL(10,2),\n    temperaturamanual DECIMAL(10,2),\n    polmanual         DECIMAL(10,2),\n    phmanual          DECIMAL(10,2),\n    brixautomatico    DECIMAL(10,2),\n    polautomatico     DECIMAL(10,2),\n    pureza            DECIMAL(10,2),\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    UNIQUE KEY uk_melaza (codigoproceso, fechaindustrial, hora),\n    KEY idx_fecha (fechaindustrial),\n    KEY idx_proceso (codigoproceso)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 1520,
+    "wires": [
+      [
+        "5c79a03e09091a27",
+        "9cd178afdd587570"
+      ]
+    ]
+  },
+  {
+    "id": "61af5901eb3e1d9d",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 630,
+    "y": 1440,
+    "wires": [
+      [
+        "da8ec841d4623096"
+      ]
+    ]
+  },
+  {
+    "id": "5c79a03e09091a27",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 830,
+    "y": 1500,
+    "wires": [
+      [
+        "216ddea220dd27f1"
+      ]
+    ]
+  },
+  {
+    "id": "3e3c4fe7fbcfa015",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 630,
+    "y": 1480,
+    "wires": [
+      [
+        "da8ec841d4623096"
+      ]
+    ]
+  },
+  {
+    "id": "9cd178afdd587570",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "4fb5d81c3b39eb14",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 810,
+    "y": 1540,
+    "wires": [
+      [
+        "216ddea220dd27f1"
+      ]
+    ]
+  },
+  {
+    "id": "29abf24fd3bbdd57",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "name": "Sulfitado (Laboratorio)",
+    "func": "let sulfitado = `\nSELECT TOP (50000)\n    id,\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    horaregistro,\n    hora,\n    phmanual,\n    PPMS02manual\nFROM pr_ezi_laboratorio_gral2\nWHERE codigoproceso IN ('Encalado', 'Sulfitado')\nORDER BY\n    fecharegistro DESC,\n    hora DESC,\n    id DESC;\n`\n;\n\nmsg.payload = sulfitado;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1540,
+    "y": 1400,
+    "wires": [
+      [
+        "bb7bf19e22334557"
+      ]
+    ]
+  },
+  {
+    "id": "bb7bf19e22334557",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 1770,
+    "y": 1380,
+    "wires": [
+      [
+        "888a3980461a2583"
+      ]
+    ]
+  },
+  {
+    "id": "888a3980461a2583",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "name": "debug 106",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1960,
+    "y": 1400,
+    "wires": []
+  },
+  {
+    "id": "9ab402187dde2971",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/10 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 1340,
+    "y": 1400,
+    "wires": [
+      [
+        "29abf24fd3bbdd57"
+      ]
+    ]
+  },
+  {
+    "id": "a9602649af357e8e",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "name": "Insercion en MySQL",
+    "func": "// =====================\n// FUNCIONES AUXILIARES\n// =====================\n\n// Convierte \"17/10/2025\" → \"2025-10-17\"\nfunction parseDateDMY(str) {\n    if (!str) return null;\n\n    // Si ya viene como Date\n    if (str instanceof Date) {\n        return str.toISOString().slice(0, 10);\n    }\n\n    if (typeof str === 'string' && str.includes('/')) {\n        const [d, m, y] = str.split('/');\n        if (!d || !m || !y) return null;\n        return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n    }\n\n    return null;\n}\n\n// Convierte \"04:20\" / \"04:20:00\" → \"04:20:00\"\nfunction formatTimeMySQL(str) {\n    if (!str) return null;\n\n    const parts = String(str).split(':');\n    if (parts.length < 2) return null;\n\n    const h = parts[0].padStart(2, '0');\n    const m = parts[1].padStart(2, '0');\n    const s = parts[2] ? parts[2].padStart(2, '0') : '00';\n\n    return `${h}:${m}:${s}`;\n}\n\n// =====================\n// PROCESAMIENTO\n// =====================\nconst rows = msg.payload;\n\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay datos desde MSSQL\");\n    return null;\n}\n\n// =====================\n// SQL MYSQL\n// =====================\nconst sql = `\nINSERT INTO calidadSulfitado_xHora (\n    id_mssql,\n    codigoproceso,\n    fechaindustrial,\n    fecharegistro,\n    horaregistro,\n    hora,\n    phmanual,\n    PPMS02manual\n)\nVALUES (?, ?, ?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    codigoproceso = VALUES(codigoproceso),\n    fecharegistro = VALUES(fecharegistro),\n    horaregistro  = VALUES(horaregistro),\n    hora          = VALUES(hora),\n    phmanual      = VALUES(phmanual),\n    PPMS02manual  = VALUES(PPMS02manual);\n`;\n\n// =====================\n// ARMADO DE MENSAJES\n// =====================\nconst msgs = [];\n\nfor (const r of rows) {\n\n    const fechaIndustrial = parseDateDMY(r.fechaindustrial);\n    const fechaRegistro  = parseDateDMY(r.fecharegistro);\n    const horaRegistro   = formatTimeMySQL(r.horaregistro);\n    const hora           = formatTimeMySQL(r.hora || r.HORA);\n\n    // Campos mínimos reales\n    if (!r.id || !r.codigoproceso || !fechaIndustrial || !hora) {\n        node.warn(`Fila descartada (datos mínimos inválidos) → ID: ${r.id}`);\n        continue;\n    }\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            r.id,                       // id_mssql\n            r.codigoproceso,\n            fechaIndustrial,\n            fechaRegistro,\n            horaRegistro,\n            hora,\n            r.phmanual ?? null,\n            r.PPMS02manual ?? null\n        ],\n        _debug: {\n            id_mssql: r.id,\n            proceso: r.codigoproceso,\n            fechaindustrial: fechaIndustrial,\n            hora\n        }\n    });\n}\n\nnode.warn(`Registros Sulfitado listos para insertar: ${msgs.length}`);\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1560,
+    "y": 1460,
+    "wires": [
+      [
+        "61a7a2684f735a19",
+        "c0bf5418e4910cd9"
+      ]
+    ]
+  },
+  {
+    "id": "27a499b1e5998b90",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 2050,
+    "y": 1460,
+    "wires": []
+  },
+  {
+    "id": "ea6456f6a0e272d5",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "name": "Crear Tabla (calidadSulfitado_xHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE calidadSulfitado_xHora (\n    id              BIGINT AUTO_INCREMENT PRIMARY KEY,\n    id_mssql        BIGINT NOT NULL,\n\n    codigoproceso   VARCHAR(50) NOT NULL,\n\n    fechaindustrial DATE NOT NULL,\n    fecharegistro   DATE,\n    horaregistro    TIME,\n    hora            TIME NOT NULL,\n\n    phmanual        DECIMAL(10,2),\n    PPMS02manual    DECIMAL(10,2),\n\n    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    UNIQUE KEY uk_sulfitado_mssql (id_mssql)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1420,
+    "y": 1520,
+    "wires": [
+      [
+        "7e3a1360ff74c6d6",
+        "c029d1c45682309d"
+      ]
+    ]
+  },
+  {
+    "id": "c3115fe08027df07",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1960,
+    "y": 1520,
+    "wires": []
+  },
+  {
+    "id": "61a7a2684f735a19",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 1810,
+    "y": 1460,
+    "wires": [
+      [
+        "27a499b1e5998b90"
+      ]
+    ]
+  },
+  {
+    "id": "7e3a1360ff74c6d6",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 1730,
+    "y": 1540,
+    "wires": [
+      [
+        "c3115fe08027df07"
+      ]
+    ]
+  },
+  {
+    "id": "c0bf5418e4910cd9",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 1790,
+    "y": 1420,
+    "wires": [
+      [
+        "27a499b1e5998b90"
+      ]
+    ]
+  },
+  {
+    "id": "c029d1c45682309d",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "09cbaf35a2f80fe3",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 1710,
+    "y": 1500,
+    "wires": [
+      [
+        "c3115fe08027df07"
+      ]
+    ]
+  },
+  {
+    "id": "57fe28b636a3e225",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "name": "Molienda Ultima Hora (Laboratorio)",
+    "func": "const fechaMes = global.get('zafra_inicio_mes_Ymd') || '2026-05-01';\n\nlet datosCania = `\n   SELECT TOP 500\t\n    mov.numero_pesada,\n    CONVERT(DATE, ml.fechaindustrial, 103) AS fechaindustrial,\n    g.GRUPO,\n    ml.razon_social AS caniero,    \n    mov.peso_neto AS cania_bruta,\n    ml.trash,\n    ml.trashReal,\n    ml.Polporciento,\n    ml.Brixporciento,\n    ml.Pureza,\n    ml.Rendimiento,\n    ml.RendimientoReal,\n    tca.NOMBRE AS tipo_cania,\n    CONVERT(DATE, ml.fecha_pesada, 103) AS fecha_pesada,\n    ml.hora_pesada,\n    CONVERT(DATE, ml.fecha_salida, 103) AS fecha_salida,\n    ml.hora_salida,\n    '' AS nromuestra2,\n    ml.prepesada,\n    ml.usuario,\n    tc.NOMBRE AS tipo_contrato,\n    ml.transporte,\n    ml.chofer AS fletero,\n    '' AS cosechero,\n    '' AS finca,\n    '' AS nombre_finca,\n    ml.patente,\n    ml.observaciones,\n    ml.tara\nFROM pr_ezi_movimientos mov\nLEFT JOIN CORONA.dbo.pr_ezi_muestralab2 ml ON mov.numero_pesada = ml.numero_pesada\nLEFT JOIN v_pr_tipocontrato tc \n       ON tc.ID = ml.tipocontrato\nLEFT JOIN v_pr_tipocana tca \n       ON tca.ID = ml.id_tipo_cana\nLEFT JOIN v_pr_grupos g \n       ON g.idcaniero = ml.id_caniero\n--WHERE CONVERT(DATE, ml.fecha_pesada, 103) >= '${fechaMes}'\nORDER BY \n    CONVERT(DATE, ml.fecha_pesada, 103) DESC,\n    ml.hora_pesada DESC;\n`;\n\nmsg.payload = datosCania;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 600,
+    "y": 1620,
+    "wires": [
+      [
+        "ccba03dc007632af"
+      ]
+    ]
+  },
+  {
+    "id": "ccba03dc007632af",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2026' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2023' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS parte,\r\n    'Molienda 2022' AS codigoproceso,\r\n    (molienda) / 1000 AS diario,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, fechaindustrial, 103), 101) AS fechaindustrial\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022 \r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY parte ASC, codigoproceso ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 850,
+    "y": 1620,
+    "wires": [
+      [
+        "6f38b016555cde59",
+        "0917ec8093fdbc63"
+      ]
+    ]
+  },
+  {
+    "id": "6f38b016555cde59",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "name": "debug 115",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1050,
+    "y": 1620,
+    "wires": []
+  },
+  {
+    "id": "edbf58f0adc7ce47",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "name": "Cada 5 min + Startup",
+    "props": [],
+    "repeat": "300",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 330,
+    "y": 1620,
+    "wires": [
+      [
+        "57fe28b636a3e225"
+      ]
+    ]
+  },
+  {
+    "id": "567aeaeb904e6103",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 870,
+    "y": 1680,
+    "wires": []
+  },
+  {
+    "id": "cf0a543f23004a16",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "name": "Crear Tabla (datos_Cania) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS datos_Cania (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n\n    fechaindustrial DATE,\n    fecha_pesada DATE NOT NULL,\n    hora_pesada TIME NOT NULL,\n\n    numero_pesada INT NOT NULL,\n    grupo VARCHAR(50),\n    caniero VARCHAR(150),\n    nro_muestra INT,\n\n    cania_bruta DECIMAL(10,2),\n    trash DECIMAL(6,2),\n    trashReal DECIMAL(6,2),\n\n    pol DECIMAL(6,2),\n    brix DECIMAL(6,2),\n    pureza DECIMAL(6,2),\n    rendimiento DECIMAL(6,2),\n    rendimiento_real DECIMAL(6,2),\n\n    tipo_cania VARCHAR(50),\n    fecha_salida DATE,\n    hora_salida TIME,\n\n    prepesada VARCHAR(50),\n    usuario VARCHAR(50),\n    tipo_contrato VARCHAR(50),\n    transporte VARCHAR(100),\n    fletero VARCHAR(100),\n    patente VARCHAR(20),\n    observaciones TEXT,\n    tara DECIMAL(10,2),\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    -- 🔐 CLAVE ÚNICA ANTIDUPLICADOS\n    UNIQUE KEY uq_muestralab (fecha_pesada, hora_pesada, numero_pesada)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 530,
+    "y": 1780,
+    "wires": [
+      [
+        "aa5b2a524afa5b79",
+        "263365a01b9ce497"
+      ]
+    ]
+  },
+  {
+    "id": "fdca5061173ffd67",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1100,
+    "y": 1780,
+    "wires": []
+  },
+  {
+    "id": "0917ec8093fdbc63",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "name": "Insercion en MySQL",
+    "func": "// =====================\n// FUNCIONES AUXILIARES\n// =====================\nfunction parseDate(val) {\n    if (val === null || val === undefined || val === '' || val === 'null') return null;\n\n    if (val instanceof Date) {\n        // Si es fecha inválida, devolver null en vez de \"Invalid Date\"\n        if (isNaN(val.getTime())) return null;\n        return val.toISOString().slice(0, 10);\n    }\n\n    if (typeof val === \"string\") {\n        val = val.trim();\n        if (val === '') return null;\n\n        if (val.includes(\"T\")) return val.slice(0, 10);\n\n        // Formato DD/MM/YYYY o DD/MM/YY\n        if (val.includes(\"/\")) {\n            const parts = val.split(\"/\");\n            if (parts.length === 3) {\n                let [d, m, y] = parts;\n                // Año de 2 dígitos → 20xx\n                if (y.length === 2) y = \"20\" + y;\n                return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;\n            }\n        }\n\n        // Formato YYYY-MM-DD directo\n        if (/^\\d{4}-\\d{2}-\\d{2}/.test(val)) return val.slice(0, 10);\n    }\n\n    node.warn(`parseDate: valor no reconocido → \"${val}\" (tipo: ${typeof val})`);\n    return null;\n}\n\nfunction parseTime(val) {\n    if (val === null || val === undefined || val === '' || val === 'null') return null;\n    const str = String(val).trim();\n    if (str === '') return null;\n    const p = str.split(\":\");\n    if (p.length < 2) return null;\n    return `${p[0].padStart(2, '0')}:${p[1].padStart(2, '0')}:${(p[2] || '00').padStart(2, '0')}`;\n}\n\nfunction parseNum(val, defaultVal = 0) {\n    if (val === null || val === undefined || val === '') return defaultVal;\n    const n = Number(val);\n    return isNaN(n) ? defaultVal : n;\n}\n\n// =====================\n// DATOS DE ENTRADA\n// =====================\nconst rows = msg.payload;\n\nif (!Array.isArray(rows) || rows.length === 0) {\n    node.warn(\"No hay datos para insertar en datos_cania\");\n    return null;\n}\n\n// =====================\n// SQL\n// =====================\nconst sql = `\nINSERT INTO datos_Cania (\n    fechaindustrial,\n    numero_pesada,\n    grupo,\n    caniero,\n    nro_muestra,\n    cania_bruta,\n    trash,\n    trashReal,\n    polporciento,\n    brixporciento,\n    pureza,\n    rendimiento,\n    rendimientoReal,\n    tipo_cania,\n    fecha_pesada,\n    hora_pesada,\n    fecha_salida,\n    hora_salida,\n    nromuestra2,\n    prepesada,\n    usuario,\n    tipo_contrato,\n    transporte,\n    fletero,\n    cosechero,\n    finca,\n    nombre_finca,\n    patente,\n    observaciones,\n    tara\n)\nVALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)\nON DUPLICATE KEY UPDATE\n    fechaindustrial  = COALESCE(VALUES(fechaindustrial), fechaindustrial),\n    cania_bruta      = VALUES(cania_bruta),\n    trash            = VALUES(trash),\n    trashReal        = VALUES(trashReal),\n    polporciento     = VALUES(polporciento),\n    brixporciento    = VALUES(brixporciento),\n    pureza           = VALUES(pureza),\n    rendimiento      = VALUES(rendimiento),\n    rendimientoReal  = VALUES(rendimientoReal),\n    tipo_cania       = VALUES(tipo_cania),\n    fecha_pesada     = VALUES(fecha_pesada),\n    hora_pesada      = VALUES(hora_pesada),\n    fecha_salida     = VALUES(fecha_salida),\n    hora_salida      = VALUES(hora_salida),\n    tipo_contrato    = VALUES(tipo_contrato),\n    fletero          = VALUES(fletero),\n    patente          = VALUES(patente),\n    observaciones    = VALUES(observaciones),\n    tara             = VALUES(tara);\n`;\n\n// =====================\n// PROCESAMIENTO\n// =====================\nconst msgs      = [];\nlet descartadas = 0;\nlet sinFechaInd = 0;\n\nfor (const r of rows) {\n\n    // numero_pesada es la única clave obligatoria\n    if (!r.numero_pesada) {\n        node.warn(`Fila descartada — numero_pesada vacío: ${JSON.stringify(r)}`);\n        descartadas++;\n        continue;\n    }\n\n    const fechaindustrial = parseDate(r.fechaindustrial);   // puede ser null → se inserta NULL\n    const fechaPesada     = parseDate(r.fecha_pesada);\n    const fechaSalida     = parseDate(r.fecha_salida);\n    const horaPesada      = parseTime(r.hora_pesada);\n    const horaSalida      = parseTime(r.hora_salida);\n\n    // Solo advertir, NO descartar\n    if (fechaindustrial === null) {\n        sinFechaInd++;\n        node.warn(`Pesada #${r.numero_pesada} → fechaindustrial NULL (fecha_pesada: ${fechaPesada})`);\n    }\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            fechaindustrial,                    // NULL permitido\n            Number(r.numero_pesada),\n            r.GRUPO          || null,\n            r.caniero        || null,\n            parseNum(r.nro_muestra, null),\n\n            parseNum(r.cania_bruta),\n            parseNum(r.trash),\n            parseNum(r.trashReal),\n\n            parseNum(r.Polporciento),\n            parseNum(r.Brixporciento),\n            parseNum(r.Pureza),\n\n            parseNum(r.Rendimiento),\n            parseNum(r.RendimientoReal),\n\n            r.tipo_cania     || null,\n\n            fechaPesada,\n            horaPesada,\n\n            fechaSalida,\n            horaSalida,\n\n            r.nromuestra2    || null,\n            r.prepesada      || null,\n            r.usuario        || null,\n            r.tipo_contrato  || null,\n            r.transporte     || null,\n            r.fletero        || null,\n            r.cosechero      || null,\n            r.finca          || null,\n            r.nombre_finca   || null,\n            r.patente        || null,\n            r.observaciones  || null,\n            parseNum(r.tara)\n        ]\n    });\n}\n\nnode.warn(\n    `datos_cania → preparados: ${msgs.length} | descartados: ${descartadas} | sin fechaindustrial: ${sinFechaInd}`\n);\n\nreturn [msgs];",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 380,
+    "y": 1680,
+    "wires": [
+      [
+        "0aa692e88636d0e5",
+        "8d2c4fd7c4cdf1f3"
+      ]
+    ]
+  },
+  {
+    "id": "0aa692e88636d0e5",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 630,
+    "y": 1680,
+    "wires": [
+      [
+        "567aeaeb904e6103"
+      ]
+    ]
+  },
+  {
+    "id": "aa5b2a524afa5b79",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 850,
+    "y": 1780,
+    "wires": [
+      [
+        "fdca5061173ffd67"
+      ]
+    ]
+  },
+  {
+    "id": "8d2c4fd7c4cdf1f3",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 610,
+    "y": 1740,
+    "wires": [
+      [
+        "567aeaeb904e6103"
+      ]
+    ]
+  },
+  {
+    "id": "263365a01b9ce497",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "77015e129e81f3aa",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 870,
+    "y": 1740,
+    "wires": [
+      [
+        "fdca5061173ffd67"
+      ]
+    ]
+  },
+  {
+    "id": "eacf409096df32ae",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "name": "Molienda_Laboratrio-MMSQL",
+    "func": "let Consuslta = `\nSELECT\n    CONVERT(VARCHAR(10), CONVERT(DATE, base.fechaindustrial, 103), 103) AS fechaindustrial,\n    base.hora,\n    COALESCE(k.KILOS,   0) AS kilos,\n    COALESCE(g.kilos,   0) AS gas,\n    COALESCE(h.humedad, 0) AS humedad,\n    COALESCE(e.bolsas,  0) AS bolsas\nFROM (\n    SELECT DISTINCT fechaindustrial, HORA AS hora\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Molienda'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND KILOS > 0\n    UNION\n    SELECT DISTINCT fechaindustrial, HORA AS hora\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Gas'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND KILOS > 0\n    UNION\n    SELECT DISTINCT fechaindustrial, HORA AS hora\n    FROM pr_ezi_laboratorio_gral2\n    WHERE codigoproceso = 'Bagazo'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND humedad > 0\n    UNION\n    SELECT DISTINCT fechaindustrial, LEFT(HORA, 2) + ':00' AS hora\n    FROM CORONA.dbo.pr_ezi_especiales2\n    WHERE codigoproceso = 'Embolsado'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n      AND RIGHT(fechaindustrial, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))\n      AND CantBolsas > 0\n      AND CONVERT(DATE, fechaindustrial, 103) <= CAST(GETDATE() AS DATE)\n) AS base\nLEFT JOIN (\n    SELECT fechaindustrial, HORA, COALESCE(KILOS, 0) AS KILOS\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Molienda'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n) AS k ON base.fechaindustrial = k.fechaindustrial AND base.hora = k.HORA\nLEFT JOIN (\n    SELECT fechaindustrial, HORA AS hora, COALESCE(KILOS, 0) AS kilos\n    FROM pr_ezi_laboratorio_gral\n    WHERE codigoproceso = 'Gas'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n) AS g ON base.fechaindustrial = g.fechaindustrial AND base.hora = g.hora\nLEFT JOIN (\n    SELECT fechaindustrial, HORA AS hora, COALESCE(humedad, 0) AS humedad\n    FROM pr_ezi_laboratorio_gral2\n    WHERE codigoproceso = 'Bagazo'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n) AS h ON base.fechaindustrial = h.fechaindustrial AND base.hora = h.hora\nLEFT JOIN (\n    SELECT\n        fechaindustrial,\n        LEFT(HORA, 2) + ':00' AS hora,\n        SUM(COALESCE(CantBolsas, 0)) AS bolsas\n    FROM CORONA.dbo.pr_ezi_especiales2\n    WHERE codigoproceso = 'Embolsado'\n      AND fechaindustrial LIKE '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'\n    GROUP BY fechaindustrial, LEFT(HORA, 2)\n) AS e ON base.fechaindustrial = e.fechaindustrial AND base.hora = e.hora\nORDER BY\n    CONVERT(DATE, base.fechaindustrial, 103) DESC,\n    base.hora DESC;\n`;\n\nmsg.payload = Consuslta;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2710,
+    "y": 1700,
+    "wires": [
+      [
+        "3946b45092a33628"
+      ]
+    ]
+  },
+  {
+    "id": "3946b45092a33628",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Coneccion Calipso",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 1,
+    "query": "SELECT \r\n    (DATEDIFF(day, '2026-05-18', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2026' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2026\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2026-05-18'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2023-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2023' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2023\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2023-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nUNION ALL\r\n\r\nSELECT \r\n    (DATEDIFF(day, '2022-05-16', CONVERT(DATE, fechaindustrial, 103)) + 1) AS 'parte',\r\n    'Gas' AS codigoproceso,\r\n    [gasnor] AS 'GasDiario',\r\n    '2022' AS 'anio'\r\nFROM \r\n    [CORONA].[dbo].[v_pr_informe_general]\r\nWHERE \r\n    YEAR(CONVERT(DATE, fechaindustrial, 103)) = 2022\r\n    AND CONVERT(DATE, fechaindustrial, 103) >= '2022-05-16'\r\n    AND gasnor IS NOT NULL\r\n\r\nORDER BY \r\n    anio ASC, parte ASC;\r\n",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 2970,
+    "y": 1700,
+    "wires": [
+      [
+        "045dd65b96612dc4"
+      ]
+    ]
+  },
+  {
+    "id": "045dd65b96612dc4",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "name": "Rev MMSQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3170,
+    "y": 1700,
+    "wires": []
+  },
+  {
+    "id": "e302e8008c72680a",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "name": "Insercion en MySQL",
+    "func": "const rows = msg.payload;\nif (!Array.isArray(rows) || rows.length === 0) return null;\n\nfunction parseDateDMY(str) {\n    if (!str) return null;\n    const [d,m,y] = str.split('/');\n    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;\n}\n\nconst sql = `\nINSERT INTO molienda_xHora (\n    fechaindustrial, hora, gas, kilos, humedad, bolsas\n)\nVALUES (?, ?, ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE\n    gas = VALUES(gas),\n    kilos = VALUES(kilos),\n    humedad = VALUES(humedad),\n    bolsas = VALUES(bolsas);\n`;\n\nconst msgs = [];\n\nfor (const r of rows) {\n    const fecha = parseDateDMY(r.fechaindustrial);\n    if (!fecha || !r.hora) continue;\n\n    msgs.push({\n        topic: sql,\n        payload: [\n            fecha,\n            r.hora,\n            Number(r.gas) || 0,\n            Number(r.kilos) || 0,\n            Number(r.humedad) || 0,\n            Number(r.bolsas) || 0\n        ]\n    });\n}\n\nreturn [msgs];\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2620,
+    "y": 1760,
+    "wires": [
+      [
+        "124350056f40022b",
+        "188e62f56486a0dd"
+      ]
+    ]
+  },
+  {
+    "id": "3472f06d74cb55f7",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "name": "Crear Tabla (produccion_porHora) en MySQL",
+    "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS produccion_porHora (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n\n    fechaindustrial DATE NOT NULL,\n    hora TIME NOT NULL,\n\n    gas DECIMAL(12,2) DEFAULT 0,\n    kilos DECIMAL(12,2) DEFAULT 0,\n    humedad DECIMAL(6,2) DEFAULT 0,\n    bolsas INT DEFAULT 0,\n\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n\n    UNIQUE KEY uq_produccion (fechaindustrial, hora),\n\n    INDEX idx_fecha (fechaindustrial),\n    INDEX idx_hora (hora)\n);\n`;\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2690,
+    "y": 1860,
+    "wires": [
+      [
+        "1e986b7a67a12966",
+        "4737b5d1f4f072e1"
+      ]
+    ]
+  },
+  {
+    "id": "e3d4214a59493d1c",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "name": "Rev (create) MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3260,
+    "y": 1860,
+    "wires": []
+  },
+  {
+    "id": "0c99b3f20ae63a20",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "name": "Rev Insert MySQL",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 3070,
+    "y": 1760,
+    "wires": []
+  },
+  {
+    "id": "a3d3ec542a928c6a",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "name": "Ejecutar",
+    "props": [],
+    "repeat": "",
+    "crontab": "*/15 0-23 * * *",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 2480,
+    "y": 1700,
+    "wires": [
+      [
+        "eacf409096df32ae"
+      ]
+    ]
+  },
+  {
+    "id": "1e986b7a67a12966",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 3010,
+    "y": 1860,
+    "wires": [
+      [
+        "e3d4214a59493d1c"
+      ]
+    ]
+  },
+  {
+    "id": "124350056f40022b",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "",
+    "x": 2850,
+    "y": 1760,
+    "wires": [
+      [
+        "0c99b3f20ae63a20"
+      ]
+    ]
+  },
+  {
+    "id": "188e62f56486a0dd",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 2830,
+    "y": 1820,
+    "wires": [
+      [
+        "0c99b3f20ae63a20"
+      ]
+    ]
+  },
+  {
+    "id": "4737b5d1f4f072e1",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "g": "665f85a24694f2cd",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "",
+    "x": 3050,
+    "y": 1820,
+    "wires": [
+      [
+        "e3d4214a59493d1c"
+      ]
+    ]
+  },
+  {
+    "id": "mysql_consumos_x_hora_ins",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "mydb": "2bf0d8227d4cf2c4",
+    "name": "consumos_x_hora INSERT",
+    "x": 3220,
+    "y": 980,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "inject_mtr",
+    "type": "inject",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "name": "Cada 2 min",
+    "props": [],
+    "repeat": "120",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "10",
+    "topic": "",
+    "x": 130,
+    "y": 40,
+    "wires": [
+      [
+        "mssql_kilos_hora"
+      ]
+    ]
+  },
+  {
+    "id": "mssql_kilos_hora",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Kilos por hora",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 0,
+    "query": "SELECT LEFT(hora_pesada,2)+':00' AS hora_inicio, COUNT(*) AS pesadas, ISNULL(SUM(neto_cana),0) AS kilos FROM pr_ezi_movimientos WHERE prepesada='F' AND tipo_pesada='C' AND fecha_pesada=CONVERT(VARCHAR(10),GETDATE(),103) GROUP BY LEFT(hora_pesada,2) ORDER BY hora_inicio",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 320,
+    "y": 40,
+    "wires": [
+      [
+        "fn_store_kilos"
+      ]
+    ]
+  },
+  {
+    "id": "fn_store_kilos",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "name": "Guarda kilos en contexto",
+    "func": "flow.set('kilos_data', msg.payload || []);\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 550,
+    "y": 40,
+    "wires": [
+      [
+        "mssql_estado"
+      ]
+    ]
+  },
+  {
+    "id": "mssql_estado",
+    "type": "MSSQL",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "mssqlCN": "6814eb4bb7e82ddb",
+    "name": "Pre-ingreso y última pesada",
+    "outField": "payload",
+    "returnType": "0",
+    "throwErrors": 0,
+    "query": "SELECT (SELECT COUNT(*) FROM pr_ezi_movimientos WHERE prepesada='T' AND tipo_pesada='C' AND fecha_pesada=CONVERT(VARCHAR(10),GETDATE(),103) AND hora_salida IS NULL) AS pre_ingreso, (SELECT MAX(hora_pesada) FROM pr_ezi_movimientos WHERE prepesada='F' AND tipo_pesada='C' AND fecha_pesada=CONVERT(VARCHAR(10),GETDATE(),103)) AS ultima_pesada",
+    "modeOpt": "",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "msg",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 820,
+    "y": 40,
+    "wires": [
+      [
+        "fn_build_inserts"
+      ]
+    ]
+  },
+  {
+    "id": "fn_build_inserts",
+    "type": "function",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "name": "Construye queries MySQL",
+    "func": "const kilos_data = flow.get('kilos_data') || [];\nconst estado = (Array.isArray(msg.payload) && msg.payload[0]) ? msg.payload[0] : {};\nconst fecha = new Date().toISOString().slice(0, 10);\nconst now = new Date().toISOString().slice(0, 19).replace('T', ' ');\n\n// INSERT para molienda_tiempo_real\nlet msg1 = null;\nif (kilos_data.length > 0) {\n    const values = kilos_data.map(r =>\n        `('${fecha}', '${r.hora_inicio}', ${parseInt(r.kilos)||0}, ${parseInt(r.pesadas)||0}, '${now}')`\n    ).join(', ');\n    msg1 = {\n        topic: '',\n        payload: `INSERT INTO molienda_tiempo_real (fecha, hora_inicio, neto_cana_kg, pesadas_count, actualizado) VALUES ${values} ON DUPLICATE KEY UPDATE neto_cana_kg=VALUES(neto_cana_kg), pesadas_count=VALUES(pesadas_count), actualizado=VALUES(actualizado)`\n    };\n}\n\n// INSERT/UPDATE para molienda_estado_actual\nconst pre_ingreso = parseInt(estado.pre_ingreso) || 0;\nconst ultima_raw = estado.ultima_pesada || null;\nconst ultima = ultima_raw ? String(ultima_raw).substring(0, 8) : null;\nconst ultima_sql = ultima ? `'${ultima}'` : 'NULL';\nconst msg2 = {\n    topic: '',\n    payload: `INSERT INTO molienda_estado_actual (id, pre_ingreso, ultima_pesada, actualizado) VALUES (1, ${pre_ingreso}, ${ultima_sql}, '${now}') ON DUPLICATE KEY UPDATE pre_ingreso=${pre_ingreso}, ultima_pesada=${ultima_sql}, actualizado='${now}'`\n};\n\nreturn [msg1, msg2];",
+    "outputs": 2,
+    "noerr": 0,
+    "x": 1080,
+    "y": 40,
+    "wires": [
+      [
+        "mysql_tiempo_real"
+      ],
+      [
+        "mysql_estado"
+      ]
+    ]
+  },
+  {
+    "id": "mysql_tiempo_real",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "mydb": "5c5b1df892bc8c48",
+    "name": "→ molienda_tiempo_real",
+    "x": 1370,
+    "y": 20,
+    "wires": [
+      [
+        "debug_mtr"
+      ]
+    ]
+  },
+  {
+    "id": "mysql_estado",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "mydb": "5c5b1df892bc8c48",
+    "name": "→ molienda_estado_actual",
+    "x": 1360,
+    "y": 60,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "debug_mtr",
+    "type": "debug",
+    "z": "1389840a43cc0448",
+    "d": true,
+    "name": "OK",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "payload",
+    "statusType": "msg",
+    "x": 1630,
+    "y": 40,
+    "wires": []
+  },
+  {
+    "id": "27136084f5a0bb75",
+    "type": "mysql",
+    "z": "1389840a43cc0448",
+    "mydb": "5c5b1df892bc8c48",
+    "name": "consumos_x_hora INSERT",
+    "x": 3220,
+    "y": 1040,
+    "wires": [
+      [
+        "60cae5cd5ae7f9f4"
+      ]
+    ]
+  }
+]

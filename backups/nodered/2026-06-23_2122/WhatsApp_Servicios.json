@@ -1,0 +1,883 @@
+[
+  {
+    "id": "7cc80e1c2381833e",
+    "type": "group",
+    "z": "c98beebff50c75d4",
+    "name": "Sistema Acuerdo GUILLERMO",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "76f8563a5a3786f8",
+      "017b7c041cf62dca",
+      "2a4a90262bb73ccd"
+    ],
+    "x": 28,
+    "y": 73,
+    "w": 924,
+    "h": 794
+  },
+  {
+    "id": "4a5ee6cfb1742d34",
+    "type": "group",
+    "z": "c98beebff50c75d4",
+    "name": "Integral Abogados",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "071d9a9b01241c5f",
+      "3aa6c4013cc05afb",
+      "53a0d60273184bc6",
+      "417a63a12af18db4",
+      "b9ae44ede249371f",
+      "3ed324d320750822",
+      "d9bd36924dc5c7ef",
+      "09aa70c191ceb4bd"
+    ],
+    "x": 994,
+    "y": 59,
+    "w": 912,
+    "h": 182
+  },
+  {
+    "id": "cf0d0bc723101e9f",
+    "type": "group",
+    "z": "c98beebff50c75d4",
+    "name": "Estudio BT",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "de5c9360991f419d",
+      "18a9d1eb459018e9",
+      "683f895c2469581f",
+      "1de5917707523ff4",
+      "621194dd727eaa09",
+      "bcdcb4e3c680b436",
+      "95a9c461d9df5ef0",
+      "fb10d1af410ee8c0"
+    ],
+    "x": 994,
+    "y": 359,
+    "w": 832,
+    "h": 182
+  },
+  {
+    "id": "76f8563a5a3786f8",
+    "type": "group",
+    "z": "c98beebff50c75d4",
+    "g": "7cc80e1c2381833e",
+    "name": "Guillermo (Cordoba)",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "1d41b4ed4a01b509",
+      "6205ec384bf629b8",
+      "137ca40dbf45d67e",
+      "d048a95a9c764ff2",
+      "44d5e707aac1f796",
+      "05d95d1ad12b2a9a",
+      "ac228e511e8d22f9",
+      "e64ca72eb600a04c"
+    ],
+    "x": 54,
+    "y": 99,
+    "w": 852,
+    "h": 182
+  },
+  {
+    "id": "2a4a90262bb73ccd",
+    "type": "group",
+    "z": "c98beebff50c75d4",
+    "g": "7cc80e1c2381833e",
+    "name": "Guillermo (Buenos Aires)",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "57b6e4e9bac05601",
+      "584e1af11e16ba44",
+      "7f0febc0c448437c",
+      "50c9fe3c52cda193",
+      "ff1e16140f1e66fd",
+      "c9b304474b136b1c",
+      "ae0ef88a094456f8",
+      "767690b3bd4e4d12"
+    ],
+    "x": 54,
+    "y": 299,
+    "w": 852,
+    "h": 182
+  },
+  {
+    "id": "017b7c041cf62dca",
+    "type": "group",
+    "z": "c98beebff50c75d4",
+    "g": "7cc80e1c2381833e",
+    "name": "Guillermo (Tucumán)",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "8bafdfbc64c9d011",
+      "83be42b4250a78f7",
+      "1775d70e56571bfd",
+      "9fd7892213a16876",
+      "c2abe3bf99696955",
+      "fc2c9f5c8eeb286b",
+      "316fedb523c5ced8",
+      "f3c995bff1be9374"
+    ],
+    "x": 54,
+    "y": 659,
+    "w": 872,
+    "h": 182
+  },
+  {
+    "id": "1d41b4ed4a01b509",
+    "type": "chats-out",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "76f8563a5a3786f8",
+    "name": "Salida Wsp",
+    "whatsappLink": "",
+    "number": "",
+    "x": 800,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "6205ec384bf629b8",
+    "type": "function",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "76f8563a5a3786f8",
+    "name": "Flujo de Respuestas",
+    "func": "var tel = msg.datos.telefono;\nvar message = msg.datos.mensaje;\nvar run = msg.datos.run;\n\nif (run === true) {\n    msg.payload = message;\n    msg.toNumber = tel;\n} else {\n    return null;\n}\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 590,
+    "y": 200,
+    "wires": [
+      [
+        "1d41b4ed4a01b509"
+      ]
+    ]
+  },
+  {
+    "id": "137ca40dbf45d67e",
+    "type": "function",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "76f8563a5a3786f8",
+    "name": "Reestructurado",
+    "func": "var datos = JSON.parse(msg.payload);\n\nmsg.datos = {\n    mensaje: datos.mensaje,\n    telefono: datos.telefono,\n    run: true \n};\n\ndelete msg.payload;\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 370,
+    "y": 200,
+    "wires": [
+      [
+        "6205ec384bf629b8"
+      ]
+    ]
+  },
+  {
+    "id": "c0cac35f51b49558",
+    "type": "comment",
+    "z": "c98beebff50c75d4",
+    "name": "Listado de Servicios WhatsApp",
+    "info": "## Respetar el Orden del Listado\n\n# Listado de ervicios de WhatsApp\n 1. Wsp Sistemas (Asistente Zoé)\n 2. Wsp Guillermo (Acuerdo Cordoba)\n 3. Wsp Guillermo (Acuerdo Bs. As.)\n 4. Wsp Guillermo (Acuerdo Tuc.)\n 5. Wsp Estudio Bt\n 6. Wsp Integral Abogados\n \n",
+    "x": 150,
+    "y": 40,
+    "wires": []
+  },
+  {
+    "id": "d048a95a9c764ff2",
+    "type": "websocket in",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "76f8563a5a3786f8",
+    "name": "Acuerdo Cordoba",
+    "server": "f5cc61ee50899d37",
+    "client": "",
+    "x": 160,
+    "y": 200,
+    "wires": [
+      [
+        "137ca40dbf45d67e",
+        "44d5e707aac1f796"
+      ]
+    ]
+  },
+  {
+    "id": "44d5e707aac1f796",
+    "type": "debug",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "76f8563a5a3786f8",
+    "name": "Recepcion de Acuerdo Cba",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 410,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "05d95d1ad12b2a9a",
+    "type": "chats-in",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "76f8563a5a3786f8",
+    "name": "Entrada Wsp",
+    "whatsappLink": "",
+    "whatsappLiteevent": "",
+    "whatsappWebevent": "message",
+    "x": 550,
+    "y": 140,
+    "wires": [
+      [
+        "ac228e511e8d22f9"
+      ]
+    ]
+  },
+  {
+    "id": "ac228e511e8d22f9",
+    "type": "debug",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "76f8563a5a3786f8",
+    "name": "Entrada Wsp Cordoba",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 760,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "57b6e4e9bac05601",
+    "type": "chats-out",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "2a4a90262bb73ccd",
+    "name": "Salida Wsp",
+    "whatsappLink": "",
+    "number": "",
+    "x": 810,
+    "y": 400,
+    "wires": []
+  },
+  {
+    "id": "584e1af11e16ba44",
+    "type": "function",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "2a4a90262bb73ccd",
+    "name": "Moledo de Envio",
+    "func": "var tel = msg.datos.telefono;\nvar message = msg.datos.mensaje;\nvar run = msg.datos.run;\n\nif (run === true) {\n    msg.payload = message;\n    msg.toNumber = tel;\n} else {\n    return null;\n}\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 610,
+    "y": 400,
+    "wires": [
+      [
+        "57b6e4e9bac05601"
+      ]
+    ]
+  },
+  {
+    "id": "7f0febc0c448437c",
+    "type": "function",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "2a4a90262bb73ccd",
+    "name": "Reestruturado",
+    "func": "var datos = JSON.parse(msg.payload);\n\nmsg.datos = {\n    mensaje: datos.mensaje,\n    telefono: datos.telefono,\n    run: true\n};\n\ndelete msg.payload;\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 400,
+    "wires": [
+      [
+        "584e1af11e16ba44"
+      ]
+    ]
+  },
+  {
+    "id": "50c9fe3c52cda193",
+    "type": "websocket in",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "2a4a90262bb73ccd",
+    "name": "Acuerdo Buenos Aires",
+    "server": "53c6a7762e3d3063",
+    "client": "",
+    "x": 180,
+    "y": 400,
+    "wires": [
+      [
+        "7f0febc0c448437c",
+        "ff1e16140f1e66fd"
+      ]
+    ]
+  },
+  {
+    "id": "ff1e16140f1e66fd",
+    "type": "debug",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "2a4a90262bb73ccd",
+    "name": "Recepcion de Acuerdo BsAs",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 450,
+    "y": 440,
+    "wires": []
+  },
+  {
+    "id": "c9b304474b136b1c",
+    "type": "chats-in",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "2a4a90262bb73ccd",
+    "name": "Entrada Wsp",
+    "whatsappLink": "",
+    "whatsappLiteevent": "",
+    "whatsappWebevent": "message",
+    "x": 490,
+    "y": 340,
+    "wires": [
+      [
+        "ae0ef88a094456f8"
+      ]
+    ]
+  },
+  {
+    "id": "ae0ef88a094456f8",
+    "type": "debug",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "2a4a90262bb73ccd",
+    "name": "Entrada Wsp Buenos Aires",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 720,
+    "y": 340,
+    "wires": []
+  },
+  {
+    "id": "8bafdfbc64c9d011",
+    "type": "chats-out",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "017b7c041cf62dca",
+    "name": "Salida Wsp",
+    "whatsappLink": "",
+    "number": "",
+    "x": 830,
+    "y": 760,
+    "wires": []
+  },
+  {
+    "id": "83be42b4250a78f7",
+    "type": "function",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "017b7c041cf62dca",
+    "name": "Flujo de Respuestas",
+    "func": "var tel = msg.datos.telefono;\nvar message = msg.datos.mensaje;\nvar run = msg.datos.run;\n\nif (run === true) {\n    msg.payload = message;\n    msg.toNumber = tel;\n} else {\n    return null;\n}\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 620,
+    "y": 760,
+    "wires": [
+      [
+        "8bafdfbc64c9d011"
+      ]
+    ]
+  },
+  {
+    "id": "1775d70e56571bfd",
+    "type": "function",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "017b7c041cf62dca",
+    "name": "Reestructurado",
+    "func": "var datos = JSON.parse(msg.payload);\n\nmsg.datos = {\n    mensaje: datos.mensaje,\n    telefono: datos.telefono,\n    run: true\n};\n\ndelete msg.payload;\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 760,
+    "wires": [
+      [
+        "83be42b4250a78f7"
+      ]
+    ]
+  },
+  {
+    "id": "9fd7892213a16876",
+    "type": "admin",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "017b7c041cf62dca",
+    "name": "Wsp Guillermo (Tucuman)",
+    "whatsappLink": "",
+    "x": 190,
+    "y": 700,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "c2abe3bf99696955",
+    "type": "websocket in",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "017b7c041cf62dca",
+    "name": "Acuerdo Tucuman",
+    "server": "0aa09d15b623332f",
+    "client": "",
+    "x": 170,
+    "y": 760,
+    "wires": [
+      [
+        "1775d70e56571bfd",
+        "fc2c9f5c8eeb286b"
+      ]
+    ]
+  },
+  {
+    "id": "fc2c9f5c8eeb286b",
+    "type": "debug",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "017b7c041cf62dca",
+    "name": "Recepcion de Acuerdo Tuc",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 440,
+    "y": 800,
+    "wires": []
+  },
+  {
+    "id": "316fedb523c5ced8",
+    "type": "chats-in",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "017b7c041cf62dca",
+    "name": "Entrada Wsp",
+    "whatsappLink": "",
+    "whatsappLiteevent": "messages.upsert",
+    "whatsappWebevent": "message",
+    "x": 470,
+    "y": 700,
+    "wires": [
+      [
+        "f3c995bff1be9374"
+      ]
+    ]
+  },
+  {
+    "id": "f3c995bff1be9374",
+    "type": "debug",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "017b7c041cf62dca",
+    "name": "Entrada Wsp Tuc",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 670,
+    "y": 700,
+    "wires": []
+  },
+  {
+    "id": "c0f6557b8df247cc",
+    "type": "comment",
+    "z": "c98beebff50c75d4",
+    "name": "Listado de WebSockets",
+    "info": "# Listado de WebSocket\n 1. Wsp Guillermo - Acuerdo Cordoba (**/wsp-cobranza**)\n 2. Wsp Guillermo - Acuerdo Buenos Aires (**/wsp-acuerdo-ba**)\n 3. Wsp Guillermo -  (**/wsp-acuerdo-?**)\n 4. Wsp Integral Abogados - (**/integral**)\n 5. Wsp Estudio Bt -  (**/estudio-bt**)\n",
+    "x": 430,
+    "y": 40,
+    "wires": []
+  },
+  {
+    "id": "071d9a9b01241c5f",
+    "type": "admin",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "4a5ee6cfb1742d34",
+    "name": "Integral Abogados",
+    "whatsappLink": "",
+    "x": 1110,
+    "y": 100,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "3aa6c4013cc05afb",
+    "type": "debug",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "4a5ee6cfb1742d34",
+    "name": "Integral Abogados",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1510,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "53a0d60273184bc6",
+    "type": "chats-in",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "4a5ee6cfb1742d34",
+    "name": "Chats In",
+    "whatsappLink": "",
+    "whatsappLiteevent": "",
+    "whatsappWebevent": "message",
+    "x": 1300,
+    "y": 100,
+    "wires": [
+      [
+        "3aa6c4013cc05afb"
+      ]
+    ]
+  },
+  {
+    "id": "417a63a12af18db4",
+    "type": "websocket in",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "4a5ee6cfb1742d34",
+    "name": "Integral Abogados",
+    "server": "0943465d8acbc837",
+    "client": "",
+    "x": 1170,
+    "y": 160,
+    "wires": [
+      [
+        "b9ae44ede249371f",
+        "3ed324d320750822"
+      ]
+    ]
+  },
+  {
+    "id": "b9ae44ede249371f",
+    "type": "function",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "4a5ee6cfb1742d34",
+    "name": "Reestructurado",
+    "func": "var datos = JSON.parse(msg.payload);\n\nmsg.datos = {\n    mensaje: datos.mensaje,\n    telefono: datos.telefono,\n    run: true \n};\n\ndelete msg.payload;\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1380,
+    "y": 160,
+    "wires": [
+      [
+        "d9bd36924dc5c7ef"
+      ]
+    ]
+  },
+  {
+    "id": "3ed324d320750822",
+    "type": "debug",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "4a5ee6cfb1742d34",
+    "name": "Recepcion Integral Abogados",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1450,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "d9bd36924dc5c7ef",
+    "type": "function",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "4a5ee6cfb1742d34",
+    "name": "Flujo de Respuestas",
+    "func": "var tel = msg.datos.telefono;\nvar message = msg.datos.mensaje;\nvar run = msg.datos.run;\n\nif (run === true) {\n    msg.payload = message;\n    msg.toNumber = tel;\n} else {\n    return null;\n}\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1600,
+    "y": 160,
+    "wires": [
+      [
+        "09aa70c191ceb4bd"
+      ]
+    ]
+  },
+  {
+    "id": "09aa70c191ceb4bd",
+    "type": "chats-out",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "4a5ee6cfb1742d34",
+    "name": "Salida Wsp",
+    "whatsappLink": "",
+    "number": "",
+    "x": 1810,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "de5c9360991f419d",
+    "type": "admin",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "cf0d0bc723101e9f",
+    "name": "Estudio Bt",
+    "whatsappLink": "",
+    "x": 1110,
+    "y": 400,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "18a9d1eb459018e9",
+    "type": "debug",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "cf0d0bc723101e9f",
+    "name": "Estudio BT",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1470,
+    "y": 400,
+    "wires": []
+  },
+  {
+    "id": "683f895c2469581f",
+    "type": "chats-in",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "cf0d0bc723101e9f",
+    "name": "Entrada Wsp",
+    "whatsappLink": "",
+    "whatsappLiteevent": "",
+    "whatsappWebevent": "message",
+    "x": 1290,
+    "y": 400,
+    "wires": [
+      [
+        "18a9d1eb459018e9"
+      ]
+    ]
+  },
+  {
+    "id": "1de5917707523ff4",
+    "type": "websocket in",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "cf0d0bc723101e9f",
+    "name": "Estudio BT",
+    "server": "68a3ac5dc4755305",
+    "client": "",
+    "x": 1080,
+    "y": 460,
+    "wires": [
+      [
+        "bcdcb4e3c680b436",
+        "621194dd727eaa09"
+      ]
+    ]
+  },
+  {
+    "id": "621194dd727eaa09",
+    "type": "function",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "cf0d0bc723101e9f",
+    "name": "Reestructurado",
+    "func": "var datos = JSON.parse(msg.payload);\n\nmsg.datos = {\n    mensaje: datos.mensaje,\n    telefono: datos.telefono,\n    run: true\n};\n\ndelete msg.payload;\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1300,
+    "y": 460,
+    "wires": [
+      [
+        "95a9c461d9df5ef0"
+      ]
+    ]
+  },
+  {
+    "id": "bcdcb4e3c680b436",
+    "type": "debug",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "cf0d0bc723101e9f",
+    "name": "Recepcion Estudio BT",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1320,
+    "y": 500,
+    "wires": []
+  },
+  {
+    "id": "95a9c461d9df5ef0",
+    "type": "function",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "cf0d0bc723101e9f",
+    "name": "Flujo de Respuestas",
+    "func": "var tel = msg.datos.telefono;\nvar message = msg.datos.mensaje;\nvar run = msg.datos.run;\n\nif (run === true) {\n    msg.payload = message;\n    msg.toNumber = tel;\n} else {\n    return null;\n}\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1520,
+    "y": 460,
+    "wires": [
+      [
+        "fb10d1af410ee8c0"
+      ]
+    ]
+  },
+  {
+    "id": "fb10d1af410ee8c0",
+    "type": "chats-out",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "cf0d0bc723101e9f",
+    "name": "Salida Wsp",
+    "whatsappLink": "",
+    "number": "",
+    "x": 1730,
+    "y": 460,
+    "wires": []
+  },
+  {
+    "id": "767690b3bd4e4d12",
+    "type": "admin",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "2a4a90262bb73ccd",
+    "name": "Wsp Guillermo (Buenos Aires)",
+    "whatsappLink": "",
+    "x": 250,
+    "y": 340,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "e64ca72eb600a04c",
+    "type": "admin",
+    "z": "c98beebff50c75d4",
+    "d": true,
+    "g": "76f8563a5a3786f8",
+    "name": "Wsp Guillermo (Cordoba)",
+    "whatsappLink": "",
+    "x": 210,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  }
+]

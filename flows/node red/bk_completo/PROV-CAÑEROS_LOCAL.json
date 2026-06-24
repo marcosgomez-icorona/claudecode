@@ -1,0 +1,1626 @@
+[
+  {
+    "id": "94d8402a966e8f58",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "LIST DETALLE OC",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT V_EZI_PROV_ORDENCOMPRA_DET.ID,V_EZI_PROV_ORDENCOMPRA_DET.OC,NUMEROITEM,CODIGO,NOM_PRODUCTO 'ARTICULO',CANTIDAD,UNI_MED,PU,TOTAL_ITEM,\r\nV_EZI_PROV_ORDENCOMPRA_DET.fechaentrega,CONVERT(date, LEFT(FECHAACTUAL, 8)) 'fecha_oc'\r\n FROM V_EZI_PROV_ORDENCOMPRA_ENC\r\nINNER JOIN V_EZI_PROV_ORDENCOMPRA_DET ON V_EZI_PROV_ORDENCOMPRA_ENC.ID = V_EZI_PROV_ORDENCOMPRA_DET.ID\r\nwhere V_EZI_PROV_ORDENCOMPRA_ENC.DESCRIPCION = 'Orden de Compra' AND YEAR(CONVERT(date, LEFT(FECHAACTUAL, 8)))>=2025\r\nORDER BY CONVERT(date, LEFT(FECHAACTUAL, 8)) DESC, V_EZI_PROV_ORDENCOMPRA_ENC.ID DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 290,
+    "y": 120,
+    "wires": [
+      [
+        "0079180cd42c65be"
+      ]
+    ]
+  },
+  {
+    "id": "94619087343f3d13",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "debug 68",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1000,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "2885bec418ea1607",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 120,
+    "wires": [
+      [
+        "94d8402a966e8f58"
+      ]
+    ]
+  },
+  {
+    "id": "0079180cd42c65be",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción preparada.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Definir la consulta INSERT con placeholders para MySQL\n// ¡CAMBIO AQUÍ: Agregado 'IGNORE' después de 'INSERT'!\nconst insertSql = `\n    INSERT IGNORE INTO detalle_oc (nro_oc, numero_item, codigo, articulo, cantidad, uni_med, pu, total_item, fecha_entrega)\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a las variables PHP.\n    // Asegúrate de que estos nombres coincidan con los alias en tu consulta MSSQL.\n    const nro_oc = row.OC;\n    const numero_item = row.NUMEROITEM;\n    const codigo = row.CODIGO;\n    const articulo = row.ARTICULO;\n    const cantidad = row.CANTIDAD;\n    const uni_med = row.UNI_MED;\n    const pu = row.PU;\n    const total_item = row.TOTAL_ITEM;\n    let fecha_entrega = row.fechaentrega;\n\n    // **IMPORTANTE:** Formatear la fecha para MySQL.\n    // Los nodos de base de datos a menudo devuelven fechas como objetos Date de JS o strings ISO.\n    if (fecha_entrega instanceof Date) {\n        fecha_entrega = fecha_entrega.toISOString().slice(0, 19).replace('T', ' ');\n    } else if (typeof fecha_entrega === 'string' && fecha_entrega.includes('T')) {\n        fecha_entrega = fecha_entrega.slice(0, 19).replace('T', ' ');\n    }\n\n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [\n        nro_oc,\n        numero_item,\n        codigo,\n        articulo,\n        cantidad,\n        uni_med,\n        pu,\n        total_item,\n        fecha_entrega\n    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql\n    });\n}\n\n// Devolver un array de mensajes. Cada mensaje será enviado secuencialmente al siguiente nodo.\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 530,
+    "y": 120,
+    "wires": [
+      [
+        "e192c8a05db4bdcd"
+      ]
+    ]
+  },
+  {
+    "id": "e192c8a05db4bdcd",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "Con DB Extranet",
+    "x": 810,
+    "y": 120,
+    "wires": [
+      [
+        "94619087343f3d13"
+      ]
+    ]
+  },
+  {
+    "id": "0865881f60f9f290",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "LIST CERT SERVICIOS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT ID,CONSTANCIA,CONVERT(date, LEFT(FECHAACTUAL, 8)) AS FECHAACTUAL,CONVERT(date, LEFT(FECHAENTREGA, 8)) AS FECHAENTREGA,cod_proveedor ,nom_proveedor ,\r\nnom_cond_iva,subtotal_doc,total_doc,DETALLE ,numeroOC ,totalOC,monOC ,totalConstancia,monConstancia\r\nFROM CORONA.dbo.V_EZI_PROV_CONST_SC_ENC",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 290,
+    "y": 200,
+    "wires": [
+      [
+        "be397a64166052af"
+      ]
+    ]
+  },
+  {
+    "id": "1e0465585d75cc24",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "debug 69",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1000,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "b66253a90debdcd8",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 200,
+    "wires": [
+      [
+        "0865881f60f9f290"
+      ]
+    ]
+  },
+  {
+    "id": "be397a64166052af",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción preparada.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Definir la consulta INSERT con placeholders para MySQL\n// ¡CAMBIO AQUÍ: Agregado 'IGNORE' después de 'INSERT'!\nconst insertSql = `\n    INSERT IGNORE INTO certificacion_servicio (fecha,nro_oc,nro_certificado,total,proveedor,importe_oc ,cond_iva,fechaentrega)\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a las variables PHP.\n    // Asegúrate de que estos nombres coincidan con los alias en tu consulta MSSQL.\n    const fecha = row.FECHAACTUAL;\n    const nro_oc = row.numeroOC;\n    const nro_certificado = row.CONSTANCIA;    \n    const total = row.total_doc;    \n    const proveedor = row.nom_proveedor;    \n    const importe_oc = row.totalOC;    \n    const cond_iva = row.nom_cond_iva;    \n    let fechaentrega = row.FECHAENTREGA;\n    \n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [\n        fecha, nro_oc, nro_certificado, total, proveedor, importe_oc, cond_iva, fechaentrega\n    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql\n    });\n}\n\n// Devolver un array de mensajes. Cada mensaje será enviado secuencialmente al siguiente nodo.\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 550,
+    "y": 200,
+    "wires": [
+      [
+        "33db1b6109ea7a33"
+      ]
+    ]
+  },
+  {
+    "id": "33db1b6109ea7a33",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "Con DB Extranet",
+    "x": 790,
+    "y": 200,
+    "wires": [
+      [
+        "1e0465585d75cc24"
+      ]
+    ]
+  },
+  {
+    "id": "b1d29428883b17ec",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "DETALLE ORDENES PAGO",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 826 [id_egresovalores],[egreso_valor],[num_banco],[TIPOVALOR],[importe_valor],[total],CONVERT(DATE, [fechavencimiento_cheque], 103) AS [fechavencimiento_cheque],CONVERT(DATE,fechaemision_cheque, 103) AS [fechaemision_cheque],[NOMBREORIGINANTETR]\r\nFROM [CORONA].[dbo].[V_EZI_PROV_ORDENPAGO_DET]\r\nWHERE YEAR(CONVERT(DATE,fechaemision_cheque, 103))=2025 and MONTH(CONVERT(DATE,fechaemision_cheque, 103))=7\r\nORDER BY CONVERT(DATE,fechaemision_cheque, 103) DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 300,
+    "y": 600,
+    "wires": [
+      [
+        "17bb8bec8347d373"
+      ]
+    ]
+  },
+  {
+    "id": "8765b363039b1949",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "debug 70",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1000,
+    "y": 600,
+    "wires": []
+  },
+  {
+    "id": "35293c09738babbb",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 600,
+    "wires": [
+      [
+        "b1d29428883b17ec"
+      ]
+    ]
+  },
+  {
+    "id": "17bb8bec8347d373",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción preparada.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Definir la consulta INSERT con placeholders para MySQL\n// ¡CAMBIO AQUÍ: Agregado 'IGNORE' después de 'INSERT'!\nconst insertSql = `\n    INSERT INTO detalle_orden_pago (id_egresovalores, egreso_valor, num_banco, tipo_valor, importe_valor, total, fechavencimiento_cheque, fechaemision_cheque)\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a las variables PHP.\n    // Asegúrate de que estos nombres coincidan con los alias en tu consulta MSSQL.\n    const id_egresovalores = row.id_egresovalores;\n    const egreso_valor = row.egreso_valor;\n    const num_banco = row.num_banco;        \n    const tipo_valor = row.TIPOVALOR;    \n    const importe_valor = row.importe_valor;\n    const total = row.total;\n    const fechavencimiento_cheque = row.fechavencimiento_cheque;\n    const fechaemision_cheque = row.fechaemision_cheque;\n    \n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [\n                        id_egresovalores, egreso_valor, num_banco, tipo_valor, importe_valor, total, fechavencimiento_cheque, fechaemision_cheque\n                    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql\n    });\n}\n\n// Devolver un array de mensajes. Cada mensaje será enviado secuencialmente al siguiente nodo.\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 570,
+    "y": 600,
+    "wires": [
+      [
+        "fa8b62d71d62c572"
+      ]
+    ]
+  },
+  {
+    "id": "fa8b62d71d62c572",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "Con DB Extranet",
+    "x": 810,
+    "y": 600,
+    "wires": [
+      [
+        "8765b363039b1949"
+      ]
+    ]
+  },
+  {
+    "id": "c8d64dba62cd90c0",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "LIST PROVEEDORES",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT [NOMBRE],[CUIT],[CODIGO],[LP],[TIPOPAGO],[DIASPLAZO],[CREDITOMAXIMO],[ING_BRUTOS],[ENTEASOCIADO_ID],[POSICIONADORIMPUESTOS_ID],\r\n[TELEFONOS_ID] ,[CALLE] ,[PISO] ,[OFICINA]   ,[CODPOS] ,[CIUDAD],[PROVINCIA] ,[PAIS]\r\nFROM [CORONA].[dbo].[V_EZI_PROV_PROVEEDORES]\r\nORDER BY NOMBRE ASC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 280,
+    "y": 680,
+    "wires": [
+      [
+        "c538524272eb3eb6"
+      ]
+    ]
+  },
+  {
+    "id": "a395dadf2ebd2419",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "debug 71",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1000,
+    "y": 680,
+    "wires": []
+  },
+  {
+    "id": "6e999a277028aacc",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 680,
+    "wires": [
+      [
+        "c8d64dba62cd90c0"
+      ]
+    ]
+  },
+  {
+    "id": "c538524272eb3eb6",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción preparada.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Definir la consulta INSERT con placeholders para MySQL\n// ¡CAMBIO AQUÍ: Agregado 'IGNORE' después de 'INSERT'!\nconst insertSql = `\n    INSERT IGNORE INTO proveedores (cuit, nombre, domicilio) VALUES\n    (?, ?, ?)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a las variables PHP.\n    // Asegúrate de que estos nombres coincidan con los alias en tu consulta MSSQL.\n    const cuit = row.CUIT;\n    const nombre = row.NOMBRE;\n    const domicilio = row.CALLE;        \n    \n\n    // **IMPORTANTE:** Formatear la fecha para MySQL.\n    // Los nodos de base de datos a menudo devuelven fechas como objetos Date de JS o strings ISO.\n    /*\n    if (fecha instanceof Date) {\n        fecha = fecha.toISOString().slice(0, 19).replace('T', ' ');\n    } else if (typeof fecha === 'string' && fecha.includes('T')) {\n        fecha = fecha.slice(0, 19).replace('T', ' ');\n    }\n*/\n    // Crear el array de parámetros del PROVEEDOR para la consulta preparada\n    const params = [\n        cuit,\n        nombre,\n        domicilio\n    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql\n    });\n}\n\n// Devolver un array de mensajes. Cada mensaje será enviado secuencialmente al siguiente nodo.\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 550,
+    "y": 680,
+    "wires": [
+      [
+        "85792b1e8e0dc40b"
+      ]
+    ]
+  },
+  {
+    "id": "85792b1e8e0dc40b",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "Con DB Extranet",
+    "x": 790,
+    "y": 680,
+    "wires": [
+      [
+        "a395dadf2ebd2419"
+      ]
+    ]
+  },
+  {
+    "id": "512364fb69ad3dc7",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "debug 72",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 740,
+    "y": 800,
+    "wires": []
+  },
+  {
+    "id": "06159b78f4facf19",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 740,
+    "wires": [
+      [
+        "c20e64c2316d53ef"
+      ]
+    ]
+  },
+  {
+    "id": "c9cd1b244d469783",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Array Pesadas",
+    "func": "// Guarda los valores de pesada en flow\nconst pesadas = msg.payload.map(row => row.pesada);\nflow.set('pesadas_existentes', pesadas);\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 680,
+    "y": 740,
+    "wires": [
+      [
+        "892e2c3284af1a24"
+      ]
+    ]
+  },
+  {
+    "id": "892e2c3284af1a24",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "DETALLE CAÑEROS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT numero_pesada, remito, fechaindustrial, id_caniero, Caña as tipo, razon_social, GRUPO, bruto, trash, netoreal, Brix, Pol, Pureza, Rendimiento\nFROM [CORONA].[dbo].[v_pr_detallado_cania]\nWHERE YEAR(CONVERT(DATE, fechaindustrial, 103)) >= 2024\nORDER BY CONVERT(DATE, fechaindustrial, 103) DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 140,
+    "y": 800,
+    "wires": [
+      [
+        "c3cd88866206058f"
+      ]
+    ]
+  },
+  {
+    "id": "c3cd88866206058f",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "INSERT MASIVO",
+    "func": "const mssqlRows = msg.payload;\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde MSSQL.\");\n    return null;\n}\n\nconst pesadasExistentes = flow.get('pesadas_existentes') || [];\nconst mysqlMessages = [];\n\nlet Sql = `\n    INSERT INTO detalle_canieros (\n         id_caniero, razon_social, grupo, pesada, fechaindustrial,\n        remito, tipo, bruto_tn, trash, neto_tn, brix, pol, pureza, rendimiento\n    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\nfor (const row of mssqlRows) {\n    const pesada = row.numero_pesada;\n\n    if (pesadasExistentes.includes(pesada)) {\n        \n        node.warn(`Pesada duplicada: ${pesada}. Se omite.`);\n        let Sql = `\n            UPDATE detalle_canieros\n            SET id_caniero = ?, razon_social = ?, grupo = ?\n            WHERE pesada = ?\n`; \n        continue;\n    }\n\n    const params = [        \n        row.id_caniero,\n        row.razon_social,\n        row.GRUPO,\n        pesada,\n        row.fechaindustrial,\n        row.remito,\n        row.tipo,\n        row.bruto,\n        row.trash,\n        row.netoreal,\n        row.Brix,\n        row.Pol,\n        row.Pureza,\n        row.Rendimiento\n    ];\n\n    mysqlMessages.push({\n        topic: Sql,\n        payload: params\n    });\n}\n\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 800,
+    "wires": [
+      [
+        "9323c81f73d921cf"
+      ]
+    ]
+  },
+  {
+    "id": "1bb62617abf194f1",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "DB Extranet",
+    "x": 470,
+    "y": 740,
+    "wires": [
+      [
+        "c9cd1b244d469783"
+      ]
+    ]
+  },
+  {
+    "id": "c20e64c2316d53ef",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Extraer Datos DBs",
+    "func": "let query = `\nSELECT pesada FROM detalle_canieros\nWHERE YEAR(STR_TO_DATE(fechaindustrial, '%d/%m/%Y')) >= 2024;\n`;\n\nmsg.topic = query;\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 290,
+    "y": 740,
+    "wires": [
+      [
+        "1bb62617abf194f1"
+      ]
+    ]
+  },
+  {
+    "id": "9323c81f73d921cf",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "DB Extranet",
+    "x": 570,
+    "y": 800,
+    "wires": [
+      [
+        "512364fb69ad3dc7"
+      ]
+    ]
+  },
+  {
+    "id": "e83c8539bd405098",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "DET CONSTANCIA SERVICIOS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT ID,constancia,NUMEROITEM,CODIGO,NOM_PRODUCTO,BONIFICACION,DESCUENTO,CANTIDAD,CANTIDADOC ,CANTIDADPENDIENTEOC,CUMPLIDO,PORCENTAJE,\r\nESTADO ,UNI_MED,PU ,TOTAL_ITEM ,TOTALTR,CONVERT(date, LEFT(FECHAENTREGA, 8)) AS FECHAENTREGA,REPRESENTANTE ,ID_SOLICITUD,SECTOR,CUMPLIDOHASTAHOY,CUMPLIDOHOY,MEMO,MEMOITEM\r\nFROM CORONA.dbo.V_EZI_PROV_CONST_SC_DET\r\nWHERE YEAR(CONVERT(date, LEFT(FECHAENTREGA, 8)))>=2024\r\nORDER BY constancia DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 310,
+    "y": 260,
+    "wires": [
+      [
+        "5c1e7d8391d6f8de"
+      ]
+    ]
+  },
+  {
+    "id": "224a40581d3ebb2d",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "debug 73",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1040,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "bb12a1a70924cc1d",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 260,
+    "wires": [
+      [
+        "e83c8539bd405098"
+      ]
+    ]
+  },
+  {
+    "id": "5c1e7d8391d6f8de",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción preparada.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Definir la consulta INSERT con placeholders para MySQL\n// ¡CAMBIO AQUÍ: Agregado 'IGNORE' después de 'INSERT'!\nconst insertSql = `\n    INSERT IGNORE INTO detalle_constancia_servicio (id,constancia,numeroitem,codigo,nom_producto,bonificacion,descuento,cantidad ,cantidaddoc,\n    cantidadpendienteoc,cumplido ,porcentaje,estado,uni_med,pu,total_item,totalr ,fechaentrega,representante,id_solicitud,sector,\n    cumplidohastahoy,cumplidohoy,memo,memoitem)\n    VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?,?, ?, ?, ?, ?,?, ?, ?, ?, ?,?, ?, ?, ?, ?)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a las variables PHP.\n    // Asegúrate de que estos nombres coincidan con los alias en tu consulta MSSQL.\n    const id = row.ID;    \n    const constancia = row.constancia;    \n    const numeroitem = row.NUMEROITEM;    \n    const codigo = row.CODIGO;    \n    const nom_producto = row.NOM_PRODUCTO;\n    const bonificacion = row.BONIFICACION;\n    const descuento = row.DESCUENTO;\n    const cantidad = row.CANTIDAD;\n    const cantidaddoc = row.CANTIDADOC;  \n    const cantidadpendienteoc = row.CANTIDADPENDIENTEOC;\n    const cumplido = row.CUMPLIDO;\n    const porcentaje = row.PORCENTAJE;\n    const estado = row.ESTADO;\n    const uni_med = row.UNI_MED;  \n    const pu = row.PU;\n    const total_item = row.TOTAL_ITEM;\n    const totalr = row.TOTALTR;\n    const fechaentrega = row.FECHAENTREGA;\n    const representante = row.REPRESENTANTE;  \n    const id_solicitud = row.ID_SOLICITUD;\n    const sector = row.SECTOR;\n    const cumplidohastahoy = row.CUMPLIDOHASTAHOY;\n    const cumplidohoy = row.CUMPLIDOHOY;\n    const memo = row.MEMO;  \n    const memoitem = row.MEMOITEM;  \n\n    // **IMPORTANTE:** Formatear la fecha para MySQL.\n    // Los nodos de base de datos a menudo devuelven fechas como objetos Date de JS o strings ISO.\n    /*\n    if (fecha instanceof Date) {\n        fecha = fecha.toISOString().slice(0, 19).replace('T', ' ');\n    } else if (typeof fecha === 'string' && fecha.includes('T')) {\n        fecha = fecha.slice(0, 19).replace('T', ' ');\n    }\n*/\n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params =  [   id,constancia,numeroitem,codigo,nom_producto,bonificacion,descuento,cantidad ,cantidaddoc,\n                        cantidadpendienteoc,cumplido ,porcentaje,estado,uni_med,pu,total_item,totalr ,fechaentrega,representante,id_solicitud,sector,\n                        cumplidohastahoy,cumplidohoy,memo,memoitem\n                    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql\n    });\n}\n\n// Devolver un array de mensajes. Cada mensaje será enviado secuencialmente al siguiente nodo.\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 590,
+    "y": 260,
+    "wires": [
+      [
+        "1172181cef7c4b33"
+      ]
+    ]
+  },
+  {
+    "id": "1172181cef7c4b33",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "Con DB Extranet",
+    "x": 830,
+    "y": 260,
+    "wires": [
+      [
+        "224a40581d3ebb2d"
+      ]
+    ]
+  },
+  {
+    "id": "4781ec3879597c4e",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "LIST OC",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT ID,OC AS nro_oc,CONVERT(date, LEFT(FECHAACTUAL, 8)) AS fecha_emision,DETALLE AS detalle,PLAZOENTREGA AS plazo_entrega,\r\nformapago AS condicion_pago, total_doc AS total, nom_PROVEEDOR AS proveedor,cod_ORIGINANTE AS originante\r\nFROM V_EZI_PROV_ORDENCOMPRA_ENC\r\nWHERE DESCRIPCION = 'Orden de Compra' AND YEAR(CONVERT(date, LEFT(FECHAACTUAL, 8)))>=2025 -- and nom_PROVEEDOR LIKE '%GERVAN BRISA ANABEL%'\r\nORDER BY CONVERT(date, LEFT(FECHAACTUAL, 8)) DESC, nom_PROVEEDOR ASC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 260,
+    "y": 60,
+    "wires": [
+      [
+        "9a61afab2596cc04"
+      ]
+    ]
+  },
+  {
+    "id": "9ec85149c3d408d0",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "debug 74",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1000,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "d178776817183c82",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 60,
+    "wires": [
+      [
+        "4781ec3879597c4e"
+      ]
+    ]
+  },
+  {
+    "id": "9a61afab2596cc04",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción preparada.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Definir la consulta INSERT con placeholders para MySQL\n// ¡CAMBIO AQUÍ: Agregado 'IGNORE' después de 'INSERT'!\nconst insertSql = `\n    INSERT IGNORE INTO ordenes_compra ( id,nro_oc,fecha_emision,detalle ,plazo_entrega,condicion_pago ,total ,proveedor ,originante)\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a las variables PHP.\n    // Asegúrate de que estos nombres coincidan con los alias en tu consulta MSSQL.\n    const id = row.ID;\n    const nro_oc = row.nro_oc;\n    const fecha_emision = row.fecha_emision;\n    const detalle = row.detalle;\n    const plazo_entrega = row.plazo_entrega;\n    const condicion_pago = row.condicion_pago;\n    const total = row.total;\n    const proveedor = row.proveedor;\n    const originante = row.originante;\n       \n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [\n                        id, nro_oc, fecha_emision, detalle, plazo_entrega, condicion_pago, total, proveedor, originante\n                    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql\n    });\n}\n\n// Devolver un array de mensajes. Cada mensaje será enviado secuencialmente al siguiente nodo.\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 530,
+    "y": 60,
+    "wires": [
+      [
+        "7e8d251f93aaf5b2"
+      ]
+    ]
+  },
+  {
+    "id": "7e8d251f93aaf5b2",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "Con DB Extranet",
+    "x": 810,
+    "y": 60,
+    "wires": [
+      [
+        "9ec85149c3d408d0"
+      ]
+    ]
+  },
+  {
+    "id": "a8ba42b4902605b7",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "CTA CTE PROV",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT [NOMBRE] AS COMPROBANTE, [NOMBREDESTINATARIO], debe, [haber], CASE\tWHEN debe > 0 THEN debe \r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tWHEN haber > 0 THEN haber\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tELSE 0  END AS TOTAL,\r\n    [SALDODOCUMENTO],CONVERT(date, LEFT([FECHAACTUAL], 8)) AS [FECHAACTUAL], TIPO,[NUMERODOCUMENTO]\r\nFROM [CORONA].[dbo].[V_EZI_PROV_CTA_CTE]\r\nWHERE YEAR(CONVERT(date, LEFT([FECHAACTUAL], 8)))>=2025 \r\nORDER BY CONVERT(date, LEFT([FECHAACTUAL], 8)) DESC;\r\n",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 260,
+    "y": 320,
+    "wires": [
+      [
+        "b4837f44f81c1088"
+      ]
+    ]
+  },
+  {
+    "id": "62e0cec9905bbf90",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "debug 75",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1040,
+    "y": 320,
+    "wires": []
+  },
+  {
+    "id": "a14e4e593004d992",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 320,
+    "wires": [
+      [
+        "a8ba42b4902605b7"
+      ]
+    ]
+  },
+  {
+    "id": "b4837f44f81c1088",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción preparada.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Definir la consulta INSERT con placeholders para MySQL\n// ¡CAMBIO AQUÍ: Agregado 'IGNORE' después de 'INSERT'!\nconst insertSql = `\n    INSERT IGNORE INTO cuenta_corriente (comprobante, debe, haber, saldo, importe, fecha_ingreso, tipo_pago, proveedor)\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a las variables PHP.\n    // Asegúrate de que estos nombres coincidan con los alias en tu consulta MSSQL.\n    const comprobante = row.COMPROBANTE;    \n    const debe = row.debe;    \n    const haber = row.haber;    \n    const saldo = row.SALDODOCUMENTO;  \n    const importe = row.TOTAL;       \n    const fecha_ingreso = row.FECHAACTUAL;\n    const tipo_pago = row.TIPO;\n    const proveedor = row.NOMBREDESTINATARIO;\n    \n    \n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [\n                        comprobante, debe, haber, saldo, importe, fecha_ingreso, tipo_pago, proveedor\n                    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql\n    });\n}\n\n// Devolver un array de mensajes. Cada mensaje será enviado secuencialmente al siguiente nodo.\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 590,
+    "y": 320,
+    "wires": [
+      [
+        "b8a4bb5d21259af6"
+      ]
+    ]
+  },
+  {
+    "id": "b8a4bb5d21259af6",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "Con DB Extranet",
+    "x": 830,
+    "y": 320,
+    "wires": [
+      [
+        "62e0cec9905bbf90"
+      ]
+    ]
+  },
+  {
+    "id": "0df42cd4add6438f",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "PENDIENTES DE PAGO A PROV",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT NOM_CLIENTE AS PROVEEROR,DESCRIPCION AS comprobante,'0' AS DEBE, SALDO_ORIG AS HABER, SALDO, IMPORTE_TOTAL AS IMPORTE_ORIGINAL, TRCOTIZACION, FECHAEMISION, FECHAVENCIMIENTO,'' AS TIPO_PAGO\r\nFROM [CORONA].[dbo].[V_EZI_PROV_FAC_PEND]\r\nWHERE NOMCLASIFICADOR<>'DTA' AND NOMCLASIFICADOR<>'ING' --AND YEAR(CONVERT(date, LEFT([FECHAVENCIMIENTO], 8)))>=2024\r\nORDER BY CONVERT(date, LEFT([FECHAVENCIMIENTO], 8)) DESC,DESCRIPCION DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 320,
+    "y": 380,
+    "wires": [
+      [
+        "35a51d935746a6ec"
+      ]
+    ]
+  },
+  {
+    "id": "2f71af72ebf2bc22",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "debug 76",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1040,
+    "y": 380,
+    "wires": []
+  },
+  {
+    "id": "369c979b1da398d9",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 380,
+    "wires": [
+      [
+        "0df42cd4add6438f"
+      ]
+    ]
+  },
+  {
+    "id": "35a51d935746a6ec",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción preparada.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Definir la consulta INSERT con placeholders para MySQL\n// ¡CAMBIO AQUÍ: Agregado 'IGNORE' después de 'INSERT'!\nconst insertSql = `\n    INSERT IGNORE INTO facturas_pendiente_pago (comprobante, debe, haber, saldo, importe, fecha_ingreso, fecha_vto, tipo_pago, proveedor)\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a las variables PHP.\n    // Asegúrate de que estos nombres coincidan con los alias en tu consulta MSSQL.\n    \n    const comprobante = row.comprobante;    \n    const debe = row.DEBE;    \n    const haber = row.HABER;    \n    const saldo = 0;    \n    const importe = row.IMPORTE_ORIGINAL;    \n    const fecha_ingreso = row.FECHAEMISION;\n    const fecha_vto = row.FECHAVENCIMIENTO;\n    const tipo_pago = row.TIPO_PAGO;\n    const proveedor = row.PROVEEROR;\n    \n    \n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [\n                    comprobante, debe, haber, saldo, importe, fecha_ingreso, fecha_vto, tipo_pago, proveedor\n                    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql\n    });\n}\n\n// Devolver un array de mensajes. Cada mensaje será enviado secuencialmente al siguiente nodo.\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 610,
+    "y": 380,
+    "wires": [
+      [
+        "a02f0978f18e3080"
+      ]
+    ]
+  },
+  {
+    "id": "a02f0978f18e3080",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "Con DB Extranet",
+    "x": 870,
+    "y": 380,
+    "wires": [
+      [
+        "2f71af72ebf2bc22"
+      ]
+    ]
+  },
+  {
+    "id": "c632381132437a8e",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "LIST ORDENES PAGO",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT descr_item,importe,[NUMERODOCUMENTO],[FECHAACTUAL],[nom_proveedor],[moneda],[egreso_valor],[total],VALORTOTAL,[comprador],id_egresovalores,COTIZACION,\r\nimporte_cancelado,NroCertifGan, RetGan,NroCertifIIBB, RetIIBB,NroCertifIVA, RetIVA\r\nFROM [CORONA].[dbo].[V_EZI_PROV_ORDENPAGO_ENC]\r\nWHERE YEAR(CONVERT(date, LEFT([FECHAACTUAL], 8)))>=2025\r\nORDER BY CONVERT(date, LEFT([FECHAACTUAL], 8)) DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 290,
+    "y": 540,
+    "wires": [
+      [
+        "ebd996b6331f8797"
+      ]
+    ]
+  },
+  {
+    "id": "dba63c8a42798393",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "debug 77",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1000,
+    "y": 540,
+    "wires": []
+  },
+  {
+    "id": "6f671d1877f313dc",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 540,
+    "wires": [
+      [
+        "c632381132437a8e"
+      ]
+    ]
+  },
+  {
+    "id": "ebd996b6331f8797",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción preparada.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Definir la consulta INSERT con placeholders para MySQL\n// ¡CAMBIO AQUÍ: Agregado 'IGNORE' después de 'INSERT'!\nconst insertSql = `\n    INSERT INTO orden_pago (nro_op ,fecha,descr_item,importe,total ,proveedor , comprador, moneda ,egreso_valor,id_egresovalores,cotizacion,\n                            importe_cancelado, NroCertifGan, NroCertifIIBB, NroCertifIVA, RetGan, RetIIBB, RetIVA)\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a las variables PHP.\n    // Asegúrate de que estos nombres coincidan con los alias en tu consulta MSSQL.\n    const nro_op = row.NUMERODOCUMENTO;\n    const fecha = row.FECHAACTUAL;\n    const importe = row.importe;        \n    const total = row.VALORTOTAL;        \n    const descr_item = row.descr_item;        \n    const proveedor = row.nom_proveedor;    \n    const comprador = row.comprador;    \n    const moneda = row.moneda;\n    const egreso_valor = row.egreso_valor;\n    const id_egresovalores = row.id_egresovalores;\n    const cotizacion = row.COTIZACION;\n    const importe_cancelado = row.importe_cancelado;\n    const NroCertifGan = row.NroCertifGan;\n    const NroCertifIIBB = row.NroCertifIIBB;\n    const NroCertifIVA = row.NroCertifIVA;\n    const RetGan = row.RetGan;\n    const RetIIBB = row.RetIIBB;\n    const RetIVA = row.RetIVA;\n    \n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [\n        nro_op, fecha, descr_item, importe, total, proveedor,\n        comprador, moneda, egreso_valor, id_egresovalores, cotizacion,\n        importe_cancelado, NroCertifGan, NroCertifIIBB, NroCertifIVA,\n         RetGan, RetIIBB, RetIVA\n                    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql\n    });\n}\n\n// Devolver un array de mensajes. Cada mensaje será enviado secuencialmente al siguiente nodo.\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 550,
+    "y": 540,
+    "wires": [
+      [
+        "b1b0d1f8a4f622b1"
+      ]
+    ]
+  },
+  {
+    "id": "b1b0d1f8a4f622b1",
+    "type": "mysql",
+    "z": "c0680c89401c9028",
+    "mydb": "be57a95186f3df2f",
+    "name": "Con DB Extranet",
+    "x": 790,
+    "y": 540,
+    "wires": [
+      [
+        "dba63c8a42798393"
+      ]
+    ]
+  },
+  {
+    "id": "2552a818fa89137f",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 100,
+    "y": 880,
+    "wires": [
+      [
+        "2fd7f0dfb0b8b954"
+      ]
+    ]
+  },
+  {
+    "id": "2fd7f0dfb0b8b954",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "LIST CAÑEROS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT dbo.V_CLIENTE.ID AS id_caniero,dbo.V_PERSONA.NOMBRE AS razon_social, MAX(dbo.v_pr_grupos.GRUPO) AS grupo, dbo.V_PERSONA.CUIT AS cuit\r\nFROM         dbo.V_UD_CLIENTE RIGHT OUTER JOIN\r\n                      dbo.V_CLIENTE WITH (NOLOCK) ON dbo.V_UD_CLIENTE.ID = dbo.V_CLIENTE.BOEXTENSION_ID LEFT OUTER JOIN\r\n                      dbo.v_pr_grupos ON dbo.V_CLIENTE.ID = dbo.v_pr_grupos.idcaniero LEFT OUTER JOIN\r\n                      dbo.V_PERSONA WITH (NOLOCK) ON dbo.V_CLIENTE.ENTEASOCIADO_ID = dbo.V_PERSONA.ID\r\n-- WHERE V_PERSONA.NOMBRE LIKE '%SOTILLO%' --dbo.V_PERSONA.CUIT IS NOT NULL \r\nGROUP BY dbo.V_PERSONA.CUIT, dbo.V_CLIENTE.ID, dbo.V_PERSONA.NOMBRE, dbo.V_CLIENTE.ACTIVESTATUS, dbo.V_UD_CLIENTE.PRODUCTOR, dbo.V_UD_CLIENTE.ID\r\nHAVING      (dbo.V_CLIENTE.ACTIVESTATUS = 0 OR\r\n                      dbo.V_CLIENTE.ACTIVESTATUS IS NULL) AND (dbo.V_UD_CLIENTE.PRODUCTOR = 'T')          \r\nORDER BY razon_social ASC, GRUPO ASC;\r\n",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 320,
+    "y": 880,
+    "wires": [
+      [
+        "b934c138b5e4b638"
+      ]
+    ]
+  },
+  {
+    "id": "60de111a2a776b5a",
+    "type": "http request",
+    "z": "c0680c89401c9028",
+    "name": "Canieros DB LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_canieros.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 960,
+    "y": 880,
+    "wires": [
+      [
+        "ec5bbf66b0e14d01"
+      ]
+    ]
+  },
+  {
+    "id": "ec5bbf66b0e14d01",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1170,
+    "y": 880,
+    "wires": []
+  },
+  {
+    "id": "8982fdf62b0711ab",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "SALIDA JSON",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 860,
+    "y": 920,
+    "wires": []
+  },
+  {
+    "id": "b934c138b5e4b638",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 580,
+    "y": 880,
+    "wires": [
+      [
+        "60de111a2a776b5a",
+        "8982fdf62b0711ab"
+      ]
+    ]
+  },
+  {
+    "id": "e9273b4c6db17962",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 460,
+    "wires": [
+      [
+        "5b310176b4107dc8"
+      ]
+    ]
+  },
+  {
+    "id": "5b310176b4107dc8",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "SALDOS ANT A 2024",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT SUM(SALDO) AS SALDO_ACUMULADO_ANT, NOM_CLIENTE AS PROVEEROR\r\nFROM [CORONA].[dbo].[V_EZI_PROV_FAC_PEND]\r\nWHERE NOMCLASIFICADOR<>'DTA' AND NOMCLASIFICADOR<>'ING' AND YEAR(CONVERT(date, LEFT([FECHAVENCIMIENTO], 8)))<2024\r\nGROUP BY NOM_CLIENTE;\r\n",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 320,
+    "y": 460,
+    "wires": [
+      [
+        "33e08cf82f2bce2c"
+      ]
+    ]
+  },
+  {
+    "id": "cd17b23c66a36abd",
+    "type": "http request",
+    "z": "c0680c89401c9028",
+    "name": "Saldo Ant 2024 Proveedores",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://localhost:7070/coronaweb/extranet/api/saldo_ant_proveedores.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 840,
+    "y": 460,
+    "wires": [
+      [
+        "03653349e0bf48c7"
+      ]
+    ]
+  },
+  {
+    "id": "03653349e0bf48c7",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1090,
+    "y": 460,
+    "wires": []
+  },
+  {
+    "id": "33e08cf82f2bce2c",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 560,
+    "y": 460,
+    "wires": [
+      [
+        "cd17b23c66a36abd"
+      ]
+    ]
+  },
+  {
+    "id": "f7a86db033b62ccf",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 520,
+    "y": 20,
+    "wires": [
+      [
+        "dbd3d8219c173f35"
+      ]
+    ]
+  },
+  {
+    "id": "dbd3d8219c173f35",
+    "type": "http request",
+    "z": "c0680c89401c9028",
+    "name": "Enviar PROVEEDORES",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_proveedores.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 770,
+    "y": 20,
+    "wires": [
+      [
+        "7abc8f5a767238e6"
+      ]
+    ]
+  },
+  {
+    "id": "7abc8f5a767238e6",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 970,
+    "y": 20,
+    "wires": []
+  },
+  {
+    "id": "511d7e0a04c6983b",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "LIST PROVEEDORES",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT NOMBRE,CUIT,CALLE AS DOMICILIO,CIUDAD, PROVINCIA \r\nFROM V_EZI_PROV_PROVEEDORES;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 300,
+    "y": 20,
+    "wires": [
+      [
+        "f7a86db033b62ccf"
+      ]
+    ]
+  },
+  {
+    "id": "0ebab53a7d9ad042",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 20,
+    "wires": [
+      [
+        "511d7e0a04c6983b"
+      ]
+    ]
+  },
+  {
+    "id": "45f99c4b866064ab",
+    "type": "inject",
+    "z": "c0680c89401c9028",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 100,
+    "y": 980,
+    "wires": [
+      [
+        "dfde0fc23a7102fd"
+      ]
+    ]
+  },
+  {
+    "id": "dfde0fc23a7102fd",
+    "type": "MSSQL",
+    "z": "c0680c89401c9028",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "CTA CTE CAÑEROS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "WITH datos_muestreo AS (\r\n    SELECT \r\n        t.id_caniero, \r\n        t.razon_social, \r\n        t.peso_neto AS neto,\r\n        ISNULL(t.azucarcaniertoneto, 0) + ISNULL(t.devengado2, 0) AS devengado_total,\r\n        ISNULL(t.azucarcaniertoneto, 0) AS dev_v1,\r\n        ISNULL(t.devengado2, 0) AS dev_v2,\r\n        RIGHT(t.fechaindustrial, 4) AS ZAFRA,\r\n        f.fecha AS fechafiltro,\r\n        f.idcaniero2\r\n    FROM dbo.pr_ezi_muestralab3 t\r\n    INNER JOIN dbo.pr_ezi_filtro_ec f \r\n        ON RIGHT(t.fechaindustrial, 4) + SUBSTRING(t.fechaindustrial, 4, 2) + LEFT(t.fechaindustrial, 2) <= f.fecha\r\n),\r\ndatos_ordenes AS (\r\n    SELECT \r\n        o.id_caniero, \r\n        o.firma AS razon_social,\r\n        o.zafra AS ZAFRA,\r\n        f.fecha AS fechafiltro,\r\n        f.idcaniero2,\r\n        o.cantidad AS ord_emitidas_v1\r\n    FROM dbo.pr_ezi_ordenes_azucar o\r\n    INNER JOIN dbo.pr_ezi_filtro_ec f \r\n        ON RIGHT(o.fecha, 4) + SUBSTRING(o.fecha, 4, 2) + LEFT(o.fecha, 2) <= f.fecha AND o.zafra = f.zafra\r\n    WHERE o.estado <> N'Anulada' AND (o.autorizada = N'S' OR o.autorizada IS NULL) AND tipoorden IS NULL\r\n),\r\nctacte AS (\r\n    SELECT \r\n        id_caniero, razon_social, \r\n        SUM(neto) AS neto, \r\n        ROUND(SUM(devengado_total) / 50, 0) AS devengado,\r\n        ROUND(SUM(dev_v1) / 50, 0) AS dev_v1,\r\n        ROUND(SUM(dev_v2) / 50, 0) AS dev_v2,\r\n        ZAFRA, \r\n        fechafiltro, \r\n        idcaniero2,\r\n        0 AS ord_emitidas_v1\r\n    FROM datos_muestreo\r\n    GROUP BY id_caniero, razon_social, ZAFRA, fechafiltro, idcaniero2\r\n),\r\nordenes_azucar AS (\r\n    SELECT \r\n        id_caniero, razon_social, \r\n        0 AS neto, \r\n        0 AS devengado, \r\n        0 AS dev_v1,\r\n        0 AS dev_v2,\r\n        ZAFRA, \r\n        fechafiltro, \r\n        idcaniero2, \r\n        SUM(ord_emitidas_v1) AS ord_emitidas_v1\r\n    FROM datos_ordenes\r\n    GROUP BY id_caniero, razon_social, ZAFRA, fechafiltro, idcaniero2\r\n),\r\nEC AS (\r\n    SELECT * FROM ctacte\r\n    UNION ALL\r\n    SELECT * FROM ordenes_azucar\r\n)\r\nSELECT \r\n    EC.razon_social AS caniero,\r\n    g.GRUPO,\r\n    SUM(EC.neto) AS cania_bruta,\r\n    SUM(EC.devengado) AS bls_totales_dev,\r\n    SUM(EC.dev_v1) AS bls_dev_v1,\r\n    SUM(EC.dev_v2) AS bls_dev_v2,\r\n    SUM(EC.ord_emitidas_v1) AS ord_emitidas_v1,\r\n    0 AS saldozafraanterior,\r\n    SUM(EC.dev_v1 - EC.ord_emitidas_v1) AS saldobolsas_v1,\r\n    EC.ZAFRA,\r\n    CONVERT(VARCHAR(10), CONVERT(DATE, STUFF(STUFF(EC.fechafiltro, 5, 0, '-'), 8, 0, '-')), 103) AS fechafiltro\r\nFROM EC\r\nINNER JOIN dbo.v_pr_grupos g ON EC.id_caniero = g.idcaniero\r\nINNER JOIN dbo.pr_ezi_filtro_ec f ON EC.ZAFRA = f.zafra\r\nGROUP BY \r\n    EC.id_caniero, EC.razon_social, EC.ZAFRA, \r\n    EC.fechafiltro, g.GRUPO, EC.idcaniero2, f.grupo\r\nORDER BY EC.ZAFRA, EC.razon_social;\r\n",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": true,
+    "params": [],
+    "x": 340,
+    "y": 980,
+    "wires": [
+      [
+        "8bab561c2b42bf24"
+      ]
+    ]
+  },
+  {
+    "id": "a5356cc8583a41de",
+    "type": "http request",
+    "z": "c0680c89401c9028",
+    "name": "Cta Cte Canieros DB LOCAL",
+    "method": "POST",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.0.23:7070/coronaweb/extranet/api/sincronizar_cta_cte_canieros.php",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 820,
+    "y": 980,
+    "wires": [
+      [
+        "8a8fc57a9b3ea096"
+      ]
+    ]
+  },
+  {
+    "id": "8a8fc57a9b3ea096",
+    "type": "debug",
+    "z": "c0680c89401c9028",
+    "name": "salida POST",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1170,
+    "y": 980,
+    "wires": []
+  },
+  {
+    "id": "8bab561c2b42bf24",
+    "type": "function",
+    "z": "c0680c89401c9028",
+    "name": "Formateo JSON",
+    "func": "\n// Agregar token dentro del JSON para evitar uso de headers bloqueados\nmsg.payload = {\n    api_key: \"Corona1234$\", // Autenticación ahora via JSON\n    data: msg.payload // Datos reales\n};\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 580,
+    "y": 980,
+    "wires": [
+      [
+        "a5356cc8583a41de"
+      ]
+    ]
+  }
+]

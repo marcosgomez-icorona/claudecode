@@ -1,0 +1,7560 @@
+[
+  {
+    "id": "eeee961d70740b6a",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1440,
+    "y": 320,
+    "wires": [
+      [
+        "1016fcf1a8096bf0"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "32eab15878d66eb2",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=trapiche.Trapiche.Cabina.conductora",
+    "datatype": "Boolean",
+    "value": "",
+    "name": "on/off conductora",
+    "x": 1250,
+    "y": 320,
+    "wires": [
+      [
+        "eeee961d70740b6a"
+      ]
+    ]
+  },
+  {
+    "id": "40adfbbfafa32d2c",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1250,
+    "y": 280,
+    "wires": []
+  },
+  {
+    "id": "1016fcf1a8096bf0",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 22",
+    "func": "if (msg.payload == true) {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"Trapiche Funcionando\",\n    }\n    return msg;\n}\nelse if (msg.payload == false) {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"trapiche parado\",\n    } \n    return msg;\n}\nelse {\n}\n\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1650,
+    "y": 320,
+    "wires": [
+      [
+        "da837b4386256c8f"
+      ]
+    ]
+  },
+  {
+    "id": "42281c5efdf63948",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1500,
+    "y": 1520,
+    "wires": [
+      [
+        "3e0b62ade18d60f3"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "fa89ed564c6303ee",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=Clarificacion.Clarificacion.nivel_decantador1",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "nivel dec1",
+    "x": 1280,
+    "y": 1520,
+    "wires": [
+      [
+        "42281c5efdf63948"
+      ]
+    ]
+  },
+  {
+    "id": "1957200796092bf8",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1310,
+    "y": 1480,
+    "wires": []
+  },
+  {
+    "id": "b219874d94fab2bc",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1500,
+    "y": 1600,
+    "wires": [
+      [
+        "ec6a117f9ccf0c0f"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "fb77cae360fbc83c",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=Clarificacion.Clarificacion.nivel_decantador2",
+    "datatype": "Boolean",
+    "value": "",
+    "name": "nivel dec2",
+    "x": 1280,
+    "y": 1600,
+    "wires": [
+      [
+        "b219874d94fab2bc"
+      ]
+    ]
+  },
+  {
+    "id": "b94cfe71e2cc97f7",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1310,
+    "y": 1560,
+    "wires": []
+  },
+  {
+    "id": "c9a093b638d894e5",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1500,
+    "y": 1700,
+    "wires": [
+      [
+        "7581cee6382a04af"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "41ebd6cb47ee7871",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=Clarificacion.Clarificacion.nivel_decantador3",
+    "datatype": "Boolean",
+    "value": "",
+    "name": "nivel dec3",
+    "x": 1280,
+    "y": 1700,
+    "wires": [
+      [
+        "c9a093b638d894e5"
+      ]
+    ]
+  },
+  {
+    "id": "2d99c08e34b15abe",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1310,
+    "y": 1660,
+    "wires": []
+  },
+  {
+    "id": "3e0b62ade18d60f3",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "niveldec1",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1700,
+    "y": 1520,
+    "wires": [
+      [
+        "17e5fd35c82dee1e"
+      ]
+    ]
+  },
+  {
+    "id": "ec6a117f9ccf0c0f",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "niveldec2",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1700,
+    "y": 1600,
+    "wires": [
+      [
+        "17e5fd35c82dee1e"
+      ]
+    ]
+  },
+  {
+    "id": "7581cee6382a04af",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "niveldec3",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1700,
+    "y": 1700,
+    "wires": [
+      [
+        "17e5fd35c82dee1e"
+      ]
+    ]
+  },
+  {
+    "id": "d29a6e68ccf3b288",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1440,
+    "y": 540,
+    "wires": [
+      [
+        "07d69a11ac7c1d45"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "1e82292523b3fa17",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1250,
+    "y": 500,
+    "wires": []
+  },
+  {
+    "id": "f48ba95172dc73e6",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=molino.molino.molino1.molino_motor_veloc1",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "veloc mol1",
+    "x": 1250,
+    "y": 540,
+    "wires": [
+      [
+        "d29a6e68ccf3b288"
+      ]
+    ]
+  },
+  {
+    "id": "541d6c6ac17d6c61",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1590,
+    "y": 1840,
+    "wires": [
+      [
+        "31a331ed740a9f51"
+      ],
+      [
+        "31a331ed740a9f51"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "c5694a4b826b7de5",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=fabricacion.fabricacion.Caudal_Jugo_Clarificado",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "caudal clarif",
+    "x": 1270,
+    "y": 1840,
+    "wires": [
+      [
+        "1cd5bff684de0b16"
+      ]
+    ]
+  },
+  {
+    "id": "b89dfc21da77bbfe",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1310,
+    "y": 1800,
+    "wires": []
+  },
+  {
+    "id": "31a331ed740a9f51",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3276",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "366",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1770,
+    "y": 1840,
+    "wires": [
+      [
+        "4320a9bb2f1d593a"
+      ]
+    ]
+  },
+  {
+    "id": "807d2116a4a11964",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 28",
+    "func": "let ultimovalor = msg.payload.content;\nmsg.payload = ultimovalor;\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 990,
+    "y": 240,
+    "wires": [
+      [
+        "0305a97f53d21197"
+      ]
+    ]
+  },
+  {
+    "id": "0305a97f53d21197",
+    "type": "switch",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "1",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1170,
+    "y": 240,
+    "wires": [
+      [
+        "275a69fb75083eed"
+      ]
+    ]
+  },
+  {
+    "id": "1a6d4750a0b45d8c",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "funcion para que trabaje unicamente content",
+    "info": "",
+    "x": 970,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "ef38e8e38d7db6d8",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "toma de deciciones",
+    "info": "",
+    "x": 1250,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "b0e894c41b17edb5",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "recibido telegram",
+    "info": "",
+    "x": 700,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "275a69fb75083eed",
+    "type": "trigger",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "op1": "true",
+    "op2": "false",
+    "op1type": "bool",
+    "op2type": "bool",
+    "duration": "1",
+    "extend": true,
+    "overrideDelay": false,
+    "units": "s",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 2,
+    "x": 1320,
+    "y": 240,
+    "wires": [
+      [
+        "32eab15878d66eb2",
+        "f48ba95172dc73e6",
+        "64f49464b810d3d1",
+        "179f0beba254cc41",
+        "1f8777fc9de887a8",
+        "e54ad2c989aab0bb",
+        "70a7506e8a7c3460",
+        "de931964bdff12c0",
+        "9143faf435726480",
+        "3c7eee757fc9e193"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "960a32320dcba0df",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1440,
+    "y": 620,
+    "wires": [
+      [
+        "1076af05f56c1d9e"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "97a7b9f9cdb8585d",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1250,
+    "y": 580,
+    "wires": []
+  },
+  {
+    "id": "64f49464b810d3d1",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=molino.molino.molino1.balanza_cinta_salida_trapiche1",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "bagazo t/h",
+    "x": 1250,
+    "y": 620,
+    "wires": [
+      [
+        "960a32320dcba0df"
+      ]
+    ]
+  },
+  {
+    "id": "1076af05f56c1d9e",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "5832",
+    "maxin": "7272",
+    "minout": "0",
+    "maxout": "150",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1600,
+    "y": 620,
+    "wires": [
+      [
+        "86cce3de0f6ce34d"
+      ]
+    ]
+  },
+  {
+    "id": "926c20ecfdbf8e97",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1440,
+    "y": 700,
+    "wires": [
+      [
+        "0d0e3658d5d05dbb"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "71c0f31e514341cc",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1250,
+    "y": 660,
+    "wires": []
+  },
+  {
+    "id": "179f0beba254cc41",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=laboratorio.bagazo.polautomatico.polautomatico__1_",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "Pol bagazo",
+    "x": 1250,
+    "y": 700,
+    "wires": [
+      [
+        "926c20ecfdbf8e97"
+      ]
+    ]
+  },
+  {
+    "id": "d777e68536e30bd2",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1440,
+    "y": 780,
+    "wires": [
+      [
+        "0e937e860d1fe87a"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "0ad37f99687accdd",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1250,
+    "y": 740,
+    "wires": []
+  },
+  {
+    "id": "1f8777fc9de887a8",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=laboratorio.bagazo.humedad.humedad__1_",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "humedad bagazo",
+    "x": 1250,
+    "y": 780,
+    "wires": [
+      [
+        "d777e68536e30bd2"
+      ]
+    ]
+  },
+  {
+    "id": "81b898d37120ea9d",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 32",
+    "func": "let ultimovalor = msg.payload.content;\nmsg.payload = ultimovalor;\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 950,
+    "y": 1420,
+    "wires": [
+      [
+        "e5c392430de081c5"
+      ]
+    ]
+  },
+  {
+    "id": "e5c392430de081c5",
+    "type": "switch",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "2",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1130,
+    "y": 1420,
+    "wires": [
+      [
+        "44356ea522a71dab"
+      ]
+    ]
+  },
+  {
+    "id": "8525e9d6c2e7ef31",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "funcion para que trabaje unicamente content",
+    "info": "",
+    "x": 1010,
+    "y": 1380,
+    "wires": []
+  },
+  {
+    "id": "266ccf160716f09f",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "toma de deciciones",
+    "info": "",
+    "x": 1290,
+    "y": 1380,
+    "wires": []
+  },
+  {
+    "id": "4b840ba968dea1b2",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "recibido telegram",
+    "info": "",
+    "x": 740,
+    "y": 1380,
+    "wires": []
+  },
+  {
+    "id": "44356ea522a71dab",
+    "type": "trigger",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "op1": "true",
+    "op2": "false",
+    "op1type": "bool",
+    "op2type": "bool",
+    "duration": "1",
+    "extend": true,
+    "overrideDelay": false,
+    "units": "s",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 2,
+    "x": 1360,
+    "y": 1420,
+    "wires": [
+      [
+        "fa89ed564c6303ee",
+        "fb77cae360fbc83c",
+        "41ebd6cb47ee7871",
+        "c5694a4b826b7de5",
+        "68b36946c5d8214d",
+        "f822918d4170216e",
+        "aa716f07240649b8",
+        "4f475724bcf1dbad",
+        "dbfdc4c2f26bed66",
+        "7cafcf30e8e8637a"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "a4525bd53153c106",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1500,
+    "y": 1960,
+    "wires": [
+      [
+        "042a7e5e9db8b4c4"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "68b36946c5d8214d",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=Calentadores.Calentadores.ph_encalado",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "PH",
+    "x": 1290,
+    "y": 1960,
+    "wires": [
+      [
+        "a4525bd53153c106"
+      ]
+    ]
+  },
+  {
+    "id": "1bc76dcba774a778",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1310,
+    "y": 1920,
+    "wires": []
+  },
+  {
+    "id": "042a7e5e9db8b4c4",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "6552",
+    "maxin": "32760",
+    "minout": "0",
+    "maxout": "14.3",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1680,
+    "y": 1960,
+    "wires": [
+      [
+        "003610149631b051"
+      ]
+    ]
+  },
+  {
+    "id": "039f69a99b33eedc",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 34",
+    "func": "let ultimovalor = msg.payload.content;\nmsg.payload = ultimovalor;\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 930,
+    "y": 100,
+    "wires": [
+      [
+        "9dc5af092f8000ea"
+      ]
+    ]
+  },
+  {
+    "id": "9dc5af092f8000ea",
+    "type": "switch",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "4",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1110,
+    "y": 100,
+    "wires": [
+      [
+        "e6fc9ca809a3cd4c"
+      ]
+    ]
+  },
+  {
+    "id": "dab9cc0875721f47",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "funcion para que trabaje unicamente content",
+    "info": "",
+    "x": 910,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "fda5cedc838850e6",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "toma de deciciones",
+    "info": "",
+    "x": 1190,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "e26be1d924e28f12",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "recibido telegram",
+    "info": "",
+    "x": 640,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "e6fc9ca809a3cd4c",
+    "type": "trigger",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "op1": "true",
+    "op2": "false",
+    "op1type": "bool",
+    "op2type": "bool",
+    "duration": "1",
+    "extend": true,
+    "overrideDelay": false,
+    "units": "s",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 2,
+    "x": 1260,
+    "y": 100,
+    "wires": [
+      [
+        "275a69fb75083eed",
+        "786dbd3de59c2909"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "d04c164f4f4c31c5",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1690,
+    "y": 2060,
+    "wires": [
+      [
+        "5def6658e80651b4"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "f822918d4170216e",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=fabricacion.fabricacion.nivel_melado_tratado_1",
+    "datatype": "Int16",
+    "value": "",
+    "name": "Nivel melado tratado",
+    "x": 1300,
+    "y": 2060,
+    "wires": [
+      [
+        "aae5471acde0c76c"
+      ]
+    ]
+  },
+  {
+    "id": "32bd66cd0a91378d",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1310,
+    "y": 2020,
+    "wires": []
+  },
+  {
+    "id": "5def6658e80651b4",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3276",
+    "maxin": "9800",
+    "minout": "0",
+    "maxout": "100",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1870,
+    "y": 2060,
+    "wires": [
+      [
+        "8266227516582c94"
+      ]
+    ]
+  },
+  {
+    "id": "d0a95746dd4ad379",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1480,
+    "y": 2240,
+    "wires": [
+      [
+        "0b8d188a6a94556a"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "aa716f07240649b8",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=Tacho.Tacho.Descarga_tachos_1ra",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "desc tach1ra",
+    "x": 1270,
+    "y": 2240,
+    "wires": [
+      [
+        "d0a95746dd4ad379"
+      ]
+    ]
+  },
+  {
+    "id": "2af6cc5adb817767",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1290,
+    "y": 2200,
+    "wires": []
+  },
+  {
+    "id": "2fd7a7aaf2657bb1",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1480,
+    "y": 2320,
+    "wires": [
+      [
+        "41a4ad71c7e41978"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "4f475724bcf1dbad",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=Tacho.Tacho.Descarga_tachos_2da",
+    "datatype": "Boolean",
+    "value": "",
+    "name": "desc tach2da",
+    "x": 1270,
+    "y": 2320,
+    "wires": [
+      [
+        "2fd7a7aaf2657bb1"
+      ]
+    ]
+  },
+  {
+    "id": "38e7e3e915bfdef9",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1290,
+    "y": 2280,
+    "wires": []
+  },
+  {
+    "id": "ef3f2c1f25c074d6",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1480,
+    "y": 2420,
+    "wires": [
+      [
+        "b0a32a6520a6f26b"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "dbfdc4c2f26bed66",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=Tacho.Tacho.Descarga_tachos_3ra",
+    "datatype": "Boolean",
+    "value": "",
+    "name": "desc tach3ra",
+    "x": 1270,
+    "y": 2420,
+    "wires": [
+      [
+        "ef3f2c1f25c074d6"
+      ]
+    ]
+  },
+  {
+    "id": "922eca9b2d98fe55",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1290,
+    "y": 2380,
+    "wires": []
+  },
+  {
+    "id": "0b8d188a6a94556a",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "tacho1ra",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1670,
+    "y": 2240,
+    "wires": [
+      [
+        "17e5fd35c82dee1e"
+      ]
+    ]
+  },
+  {
+    "id": "41a4ad71c7e41978",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "tacho2da",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1670,
+    "y": 2320,
+    "wires": [
+      [
+        "17e5fd35c82dee1e"
+      ]
+    ]
+  },
+  {
+    "id": "b0a32a6520a6f26b",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "tacho3ra",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1670,
+    "y": 2420,
+    "wires": [
+      [
+        "17e5fd35c82dee1e"
+      ]
+    ]
+  },
+  {
+    "id": "abf41304c8b9918b",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1440,
+    "y": 860,
+    "wires": [
+      [
+        "d28458f4f44a005a"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "3927ea30af04e827",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1250,
+    "y": 820,
+    "wires": []
+  },
+  {
+    "id": "e54ad2c989aab0bb",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=trapiche.Trapiche.lubricacion.Presion_molino6_este",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "pres6 este",
+    "x": 1250,
+    "y": 860,
+    "wires": [
+      [
+        "abf41304c8b9918b"
+      ]
+    ]
+  },
+  {
+    "id": "33d22db1042831f6",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1440,
+    "y": 940,
+    "wires": [
+      [
+        "39f3c48476d606c4"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "ac71991e688093a3",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1250,
+    "y": 900,
+    "wires": []
+  },
+  {
+    "id": "70a7506e8a7c3460",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=trapiche.Trapiche.lubricacion.Presion_molino6_Oeste",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "pres6 oeste",
+    "x": 1250,
+    "y": 940,
+    "wires": [
+      [
+        "33d22db1042831f6"
+      ]
+    ]
+  },
+  {
+    "id": "d28458f4f44a005a",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "400",
+    "minout": "0",
+    "maxout": "400",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1600,
+    "y": 860,
+    "wires": [
+      [
+        "8973371a87025f13"
+      ]
+    ]
+  },
+  {
+    "id": "39f3c48476d606c4",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "400",
+    "minout": "0",
+    "maxout": "400",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1600,
+    "y": 940,
+    "wires": [
+      [
+        "4a429edfdab2f2bc"
+      ]
+    ]
+  },
+  {
+    "id": "37a80282b778ecb8",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "pres6este",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1910,
+    "y": 860,
+    "wires": [
+      [
+        "115637caf03c0c7c"
+      ]
+    ]
+  },
+  {
+    "id": "f40999327d34d340",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "pres6oeste",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1910,
+    "y": 940,
+    "wires": [
+      [
+        "115637caf03c0c7c"
+      ]
+    ]
+  },
+  {
+    "id": "edb2931ccf07170d",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1450,
+    "y": 2740,
+    "wires": [
+      [
+        "ede3379693f4cdad"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "3ad41288361c7c57",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=salon.salon.balanza.SILO_A_BOLSAS",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "SILO A",
+    "x": 1230,
+    "y": 2740,
+    "wires": [
+      [
+        "edb2931ccf07170d"
+      ]
+    ]
+  },
+  {
+    "id": "05dac93324ca1317",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1260,
+    "y": 2700,
+    "wires": []
+  },
+  {
+    "id": "e24db39ae1a1ae60",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1450,
+    "y": 2820,
+    "wires": [
+      [
+        "750d90f0798b350f"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "3d571bc12931151f",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=salon.salon.balanza.SILO_B_BOLSAS",
+    "datatype": "Boolean",
+    "value": "",
+    "name": "SILO B",
+    "x": 1230,
+    "y": 2820,
+    "wires": [
+      [
+        "e24db39ae1a1ae60"
+      ]
+    ]
+  },
+  {
+    "id": "35c8ae7644e0a6fb",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1260,
+    "y": 2780,
+    "wires": []
+  },
+  {
+    "id": "e916dea6e2660cc1",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1450,
+    "y": 2920,
+    "wires": [
+      [
+        "0bbab30c371b8282"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "9678623b4053a597",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=salon.salon.balanza.SILO_C_BOLSAS",
+    "datatype": "Boolean",
+    "value": "",
+    "name": "SILO C",
+    "x": 1230,
+    "y": 2920,
+    "wires": [
+      [
+        "e916dea6e2660cc1"
+      ]
+    ]
+  },
+  {
+    "id": "1d9818d586be451e",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1260,
+    "y": 2880,
+    "wires": []
+  },
+  {
+    "id": "ede3379693f4cdad",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "siloa",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1670,
+    "y": 2740,
+    "wires": [
+      [
+        "9fbe70d295ba8b8a"
+      ]
+    ]
+  },
+  {
+    "id": "750d90f0798b350f",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "silob",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1670,
+    "y": 2820,
+    "wires": [
+      [
+        "9fbe70d295ba8b8a"
+      ]
+    ]
+  },
+  {
+    "id": "0bbab30c371b8282",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "siloc",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1670,
+    "y": 2920,
+    "wires": [
+      [
+        "9fbe70d295ba8b8a"
+      ]
+    ]
+  },
+  {
+    "id": "2a0d93262db8ea66",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 40",
+    "func": "let ultimovalor = msg.payload.content;\nmsg.payload = ultimovalor;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 980,
+    "y": 2640,
+    "wires": [
+      [
+        "69dd4c39a661a704"
+      ]
+    ]
+  },
+  {
+    "id": "69dd4c39a661a704",
+    "type": "switch",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "3",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1160,
+    "y": 2640,
+    "wires": [
+      [
+        "2255a5643ac8fcb7"
+      ]
+    ]
+  },
+  {
+    "id": "c36ff406f0dd68b5",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "funcion para que trabaje unicamente content",
+    "info": "",
+    "x": 980,
+    "y": 2580,
+    "wires": []
+  },
+  {
+    "id": "26ef8ac46c0e3643",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "toma de deciciones",
+    "info": "",
+    "x": 1240,
+    "y": 2600,
+    "wires": []
+  },
+  {
+    "id": "58915635f8f2bb1e",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "recibido telegram",
+    "info": "",
+    "x": 730,
+    "y": 2620,
+    "wires": []
+  },
+  {
+    "id": "2255a5643ac8fcb7",
+    "type": "trigger",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "op1": "true",
+    "op2": "false",
+    "op1type": "bool",
+    "op2type": "bool",
+    "duration": "1",
+    "extend": true,
+    "overrideDelay": false,
+    "units": "s",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 2,
+    "x": 1320,
+    "y": 2640,
+    "wires": [
+      [
+        "3ad41288361c7c57",
+        "3d571bc12931151f",
+        "9678623b4053a597",
+        "cc9b9c9667554f61",
+        "211448c3924d3d96",
+        "052f974b0c4b1487",
+        "083ca8d6de5b793b",
+        "5bace87b3f410a36",
+        "4e4d9753b1cca208",
+        "bc4a55f3ebf92f67"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "b7b387b91397e83f",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "Trapiche",
+    "info": "****",
+    "x": 1660,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "7d4cba8354a332d8",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "Fabrica",
+    "info": "****",
+    "x": 1770,
+    "y": 1380,
+    "wires": []
+  },
+  {
+    "id": "9e880c51afdcb8a7",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "Salon",
+    "info": "****",
+    "x": 1800,
+    "y": 2560,
+    "wires": []
+  },
+  {
+    "id": "990d55691198a825",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1450,
+    "y": 3000,
+    "wires": [
+      [
+        "1a423cac8d5e9042"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "cc9b9c9667554f61",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=salon.salon.balanza.SILO_E_BOLSAS",
+    "datatype": "Boolean",
+    "value": "",
+    "name": "SILO E",
+    "x": 1230,
+    "y": 3000,
+    "wires": [
+      [
+        "990d55691198a825"
+      ]
+    ]
+  },
+  {
+    "id": "b95cfb9878e31d0a",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1260,
+    "y": 2960,
+    "wires": []
+  },
+  {
+    "id": "1a423cac8d5e9042",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "siloe",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1670,
+    "y": 3000,
+    "wires": [
+      [
+        "9fbe70d295ba8b8a"
+      ]
+    ]
+  },
+  {
+    "id": "eb5e54a20f55f08c",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1430,
+    "y": 3160,
+    "wires": [
+      [
+        "1cf6ce5e777fc0cb"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "8da068260ba7c662",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1240,
+    "y": 3120,
+    "wires": []
+  },
+  {
+    "id": "211448c3924d3d96",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=laboratorio.analisis_azucar.cinta_corta_color",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "cinta corta color",
+    "x": 1210,
+    "y": 3160,
+    "wires": [
+      [
+        "eb5e54a20f55f08c"
+      ]
+    ]
+  },
+  {
+    "id": "f833e7c6479de7b9",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1430,
+    "y": 3240,
+    "wires": [
+      [
+        "5c4cc33d5354e242"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "8afd213173643864",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1240,
+    "y": 3200,
+    "wires": []
+  },
+  {
+    "id": "052f974b0c4b1487",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=laboratorio.analisis_azucar.cinta_corta_humedad",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "cinta corta humedad",
+    "x": 1230,
+    "y": 3240,
+    "wires": [
+      [
+        "f833e7c6479de7b9"
+      ]
+    ]
+  },
+  {
+    "id": "1cf6ce5e777fc0cb",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "1000",
+    "minout": "0",
+    "maxout": "1000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1590,
+    "y": 3160,
+    "wires": [
+      [
+        "a517daf4466ed6b3"
+      ]
+    ]
+  },
+  {
+    "id": "d78f636a68f3eaa5",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "cintacortacolor",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1910,
+    "y": 3160,
+    "wires": [
+      [
+        "9fbe70d295ba8b8a"
+      ]
+    ]
+  },
+  {
+    "id": "bf179ebbe4233ba6",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "cintacortahumedad",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1915,
+    "y": 3243,
+    "wires": [
+      [
+        "9fbe70d295ba8b8a"
+      ]
+    ]
+  },
+  {
+    "id": "bf4e3de484ac29d4",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1430,
+    "y": 3380,
+    "wires": [
+      [
+        "ed3ee30c27cae9e8"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "d1321c10fb3b1188",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1240,
+    "y": 3340,
+    "wires": []
+  },
+  {
+    "id": "083ca8d6de5b793b",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=laboratorio.analisis_azucar.cinta_larga_color",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "cinta larga color",
+    "x": 1210,
+    "y": 3380,
+    "wires": [
+      [
+        "bf4e3de484ac29d4"
+      ]
+    ]
+  },
+  {
+    "id": "fa8f37a7f6d636ca",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1430,
+    "y": 3460,
+    "wires": [
+      [
+        "c889c4467923081b"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "15699f3738715358",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1240,
+    "y": 3420,
+    "wires": []
+  },
+  {
+    "id": "5bace87b3f410a36",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=laboratorio.analisis_azucar.cinta_larga_humedad",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "cinta larga humedad",
+    "x": 1230,
+    "y": 3460,
+    "wires": [
+      [
+        "fa8f37a7f6d636ca"
+      ]
+    ]
+  },
+  {
+    "id": "327bf8b74bbf624f",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "cintalargacolor",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1910,
+    "y": 3380,
+    "wires": [
+      [
+        "9fbe70d295ba8b8a"
+      ]
+    ]
+  },
+  {
+    "id": "10893784c85da371",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "cintalargahumedad",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1915,
+    "y": 3463,
+    "wires": [
+      [
+        "9fbe70d295ba8b8a"
+      ]
+    ]
+  },
+  {
+    "id": "5c4cc33d5354e242",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "1000",
+    "minout": "0",
+    "maxout": "1000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1590,
+    "y": 3240,
+    "wires": [
+      [
+        "7ae0cf822cb82939"
+      ]
+    ]
+  },
+  {
+    "id": "ed3ee30c27cae9e8",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "1000",
+    "minout": "0",
+    "maxout": "1000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1590,
+    "y": 3380,
+    "wires": [
+      [
+        "ac699ae591a49301"
+      ]
+    ]
+  },
+  {
+    "id": "c889c4467923081b",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "1000",
+    "minout": "0",
+    "maxout": "1000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1590,
+    "y": 3460,
+    "wires": [
+      [
+        "ae429f601750edc1"
+      ]
+    ]
+  },
+  {
+    "id": "4e4d9753b1cca208",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=salon.salon.balanza.salon_contador_dia",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "cont bolsas",
+    "x": 1200,
+    "y": 3560,
+    "wires": [
+      [
+        "eb0bb6b74d3c93f6"
+      ]
+    ]
+  },
+  {
+    "id": "eb0bb6b74d3c93f6",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1410,
+    "y": 3560,
+    "wires": [
+      [
+        "03ae8028cd2f5bdb"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "03ae8028cd2f5bdb",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "20000",
+    "minout": "0",
+    "maxout": "20000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1610,
+    "y": 3560,
+    "wires": [
+      [
+        "97a65d7abcf4ee2b"
+      ]
+    ]
+  },
+  {
+    "id": "81efcdc0575dc77a",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1220,
+    "y": 3520,
+    "wires": []
+  },
+  {
+    "id": "3d24a969e879d9d5",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "contbolsas",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 2040,
+    "y": 3560,
+    "wires": [
+      [
+        "9fbe70d295ba8b8a"
+      ]
+    ]
+  },
+  {
+    "id": "24bbaf1f34f0c717",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1440,
+    "y": 440,
+    "wires": [
+      [
+        "063d6ae3e2a84abd"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "6a72f5e5fb09158a",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1250,
+    "y": 400,
+    "wires": []
+  },
+  {
+    "id": "de931964bdff12c0",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=laboratorio.molienda.molienda_KILOS",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "Molienda",
+    "x": 1240,
+    "y": 440,
+    "wires": [
+      [
+        "24bbaf1f34f0c717"
+      ]
+    ]
+  },
+  {
+    "id": "063d6ae3e2a84abd",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "9000000",
+    "minout": "0",
+    "maxout": "9000000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1600,
+    "y": 440,
+    "wires": [
+      [
+        "333465da6dadbf9a"
+      ]
+    ]
+  },
+  {
+    "id": "19cd50ffe4274994",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "molienda",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1960,
+    "y": 440,
+    "wires": [
+      [
+        "115637caf03c0c7c"
+      ]
+    ]
+  },
+  {
+    "id": "80f938b23ed4cb3f",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "vel1",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1940,
+    "y": 540,
+    "wires": [
+      [
+        "115637caf03c0c7c"
+      ]
+    ]
+  },
+  {
+    "id": "4d65633889c52d11",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "bagazo",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1960,
+    "y": 620,
+    "wires": [
+      [
+        "115637caf03c0c7c"
+      ]
+    ]
+  },
+  {
+    "id": "faf17624d2e52800",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "pol",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1800,
+    "y": 700,
+    "wires": [
+      [
+        "115637caf03c0c7c"
+      ]
+    ]
+  },
+  {
+    "id": "6521d8dd18809eac",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "humedad",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1800,
+    "y": 780,
+    "wires": [
+      [
+        "115637caf03c0c7c"
+      ]
+    ]
+  },
+  {
+    "id": "115637caf03c0c7c",
+    "type": "join",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": true,
+    "accumulate": false,
+    "timeout": "",
+    "count": "9",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 2300,
+    "y": 620,
+    "wires": [
+      [
+        "549bff1719d10fc9"
+      ]
+    ]
+  },
+  {
+    "id": "549bff1719d10fc9",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 45",
+    "func": "\nlet funcionando=msg.payload.funcionando.content;\nlet molienda=msg.payload.molienda;\nlet vel1 = msg.payload.vel1;\nlet bagazo = msg.payload.bagazo;\nlet pol = msg.payload.pol;\nlet humedad = msg.payload.humedad;\nlet pres6este = msg.payload.pres6este;\nlet pres6oeste = msg.payload.pres6oeste;\nlet gastotal=msg.payload.gastotal;\n  \nmsg.payload={\n   \"chatId\": -4293484523,\n   \"type\": \"message\",\n   \"content\":\"Trapiche: \\n\"+funcionando+\"\\n\"+\"La Molienda actual es=\" + molienda + \" Kg \\n\"+\"La velocidad del primer molino= \"+vel1 +\" rpm \\n\" + \n\"La salida de bagazo= \" +bagazo +\" T/h \\n\" + \"Pol de bagazo= \"+pol +\" % \\n\" +\n      \"La humedad del bagazo= \" + humedad + \" % \\n \\n\" + \"La presion del 6to molino: \\n\" + \"Este= \" + pres6este+\" bar \\n\" + \"Oeste= \"+pres6oeste+\" bar \\n \\n\"+\n      \"Consumo de Gas= \"+gastotal+\" m3\", \n}\nreturn msg;\n\n\n\n\n\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2440,
+    "y": 620,
+    "wires": [
+      [
+        "487d961b6a33496b"
+      ]
+    ]
+  },
+  {
+    "id": "487d961b6a33496b",
+    "type": "rbe",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "func": "rbe",
+    "gap": "5%",
+    "start": "",
+    "inout": "out",
+    "septopics": false,
+    "property": "payload",
+    "topi": "topic",
+    "x": 2580,
+    "y": 620,
+    "wires": [
+      [
+        "a26e1beaeb28c4ab"
+      ]
+    ]
+  },
+  {
+    "id": "da837b4386256c8f",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "funcionando",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1870,
+    "y": 320,
+    "wires": [
+      [
+        "115637caf03c0c7c"
+      ]
+    ]
+  },
+  {
+    "id": "17e5fd35c82dee1e",
+    "type": "join",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": true,
+    "accumulate": false,
+    "timeout": "",
+    "count": "10",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 2390,
+    "y": 2000,
+    "wires": [
+      [
+        "0e9af0e5682854d6"
+      ]
+    ]
+  },
+  {
+    "id": "0e9af0e5682854d6",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 46",
+    "func": "\nlet dec1=msg.payload.niveldec1;\nlet dec2=msg.payload.niveldec2;\nlet dec3=msg.payload.niveldec3;\nlet caudalclarif=msg.payload.caudalclarif;\nlet ph = msg.payload.ph;\nlet niveltratado=msg.payload.niveltratado;\nlet nivelmelado=msg.payload.nivelmelado;\nlet tacho1ra= msg.payload.tacho1ra;\nlet tacho2da= msg.payload.tacho2da;\nlet tacho3ra= msg.payload.tacho3ra;\n  \nmsg.payload={\n   \"chatId\":-4293484523,\n   \"type\": \"message\",\n   \"content\":\"Fabrica: \\n\"+\"Niveles de decantadores= \"+dec1+\" - \"+dec2+\" - \"+dec3+\"\\n \\n\"+\n   \"Caudal de alimentacion a evaporacion= \"+caudalclarif+\" m3 \\n \\n\"+\n   \"El valor de ph de jugo es = \"+ph+\"\\n \\n\"+ \"El nivel melado= \"+nivelmelado+\"% \\n\"+\n   \"El nivel Melado tratado= \"+niveltratado+\"% \\n \\n\"+\n   \"Descargas de tachos actuales: \\n\"+\"1era= \"+tacho1ra+ \"\\n\"+\"2da= \"+tacho2da+\"\\n\" +\"3ra= \"+tacho3ra, \n}\nreturn msg;\n\n\n\n\n\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2560,
+    "y": 2000,
+    "wires": [
+      [
+        "424a0f7b20384884"
+      ]
+    ]
+  },
+  {
+    "id": "424a0f7b20384884",
+    "type": "rbe",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "func": "rbe",
+    "gap": "5%",
+    "start": "",
+    "inout": "out",
+    "septopics": false,
+    "property": "payload",
+    "topi": "topic",
+    "x": 2720,
+    "y": 2000,
+    "wires": [
+      [
+        "80fc9d0b561c2da7"
+      ]
+    ]
+  },
+  {
+    "id": "9fbe70d295ba8b8a",
+    "type": "join",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": true,
+    "accumulate": false,
+    "timeout": "",
+    "count": "9",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 2160,
+    "y": 3000,
+    "wires": [
+      [
+        "57c3396bc28c92c1"
+      ]
+    ]
+  },
+  {
+    "id": "57c3396bc28c92c1",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 47",
+    "func": "\nlet siloa=msg.payload.siloa;\nlet silob=msg.payload.silob;\nlet siloc=msg.payload.siloc;\nlet siloe=msg.payload.siloe;\nlet cintacortacolor=msg.payload.cintacortacolor;\nlet cintacortahumedad=msg.payload.cintacortahumedad;\nlet cintalargacolor=msg.payload.cintalargacolor;\nlet cintalargahumedad=msg.payload.cintalargahumedad;\nlet contbolsas=msg.payload.contbolsas;\n\n\n  \nmsg.payload={\n   \"chatId\": -4293484523,\n   \"type\": \"message\",\n   \"content\":\"Salon: \\n\"+ \"La cantidad de bolsas producidas =\"+contbolsas+\"\\n \\n\"+\n   \"Cinta corta:\\n\"+\"Color= \"+cintacortacolor+\"\\n\"+\n   \"Humedad: \"+cintacortahumedad+\"\\n \\n\"+\"Cinta Larga: \\n\"+\n   \"Color: \"+cintalargacolor+\"\\n\"+\"Humedad: \"+cintalargahumedad+\"\\n \\n\"+\n      \"Nivel silos en bolsas: \\n\" + \"A= \" + siloa + \"    Max:2000 \\n\" + \"B= \" + silob + \"    Max:2000\\n\" + \"C= \" + siloc + \"    Max:1000\\n\" + \"E= \" + siloe +\"    Max:1000\", \n}\n\n   \n\nreturn msg;\n\n\n\n\n\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2320,
+    "y": 3000,
+    "wires": [
+      [
+        "bc4a55f3ebf92f67"
+      ]
+    ]
+  },
+  {
+    "id": "bc4a55f3ebf92f67",
+    "type": "rbe",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "func": "rbe",
+    "gap": "5%",
+    "start": "",
+    "inout": "out",
+    "septopics": false,
+    "property": "payload",
+    "topi": "topic",
+    "x": 2500,
+    "y": 3000,
+    "wires": [
+      [
+        "e1fd2acff338f89d"
+      ]
+    ]
+  },
+  {
+    "id": "2c31726679f1d0bd",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "b5cc2909d196ef01",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1820,
+    "y": 160,
+    "wires": [
+      [
+        "fa1cad1d6d041606"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "f94f5c8ebac1e5b8",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=trapiche.Trapiche.Cabina.conductora",
+    "datatype": "Boolean",
+    "value": "",
+    "name": "on/off conductora",
+    "x": 1630,
+    "y": 160,
+    "wires": [
+      [
+        "2c31726679f1d0bd"
+      ]
+    ]
+  },
+  {
+    "id": "d661bb81190b07a8",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1630,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "9b8cb6b8e994b840",
+    "type": "inject",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "5",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "5",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 1430,
+    "y": 160,
+    "wires": [
+      [
+        "f94f5c8ebac1e5b8"
+      ]
+    ]
+  },
+  {
+    "id": "fa1cad1d6d041606",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 48",
+    "func": "if (msg.payload == true) {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"Trapiche Funcionando\",\n    }\n    return msg;\n}\nelse if (msg.payload == false) {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"trapiche parado\",\n    } \n    return msg;\n}\nelse {\n}\n\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1990,
+    "y": 160,
+    "wires": [
+      [
+        "e3f940a88ebb8ac1"
+      ]
+    ]
+  },
+  {
+    "id": "e3f940a88ebb8ac1",
+    "type": "rbe",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "func": "rbei",
+    "gap": "",
+    "start": "",
+    "inout": "out",
+    "septopics": false,
+    "property": "payload",
+    "topi": "topic",
+    "x": 2130,
+    "y": 160,
+    "wires": [
+      [
+        "4d79b65b7cee8c10"
+      ]
+    ]
+  },
+  {
+    "id": "aeb78d573f2d8f3c",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "caudalclarif",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 2100,
+    "y": 1840,
+    "wires": [
+      [
+        "17e5fd35c82dee1e"
+      ]
+    ]
+  },
+  {
+    "id": "bf7809f53684cb12",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "ph",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1990,
+    "y": 1960,
+    "wires": [
+      [
+        "17e5fd35c82dee1e"
+      ]
+    ]
+  },
+  {
+    "id": "2bea66192c1f284f",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "niveltratado",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 2180,
+    "y": 2060,
+    "wires": [
+      [
+        "17e5fd35c82dee1e"
+      ]
+    ]
+  },
+  {
+    "id": "786dbd3de59c2909",
+    "type": "delay",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "3",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 900,
+    "y": 1260,
+    "wires": [
+      [
+        "44356ea522a71dab",
+        "92dc5c76b33d8632"
+      ]
+    ]
+  },
+  {
+    "id": "92dc5c76b33d8632",
+    "type": "delay",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "3",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 890,
+    "y": 2520,
+    "wires": [
+      [
+        "2255a5643ac8fcb7"
+      ]
+    ]
+  },
+  {
+    "id": "0cfc0e213389deee",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1500,
+    "y": 2140,
+    "wires": [
+      [
+        "d2920eaee1fc7079"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "7cafcf30e8e8637a",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=Tacho.Tacho.nivel_melado",
+    "datatype": "Int16",
+    "value": "",
+    "name": "Nivel melado ",
+    "x": 1280,
+    "y": 2140,
+    "wires": [
+      [
+        "0cfc0e213389deee"
+      ]
+    ]
+  },
+  {
+    "id": "f79ab4f3c4430c7e",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1310,
+    "y": 2100,
+    "wires": []
+  },
+  {
+    "id": "d2920eaee1fc7079",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "6552",
+    "maxin": "16000",
+    "minout": "0",
+    "maxout": "100",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1680,
+    "y": 2140,
+    "wires": [
+      [
+        "83100815b2c7e0c4"
+      ]
+    ]
+  },
+  {
+    "id": "8b0a585a65a1ea0f",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "nivelmelado",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1990,
+    "y": 2140,
+    "wires": [
+      [
+        "17e5fd35c82dee1e"
+      ]
+    ]
+  },
+  {
+    "id": "2811ca7e72593db8",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 49",
+    "func": "if (msg.payload.content == \"Instructivo\") {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"Bienvenido a la Industria 4.0 \\n \\n\"+\"Ingrese el número para acceso online: \\n\"+\"1) Trapiche \\n\"+\"2) Fabrica \\n\"+\"3) Salon \\n\"+\"4) General (trapiche + fabrica+ salon)  \\n\"+\"5) Caldera \\n\"+\"6) Usina \\n\",\n    }\n    return msg;\n}\n\nelse {\n\n}\n\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 700,
+    "y": 420,
+    "wires": [
+      [
+        "48de9c225e9805f7"
+      ]
+    ]
+  },
+  {
+    "id": "b638c2898cb680e0",
+    "type": "join",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": true,
+    "accumulate": false,
+    "timeout": "",
+    "count": "6",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 2490,
+    "y": 4380,
+    "wires": [
+      [
+        "ffaca25500c3e14c"
+      ]
+    ]
+  },
+  {
+    "id": "ffaca25500c3e14c",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 50",
+    "func": "\nlet presionvapor=msg.payload.presionvapor;\nlet presionagua=msg.payload.presionagua;\nlet presionaire=msg.payload.presionaire;\nlet gastotal=msg.payload.gastotal;\nlet vapor6 = msg.payload.vapor6;\nlet vapor2 = msg.payload.vapor2;\n\n  \nmsg.payload={\n   \"chatId\": -4293484523,\n   \"type\": \"message\",\n   \"content\":\"Caldera: \\n\"+\"Presion de vapor= \"+presionvapor+\" bar \\n\"+\"Presion de agua= \"+presionagua+\" bar \\n\"\n   +\"Presion de aire= \"+presionaire+\" bar \\n\"+\"Caudal gas Total= \"+gastotal+\" m3 \\n \\n\"+\n   \"Caudal caldera 6 = \" + vapor6 +\"T/H \\n\"+\n   \"Caudal Caldera 2 = \"+ vapor2+\"T/H\", \n}\n\n   \n\nreturn msg;\n\n\n\n\n\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2650,
+    "y": 4380,
+    "wires": [
+      [
+        "dac0848c099af80a"
+      ]
+    ]
+  },
+  {
+    "id": "dac0848c099af80a",
+    "type": "rbe",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "func": "rbe",
+    "gap": "5%",
+    "start": "",
+    "inout": "out",
+    "septopics": false,
+    "property": "payload",
+    "topi": "topic",
+    "x": 2830,
+    "y": 4380,
+    "wires": [
+      [
+        "7ffcb1d8365195ab"
+      ]
+    ]
+  },
+  {
+    "id": "5ff2caef2a094d88",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=caldera.caldera.presion_aire",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "presion aire",
+    "x": 1170,
+    "y": 4400,
+    "wires": [
+      [
+        "e647ce89bda89ee0"
+      ]
+    ]
+  },
+  {
+    "id": "e647ce89bda89ee0",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1380,
+    "y": 4400,
+    "wires": [
+      [
+        "e507d0ae88b13878"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "e507d0ae88b13878",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3276",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "10",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1580,
+    "y": 4400,
+    "wires": [
+      [
+        "4c7bbc733e9a39f6"
+      ]
+    ]
+  },
+  {
+    "id": "c9a7401468d4d0bb",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=caldera.caldera.Pres_Vapor_Direc_Bajas",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "presion Vapor",
+    "x": 1180,
+    "y": 4240,
+    "wires": [
+      [
+        "5e6d5c905028e965"
+      ]
+    ]
+  },
+  {
+    "id": "5e6d5c905028e965",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1380,
+    "y": 4240,
+    "wires": [
+      [
+        "2d3a9e5513829c86"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "2d3a9e5513829c86",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3276",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "25",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1580,
+    "y": 4240,
+    "wires": [
+      [
+        "e4df4dd408d6d083"
+      ]
+    ]
+  },
+  {
+    "id": "1e54c16bacba29a7",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1280,
+    "y": 4360,
+    "wires": []
+  },
+  {
+    "id": "2b2ee44e17f12f7a",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1270,
+    "y": 4200,
+    "wires": []
+  },
+  {
+    "id": "3f65d08a21e8d2ea",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=caldera.caldera.Pres_H2O_Alimentacion1",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "presion agua",
+    "x": 1180,
+    "y": 4320,
+    "wires": [
+      [
+        "de822920ac617c2e"
+      ]
+    ]
+  },
+  {
+    "id": "de822920ac617c2e",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1390,
+    "y": 4320,
+    "wires": [
+      [
+        "7e09aac432e8decc"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "7e09aac432e8decc",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3276",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "50",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1590,
+    "y": 4320,
+    "wires": [
+      [
+        "af607059433dae96"
+      ]
+    ]
+  },
+  {
+    "id": "887d966158d41631",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1280,
+    "y": 4280,
+    "wires": []
+  },
+  {
+    "id": "69d4ea5ee6050f4e",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "presionaire",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1890,
+    "y": 4400,
+    "wires": [
+      [
+        "b638c2898cb680e0"
+      ]
+    ]
+  },
+  {
+    "id": "d93b37709ff17eac",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "presionvapor",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1890,
+    "y": 4240,
+    "wires": [
+      [
+        "b638c2898cb680e0",
+        "28ee535bd9264388"
+      ]
+    ]
+  },
+  {
+    "id": "76e235f09df6b0af",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "presionagua",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 2020,
+    "y": 4320,
+    "wires": [
+      [
+        "b638c2898cb680e0"
+      ]
+    ]
+  },
+  {
+    "id": "c7349939560b0c5e",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=caldera6.caldera6.Caud_Gas_Cald6",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "Gas cald6",
+    "x": 1160,
+    "y": 4520,
+    "wires": [
+      [
+        "4d6bef97991631c6"
+      ]
+    ]
+  },
+  {
+    "id": "4d6bef97991631c6",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1380,
+    "y": 4520,
+    "wires": [
+      [
+        "f53ba343953a2bd2"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "f53ba343953a2bd2",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3296",
+    "maxin": "16383",
+    "minout": "-5.4",
+    "maxout": "7700",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1580,
+    "y": 4520,
+    "wires": [
+      [
+        "6f2a2b91934d1087"
+      ]
+    ]
+  },
+  {
+    "id": "b61154d95db4629a",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1280,
+    "y": 4480,
+    "wires": []
+  },
+  {
+    "id": "02c47573dc587571",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "gas6",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1910,
+    "y": 4520,
+    "wires": [
+      [
+        "bdb0647a981a30a8"
+      ]
+    ]
+  },
+  {
+    "id": "86e5ee3360a74ff1",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=caldera2.caldera2.Caud_Gas_Cald2",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "Gas Cald2",
+    "x": 1170,
+    "y": 4620,
+    "wires": [
+      [
+        "82631389169b224a"
+      ]
+    ]
+  },
+  {
+    "id": "82631389169b224a",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1380,
+    "y": 4620,
+    "wires": [
+      [
+        "705e2f60e18aacc4"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "705e2f60e18aacc4",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3316",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "5850",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1580,
+    "y": 4620,
+    "wires": [
+      [
+        "815afc607d174d7d"
+      ]
+    ]
+  },
+  {
+    "id": "99b9be4352729be4",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1280,
+    "y": 4580,
+    "wires": []
+  },
+  {
+    "id": "140983f6d792c170",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "gas2",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1910,
+    "y": 4620,
+    "wires": [
+      [
+        "bdb0647a981a30a8"
+      ]
+    ]
+  },
+  {
+    "id": "bdb0647a981a30a8",
+    "type": "join",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": true,
+    "accumulate": false,
+    "timeout": "",
+    "count": "2",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 2110,
+    "y": 4580,
+    "wires": [
+      [
+        "ea27a746e7ce5740"
+      ]
+    ]
+  },
+  {
+    "id": "ea27a746e7ce5740",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 51",
+    "func": "let gas6=msg.payload.gas6;\nlet gas2 = msg.payload.gas2;\nlet suma= msg.payload;\n\nsuma=gas6+gas2;\nmsg.payload=suma;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2250,
+    "y": 4580,
+    "wires": [
+      [
+        "e1b48b85a8d3c064"
+      ]
+    ]
+  },
+  {
+    "id": "e85f5004d313d806",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "gastotal",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 2550,
+    "y": 4580,
+    "wires": [
+      [
+        "b638c2898cb680e0"
+      ]
+    ]
+  },
+  {
+    "id": "6fcb9b2beedc5a9f",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 52",
+    "func": "let ultimovalor = msg.payload.content;\nmsg.payload = ultimovalor;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 930,
+    "y": 4140,
+    "wires": [
+      [
+        "3506a1f7549c1397"
+      ]
+    ]
+  },
+  {
+    "id": "3506a1f7549c1397",
+    "type": "switch",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "5",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1110,
+    "y": 4140,
+    "wires": [
+      [
+        "5ae013ac83f81782"
+      ]
+    ]
+  },
+  {
+    "id": "99038e7d8544459f",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "funcion para que trabaje unicamente content",
+    "info": "",
+    "x": 930,
+    "y": 4080,
+    "wires": []
+  },
+  {
+    "id": "d02767a8b1a444d8",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "toma de deciciones",
+    "info": "",
+    "x": 1190,
+    "y": 4100,
+    "wires": []
+  },
+  {
+    "id": "1f767c0197439dd0",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "recibido telegram",
+    "info": "",
+    "x": 680,
+    "y": 4120,
+    "wires": []
+  },
+  {
+    "id": "5ae013ac83f81782",
+    "type": "trigger",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "op1": "true",
+    "op2": "false",
+    "op1type": "bool",
+    "op2type": "bool",
+    "duration": "1",
+    "extend": true,
+    "overrideDelay": false,
+    "units": "s",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 2,
+    "x": 1260,
+    "y": 4140,
+    "wires": [
+      [
+        "c9a7401468d4d0bb",
+        "3f65d08a21e8d2ea",
+        "5ff2caef2a094d88",
+        "c7349939560b0c5e",
+        "86e5ee3360a74ff1",
+        "f1515667c01e480e",
+        "4d79a2a6843e881b"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "553412edf71c087f",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=siemens.siemens.siemens.Frecuencia_Siemens",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "frec siemens",
+    "x": 1170,
+    "y": 5300,
+    "wires": [
+      [
+        "50ac86fe0a824677"
+      ]
+    ]
+  },
+  {
+    "id": "50ac86fe0a824677",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1380,
+    "y": 5300,
+    "wires": [
+      [
+        "e1dd42b43fa9e3a7"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "e1dd42b43fa9e3a7",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "100",
+    "minout": "0",
+    "maxout": "100",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1580,
+    "y": 5300,
+    "wires": [
+      [
+        "f067a62e07b6f1c0"
+      ]
+    ]
+  },
+  {
+    "id": "f27d14b54d9ab0da",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=siemens.siemens.siemens.Potencia_Activa_Total_Siemens",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "activa siemens",
+    "x": 1180,
+    "y": 5140,
+    "wires": [
+      [
+        "617fe219d3458cf8"
+      ]
+    ]
+  },
+  {
+    "id": "617fe219d3458cf8",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1380,
+    "y": 5140,
+    "wires": [
+      [
+        "e883dd5a780bef23"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "e883dd5a780bef23",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "9999999",
+    "minout": "0",
+    "maxout": "9999999",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1580,
+    "y": 5140,
+    "wires": [
+      [
+        "e958a04c284bf1de"
+      ]
+    ]
+  },
+  {
+    "id": "8009d9dd9db3a517",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1280,
+    "y": 5260,
+    "wires": []
+  },
+  {
+    "id": "44c4d7934aafe168",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1270,
+    "y": 5100,
+    "wires": []
+  },
+  {
+    "id": "64a8755e60378e2d",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=siemens.siemens.siemens.Potencia_Reactiva_Total_Siemens",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "reactiva siemens",
+    "x": 1180,
+    "y": 5220,
+    "wires": [
+      [
+        "eace5baf31ee7c6b"
+      ]
+    ]
+  },
+  {
+    "id": "eace5baf31ee7c6b",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1390,
+    "y": 5220,
+    "wires": [
+      [
+        "031b00257b3f46d5"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "031b00257b3f46d5",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "9999999",
+    "minout": "0",
+    "maxout": "9999999",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1590,
+    "y": 5220,
+    "wires": [
+      [
+        "d6abefe3edeb6b7f"
+      ]
+    ]
+  },
+  {
+    "id": "1c0964105b844d80",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1280,
+    "y": 5180,
+    "wires": []
+  },
+  {
+    "id": "c9063da5464d6364",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "fsiemens",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1890,
+    "y": 5300,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "c2ce7149d6b5cf4c",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "asiemens",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1890,
+    "y": 5140,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "bf44618725632198",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "rsiemens",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 2020,
+    "y": 5220,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "c47ac4abaf2710b7",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 53",
+    "func": "let ultimovalor = msg.payload.content;\nmsg.payload = ultimovalor;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 930,
+    "y": 5040,
+    "wires": [
+      [
+        "d6c6e5c63fdf6bbc"
+      ]
+    ]
+  },
+  {
+    "id": "d6c6e5c63fdf6bbc",
+    "type": "switch",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "6",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1110,
+    "y": 5040,
+    "wires": [
+      [
+        "401a2bf838878122"
+      ]
+    ]
+  },
+  {
+    "id": "b8e4e2ac0a05e352",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "funcion para que trabaje unicamente content",
+    "info": "",
+    "x": 930,
+    "y": 4980,
+    "wires": []
+  },
+  {
+    "id": "3a7f169e90429dc9",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "toma de deciciones",
+    "info": "",
+    "x": 1190,
+    "y": 5000,
+    "wires": []
+  },
+  {
+    "id": "b3267438cd8a95b6",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "recibido telegram",
+    "info": "",
+    "x": 680,
+    "y": 5020,
+    "wires": []
+  },
+  {
+    "id": "401a2bf838878122",
+    "type": "trigger",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "op1": "true",
+    "op2": "false",
+    "op1type": "bool",
+    "op2type": "bool",
+    "duration": "1",
+    "extend": true,
+    "overrideDelay": false,
+    "units": "s",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 2,
+    "x": 1260,
+    "y": 5040,
+    "wires": [
+      [
+        "f27d14b54d9ab0da",
+        "64a8755e60378e2d",
+        "553412edf71c087f",
+        "74c81e2e9b27f094",
+        "f58d5e621638cc43",
+        "4bd3c35fe17e6792",
+        "1ad410e9b2dcb476",
+        "aeb790c4bb3ea667",
+        "97eb9a43a04d0e43",
+        "75cbf0cfc81b47d7",
+        "adee8736f9714e10"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "f0c579b155cb4a32",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "CALDERA",
+    "info": "",
+    "x": 1480,
+    "y": 4020,
+    "wires": []
+  },
+  {
+    "id": "a373a727e3d836ab",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "USINA",
+    "info": "",
+    "x": 1430,
+    "y": 4900,
+    "wires": []
+  },
+  {
+    "id": "4bd3c35fe17e6792",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=skoda.skoda.AEG.Frecuencia_AEG",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "frec aeg",
+    "x": 1150,
+    "y": 5800,
+    "wires": [
+      [
+        "5812ce2b2c891647"
+      ]
+    ]
+  },
+  {
+    "id": "5812ce2b2c891647",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1370,
+    "y": 5800,
+    "wires": [
+      [
+        "84f85cf8235583a1"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "74c81e2e9b27f094",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=skoda.skoda.AEG.Potencia_Activa_Total_AEG",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "activa aeg",
+    "x": 1150,
+    "y": 5640,
+    "wires": [
+      [
+        "b6106e5e750dfbb1"
+      ]
+    ]
+  },
+  {
+    "id": "b6106e5e750dfbb1",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1370,
+    "y": 5640,
+    "wires": [
+      [
+        "1447f1cd4ad0dd2c"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "1447f1cd4ad0dd2c",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "9999999",
+    "minout": "0",
+    "maxout": "9999999",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1570,
+    "y": 5640,
+    "wires": [
+      [
+        "e3ed8f67d416b750"
+      ]
+    ]
+  },
+  {
+    "id": "95214da4e124e856",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1270,
+    "y": 5760,
+    "wires": []
+  },
+  {
+    "id": "681a3652536abc51",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1260,
+    "y": 5600,
+    "wires": []
+  },
+  {
+    "id": "f58d5e621638cc43",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=skoda.skoda.AEG.Potencia_Reactiva_Total_AEG",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "reactiva aeg",
+    "x": 1160,
+    "y": 5720,
+    "wires": [
+      [
+        "db641dfa8d69c560"
+      ]
+    ]
+  },
+  {
+    "id": "db641dfa8d69c560",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1380,
+    "y": 5720,
+    "wires": [
+      [
+        "cf096c2f2c6f7ad5"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "312868b99657da28",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1270,
+    "y": 5680,
+    "wires": []
+  },
+  {
+    "id": "0d8f5808390186a9",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "fweg",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1880,
+    "y": 5800,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "c64fd1c3b6de7559",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "aweg",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1880,
+    "y": 5640,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "5da9dda1ef01e463",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "rweg",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 2010,
+    "y": 5720,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "97eb9a43a04d0e43",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=Secador.Secador.Buttner.temp_sala_centrifuga",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "temp sala centr",
+    "x": 1180,
+    "y": 6240,
+    "wires": [
+      [
+        "0aa9195ef06b15ce"
+      ]
+    ]
+  },
+  {
+    "id": "0aa9195ef06b15ce",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1380,
+    "y": 6240,
+    "wires": [
+      [
+        "2b08be7377847757"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "2b08be7377847757",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3276",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "150",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1580,
+    "y": 6240,
+    "wires": [
+      [
+        "028655e5ca6434b2"
+      ]
+    ]
+  },
+  {
+    "id": "1ad410e9b2dcb476",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=caldera.caldera.temp_sala_variador",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "temp sal cald",
+    "x": 1170,
+    "y": 6080,
+    "wires": [
+      [
+        "4b8c7c79de443200"
+      ]
+    ]
+  },
+  {
+    "id": "4b8c7c79de443200",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1380,
+    "y": 6080,
+    "wires": [
+      [
+        "fa61135c295cfa31"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "fa61135c295cfa31",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "10000",
+    "minout": "0",
+    "maxout": "10000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1580,
+    "y": 6080,
+    "wires": [
+      [
+        "0890d44b94aeb871"
+      ]
+    ]
+  },
+  {
+    "id": "3716fded52c9ae86",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1270,
+    "y": 6040,
+    "wires": []
+  },
+  {
+    "id": "aeb790c4bb3ea667",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=trapiche.Trapiche.Cabina.TempSala_Trapiche",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "temp sal trapiche",
+    "x": 1180,
+    "y": 6160,
+    "wires": [
+      [
+        "faf0bd9541a7da6c"
+      ]
+    ]
+  },
+  {
+    "id": "faf0bd9541a7da6c",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1390,
+    "y": 6160,
+    "wires": [
+      [
+        "15c37ebc610e50be"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "15c37ebc610e50be",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "10000",
+    "minout": "0",
+    "maxout": "10000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1590,
+    "y": 6160,
+    "wires": [
+      [
+        "95258098d53eeac9"
+      ]
+    ]
+  },
+  {
+    "id": "0e60de28ba3f7ad1",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1280,
+    "y": 6120,
+    "wires": []
+  },
+  {
+    "id": "885262885891de42",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "tempcent",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1890,
+    "y": 6240,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "9a610bb3b2e6c8e9",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "tempcald",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1890,
+    "y": 6080,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "7c3007012073aa64",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "temptrap",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1930,
+    "y": 6160,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "ce0a7bfc59400da8",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 1270,
+    "y": 6200,
+    "wires": []
+  },
+  {
+    "id": "0e4422ee3791920d",
+    "type": "join",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": true,
+    "accumulate": false,
+    "timeout": "",
+    "count": "13",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 2520,
+    "y": 5380,
+    "wires": [
+      [
+        "790b985a4d8da58a"
+      ]
+    ]
+  },
+  {
+    "id": "c73a32821ef27344",
+    "type": "rbe",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "func": "rbe",
+    "gap": "5%",
+    "start": "",
+    "inout": "out",
+    "septopics": false,
+    "property": "payload",
+    "topi": "topic",
+    "x": 2850,
+    "y": 5380,
+    "wires": [
+      [
+        "8e3a7637545a95ba"
+      ]
+    ]
+  },
+  {
+    "id": "790b985a4d8da58a",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 54",
+    "func": "\nlet asiemens=msg.payload.asiemens;\nlet rsiemens=msg.payload.rsiemens;\nlet fsiemens=msg.payload.fsiemens;\nlet aweg=msg.payload.aweg;\nlet rweg=msg.payload.rweg;\nlet fweg = msg.payload.fweg;\nlet tempcald = msg.payload.tempcald;\nlet temptrap = msg.payload.temptrap;\nlet tempcent = msg.payload.tempcent;\nlet intsiemens=msg.payload.intsiemens;\nlet rendsiemens=msg.payload.rendsiemens;\nlet intweg=msg.payload.intweg;\nlet rendweg=msg.payload.rendweg;\n  \nmsg.payload={\n   \"chatId\": -4293484523,\n   \"type\": \"message\",\n   \"content\":\"Usina: \\n\"+\"Siemens: \\n\"+\"Potencia Activa= \"+asiemens+\" kw \\n\"+\"Potencia Reactiva= \"+rsiemens+\" kva \\n\"+\"Frecuencia= \"+fsiemens+\" hz \\n\"\n   +\"Intensidad de baja= \"+intsiemens +\" A \\n\"+\"Rendimiento Siemens= \"+rendsiemens+\" % \\n \\n\"+\n   \"WEG: \\n\"+\"Potencia Activa= \"+aweg+\" kw \\n\"+\"Potencia Reactiva= \"+rweg+\" Kva \\n\"+\"Frecuencia= \"+fweg+\" hz \\n\"+\"Intensidad de baja= \"+intweg+\"A \\n\"+\"Rendimiento WEG= \"+rendweg+\" % \\n \\n\"+\n   \"Temperatura de salas: \\n\"+\"Caldera=\"+tempcald+\" ºC \\n\"+\"Trapiche= \"+temptrap+\" ºC \\n\"+\"Centrifuga= \"+tempcent+\" ºC \\n\", \n}\n\n   \n\nreturn msg;\n\n\n\n\n\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2670,
+    "y": 5380,
+    "wires": [
+      [
+        "c73a32821ef27344"
+      ]
+    ]
+  },
+  {
+    "id": "84f85cf8235583a1",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "9999999",
+    "minout": "0",
+    "maxout": "9999999",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1570,
+    "y": 5800,
+    "wires": [
+      [
+        "c2552a27e1e41030"
+      ]
+    ]
+  },
+  {
+    "id": "cf096c2f2c6f7ad5",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "9999999",
+    "minout": "0",
+    "maxout": "9999999",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1550,
+    "y": 5720,
+    "wires": [
+      [
+        "2b9a0713af2fbeb8"
+      ]
+    ]
+  },
+  {
+    "id": "9143faf435726480",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=caldera6.caldera6.Caud_Gas_Cald6",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "Gas cald6",
+    "x": 1260,
+    "y": 1040,
+    "wires": [
+      [
+        "527ed5f621ebc6d4"
+      ]
+    ]
+  },
+  {
+    "id": "527ed5f621ebc6d4",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1480,
+    "y": 1040,
+    "wires": [
+      [
+        "fe1ef54ec348afbb",
+        "d4499cb77b9f99dc"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "fe1ef54ec348afbb",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3296",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "7700",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1680,
+    "y": 1040,
+    "wires": [
+      [
+        "7b4b292cf4bbab6d"
+      ]
+    ]
+  },
+  {
+    "id": "3f1ca6cdce6623b9",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1380,
+    "y": 1000,
+    "wires": []
+  },
+  {
+    "id": "0fc8d31c8139088e",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "gas6",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 2010,
+    "y": 1040,
+    "wires": [
+      [
+        "d848a0e12a7ff8ab"
+      ]
+    ]
+  },
+  {
+    "id": "3c7eee757fc9e193",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=caldera2.caldera2.Caud_Gas_Cald2",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "Gas Cald2",
+    "x": 1270,
+    "y": 1140,
+    "wires": [
+      [
+        "3f1e51f249d36a98"
+      ]
+    ]
+  },
+  {
+    "id": "3f1e51f249d36a98",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1480,
+    "y": 1140,
+    "wires": [
+      [
+        "dea9be7c8ab9382c",
+        "380ece9c6f46367f"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "dea9be7c8ab9382c",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3296",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "5850",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1680,
+    "y": 1140,
+    "wires": [
+      [
+        "76664477c4cfa004"
+      ]
+    ]
+  },
+  {
+    "id": "13583abb4b8dde58",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1380,
+    "y": 1100,
+    "wires": []
+  },
+  {
+    "id": "651a49b2eddc7ab0",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "gas2",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 2010,
+    "y": 1140,
+    "wires": [
+      [
+        "d848a0e12a7ff8ab"
+      ]
+    ]
+  },
+  {
+    "id": "d848a0e12a7ff8ab",
+    "type": "join",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": true,
+    "accumulate": false,
+    "timeout": "",
+    "count": "2",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 2210,
+    "y": 1100,
+    "wires": [
+      [
+        "70d604dbc0c683fe"
+      ]
+    ]
+  },
+  {
+    "id": "70d604dbc0c683fe",
+    "type": "function",
+    "z": "d66f82757e95218d",
+    "name": "function 55",
+    "func": "let gas6=msg.payload.gas6;\nlet gas2 = msg.payload.gas2;\nlet suma= msg.payload;\n\nsuma=gas6+gas2;\nmsg.payload=suma;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2350,
+    "y": 1100,
+    "wires": [
+      [
+        "dd6d550a3ff9b2ab"
+      ]
+    ]
+  },
+  {
+    "id": "17ddd1300dfa300b",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "gastotal",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 2650,
+    "y": 1100,
+    "wires": [
+      [
+        "115637caf03c0c7c"
+      ]
+    ]
+  },
+  {
+    "id": "75cbf0cfc81b47d7",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=siemens.siemens.siemens.Intensidad_Media_Siemens",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "intens siemens",
+    "x": 1180,
+    "y": 5400,
+    "wires": [
+      [
+        "8adb9b22e102605e"
+      ]
+    ]
+  },
+  {
+    "id": "8adb9b22e102605e",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1380,
+    "y": 5400,
+    "wires": [
+      [
+        "044aaf7fafc6a342"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "044aaf7fafc6a342",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "9999999",
+    "minout": "0",
+    "maxout": "9999999",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1580,
+    "y": 5400,
+    "wires": [
+      [
+        "4a9442b76ec19309"
+      ]
+    ]
+  },
+  {
+    "id": "53c1b9abe2221c35",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1280,
+    "y": 5360,
+    "wires": []
+  },
+  {
+    "id": "2d8970c555c049fc",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "intsiemens",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1910,
+    "y": 5400,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "563be6aea8147e88",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "rendsiemens",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1890,
+    "y": 5480,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "adee8736f9714e10",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=skoda.skoda.AEG.Intensidad_Media_AEG",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "intens weg",
+    "x": 1130,
+    "y": 5880,
+    "wires": [
+      [
+        "8dae3fb9fcb28527"
+      ]
+    ]
+  },
+  {
+    "id": "8dae3fb9fcb28527",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1340,
+    "y": 5880,
+    "wires": [
+      [
+        "fb4c19d172e954cd"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "fb4c19d172e954cd",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "0",
+    "maxin": "6000",
+    "minout": "0",
+    "maxout": "2000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1540,
+    "y": 5880,
+    "wires": [
+      [
+        "e9fa01b9f7bcf4f1"
+      ]
+    ]
+  },
+  {
+    "id": "ae4bd6563bfabbb0",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1240,
+    "y": 5840,
+    "wires": []
+  },
+  {
+    "id": "14c2dd3c2b5674d5",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "intweg",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1870,
+    "y": 5880,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "2662d9bd97582daf",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "rendweg",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1850,
+    "y": 5960,
+    "wires": [
+      [
+        "0e4422ee3791920d"
+      ]
+    ]
+  },
+  {
+    "id": "aae5471acde0c76c",
+    "type": "join",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": true,
+    "accumulate": false,
+    "timeout": "",
+    "count": "1",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 1510,
+    "y": 2060,
+    "wires": [
+      [
+        "d04c164f4f4c31c5"
+      ]
+    ]
+  },
+  {
+    "id": "1cd5bff684de0b16",
+    "type": "join",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": true,
+    "accumulate": false,
+    "timeout": "",
+    "count": "1",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 1430,
+    "y": 1840,
+    "wires": [
+      [
+        "541d6c6ac17d6c61"
+      ]
+    ]
+  },
+  {
+    "id": "d4499cb77b9f99dc",
+    "type": "debug",
+    "z": "d66f82757e95218d",
+    "name": "debug 25",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1960,
+    "y": 980,
+    "wires": []
+  },
+  {
+    "id": "380ece9c6f46367f",
+    "type": "debug",
+    "z": "d66f82757e95218d",
+    "name": "debug 26",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1980,
+    "y": 1220,
+    "wires": []
+  },
+  {
+    "id": "9b0722a113c96086",
+    "type": "inject",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 990,
+    "y": 1060,
+    "wires": [
+      [
+        "9143faf435726480",
+        "3c7eee757fc9e193"
+      ]
+    ]
+  },
+  {
+    "id": "f1515667c01e480e",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=caldera6.caldera6.Caudal_Vapor_Cald6",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "caud vap cal6",
+    "x": 1190,
+    "y": 4720,
+    "wires": [
+      [
+        "e48c73624d69fa79"
+      ]
+    ]
+  },
+  {
+    "id": "e48c73624d69fa79",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1390,
+    "y": 4720,
+    "wires": [
+      [
+        "951da37d2e3e9749"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "951da37d2e3e9749",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3276",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "130",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1590,
+    "y": 4720,
+    "wires": [
+      [
+        "f96bc273ad445a9a"
+      ]
+    ]
+  },
+  {
+    "id": "0eef28e513d60045",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1290,
+    "y": 4680,
+    "wires": []
+  },
+  {
+    "id": "5d9f292c7b9cbee8",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "vapor6",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1920,
+    "y": 4720,
+    "wires": [
+      [
+        "b638c2898cb680e0",
+        "a54ee3b71bbe38ce",
+        "c6580266e41a5120",
+        "3a3de978afd637b7"
+      ]
+    ]
+  },
+  {
+    "id": "4d79a2a6843e881b",
+    "type": "OpcUa-Item",
+    "z": "d66f82757e95218d",
+    "item": "ns=2;s=caldera2.caldera2.Caudal_Vapor_Cald2",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "caud vap cal2",
+    "x": 1190,
+    "y": 4800,
+    "wires": [
+      [
+        "bfce312e58979585"
+      ]
+    ]
+  },
+  {
+    "id": "bfce312e58979585",
+    "type": "OpcUa-Client",
+    "z": "d66f82757e95218d",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 1390,
+    "y": 4800,
+    "wires": [
+      [
+        "b3e99d06fad71faa"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "b3e99d06fad71faa",
+    "type": "range",
+    "z": "d66f82757e95218d",
+    "minin": "3276",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "60",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 1590,
+    "y": 4800,
+    "wires": [
+      [
+        "3a406a9baa9de9e8"
+      ]
+    ]
+  },
+  {
+    "id": "63fe34ad0da63001",
+    "type": "comment",
+    "z": "d66f82757e95218d",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 1290,
+    "y": 4760,
+    "wires": []
+  },
+  {
+    "id": "ccc244d28719e62e",
+    "type": "change",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "vapor2",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1920,
+    "y": 4800,
+    "wires": [
+      [
+        "b638c2898cb680e0",
+        "a54ee3b71bbe38ce",
+        "c6580266e41a5120",
+        "3a3de978afd637b7"
+      ]
+    ]
+  },
+  {
+    "id": "1ebe749ebc353eba",
+    "type": "inject",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "1",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 940,
+    "y": 4700,
+    "wires": [
+      [
+        "f1515667c01e480e",
+        "4d79a2a6843e881b",
+        "c9a7401468d4d0bb"
+      ]
+    ]
+  },
+  {
+    "id": "07d69a11ac7c1d45",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "10",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1610,
+    "y": 540,
+    "wires": [
+      [
+        "fda435813d3737ca"
+      ]
+    ]
+  },
+  {
+    "id": "fda435813d3737ca",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "0",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1730,
+    "y": 540,
+    "wires": [
+      [
+        "80f938b23ed4cb3f"
+      ]
+    ]
+  },
+  {
+    "id": "4320a9bb2f1d593a",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "2",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1920,
+    "y": 1840,
+    "wires": [
+      [
+        "aeb78d573f2d8f3c"
+      ]
+    ]
+  },
+  {
+    "id": "86cce3de0f6ce34d",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1750,
+    "y": 620,
+    "wires": [
+      [
+        "4d65633889c52d11"
+      ]
+    ]
+  },
+  {
+    "id": "0d0e3658d5d05dbb",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "2",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1630,
+    "y": 700,
+    "wires": [
+      [
+        "faf17624d2e52800"
+      ]
+    ]
+  },
+  {
+    "id": "0e937e860d1fe87a",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "2",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1630,
+    "y": 780,
+    "wires": [
+      [
+        "6521d8dd18809eac"
+      ]
+    ]
+  },
+  {
+    "id": "003610149631b051",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "2",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1830,
+    "y": 1960,
+    "wires": [
+      [
+        "bf7809f53684cb12"
+      ]
+    ]
+  },
+  {
+    "id": "8266227516582c94",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "0",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 2000,
+    "y": 2060,
+    "wires": [
+      [
+        "2bea66192c1f284f"
+      ]
+    ]
+  },
+  {
+    "id": "8973371a87025f13",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1730,
+    "y": 860,
+    "wires": [
+      [
+        "37a80282b778ecb8"
+      ]
+    ]
+  },
+  {
+    "id": "4a429edfdab2f2bc",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1730,
+    "y": 940,
+    "wires": [
+      [
+        "f40999327d34d340"
+      ]
+    ]
+  },
+  {
+    "id": "a517daf4466ed6b3",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "0",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1720,
+    "y": 3160,
+    "wires": [
+      [
+        "d78f636a68f3eaa5"
+      ]
+    ]
+  },
+  {
+    "id": "7ae0cf822cb82939",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "5",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1720,
+    "y": 3240,
+    "wires": [
+      [
+        "bf179ebbe4233ba6"
+      ]
+    ]
+  },
+  {
+    "id": "ac699ae591a49301",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "0",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1720,
+    "y": 3380,
+    "wires": [
+      [
+        "327bf8b74bbf624f"
+      ]
+    ]
+  },
+  {
+    "id": "ae429f601750edc1",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "5",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1720,
+    "y": 3460,
+    "wires": [
+      [
+        "10893784c85da371"
+      ]
+    ]
+  },
+  {
+    "id": "97a65d7abcf4ee2b",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "0",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1810,
+    "y": 3560,
+    "wires": [
+      [
+        "3d24a969e879d9d5"
+      ]
+    ]
+  },
+  {
+    "id": "333465da6dadbf9a",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "0",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1750,
+    "y": 440,
+    "wires": [
+      [
+        "19cd50ffe4274994"
+      ]
+    ]
+  },
+  {
+    "id": "83100815b2c7e0c4",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "0",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1810,
+    "y": 2140,
+    "wires": [
+      [
+        "8b0a585a65a1ea0f"
+      ]
+    ]
+  },
+  {
+    "id": "4c7bbc733e9a39f6",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1730,
+    "y": 4400,
+    "wires": [
+      [
+        "69d4ea5ee6050f4e"
+      ]
+    ]
+  },
+  {
+    "id": "e4df4dd408d6d083",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo3",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1730,
+    "y": 4240,
+    "wires": [
+      [
+        "d93b37709ff17eac"
+      ]
+    ]
+  },
+  {
+    "id": "af607059433dae96",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1790,
+    "y": 4320,
+    "wires": [
+      [
+        "76e235f09df6b0af"
+      ]
+    ]
+  },
+  {
+    "id": "6f2a2b91934d1087",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1730,
+    "y": 4520,
+    "wires": [
+      [
+        "02c47573dc587571"
+      ]
+    ]
+  },
+  {
+    "id": "815afc607d174d7d",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1730,
+    "y": 4620,
+    "wires": [
+      [
+        "140983f6d792c170"
+      ]
+    ]
+  },
+  {
+    "id": "e1b48b85a8d3c064",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 2390,
+    "y": 4580,
+    "wires": [
+      [
+        "e85f5004d313d806"
+      ]
+    ]
+  },
+  {
+    "id": "f067a62e07b6f1c0",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "100",
+    "round": true,
+    "truncate": false,
+    "decimals": "2",
+    "decimals2": 0,
+    "x": 1730,
+    "y": 5300,
+    "wires": [
+      [
+        "c9063da5464d6364"
+      ]
+    ]
+  },
+  {
+    "id": "e958a04c284bf1de",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo3",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "mult",
+    "constant": "10",
+    "round": true,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1730,
+    "y": 5140,
+    "wires": [
+      [
+        "c2ce7149d6b5cf4c"
+      ]
+    ]
+  },
+  {
+    "id": "d6abefe3edeb6b7f",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "mult",
+    "constant": "10",
+    "round": true,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1750,
+    "y": 5220,
+    "wires": [
+      [
+        "bf44618725632198"
+      ]
+    ]
+  },
+  {
+    "id": "c2552a27e1e41030",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1720,
+    "y": 5800,
+    "wires": [
+      [
+        "0d8f5808390186a9"
+      ]
+    ]
+  },
+  {
+    "id": "e3ed8f67d416b750",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo3",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "1000",
+    "round": true,
+    "truncate": false,
+    "decimals": "1",
+    "decimals2": 0,
+    "x": 1720,
+    "y": 5640,
+    "wires": [
+      [
+        "c64fd1c3b6de7559"
+      ]
+    ]
+  },
+  {
+    "id": "2b9a0713af2fbeb8",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "1000",
+    "round": true,
+    "truncate": false,
+    "decimals": "1",
+    "decimals2": 0,
+    "x": 1730,
+    "y": 5720,
+    "wires": [
+      [
+        "5da9dda1ef01e463"
+      ]
+    ]
+  },
+  {
+    "id": "028655e5ca6434b2",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1730,
+    "y": 6240,
+    "wires": [
+      [
+        "885262885891de42"
+      ]
+    ]
+  },
+  {
+    "id": "0890d44b94aeb871",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo3",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "10",
+    "round": true,
+    "truncate": false,
+    "decimals": "1",
+    "decimals2": 0,
+    "x": 1730,
+    "y": 6080,
+    "wires": [
+      [
+        "9a610bb3b2e6c8e9"
+      ]
+    ]
+  },
+  {
+    "id": "95258098d53eeac9",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "10",
+    "round": true,
+    "truncate": false,
+    "decimals": "1",
+    "decimals2": 0,
+    "x": 1740,
+    "y": 6160,
+    "wires": [
+      [
+        "7c3007012073aa64"
+      ]
+    ]
+  },
+  {
+    "id": "7b4b292cf4bbab6d",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1830,
+    "y": 1040,
+    "wires": [
+      [
+        "0fc8d31c8139088e"
+      ]
+    ]
+  },
+  {
+    "id": "76664477c4cfa004",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 1830,
+    "y": 1140,
+    "wires": [
+      [
+        "651a49b2eddc7ab0"
+      ]
+    ]
+  },
+  {
+    "id": "dd6d550a3ff9b2ab",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 2490,
+    "y": 1100,
+    "wires": [
+      [
+        "17ddd1300dfa300b"
+      ]
+    ]
+  },
+  {
+    "id": "4a9442b76ec19309",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "mult",
+    "constant": "1.7368",
+    "round": true,
+    "truncate": false,
+    "decimals": "2",
+    "decimals2": 0,
+    "x": 1730,
+    "y": 5400,
+    "wires": [
+      [
+        "2d8970c555c049fc",
+        "5fe31f97d9f2a334"
+      ]
+    ]
+  },
+  {
+    "id": "5fe31f97d9f2a334",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "6800",
+    "round": false,
+    "truncate": false,
+    "decimals": "0",
+    "decimals2": 0,
+    "x": 1570,
+    "y": 5480,
+    "wires": [
+      [
+        "1d2548963efdc644"
+      ]
+    ]
+  },
+  {
+    "id": "1d2548963efdc644",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "mult",
+    "constant": "100",
+    "round": true,
+    "truncate": false,
+    "decimals": "2",
+    "decimals2": 0,
+    "x": 1710,
+    "y": 5480,
+    "wires": [
+      [
+        "563be6aea8147e88"
+      ]
+    ]
+  },
+  {
+    "id": "e9fa01b9f7bcf4f1",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "mult",
+    "constant": "17.368",
+    "round": true,
+    "truncate": false,
+    "decimals": "2",
+    "decimals2": 0,
+    "x": 1690,
+    "y": 5880,
+    "wires": [
+      [
+        "14c2dd3c2b5674d5",
+        "59e07e7a0ca0063d"
+      ]
+    ]
+  },
+  {
+    "id": "59e07e7a0ca0063d",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "9116",
+    "round": false,
+    "truncate": false,
+    "decimals": "0",
+    "decimals2": 0,
+    "x": 1530,
+    "y": 5960,
+    "wires": [
+      [
+        "8a944cd81c594be6"
+      ]
+    ]
+  },
+  {
+    "id": "8a944cd81c594be6",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "mult",
+    "constant": "100",
+    "round": true,
+    "truncate": false,
+    "decimals": "2",
+    "decimals2": 0,
+    "x": 1670,
+    "y": 5960,
+    "wires": [
+      [
+        "2662d9bd97582daf"
+      ]
+    ]
+  },
+  {
+    "id": "f96bc273ad445a9a",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "mult",
+    "constant": "1.03",
+    "round": true,
+    "truncate": false,
+    "decimals": "1",
+    "decimals2": 0,
+    "x": 1740,
+    "y": 4720,
+    "wires": [
+      [
+        "5d9f292c7b9cbee8"
+      ]
+    ]
+  },
+  {
+    "id": "3a406a9baa9de9e8",
+    "type": "calculator",
+    "z": "d66f82757e95218d",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "mult",
+    "constant": "1.03",
+    "round": true,
+    "truncate": false,
+    "decimals": "1",
+    "decimals2": 0,
+    "x": 1740,
+    "y": 4800,
+    "wires": [
+      [
+        "ccc244d28719e62e"
+      ]
+    ]
+  },
+  {
+    "id": "09e9fb868fc5d976",
+    "type": "telegram receiver",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "bot": "",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 710,
+    "y": 240,
+    "wires": [
+      [
+        "807d2116a4a11964"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "e69e100b861aa1b6",
+    "type": "telegram receiver",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "bot": "",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 750,
+    "y": 1420,
+    "wires": [
+      [
+        "81b898d37120ea9d"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "dfdfd3689fee0fa0",
+    "type": "telegram receiver",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "bot": "",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 650,
+    "y": 100,
+    "wires": [
+      [
+        "039f69a99b33eedc"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "841e233889982521",
+    "type": "telegram receiver",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "bot": "",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 740,
+    "y": 2660,
+    "wires": [
+      [
+        "2a0d93262db8ea66"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "b0e4926c227f11d5",
+    "type": "telegram receiver",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "bot": "",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 520,
+    "y": 420,
+    "wires": [
+      [
+        "2811ca7e72593db8"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "93fcf6a441a1db17",
+    "type": "telegram receiver",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "bot": "",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 690,
+    "y": 4160,
+    "wires": [
+      [
+        "6fcb9b2beedc5a9f"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "01b64eea8c9e3cab",
+    "type": "telegram receiver",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "bot": "",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 680,
+    "y": 5060,
+    "wires": [
+      [
+        "c47ac4abaf2710b7"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "a26e1beaeb28c4ab",
+    "type": "telegram sender",
+    "z": "d66f82757e95218d",
+    "name": "Grupo hermanos",
+    "bot": "",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 2730,
+    "y": 620,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "80fc9d0b561c2da7",
+    "type": "telegram sender",
+    "z": "d66f82757e95218d",
+    "name": "Grupo hermanos",
+    "bot": "",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 2900,
+    "y": 2000,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "e1fd2acff338f89d",
+    "type": "telegram sender",
+    "z": "d66f82757e95218d",
+    "name": "Grupo hermanos",
+    "bot": "",
+    "haserroroutput": false,
+    "outputs": 1,
+    "x": 2670,
+    "y": 3000,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "4d79b65b7cee8c10",
+    "type": "telegram sender",
+    "z": "d66f82757e95218d",
+    "name": "Grupo hermanos",
+    "bot": "",
+    "haserroroutput": false,
+    "outputs": 1,
+    "x": 2290,
+    "y": 160,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "48de9c225e9805f7",
+    "type": "telegram sender",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "bot": "",
+    "haserroroutput": false,
+    "outputs": 1,
+    "x": 880,
+    "y": 420,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "7ffcb1d8365195ab",
+    "type": "telegram sender",
+    "z": "d66f82757e95218d",
+    "name": "Grupo hermanos",
+    "bot": "",
+    "haserroroutput": false,
+    "outputs": 1,
+    "x": 3000,
+    "y": 4380,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "8e3a7637545a95ba",
+    "type": "telegram sender",
+    "z": "d66f82757e95218d",
+    "name": "Grupo hermanos",
+    "bot": "",
+    "haserroroutput": false,
+    "outputs": 1,
+    "x": 3020,
+    "y": 5380,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "3a3de978afd637b7",
+    "type": "ui_chart",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "group": "",
+    "order": 4,
+    "width": 0,
+    "height": 0,
+    "label": "Caudal de Vapor",
+    "chartType": "pie",
+    "legend": "true",
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "hola como estas ",
+    "dot": false,
+    "ymin": "",
+    "ymax": "",
+    "removeOlder": 1,
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": "50",
+    "useOneColor": false,
+    "useUTC": false,
+    "colors": [
+      "#ad1625",
+      "#ff7f0e",
+      "#ff7f0e",
+      "#2ca02c",
+      "#98df8a",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "outputs": 1,
+    "useDifferentColor": false,
+    "className": "",
+    "x": 2210,
+    "y": 4760,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "a54ee3b71bbe38ce",
+    "type": "ui_chart",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "group": "",
+    "order": 4,
+    "width": 0,
+    "height": 0,
+    "label": "Caudal de Vapor",
+    "chartType": "bar",
+    "legend": "true",
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "",
+    "dot": false,
+    "ymin": "",
+    "ymax": "",
+    "removeOlder": 1,
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": "50",
+    "useOneColor": false,
+    "useUTC": false,
+    "colors": [
+      "#1f77b4",
+      "#aec7e8",
+      "#ff7f0e",
+      "#2ca02c",
+      "#98df8a",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "outputs": 1,
+    "useDifferentColor": false,
+    "className": "",
+    "x": 2210,
+    "y": 4840,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "c6580266e41a5120",
+    "type": "ui_chart",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "group": "",
+    "order": 4,
+    "width": 0,
+    "height": 0,
+    "label": "Caudal de Vapor",
+    "chartType": "bar",
+    "legend": "true",
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "",
+    "dot": false,
+    "ymin": "",
+    "ymax": "",
+    "removeOlder": 1,
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": "50",
+    "useOneColor": false,
+    "useUTC": false,
+    "colors": [
+      "#1f77b4",
+      "#aec7e8",
+      "#ff7f0e",
+      "#2ca02c",
+      "#98df8a",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "outputs": 1,
+    "useDifferentColor": false,
+    "className": "",
+    "x": 2210,
+    "y": 4940,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "28ee535bd9264388",
+    "type": "ui_chart",
+    "z": "d66f82757e95218d",
+    "name": "",
+    "group": "",
+    "order": 4,
+    "width": 0,
+    "height": 0,
+    "label": "Presion vapor",
+    "chartType": "line",
+    "legend": "true",
+    "xformat": "HH:mm:ss",
+    "interpolate": "linear",
+    "nodata": "",
+    "dot": false,
+    "ymin": "",
+    "ymax": "",
+    "removeOlder": 1,
+    "removeOlderPoints": "",
+    "removeOlderUnit": "3600",
+    "cutout": "50",
+    "useOneColor": false,
+    "useUTC": false,
+    "colors": [
+      "#ad1625",
+      "#ff7f0e",
+      "#ff7f0e",
+      "#2ca02c",
+      "#98df8a",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "outputs": 1,
+    "useDifferentColor": false,
+    "className": "",
+    "x": 2200,
+    "y": 4240,
+    "wires": [
+      [
+        "5b13e004d6fb9da1"
+      ]
+    ]
+  },
+  {
+    "id": "5b13e004d6fb9da1",
+    "type": "ui_template",
+    "z": "d66f82757e95218d",
+    "group": "",
+    "name": "",
+    "order": 5,
+    "width": 0,
+    "height": 0,
+    "format": "<style>\n.nr-dashboard-widgetTextColor{\n    color: yellow\n}\n\n</style>",
+    "storeOutMessages": true,
+    "fwdInMessages": true,
+    "resendOnRefresh": true,
+    "templateScope": "local",
+    "className": "",
+    "x": 2400,
+    "y": 4240,
+    "wires": [
+      []
+    ]
+  }
+]

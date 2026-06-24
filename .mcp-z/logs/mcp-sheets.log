@@ -1,0 +1,57 @@
+{"level":30,"time":1781891816893,"pid":174989,"hostname":"PC-BK","msg":"","msg":"Starting mcp-sheets MCP server (stdio)"}
+{"level":30,"time":1781891816915,"pid":174989,"hostname":"PC-BK","msg":"","msg":"stdio transport ready"}
+{"level":30,"time":1781891816915,"pid":174989,"hostname":"PC-BK","msg":"","msg":"Server started with stdio transport"}
+{"level":30,"time":1781910594683,"pid":189285,"hostname":"PC-BK","msg":"","msg":"Starting mcp-sheets MCP server (stdio)"}
+{"level":30,"time":1781910594690,"pid":189285,"hostname":"PC-BK","msg":"","msg":"stdio transport ready"}
+{"level":30,"time":1781910594690,"pid":189285,"hostname":"PC-BK","msg":"","msg":"Server started with stdio transport"}
+{"level":30,"time":1782130757179,"pid":335594,"hostname":"PC-BK","msg":"","msg":"Starting mcp-sheets MCP server (stdio)"}
+{"level":30,"time":1782130757186,"pid":335594,"hostname":"PC-BK","msg":"","msg":"stdio transport ready"}
+{"level":30,"time":1782130757186,"pid":335594,"hostname":"PC-BK","msg":"","msg":"Server started with stdio transport"}
+{"level":30,"time":1782132151160,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get called"}
+{"level":30,"time":1782132152117,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get sheet not found"}
+{"level":50,"time":1782132152121,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get error"}
+{"level":30,"time":1782132159718,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.spreadsheet.find called"}
+{"level":50,"time":1782132160606,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.spreadsheet.find error"}
+{"level":30,"time":1782132168632,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.sheet.find called"}
+{"level":30,"time":1782132169055,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.sheet.find success"}
+{"level":30,"time":1782132172849,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get called"}
+{"level":30,"time":1782132173545,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get success"}
+{"level":30,"time":1782132210349,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get called"}
+{"level":30,"time":1782132211245,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get success"}
+{"level":30,"time":1782132252097,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get called"}
+{"level":30,"time":1782132252868,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get success"}
+{"level":30,"time":1782132267390,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get called"}
+{"level":30,"time":1782132268175,"pid":335594,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get success"}
+{"level":30,"time":1782134197828,"pid":339764,"hostname":"PC-BK","msg":"","msg":"Starting mcp-sheets MCP server (stdio)"}
+{"level":30,"time":1782134197833,"pid":339764,"hostname":"PC-BK","msg":"","msg":"stdio transport ready"}
+{"level":30,"time":1782134197833,"pid":339764,"hostname":"PC-BK","msg":"","msg":"Server started with stdio transport"}
+{"level":30,"time":1782145070315,"pid":348066,"hostname":"PC-BK","msg":"","msg":"Starting mcp-sheets MCP server (stdio)"}
+{"level":30,"time":1782145070325,"pid":348066,"hostname":"PC-BK","msg":"","msg":"stdio transport ready"}
+{"level":30,"time":1782145070327,"pid":348066,"hostname":"PC-BK","msg":"","msg":"Server started with stdio transport"}
+{"level":30,"time":1782155221395,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.spreadsheet.find called"}
+{"level":50,"time":1782155223960,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.spreadsheet.find error"}
+{"level":30,"time":1782156092479,"pid":356104,"hostname":"PC-BK","msg":"","msg":"Starting mcp-sheets MCP server (stdio)"}
+{"level":30,"time":1782156092507,"pid":356104,"hostname":"PC-BK","msg":"","msg":"stdio transport ready"}
+{"level":30,"time":1782156092507,"pid":356104,"hostname":"PC-BK","msg":"","msg":"Server started with stdio transport"}
+{"level":30,"time":1782156270167,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get called"}
+{"level":30,"time":1782156279325,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get success"}
+{"level":30,"time":1782156383183,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.sheet.find called"}
+{"level":30,"time":1782156385726,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.sheet.find success"}
+{"level":30,"time":1782156398909,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.sheet.find called"}
+{"level":30,"time":1782156399985,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.sheet.find success"}
+{"level":30,"time":1782156413338,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get called"}
+{"level":50,"time":1782156416206,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get error"}
+{"level":30,"time":1782156417964,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get called"}
+{"level":50,"time":1782156418794,"pid":348066,"hostname":"PC-BK","msg":"","msg":"sheets.rows.get error"}
+{"level":30,"time":1782162126247,"pid":364676,"hostname":"PC-BK","msg":"","msg":"Starting mcp-sheets MCP server (stdio)"}
+{"level":30,"time":1782162126342,"pid":364676,"hostname":"PC-BK","msg":"","msg":"stdio transport ready"}
+{"level":30,"time":1782162126343,"pid":364676,"hostname":"PC-BK","msg":"","msg":"Server started with stdio transport"}
+{"level":30,"time":1782229910537,"pid":492919,"hostname":"PC-BK","msg":"","msg":"Starting mcp-sheets MCP server (stdio)"}
+{"level":30,"time":1782229910564,"pid":492919,"hostname":"PC-BK","msg":"","msg":"stdio transport ready"}
+{"level":30,"time":1782229910564,"pid":492919,"hostname":"PC-BK","msg":"","msg":"Server started with stdio transport"}
+{"level":30,"time":1782236597050,"pid":505217,"hostname":"PC-BK","msg":"","msg":"Starting mcp-sheets MCP server (stdio)"}
+{"level":30,"time":1782236597054,"pid":505217,"hostname":"PC-BK","msg":"","msg":"stdio transport ready"}
+{"level":30,"time":1782236597054,"pid":505217,"hostname":"PC-BK","msg":"","msg":"Server started with stdio transport"}
+{"level":30,"time":1782245296365,"pid":525944,"hostname":"PC-BK","msg":"","msg":"Starting mcp-sheets MCP server (stdio)"}
+{"level":30,"time":1782245296368,"pid":525944,"hostname":"PC-BK","msg":"","msg":"stdio transport ready"}
+{"level":30,"time":1782245296368,"pid":525944,"hostname":"PC-BK","msg":"","msg":"Server started with stdio transport"}

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "20e101fb9614ba67",
+    "type": "MSSQL",
+    "z": "be2c19be1dc4427d",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "OT",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT ID, numero, tipoorden, codigoequipo, estado\r\n, criticidad, codigoequiporef, tarea\r\n, fechainicio, fechafin, prioridad\r\n, originador, ejecutante, centrodecosto\r\n, periodo, planprogramado, observaciones\r\n, paradamolienda\r\nFROM dbo.mn_ordendetrabajo",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 250,
+    "y": 60,
+    "wires": [
+      [
+        "b0b7281b8c95b8ba"
+      ]
+    ]
+  },
+  {
+    "id": "0e35426d12a9d968",
+    "type": "inject",
+    "z": "be2c19be1dc4427d",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 100,
+    "y": 60,
+    "wires": [
+      [
+        "20e101fb9614ba67"
+      ]
+    ]
+  },
+  {
+    "id": "b0b7281b8c95b8ba",
+    "type": "function",
+    "z": "be2c19be1dc4427d",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción/actualización.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Cambiado a INSERT ... ON DUPLICATE KEY UPDATE\nconst insertSql = `\n    INSERT INTO molienda (\n        fechaindustrial, numero_pesada, GRUPO, caniero, nro_muestra, cania_bruta, \n        trash, trashReal, Polporciento, Brixporciento, Pureza, \n        Rendimiento, RendimientoReal, tipo_cania, fecha_pesada, \n        hora_pesada, fecha_salida, hora_salida, nromuestra2, \n        prepesada, usuario, tipo_contrato, transporte, \n        fletero, cosechero, finca, nombre_finca, patente, \n        observaciones, tara\n    )\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n    ON DUPLICATE KEY UPDATE \n        fechaindustrial = VALUES(fechaindustrial),\n        nro_muestra = VALUES(nro_muestra),\n        cania_bruta = VALUES(cania_bruta),\n        trash = VALUES(trash),\n        Polporciento = VALUES(Polporciento),\n        Brixporciento = VALUES(Brixporciento),\n        Pureza = VALUES(Pureza),\n        Rendimiento = VALUES(Rendimiento),\n        fecha_pesada = VALUES(fecha_pesada),\n        hora_pesada = VALUES(hora_pesada)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a los parámetros de MySQL\n    const fechaindustrial = row.fechaindustrial || '';\n    const numero_pesada = row.numero_pesada || '';\n    const GRUPO = row.GRUPO || '';\n    const caniero = row.caniero || '';\n    const nro_muestra = row.nro_muestra || '';\n    const cania_bruta = row.cania_bruta || '';\n    const trash = row.trash || '';\n    const trashReal = row.trashReal || '';\n    const Polporciento = row.Polporciento || '';\n    const Brixporciento = row.Brixporciento || '';\n    const Pureza = row.Pureza || '';\n    const Rendimiento = row.Rendimiento || '';\n    const RendimientoReal = row.RendimientoReal || '';\n    const tipo_cania = row.tipo_cania || '';\n    const fecha_pesada = row.fecha_pesada || '';\n    const hora_pesada = row.hora_pesada || '';\n    const fecha_salida = row.fecha_salida || '';\n    const hora_salida = row.hora_salida || '';\n    const nromuestra2 = row.nromuestra2 || '';\n    const prepesada = row.prepesada || '';\n    const usuario = row.usuario || '';\n    const tipo_contrato = row.tipo_contrato || '';\n    const transporte = row.transporte || '';\n    const fletero = row.fletero || '';\n    const cosechero = row.cosechero || '';\n    const finca = row.finca || '';\n    const nombre_finca = row.nombre_finca || '';\n    const patente = row.patente || '';\n    const observaciones = row.observaciones || '';\n    const tara = row.tara || '';\n\n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [\n        fechaindustrial, numero_pesada, GRUPO, caniero, nro_muestra, cania_bruta,\n        trash, trashReal, Polporciento, Brixporciento, Pureza,\n        Rendimiento, RendimientoReal, tipo_cania, fecha_pesada,\n        hora_pesada, fecha_salida, hora_salida, nromuestra2,\n        prepesada, usuario, tipo_contrato, transporte,\n        fletero, cosechero, finca, nombre_finca, patente,\n        observaciones, tara\n    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql,\n        // También puedes incluir la fila original para debugging\n        _originalRow: row\n    });\n}\n\n// Devolver los mensajes para el nodo MySQL\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 510,
+    "y": 60,
+    "wires": [
+      [
+        "ebda1a9a558d3aed"
+      ]
+    ]
+  },
+  {
+    "id": "7e3922f73a3e0e1d",
+    "type": "debug",
+    "z": "be2c19be1dc4427d",
+    "name": "debug 80",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1020,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "ebda1a9a558d3aed",
+    "type": "mysql",
+    "z": "be2c19be1dc4427d",
+    "mydb": "c965cd34073f27f4",
+    "name": "Con DB Molienda",
+    "x": 810,
+    "y": 60,
+    "wires": [
+      [
+        "7e3922f73a3e0e1d"
+      ]
+    ]
+  }
+]

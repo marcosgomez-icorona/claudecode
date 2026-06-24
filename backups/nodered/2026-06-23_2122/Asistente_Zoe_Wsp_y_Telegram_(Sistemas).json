@@ -1,0 +1,803 @@
+[
+  {
+    "id": "9fdcfa0a4da1c655",
+    "type": "group",
+    "z": "2555dacba10a04c9",
+    "name": "SISTEMAS WSP",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "bd1fbc8de8ce364c",
+      "b7b2a5e94ff296b0"
+    ],
+    "x": 88,
+    "y": 13,
+    "w": 1124,
+    "h": 374
+  },
+  {
+    "id": "680b3c2d6e78472d",
+    "type": "group",
+    "z": "2555dacba10a04c9",
+    "name": "Telegram IngenioOnline",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "936ac3c2ef3220c0",
+      "e338d789bf399563",
+      "368c5543b4961715",
+      "01520973d9227be0",
+      "b3c836cc8285df25",
+      "10f18966398f6c03"
+    ],
+    "x": 194,
+    "y": 399,
+    "w": 852,
+    "h": 142
+  },
+  {
+    "id": "b7b2a5e94ff296b0",
+    "type": "group",
+    "z": "2555dacba10a04c9",
+    "g": "9fdcfa0a4da1c655",
+    "name": "Asistente Zoé",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "d3e2a12c093728ca",
+      "2154cf50f4199d7f",
+      "fe5ed357c00bb71b",
+      "a112aad5e40f631c",
+      "93b275ae7f91fd39",
+      "ee8cc3141d7d6d6e",
+      "40f09375a8d1ef85",
+      "386a0796dff0e4e3",
+      "c7726f36331a175a"
+    ],
+    "x": 114,
+    "y": 39,
+    "w": 992,
+    "h": 162
+  },
+  {
+    "id": "bd1fbc8de8ce364c",
+    "type": "group",
+    "z": "2555dacba10a04c9",
+    "g": "9fdcfa0a4da1c655",
+    "name": "Panel Ticket SIstemas",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "42fb26fdd037f980",
+      "b2690cfc9ff0d705",
+      "8bf614967f9325af",
+      "bc46b428f5926902",
+      "2f581d0c15cfe243",
+      "f3e7b8b3da224452",
+      "9b10b6f829a2928f",
+      "830d2d559234ac5d"
+    ],
+    "x": 124,
+    "y": 219,
+    "w": 1062,
+    "h": 142
+  },
+  {
+    "id": "d3e2a12c093728ca",
+    "type": "chats-in",
+    "z": "2555dacba10a04c9",
+    "g": "b7b2a5e94ff296b0",
+    "name": "Chats In",
+    "whatsappLink": "",
+    "whatsappLiteevent": "",
+    "whatsappWebevent": "message",
+    "x": 200,
+    "y": 160,
+    "wires": [
+      [
+        "fe5ed357c00bb71b"
+      ]
+    ]
+  },
+  {
+    "id": "2154cf50f4199d7f",
+    "type": "chats-out",
+    "z": "2555dacba10a04c9",
+    "g": "b7b2a5e94ff296b0",
+    "name": "Chats Out",
+    "whatsappLink": "",
+    "number": "",
+    "x": 610,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "fe5ed357c00bb71b",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "g": "b7b2a5e94ff296b0",
+    "name": "Flujo de Respuestas",
+    "func": "var tel = msg.chatID;\nvar message = msg.payload;\nvar chatID = tel;\n\nvar userContext = context.get(chatID) || { step: 0, userData: {} };\n\nif (userContext.step === 0) {\n\n    msg.payload = \"Hola, soy *Zoé* la asistente virtual del área de sistema.\\n\" +\n        \"Por favor indica cuál es la emergencia o problema y sé específico.\";\n    userContext.step = 1; \n}\nelse if (userContext.step === 1) {\n    userContext.userData.problema = message;\n    msg.payload = \"Perfecto, ahora indica el área relacionada a tu problema.\\n\\n\" +\n        \"- *1 Administracion.*\\n\" +\n        \"- *2 Of. Tecnica.*\\n\" +\n        \"- *3 Calderas.*\\n\" +\n        \"- *4 Compras.*\\n\" +\n        \"- *5 Fabrica.*\\n\" +\n        \"- *6 Laboratorio.*\\n\" +\n        \"- *7 Electrica / Usina*\\n\" +\n        \"- *8 Seguridad*\";\n    userContext.step = 2; \n}\nelse if (userContext.step === 2) {\n    if (message.toLowerCase() === \"Administacion\" || message === \"1\") {\n        userContext.userData.area = \"Administacion\";\n    } else if (message.toLowerCase() === \"Of. Tecnica\" || message === \"2\") {\n        userContext.userData.area = \"Of. Tecnica\";\n    } else if (message.toLowerCase() === \"Calderas\" || message === \"3\") {\n        userContext.userData.area = \"Calderas\";\n    } else if (message.toLowerCase() === \"Compras\" || message === \"4\") {\n        userContext.userData.area = \"Compras\";\n    } else if (message.toLowerCase() === \"Fabrica\" || message === \"5\") {\n        userContext.userData.area = \"Fabrica\";\n    } else if (message.toLowerCase() === \"Laboratorio\" || message === \"6\") {\n        userContext.userData.area = \"Laboratorio\";\n    } else if (message.toLowerCase() === \"Electrica\" || message === \"Usina\" || \"7\") {\n        userContext.userData.area = \"Electrica\";\n    } else if (message.toLowerCase() === \"Seguridad\" || message === \"8\") {\n        userContext.userData.area = \"Seguridad\";\n    } else {\n        msg.payload = \"Por favor selecciona un área válida.\";\n        return msg;\n    }\n    msg.payload = \"Excelente, ahora para finalizar, indica la gravedad o prioridad de tu problema o urgencia.\\n\\n\" +\n        \"- *1 Alta.*\\n\" +\n        \"- *2 Media.*\\n\" +\n        \"- *3 Baja.*\\n\";\n    userContext.step = 3;\n}\n\nelse if (userContext.step === 3) {\n    if (message.toLowerCase() === \"alta\" || message === \"1\") {\n        userContext.userData.prioridad = \"Alta\";\n    } else if (message.toLowerCase() === \"media\" || message === \"2\") {\n        userContext.userData.prioridad = \"Media\";\n    } else if (message.toLowerCase() === \"baja\" || message === \"3\") {\n        userContext.userData.prioridad = \"Baja\";\n    } else {\n        msg.payload = \"Por favor selecciona una prioridad válida.\";\n        return msg;\n    }\n    var userData = userContext.userData;\n    msg.payload = \"Perfecto, su caso fue guardado y notificado al área de sistema.\\n\" +\n        \"Escríbeme cuando quieras.\";\n\n    msg.caso = {\n        telefono: tel,\n        problema: userData.problema,\n        area: userData.area,\n        prioridad: userData.prioridad\n    };\n\n    userContext.step = 0;\n} else {\n    return null;\n}\n\ncontext.set(chatID, userContext);\n\nmsg.toNumber = tel;\n\nreturn msg",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 160,
+    "wires": [
+      [
+        "2154cf50f4199d7f",
+        "93b275ae7f91fd39"
+      ]
+    ]
+  },
+  {
+    "id": "a112aad5e40f631c",
+    "type": "chats-out",
+    "z": "2555dacba10a04c9",
+    "g": "b7b2a5e94ff296b0",
+    "name": "Chats Out",
+    "whatsappLink": "",
+    "number": "",
+    "x": 810,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "93b275ae7f91fd39",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "g": "b7b2a5e94ff296b0",
+    "name": "Envio del Caso",
+    "func": "var contacto = msg.caso?.telefono;\nvar caso = msg.caso?.problema;\nvar area = msg.caso?.area;\nvar prioridad = msg.caso?.prioridad;\n\nif (contacto && caso && area && prioridad) {\n    \n    msg.payload = \"🔔 Se notificó que el área de *\" + area + \"* tiene el siguiente problema:\\n\" +\n                  \"*_\" + caso + \"_*.\\n\" +\n                  \"La gravedad/prioridad es: *\" + prioridad + \"*.\\n\\n\" +\n                  \"✅ Ya puedes visualizar este caso en el panel de Sistemas.\";\n    \n    msg.toNumber = \"5493865379861\";\n\n    msg.dbQuery = {\n        telefono: contacto,\n        problema: caso,\n        area: area,\n        prioridad: prioridad\n    };\n} else {\n    msg.payload = \"❌ Error: Información incompleta. No se puede notificar el caso.\";\n    return null;\n}\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 620,
+    "y": 120,
+    "wires": [
+      [
+        "a112aad5e40f631c",
+        "386a0796dff0e4e3"
+      ]
+    ]
+  },
+  {
+    "id": "ee8cc3141d7d6d6e",
+    "type": "admin",
+    "z": "2555dacba10a04c9",
+    "d": true,
+    "g": "b7b2a5e94ff296b0",
+    "name": "Wsp Sistemas",
+    "whatsappLink": "",
+    "x": 280,
+    "y": 80,
+    "wires": [
+      [
+        "c7726f36331a175a"
+      ]
+    ]
+  },
+  {
+    "id": "40f09375a8d1ef85",
+    "type": "mysql-r2",
+    "z": "2555dacba10a04c9",
+    "g": "b7b2a5e94ff296b0",
+    "name": "BDs Computos",
+    "host": "192.168.0.23",
+    "database": "dbs_computos",
+    "username": "zoe",
+    "password": "1234",
+    "sql": "",
+    "port": "3306",
+    "pooling": false,
+    "waitForConnections": true,
+    "connectionLimit": "10",
+    "queueTimeout": "10000",
+    "x": 1000,
+    "y": 80,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "386a0796dff0e4e3",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "g": "b7b2a5e94ff296b0",
+    "name": "Envia a BDs",
+    "func": "let query = `\n    INSERT INTO casos_reportados (telefono, problema, area, prioridad) \n    VALUES (\n        '${msg.dbQuery.telefono}', \n        '${msg.dbQuery.problema}', \n        '${msg.dbQuery.area}', \n        '${msg.dbQuery.prioridad}'\n    );\n`;\n\nmsg.sql = query;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 810,
+    "y": 80,
+    "wires": [
+      [
+        "40f09375a8d1ef85"
+      ]
+    ]
+  },
+  {
+    "id": "42fb26fdd037f980",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "g": "bd1fbc8de8ce364c",
+    "name": "Extraer Datos DBs",
+    "func": "let query = `\nSELECT \n    status,\n    telefono,\n    problema,\n    area,\n    prioridad,\n    DATE_FORMAT(fecha_reporte, '%d/%m/%y') AS fecha,  -- Fecha en formato DD/MM/AA\n    DATE_FORMAT(fecha_reporte, '%H:%i') AS hora       -- Hora en formato HH:MM\nFROM casos_reportados;\n`;\n\nmsg.sql = query;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 410,
+    "y": 320,
+    "wires": [
+      [
+        "b2690cfc9ff0d705"
+      ]
+    ]
+  },
+  {
+    "id": "b2690cfc9ff0d705",
+    "type": "mysql-r2",
+    "z": "2555dacba10a04c9",
+    "g": "bd1fbc8de8ce364c",
+    "name": "BDs Computos",
+    "host": "192.168.0.23",
+    "database": "dbs_computos",
+    "username": "zoe",
+    "password": "1234",
+    "sql": "",
+    "port": "3306",
+    "pooling": false,
+    "waitForConnections": true,
+    "connectionLimit": "10",
+    "queueTimeout": "10000",
+    "x": 420,
+    "y": 260,
+    "wires": [
+      [
+        "8bf614967f9325af"
+      ]
+    ]
+  },
+  {
+    "id": "8bf614967f9325af",
+    "type": "ui-table",
+    "z": "2555dacba10a04c9",
+    "g": "bd1fbc8de8ce364c",
+    "group": "d0cc67374df50e40",
+    "name": "Tickets",
+    "label": "text",
+    "order": 1,
+    "width": 0,
+    "height": 0,
+    "maxrows": "25",
+    "passthru": false,
+    "autocols": false,
+    "showSearch": true,
+    "deselect": true,
+    "selectionType": "checkbox",
+    "columns": [
+      {
+        "title": "Reportó",
+        "key": "telefono",
+        "keyType": "key",
+        "type": "text",
+        "width": "",
+        "align": "center"
+      },
+      {
+        "title": "Insidencia",
+        "key": "problema",
+        "keyType": "key",
+        "type": "text",
+        "width": "",
+        "align": "center"
+      },
+      {
+        "title": "Origen",
+        "key": "area",
+        "keyType": "key",
+        "type": "text",
+        "width": "",
+        "align": "center"
+      },
+      {
+        "title": "Prioridad",
+        "key": "prioridad",
+        "keyType": "key",
+        "type": "text",
+        "width": "",
+        "align": "center"
+      },
+      {
+        "title": "Hora",
+        "key": "hora",
+        "keyType": "key",
+        "type": "text",
+        "width": "",
+        "align": "center"
+      },
+      {
+        "title": "Fecha",
+        "key": "fecha",
+        "keyType": "key",
+        "type": "text",
+        "width": "",
+        "align": "center"
+      },
+      {
+        "title": "Estado",
+        "key": "status",
+        "keyType": "key",
+        "type": "tickcross",
+        "width": "",
+        "align": "center"
+      },
+      {
+        "title": "Cerrar y Notificar",
+        "key": "Notificar",
+        "keyType": "str",
+        "type": "button",
+        "width": "",
+        "align": "center"
+      }
+    ],
+    "mobileBreakpoint": "sm",
+    "mobileBreakpointType": "defaults",
+    "action": "replace",
+    "x": 640,
+    "y": 260,
+    "wires": [
+      [
+        "bc46b428f5926902",
+        "9b10b6f829a2928f"
+      ]
+    ]
+  },
+  {
+    "id": "bc46b428f5926902",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "g": "bd1fbc8de8ce364c",
+    "name": "Actualizar Estado",
+    "func": "if (msg.action === \"button_click\" && msg.payload.status === 0) {\n    let query = `UPDATE casos_reportados \n                 SET status = 1 \n                 WHERE telefono = '${msg.payload.telefono}' \n                   AND problema = '${msg.payload.problema}' \n                   AND area = '${msg.payload.area}' \n                   AND prioridad = '${msg.payload.prioridad}';`;\n    msg.sql = query;\n\n    return msg;\n} else {\n    return null;\n}\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 670,
+    "y": 320,
+    "wires": [
+      [
+        "2f581d0c15cfe243"
+      ]
+    ]
+  },
+  {
+    "id": "2f581d0c15cfe243",
+    "type": "mysql-r2",
+    "z": "2555dacba10a04c9",
+    "g": "bd1fbc8de8ce364c",
+    "name": "BDs Computos",
+    "host": "192.168.0.23",
+    "database": "dbs_computos",
+    "username": "zoe",
+    "password": "1234",
+    "sql": "",
+    "port": "3306",
+    "pooling": false,
+    "waitForConnections": true,
+    "connectionLimit": "10",
+    "queueTimeout": "10000",
+    "x": 880,
+    "y": 320,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "f3e7b8b3da224452",
+    "type": "ui-button",
+    "z": "2555dacba10a04c9",
+    "g": "bd1fbc8de8ce364c",
+    "group": "d0cc67374df50e40",
+    "name": "Actualizar",
+    "label": "Actualizar",
+    "order": 2,
+    "width": "0",
+    "height": "0",
+    "emulateClick": false,
+    "tooltip": "",
+    "color": "",
+    "bgcolor": "",
+    "className": "",
+    "icon": "refresh",
+    "iconPosition": "left",
+    "payload": "true",
+    "payloadType": "bool",
+    "topic": "topic",
+    "topicType": "msg",
+    "buttonColor": "",
+    "textColor": "",
+    "iconColor": "",
+    "enableClick": true,
+    "enablePointerdown": false,
+    "pointerdownPayload": "",
+    "pointerdownPayloadType": "str",
+    "enablePointerup": false,
+    "pointerupPayload": "",
+    "pointerupPayloadType": "str",
+    "x": 210,
+    "y": 260,
+    "wires": [
+      [
+        "42fb26fdd037f980"
+      ]
+    ]
+  },
+  {
+    "id": "c7726f36331a175a",
+    "type": "debug",
+    "z": "2555dacba10a04c9",
+    "g": "b7b2a5e94ff296b0",
+    "name": "debug 60",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 460,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "936ac3c2ef3220c0",
+    "type": "telegram receiver",
+    "z": "2555dacba10a04c9",
+    "g": "680b3c2d6e78472d",
+    "name": "Bot_Corona",
+    "bot": "",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 790,
+    "y": 440,
+    "wires": [
+      [
+        "e338d789bf399563"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "e338d789bf399563",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "g": "680b3c2d6e78472d",
+    "name": "Flujo de Respuestas",
+    "func": "var chatId = String(msg.payload.chatId);\nvar message = msg.payload.content;\nvar userContext = context.get(chatId) || { step: 0, nombre: \"\" };\n\nvar statusTrapiche = \"N/A\";\nvar moliendaTotal =\"N/A\";\nvar moliendaUltHs = \"N/A\";\nvar humBagazo = \"N/A\";\nvar polBagazo = \"N/A\";\nvar velMolino1 = \"N/A\";\nvar velMolino6 = \"N/A\";\nvar pressMolino6Este = \"N/A\";\nvar pressMolino6Oeste = \"N/A\";\nvar bbImbibicion = \"N/A\";\nvar pvDirecto = \"N/A\";\nvar caudalGasTotal = \"N/A\";\nvar consumoVpTotal =\"N/A\";\nvar consumoVpDest = \"N/A\";\nvar consumoVpUsina = \"N/A\";\nvar cVaporTotal = \"N/A\";\nvar prodUsina = \"N/A\";\nvar consumoEdet = \"N/A\";\nvar consumoUsinaTotal = \"N/A\";\n\nif (userContext.step === 0) {\n    msg.payload = {\n        chatId: chatId,\n        type: \"message\",\n        content:\n            \"Hola, Bienvenido a *IngeniOnline 2.0 de Ingenio La Corona*.\\n\" +\n            \"¿Cuál es tu nombre?\",\n        options: {\n            parse_mode: \"Markdown\",\n        },\n    };\n    userContext.step = 1;\n}\n\nelse if (userContext.step === 1) {\n    userContext.nombre = message;\n    msg.payload = {\n        chatId: chatId,\n        type: \"message\",\n        content: \"*Mucho gusto, \" + userContext.nombre + \"*.\\n ¿Cómo puedo ayudarte hoy?\",\n        options: {\n            reply_markup: {\n                keyboard: [\n                    [\"Resumen General\"],\n                    [\"Trapiche\", \"Calderas\"],\n                    [\"Fabrica\", \"Destileria\"],\n                    [\"Usina\", \"Link IngeniOnline\"]\n                ],\n                resize_keyboard: true,\n                one_time_keyboard: true,\n            },\n            parse_mode: \"Markdown\",\n        },\n    };\n    userContext.step = 2;\n} else if (userContext.step === 2) {\n    if (message.toLowerCase().includes(\"resumen general\")) {\n        msg.payload = {\n            chatId: chatId,\n            type: \"message\",\n            content:\n                \"*Excelente, aquí tienes el resumen general del día de hoy.*\\n\\n\" +\n\n                \"En este momento el trapiche se encuentra \" + statusTrapiche + \".\\n\" +\n                \"Llevamos moliendo en total \" + moliendaTotal + \" (Zafra 2024).\\n\" +\n                \"La molienda del último día cerró en \" + moliendaUltHs + \".\\n\" +\n                \"La humedad del bagazo es de \" + humBagazo + \".\\n\" +\n                \"Pol del bagazo: \" + polBagazo + \".\\n\" +\n                \"El caudal de la bomba de imbibición está en \" + bbImbibicion + \".\\n\" +\n                \"La presión de vapor directo es de \" + pvDirecto + \".\\n\" +\n                \"La producción de vapor en este momento es de \" + cVaporTotal + \".\\n\" +\n                \"Consumo de vapor total: \" + consumoVpTotal + \".\\n\" +\n                \"El consumo de gas en este momento es de \" + caudalGasTotal + \".\\n\" +\n                \"Usina está produciendo \" + prodUsina + \", de la línea de edet estamos tomando \" + consumoEdet + \" y el consumo total de la fábrica es de \" + consumoUsinaTotal + \".\\n\",\n            options: {\n                parse_mode: \"Markdown\",\n            },\n        };\n    } else if (message.toLowerCase().includes(\"trapiche\")) {\n        msg.payload = {\n            chatId: chatId,\n            type: \"message\",\n            content:\n                \"*Muy bien, veamos el estado de trapiche.*\\n\\n\" +\n                \"El trapiche se encuentra \" + statusTrapiche + \".\\n\" +\n                \"El caudal de la bomba de imbibición está en \" + bbImbibicion + \".\\n\" +\n                \"La velocidad del *1er Molino* es de \" + velMolino1 + \".\\n\" + \" y del *6to* en \" + velMolino6 + \".\\n\" +\n                \"Presión Molino 6 (Este): \" + pressMolino6Este + \" kg.\\n\" +\n                \"La presión de los rodillos del 6to molino es de \" + pressMolino6Este + \"Kg *Este* y \" + pressMolino6Oeste + \"Kg *Oeste*.\\n\",\n            options: {\n                parse_mode: \"Markdown\",\n            },\n        };\n    } else if (message.toLowerCase().includes(\"calderas\")) {\n        msg.payload = {\n            chatId: chatId,\n            type: \"message\",\n            content:\n                \"*Perfecto, aquí tienes algunos datos de Calderas que tengo disponibles*\\n\\n\" +\n\n                \"La presión del vapor directo es de \" + pvDirecto + \".\\n\" +\n                \"El consumo de gas en este momento es de \" + caudalGasTotal + \".\\n\" +\n                \"Estamos produciendo \" + cVaporTotal + \".\\n\" +\n                \"El consumo de la fábrica es de \" + consumoVpTotal + \".\\n\",\n            options: {\n                parse_mode: \"Markdown\",\n            },\n        };\n    } else if (message.toLowerCase().includes(\"usina\")) {\n        msg.payload = {\n            chatId: chatId,\n            type: \"message\",\n            content:\n                \"*Muy bien, aquí tienes algunos datos disponibles del área de Usina*\\n\\n\" +\n                \"Producción actual: \" + prodUsina + \".\\n\",\n            options: {\n                parse_mode: \"Markdown\",\n            },\n        };\n    }else if (message.toLowerCase().includes(\"fábrica\")) {\n        msg.payload = {\n          chatId: chatId,\n          type: \"message\",\n          content:\n            \"*Aquí tienes algunos datos disponibles de Fábrica*\\n\\n\" +\n            \"Todavía estamos trabajando en estos datos, muy pronto estarán disponibles.\\n\",\n          options: {\n            parse_mode: \"Markdown\",\n          },\n        };\n      } else if (message.toLowerCase().includes(\"destilería\")) {\n        msg.payload = {\n          chatId: chatId,\n          type: \"message\",\n          content:\n            \"*Desde luego, aquí tienes algunos datos disponibles del área de Destilería*\\n\\n\" +\n            \"Todavía estamos trabajando en estos datos, muy pronto estarán disponibles.\\n\",\n          options: {\n            parse_mode: \"Markdown\",\n          },\n        };\n      }else if (message.toLowerCase().includes(\"link\")) {\n        let credenciales = \"test:corona123@\"\n        msg.payload = {\n            chatId: chatId,\n            type: \"message\",\n            content:\n                \"*Desde luego, aquí tienes el link para acceder a IngeniOnline:*\\n\\n\" +\n                \"[Haz clic aquí](ingcorona.ddns.net:3360/dashboard)\",\n            options: {\n                parse_mode: \"Markdown\",\n            },\n        };\n    }\n    userContext.step = 3;\n}\n\nelse if (userContext.step === 3) {\n    msg.payload = {\n        chatId: chatId,\n        type: \"message\",\n        content: \"Sí, *\" + userContext.nombre + \"* dime, ¿puedo ayudarte con algo más?\",\n        options: {\n            reply_markup: {\n                keyboard: [[\"Sí\", \"No\"]],\n                resize_keyboard: true,\n                one_time_keyboard: true,\n            },\n            parse_mode: \"Markdown\",\n        },\n    };\n    userContext.step = 4;\n}\n\nelse if (userContext.step === 4) {\n    if (message.toLowerCase().includes(\"sí\")) {\n        msg.payload = {\n            chatId: chatId,\n            type: \"message\",\n            content: \"Claro, ¿en qué más te puedo ayudarte?\",\n            options: {\n                reply_markup: {\n                    keyboard: [\n                        [\"Resumen General\"],\n                        [\"Trapiche\", \"Calderas\"],\n                        [\"Fabrica\", \"Destileria\"],\n                        [\"Usina\", \"Link IngeniOnline\"]\n                    ],\n                    resize_keyboard: true,\n                    one_time_keyboard: true,\n                },\n                parse_mode: \"Markdown\",\n            },\n        };\n        userContext.step = 2;\n    } else {\n        msg.payload = {\n            chatId: chatId,\n            type: \"message\",\n            content: \"Gracias por usar IngeniOnline. ¡Vuelve cuando quieras!\",\n            options: {\n                parse_mode: \"Markdown\",\n            },\n        };\n        userContext.step = 5;\n    }\n}\n\nelse if (userContext.step === 5) {\n    msg.payload = {\n      chatId: chatId,\n      type: \"message\",\n      content: \"Hola otra vez, \" + userContext.nombre + \". ¿Cómo puedo ayudarte hoy?\",\n      options: {\n        reply_markup: {\n          keyboard: [\n            [\"Resumen General\"],\n            [\"Trapiche\", \"Calderas\"],\n            [\"Fábrica\", \"Destilería\"],\n            [\"Usina\", \"Link IngeniOnline\"],\n          ],\n          resize_keyboard: true,\n          one_time_keyboard: true,\n        },\n        parse_mode: \"Markdown\",\n      },\n    };\n    userContext.step = 2;\n}\n\n\ncontext.set(chatId, userContext);\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 780,
+    "y": 500,
+    "wires": [
+      [
+        "368c5543b4961715"
+      ]
+    ]
+  },
+  {
+    "id": "368c5543b4961715",
+    "type": "telegram sender",
+    "z": "2555dacba10a04c9",
+    "g": "680b3c2d6e78472d",
+    "name": "Envio",
+    "bot": "",
+    "haserroroutput": false,
+    "outputs": 1,
+    "x": 970,
+    "y": 500,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "01520973d9227be0",
+    "type": "join",
+    "z": "2555dacba10a04c9",
+    "g": "680b3c2d6e78472d",
+    "name": "Unir Datos",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": false,
+    "accumulate": true,
+    "timeout": "",
+    "count": "17",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 360,
+    "y": 500,
+    "wires": [
+      [
+        "10f18966398f6c03"
+      ]
+    ]
+  },
+  {
+    "id": "b3c836cc8285df25",
+    "type": "link in",
+    "z": "2555dacba10a04c9",
+    "g": "680b3c2d6e78472d",
+    "name": "Entrada de sensores a Telegram",
+    "links": [
+      "0526c988f8555011",
+      "069b91d8b1d5b83c",
+      "1fb66aee5c9e0ac8",
+      "356f2afa063d5a46",
+      "3cc01ae29cf19382",
+      "3df1fc3b5752e758",
+      "49a26228ea6267fd",
+      "72c27896b079eaad",
+      "8439833b40cc4b5c",
+      "9c3f7e43a49401fd",
+      "ba3f641036bf5a75",
+      "c15ad607ed819388",
+      "d8b7165877ca089d",
+      "e4a67416b4e41bfc",
+      "f0c987153ad094cd",
+      "f52485f514398ff8",
+      "fcccabede2844f6e"
+    ],
+    "x": 235,
+    "y": 500,
+    "wires": [
+      [
+        "01520973d9227be0"
+      ]
+    ]
+  },
+  {
+    "id": "10f18966398f6c03",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "g": "680b3c2d6e78472d",
+    "name": "Restucturacion",
+    "func": "msg.sensores = msg.payload;\ndelete msg.payload;\nreturn msg;\n\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 560,
+    "y": 500,
+    "wires": [
+      [
+        "e338d789bf399563"
+      ]
+    ]
+  },
+  {
+    "id": "9b10b6f829a2928f",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "g": "bd1fbc8de8ce364c",
+    "name": "Aviso de al Personal",
+    "func": "var tel = msg.payload?.telefono;\nvar problema = msg.payload?.problema;\nvar status = msg.payload?.status;\nvar accion = msg?.action;\n\nif (accion === \"button_click\" && status === 0) {\n   \n    msg.toNumber = tel;\n\n    msg.payload = \n        `🔔 Se notifica desde el área de Sistemas que el problema *_${problema}_* ` +\n        `ya fue resuelto por parte del personal de sistemas.\\n\\n`\n       // `Si el problema se resolvió de manera parcial o no se resolvió 🚫, por favor indique:\\n` +\n       // `*1* SI se resolvió ✅\\n` +\n       // `*2* NO se resolvió 🚫`;\n\n    return msg;\n} else {\n    return null;\n}\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 880,
+    "y": 260,
+    "wires": [
+      [
+        "830d2d559234ac5d",
+        "42fb26fdd037f980"
+      ]
+    ]
+  },
+  {
+    "id": "830d2d559234ac5d",
+    "type": "chats-out",
+    "z": "2555dacba10a04c9",
+    "g": "bd1fbc8de8ce364c",
+    "name": "Chats Out",
+    "whatsappLink": "",
+    "number": "",
+    "x": 1100,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "b68912723cd35bfa",
+    "type": "chats-in",
+    "z": "2555dacba10a04c9",
+    "d": true,
+    "name": "Chats In",
+    "whatsappLink": "",
+    "whatsappLiteevent": "",
+    "whatsappWebevent": "message",
+    "x": 180,
+    "y": 660,
+    "wires": [
+      [
+        "513eb1b6580dfaf0"
+      ]
+    ]
+  },
+  {
+    "id": "513eb1b6580dfaf0",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "d": true,
+    "name": "Flujo de Respuestas",
+    "func": "var tel = msg.chatID;\nvar message = msg.payload;\nvar chatID = tel;\n\nvar userContext = context.get(chatID) || { step: 0, userData: {} };\n\nif (userContext.step === 0) {\n\n    msg.payload = \"Hola, soy *Zoé* la asistente virtual del área de sistema.\\n\" +\n        \"Por favor indica cuál es la emergencia o problema y sé específico.\";\n    userContext.step = 1; \n}\nelse if (userContext.step === 1) {\n    userContext.userData.problema = message;\n    msg.payload = \"Perfecto, ahora indica el área relacionada a tu problema.\\n\\n\" +\n        \"- *1 Administracion.*\\n\" +\n        \"- *2 Of. Tecnica.*\\n\" +\n        \"- *3 Calderas.*\\n\" +\n        \"- *4 Compras.*\\n\" +\n        \"- *5 Fabrica.*\\n\" +\n        \"- *6 Laboratorio.*\\n\" +\n        \"- *7 Electrica / Usina*\\n\" +\n        \"- *8 Seguridad*\";\n    userContext.step = 2; \n}\nelse if (userContext.step === 2) {\n    if (message.toLowerCase() === \"Administacion\" || message === \"1\") {\n        userContext.userData.area = \"Administacion\";\n    } else if (message.toLowerCase() === \"Of. Tecnica\" || message === \"2\") {\n        userContext.userData.area = \"Of. Tecnica\";\n    } else if (message.toLowerCase() === \"Calderas\" || message === \"3\") {\n        userContext.userData.area = \"Calderas\";\n    } else if (message.toLowerCase() === \"Compras\" || message === \"4\") {\n        userContext.userData.area = \"Compras\";\n    } else if (message.toLowerCase() === \"Fabrica\" || message === \"5\") {\n        userContext.userData.area = \"Fabrica\";\n    } else if (message.toLowerCase() === \"Laboratorio\" || message === \"6\") {\n        userContext.userData.area = \"Laboratorio\";\n    } else if (message.toLowerCase() === \"Electrica\" || message === \"Usina\" || \"7\") {\n        userContext.userData.area = \"Electrica\";\n    } else if (message.toLowerCase() === \"Seguridad\" || message === \"8\") {\n        userContext.userData.area = \"Seguridad\";\n    } else {\n        msg.payload = \"Por favor selecciona un área válida.\";\n        return msg;\n    }\n    msg.payload = \"Excelente, ahora para finalizar, indica la gravedad o prioridad de tu problema o urgencia.\\n\\n\" +\n        \"- *1 Alta.*\\n\" +\n        \"- *2 Media.*\\n\" +\n        \"- *3 Baja.*\\n\";\n    userContext.step = 3;\n}\n\nelse if (userContext.step === 3) {\n    if (message.toLowerCase() === \"alta\" || message === \"1\") {\n        userContext.userData.prioridad = \"Alta\";\n    } else if (message.toLowerCase() === \"media\" || message === \"2\") {\n        userContext.userData.prioridad = \"Media\";\n    } else if (message.toLowerCase() === \"baja\" || message === \"3\") {\n        userContext.userData.prioridad = \"Baja\";\n    } else {\n        msg.payload = \"Por favor selecciona una prioridad válida.\";\n        return msg;\n    }\n    var userData = userContext.userData;\n    msg.payload = \"Perfecto, su caso fue guardado y notificado al área de sistema.\\n\" +\n        \"Escríbeme cuando quieras.\";\n\n    msg.caso = {\n        telefono: tel,\n        problema: userData.problema,\n        area: userData.area,\n        prioridad: userData.prioridad\n    };\n\n    userContext.step = 0;\n} else {\n    return null;\n}\n\ncontext.set(chatID, userContext);\n\nmsg.toNumber = tel;\n\nreturn msg",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 660,
+    "wires": [
+      [
+        "1688520f6083b6bc",
+        "e3d53f9fd41a2b35"
+      ]
+    ]
+  },
+  {
+    "id": "1688520f6083b6bc",
+    "type": "chats-out",
+    "z": "2555dacba10a04c9",
+    "d": true,
+    "name": "Chats Out",
+    "whatsappLink": "",
+    "number": "",
+    "x": 610,
+    "y": 660,
+    "wires": []
+  },
+  {
+    "id": "e3d53f9fd41a2b35",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "d": true,
+    "name": "Envio del Caso",
+    "func": "var contacto = msg.caso?.telefono;\nvar caso = msg.caso?.problema;\nvar area = msg.caso?.area;\nvar prioridad = msg.caso?.prioridad;\n\nif (contacto && caso && area && prioridad) {\n    \n    msg.payload = \"🔔 Se notificó que el área de *\" + area + \"* tiene el siguiente problema:\\n\" +\n                  \"*_\" + caso + \"_*.\\n\" +\n                  \"La gravedad/prioridad es: *\" + prioridad + \"*.\\n\\n\" +\n                  \"✅ Ya puedes visualizar este caso en el panel de Sistemas.\";\n    \n    msg.toNumber = \"5493865379861\";\n\n    msg.dbQuery = {\n        telefono: contacto,\n        problema: caso,\n        area: area,\n        prioridad: prioridad\n    };\n} else {\n    msg.payload = \"❌ Error: Información incompleta. No se puede notificar el caso.\";\n    return null;\n}\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 620,
+    "y": 620,
+    "wires": [
+      [
+        "101c5918b5b06a56",
+        "572aecb1adc91886"
+      ]
+    ]
+  },
+  {
+    "id": "101c5918b5b06a56",
+    "type": "chats-out",
+    "z": "2555dacba10a04c9",
+    "d": true,
+    "name": "Chats Out",
+    "whatsappLink": "",
+    "number": "",
+    "x": 810,
+    "y": 620,
+    "wires": []
+  },
+  {
+    "id": "572aecb1adc91886",
+    "type": "function",
+    "z": "2555dacba10a04c9",
+    "d": true,
+    "name": "Envia a BDs",
+    "func": "let query = `\n    INSERT INTO casos_reportados (telefono, problema, area, prioridad) \n    VALUES (\n        '${msg.dbQuery.telefono}', \n        '${msg.dbQuery.problema}', \n        '${msg.dbQuery.area}', \n        '${msg.dbQuery.prioridad}'\n    );\n`;\n\nmsg.sql = query;\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 830,
+    "y": 580,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "3a521b47a0f4e4f8",
+    "type": "mysql-r2",
+    "z": "2555dacba10a04c9",
+    "d": true,
+    "name": "BDs Computos",
+    "host": "192.168.0.23",
+    "database": "dbs_computos",
+    "username": "zoe",
+    "password": "1234",
+    "sql": "",
+    "port": "3306",
+    "pooling": false,
+    "waitForConnections": true,
+    "connectionLimit": "10",
+    "queueTimeout": "10000",
+    "x": 1020,
+    "y": 580,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "09351d301f04c19e",
+    "type": "debug",
+    "z": "2555dacba10a04c9",
+    "d": true,
+    "name": "debug 61",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 360,
+    "y": 720,
+    "wires": []
+  },
+  {
+    "id": "091785153ce0a0d7",
+    "type": "admin",
+    "z": "2555dacba10a04c9",
+    "d": true,
+    "name": "Wsp Test",
+    "whatsappLink": "",
+    "x": 180,
+    "y": 720,
+    "wires": [
+      [
+        "09351d301f04c19e"
+      ]
+    ]
+  }
+]

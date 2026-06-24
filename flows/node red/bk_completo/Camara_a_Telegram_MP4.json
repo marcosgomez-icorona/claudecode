@@ -1,0 +1,1793 @@
+[
+  {
+    "id": "ddc46b77a4ded18d",
+    "type": "group",
+    "z": "f1a1b1c1d1e1f1a1",
+    "name": "Cam Tolva",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "7b9a86cb713d02a3",
+      "b5619f2e939abb12",
+      "e48cfe62cdd7aa45",
+      "6575cab2d6bcf328",
+      "a3129e22abc09790",
+      "fb0f915a8a13361d",
+      "9bc5478d6317da3d",
+      "eea5b69b83232b84",
+      "85963a34cbf3949e",
+      "b6d66de906e79046",
+      "2e3c4f40ea7bb861",
+      "b03f6078c5a66e35",
+      "5bea7d78ad81fb7b"
+    ],
+    "x": 154,
+    "y": 439,
+    "w": 1102,
+    "h": 342
+  },
+  {
+    "id": "5909ce1390bb1a96",
+    "type": "group",
+    "z": "f1a1b1c1d1e1f1a1",
+    "name": "Cam Moega",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "a111111111111111",
+      "b222222222222222",
+      "c333333333333333",
+      "d444444444444444",
+      "f666666666666666",
+      "h888888888888888",
+      "i999999999999999",
+      "j1010101010101010",
+      "k1212121212121212",
+      "7c59f4c968071a2d",
+      "1e7eb8aaa88422f2",
+      "49c3d06ae72f2453",
+      "g777777777777777"
+    ],
+    "x": 154,
+    "y": 59,
+    "w": 1132,
+    "h": 342
+  },
+  {
+    "id": "18c3143c1807811e",
+    "type": "group",
+    "z": "f1a1b1c1d1e1f1a1",
+    "name": "Cam 6to Molino",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "78e9483292c71521",
+      "ab63e3109a3082e1",
+      "1995636298085a3e",
+      "1678aa0d4a2a7ff2",
+      "5c9d2eb9f1fc8a4b",
+      "5dab9e55bff9cccd",
+      "71102b51cf5812e6",
+      "01b38e84ce216a5b",
+      "c1513f6917f9fcec",
+      "0eb5c50d6270e00a",
+      "80cc8700645fd171",
+      "a02e5214172ce258",
+      "c64f3d53d71264c8"
+    ],
+    "x": 154,
+    "y": 799,
+    "w": 1102,
+    "h": 342
+  },
+  {
+    "id": "d9e3064b879329d4",
+    "type": "group",
+    "z": "f1a1b1c1d1e1f1a1",
+    "name": "Cam Ph",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "09f4e8c9d8010c65",
+      "46732a2e87621b25",
+      "5f0c72d325f781a2",
+      "0e1b024c38df8786",
+      "f925be557ae4d2ad",
+      "d1fefb2ce5425376",
+      "4f5ad856824416d4",
+      "228324143b3ccca3",
+      "ba267564f5e55b67",
+      "13c9d6908a6d8483",
+      "10be21a21d504d0e",
+      "b0c7919986624a5a",
+      "7b338de19d8a6e35"
+    ],
+    "x": 154,
+    "y": 1159,
+    "w": 1102,
+    "h": 342
+  },
+  {
+    "id": "ff209ddb73ea0502",
+    "type": "group",
+    "z": "f1a1b1c1d1e1f1a1",
+    "name": "Rastra",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "5e8b47e285e6eb93",
+      "db0860a835dde1f0",
+      "e93debb0bf59e39d",
+      "a920f352d86b45d0",
+      "d9378f635e995bce",
+      "83ed69f002ba8443",
+      "e371be933bbace58",
+      "419c2d98585de848",
+      "e1acd3162ed15f2c",
+      "2a9492fa87370950",
+      "f354410ee842b7b2",
+      "1a90d2a41e20284d",
+      "c6f8f9d2381fe8ab"
+    ],
+    "x": 154,
+    "y": 1519,
+    "w": 1102,
+    "h": 342
+  },
+  {
+    "id": "d2bb32aea15a093b",
+    "type": "group",
+    "z": "f1a1b1c1d1e1f1a1",
+    "name": "Mesa 2",
+    "style": {
+      "label": true
+    },
+    "nodes": [
+      "f5d58ab969a6c9dc",
+      "9fbb69aa23b9fdc8",
+      "a45921c2efae2a41",
+      "55bf2029326922c9",
+      "acae72c9ae186ee2",
+      "12d491925248763f",
+      "069318180047f04e",
+      "2a032f2cfb711021",
+      "96358dbd80d67015",
+      "de6ea65837f18a2f",
+      "db531ea3b0a9bc95",
+      "339699bf590751ae",
+      "4f0cf29ba7d18935"
+    ],
+    "x": 154,
+    "y": 1899,
+    "w": 1102,
+    "h": 342
+  },
+  {
+    "id": "a111111111111111",
+    "type": "inject",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "Grabar 40 segundos",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 290,
+    "y": 140,
+    "wires": [
+      [
+        "b222222222222222"
+      ]
+    ]
+  },
+  {
+    "id": "b222222222222222",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "Preparar datos",
+    "func": "const chatId = \"-4293484523\";\nconst ffmpegPath = 'C:\\\\ffmpeg\\\\bin\\\\ffmpeg.exe';\nconst basePath = 'C:\\\\Videos\\\\moega';\n\nconst d = new Date();\nconst pad = n => String(n).padStart(2,'0');\nconst ts = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;\n\nconst filename = `camara_${ts}.mp4`;\nconst fullpath = `${basePath}\\\\${filename}`;\n\nmsg.chatId = chatId;\nmsg.filename = filename;\nmsg.fullpath = fullpath;\n\n// RTSP principal\nmsg.rtsp = \"rtsp://admin:corona1234@192.168.3.60:554/cam/realmonitor?channel=1&subtype=0\";\n\n// MP4 liviano y compatible con Telegram\nmsg.payload = `\"${ffmpegPath}\" -y -rtsp_transport tcp -i \"${msg.rtsp}\" -t 40 -an -vf scale=1280:-2 -r 15 -c:v libx264 -preset veryfast -pix_fmt yuv420p -b:v 1200k -maxrate 1200k -bufsize 2400k -movflags +faststart \"${msg.fullpath}\"`;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 520,
+    "y": 140,
+    "wires": [
+      [
+        "c333333333333333",
+        "h888888888888888"
+      ]
+    ]
+  },
+  {
+    "id": "c333333333333333",
+    "type": "exec",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "command": "",
+    "addpay": "payload",
+    "append": "",
+    "useSpawn": "false",
+    "timer": "",
+    "winHide": false,
+    "oldrc": false,
+    "name": "Ejecutar ffmpeg",
+    "x": 770,
+    "y": 140,
+    "wires": [
+      [
+        "d444444444444444"
+      ],
+      [
+        "i999999999999999"
+      ],
+      [
+        "i999999999999999"
+      ]
+    ]
+  },
+  {
+    "id": "d444444444444444",
+    "type": "delay",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "Esperar 2 segundos",
+    "pauseType": "delay",
+    "timeout": "2",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 900,
+    "y": 200,
+    "wires": [
+      [
+        "f666666666666666"
+      ]
+    ]
+  },
+  {
+    "id": "f666666666666666",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "Armar mensaje Telegram",
+    "func": "msg.payload = {\n    chatId: msg.chatId,\n    type: 'video',\n    content: msg.fullpath,\n    caption: 'Grabacion automatica de camara 192.168.3.60 - 40 segundos',\n    options: {\n        supports_streaming: true\n    }\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1110,
+    "y": 240,
+    "wires": [
+      [
+        "g777777777777777",
+        "k1212121212121212"
+      ]
+    ]
+  },
+  {
+    "id": "h888888888888888",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "Comando ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 770,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "i999999999999999",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "Error / salida ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 780,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "j1010101010101010",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "Telegram OK",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 1110,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "k1212121212121212",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "Payload Telegram",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1150,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "7c59f4c968071a2d",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "function 36",
+    "func": "if (msg.payload.content == \"📹 Moega\") {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"Espere su grabacion esta en proceso...\",\n    }\n    return msg;\n}\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 470,
+    "y": 280,
+    "wires": [
+      [
+        "g777777777777777"
+      ]
+    ]
+  },
+  {
+    "id": "1e7eb8aaa88422f2",
+    "type": "switch",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "📹 Moega",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 530,
+    "y": 200,
+    "wires": [
+      [
+        "b222222222222222"
+      ]
+    ]
+  },
+  {
+    "id": "49c3d06ae72f2453",
+    "type": "telegram receiver",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 270,
+    "y": 240,
+    "wires": [
+      [
+        "7c59f4c968071a2d",
+        "1e7eb8aaa88422f2"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "g777777777777777",
+    "type": "telegram sender",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "5909ce1390bb1a96",
+    "name": "Enviar a Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 1050,
+    "y": 300,
+    "wires": [
+      [
+        "j1010101010101010"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "7b9a86cb713d02a3",
+    "type": "inject",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "Grabar 40 segundos",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 300,
+    "y": 520,
+    "wires": [
+      [
+        "b5619f2e939abb12"
+      ]
+    ]
+  },
+  {
+    "id": "b5619f2e939abb12",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "Preparar datos",
+    "func": "const fs = require(\"fs\");\n\nconst chatId = \"-4293484523\";\nconst basePath = \"C:\\\\Videos\\\\tolva\";\n\nif (!fs.existsSync(basePath)) {\n    fs.mkdirSync(basePath, { recursive: true });\n}\n\nconst d = new Date();\nconst pad = n => String(n).padStart(2, \"0\");\n\nconst ts = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;\n\nconst filename = `camara_${ts}.mp4`;\nconst fullpath = `${basePath}\\\\${filename}`;\n\nmsg.chatId = chatId;\nmsg.filename = filename;\nmsg.fullpath = fullpath;\n\nmsg.rtsp = \"rtsp://admin:corona1234@192.168.3.54:554/cam/realmonitor?channel=1&subtype=0\";\n\n// IMPORTANTE: acá van solo los argumentos, NO el path de ffmpeg.exe\nmsg.payload = `-y -rtsp_transport tcp -i \"${msg.rtsp}\" -t 40 -an -vf scale=1280:-2 -r 15 -c:v libx264 -preset veryfast -pix_fmt yuv420p -b:v 1200k -maxrate 1200k -bufsize 2400k -movflags +faststart \"${msg.fullpath}\"`;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 520,
+    "wires": [
+      [
+        "e48cfe62cdd7aa45",
+        "fb0f915a8a13361d"
+      ]
+    ]
+  },
+  {
+    "id": "e48cfe62cdd7aa45",
+    "type": "exec",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "command": "",
+    "addpay": "payload",
+    "append": "",
+    "useSpawn": "false",
+    "timer": "",
+    "winHide": false,
+    "oldrc": false,
+    "name": "Ejecutar ffmpeg",
+    "x": 740,
+    "y": 520,
+    "wires": [
+      [
+        "6575cab2d6bcf328"
+      ],
+      [
+        "9bc5478d6317da3d"
+      ],
+      [
+        "9bc5478d6317da3d"
+      ]
+    ]
+  },
+  {
+    "id": "6575cab2d6bcf328",
+    "type": "delay",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "Esperar 2 segundos",
+    "pauseType": "delay",
+    "timeout": "2",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 870,
+    "y": 580,
+    "wires": [
+      [
+        "a3129e22abc09790"
+      ]
+    ]
+  },
+  {
+    "id": "a3129e22abc09790",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "Armar mensaje Telegram",
+    "func": "msg.payload = {\n    chatId: msg.chatId,\n    type: 'video',\n    content: msg.fullpath,\n    caption: 'Grabacion automatica de camara 192.168.3.60 - 40 segundos',\n    options: {\n        supports_streaming: true\n    }\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1080,
+    "y": 620,
+    "wires": [
+      [
+        "5bea7d78ad81fb7b",
+        "85963a34cbf3949e"
+      ]
+    ]
+  },
+  {
+    "id": "fb0f915a8a13361d",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "Comando ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 740,
+    "y": 480,
+    "wires": []
+  },
+  {
+    "id": "9bc5478d6317da3d",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "Error / salida ffmpeg",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 770,
+    "y": 640,
+    "wires": []
+  },
+  {
+    "id": "eea5b69b83232b84",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "Telegram OK",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 1080,
+    "y": 740,
+    "wires": []
+  },
+  {
+    "id": "85963a34cbf3949e",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "Payload Telegram",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1120,
+    "y": 560,
+    "wires": []
+  },
+  {
+    "id": "b6d66de906e79046",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "function 1",
+    "func": "if (msg.payload.content == \"📹 Tolva\") {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"Espere su grabacion esta en proceso...\",\n    }\n    return msg;\n}\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 460,
+    "y": 640,
+    "wires": [
+      [
+        "5bea7d78ad81fb7b"
+      ]
+    ]
+  },
+  {
+    "id": "2e3c4f40ea7bb861",
+    "type": "switch",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "📹 Tolva",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 500,
+    "y": 580,
+    "wires": [
+      [
+        "b5619f2e939abb12"
+      ]
+    ]
+  },
+  {
+    "id": "b03f6078c5a66e35",
+    "type": "telegram receiver",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 270,
+    "y": 620,
+    "wires": [
+      [
+        "b6d66de906e79046",
+        "2e3c4f40ea7bb861"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "5bea7d78ad81fb7b",
+    "type": "telegram sender",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ddc46b77a4ded18d",
+    "name": "Enviar a Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 1020,
+    "y": 680,
+    "wires": [
+      [
+        "eea5b69b83232b84"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "78e9483292c71521",
+    "type": "inject",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "Grabar 40 segundos",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 300,
+    "y": 880,
+    "wires": [
+      [
+        "ab63e3109a3082e1"
+      ]
+    ]
+  },
+  {
+    "id": "ab63e3109a3082e1",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "Preparar datos",
+    "func": "const chatId = \"-4293484523\";\nconst ffmpegPath = 'C:\\ffmpeg\\bin\\ffmpeg.exe';\nconst basePath = 'C:\\Videos\\molino6';\n\nconst d = new Date();\nconst pad = n => String(n).padStart(2,'0');\nconst ts = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;\n\nconst filename = `camara_${ts}.mp4`;\nconst fullpath = `${basePath}\\\\${filename}`;\n\nmsg.chatId = chatId;\nmsg.filename = filename;\nmsg.fullpath = fullpath;\n\n// RTSP principal\nmsg.rtsp = \"rtsp://admin:corona1234@192.168.3.61:554/cam/realmonitor?channel=1&subtype=0\";\n\n// MP4 liviano y compatible con Telegram\nmsg.payload = `\"${ffmpegPath}\" -y -rtsp_transport tcp -i \"${msg.rtsp}\" -t 40 -an -vf scale=1280:-2 -r 15 -c:v libx264 -preset veryfast -pix_fmt yuv420p -b:v 1200k -maxrate 1200k -bufsize 2400k -movflags +faststart \"${msg.fullpath}\"`;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 880,
+    "wires": [
+      [
+        "1995636298085a3e",
+        "5dab9e55bff9cccd"
+      ]
+    ]
+  },
+  {
+    "id": "1995636298085a3e",
+    "type": "exec",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "command": "",
+    "addpay": "payload",
+    "append": "",
+    "useSpawn": "false",
+    "timer": "",
+    "winHide": false,
+    "oldrc": false,
+    "name": "Ejecutar ffmpeg",
+    "x": 740,
+    "y": 880,
+    "wires": [
+      [
+        "1678aa0d4a2a7ff2"
+      ],
+      [
+        "71102b51cf5812e6"
+      ],
+      [
+        "71102b51cf5812e6"
+      ]
+    ]
+  },
+  {
+    "id": "1678aa0d4a2a7ff2",
+    "type": "delay",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "Esperar 2 segundos",
+    "pauseType": "delay",
+    "timeout": "2",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 870,
+    "y": 940,
+    "wires": [
+      [
+        "5c9d2eb9f1fc8a4b"
+      ]
+    ]
+  },
+  {
+    "id": "5c9d2eb9f1fc8a4b",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "Armar mensaje Telegram",
+    "func": "msg.payload = {\n    chatId: msg.chatId,\n    type: 'video',\n    content: msg.fullpath,\n    caption: 'Grabacion automatica de camara 192.168.3.60 - 40 segundos',\n    options: {\n        supports_streaming: true\n    }\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1080,
+    "y": 980,
+    "wires": [
+      [
+        "c64f3d53d71264c8",
+        "c1513f6917f9fcec"
+      ]
+    ]
+  },
+  {
+    "id": "5dab9e55bff9cccd",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "Comando ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 740,
+    "y": 840,
+    "wires": []
+  },
+  {
+    "id": "71102b51cf5812e6",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "Error / salida ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 770,
+    "y": 1000,
+    "wires": []
+  },
+  {
+    "id": "01b38e84ce216a5b",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "Telegram OK",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 1080,
+    "y": 1100,
+    "wires": []
+  },
+  {
+    "id": "c1513f6917f9fcec",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "Payload Telegram",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1120,
+    "y": 920,
+    "wires": []
+  },
+  {
+    "id": "0eb5c50d6270e00a",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "function 5",
+    "func": "if (msg.payload.content == \"📹 Molino6\") {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"Espere su grabacion esta en proceso...\",\n    }\n    return msg;\n}\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 460,
+    "y": 1000,
+    "wires": [
+      [
+        "c64f3d53d71264c8"
+      ]
+    ]
+  },
+  {
+    "id": "80cc8700645fd171",
+    "type": "switch",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "📹 Molino6",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 500,
+    "y": 940,
+    "wires": [
+      [
+        "ab63e3109a3082e1"
+      ]
+    ]
+  },
+  {
+    "id": "a02e5214172ce258",
+    "type": "telegram receiver",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 270,
+    "y": 980,
+    "wires": [
+      [
+        "0eb5c50d6270e00a",
+        "80cc8700645fd171"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "c64f3d53d71264c8",
+    "type": "telegram sender",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "18c3143c1807811e",
+    "name": "Enviar a Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 1020,
+    "y": 1040,
+    "wires": [
+      [
+        "01b38e84ce216a5b"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "09f4e8c9d8010c65",
+    "type": "inject",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "Grabar 40 segundos",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 300,
+    "y": 1240,
+    "wires": [
+      [
+        "46732a2e87621b25"
+      ]
+    ]
+  },
+  {
+    "id": "46732a2e87621b25",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "Preparar datos",
+    "func": "const chatId = \"-4293484523\";\nconst ffmpegPath = 'C:\\\\ffmpeg\\\\bin\\\\ffmpeg.exe';\nconst basePath = 'C:\\\\Videos\\\\PH';\n\nconst d = new Date();\nconst pad = n => String(n).padStart(2,'0');\nconst ts = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;\n\nconst filename = `camara_${ts}.mp4`;\nconst fullpath = `${basePath}\\\\${filename}`;\n\nmsg.chatId = chatId;\nmsg.filename = filename;\nmsg.fullpath = fullpath;\n\n// RTSP principal\nmsg.rtsp = \"rtsp://admin:lacorona$@192.168.3.16:554/cam/realmonitor?channel=1&subtype=0\";\n\n// MP4 liviano y compatible con Telegram\nmsg.payload = `\"${ffmpegPath}\" -y -rtsp_transport tcp -i \"${msg.rtsp}\" -t 40 -an -vf scale=1280:-2 -r 15 -c:v libx264 -preset veryfast -pix_fmt yuv420p -b:v 1200k -maxrate 1200k -bufsize 2400k -movflags +faststart \"${msg.fullpath}\"`;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 1240,
+    "wires": [
+      [
+        "5f0c72d325f781a2",
+        "d1fefb2ce5425376"
+      ]
+    ]
+  },
+  {
+    "id": "5f0c72d325f781a2",
+    "type": "exec",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "command": "",
+    "addpay": "payload",
+    "append": "",
+    "useSpawn": "false",
+    "timer": "",
+    "winHide": false,
+    "oldrc": false,
+    "name": "Ejecutar ffmpeg",
+    "x": 740,
+    "y": 1240,
+    "wires": [
+      [
+        "0e1b024c38df8786"
+      ],
+      [
+        "4f5ad856824416d4"
+      ],
+      [
+        "4f5ad856824416d4"
+      ]
+    ]
+  },
+  {
+    "id": "0e1b024c38df8786",
+    "type": "delay",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "Esperar 2 segundos",
+    "pauseType": "delay",
+    "timeout": "2",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 870,
+    "y": 1300,
+    "wires": [
+      [
+        "f925be557ae4d2ad"
+      ]
+    ]
+  },
+  {
+    "id": "f925be557ae4d2ad",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "Armar mensaje Telegram",
+    "func": "msg.payload = {\n    chatId: msg.chatId,\n    type: 'video',\n    content: msg.fullpath,\n    caption: 'Grabacion automatica de camara 192.168.3.60 - 40 segundos',\n    options: {\n        supports_streaming: true\n    }\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1080,
+    "y": 1340,
+    "wires": [
+      [
+        "7b338de19d8a6e35",
+        "ba267564f5e55b67"
+      ]
+    ]
+  },
+  {
+    "id": "d1fefb2ce5425376",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "Comando ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 740,
+    "y": 1200,
+    "wires": []
+  },
+  {
+    "id": "4f5ad856824416d4",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "Error / salida ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 770,
+    "y": 1360,
+    "wires": []
+  },
+  {
+    "id": "228324143b3ccca3",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "Telegram OK",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 1080,
+    "y": 1460,
+    "wires": []
+  },
+  {
+    "id": "ba267564f5e55b67",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "Payload Telegram",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1120,
+    "y": 1280,
+    "wires": []
+  },
+  {
+    "id": "13c9d6908a6d8483",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "function 10",
+    "func": "if (msg.payload.content == \"📹 Ph\") {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"Espere su grabacion esta en proceso...\",\n    }\n    return msg;\n}\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 460,
+    "y": 1360,
+    "wires": [
+      [
+        "7b338de19d8a6e35"
+      ]
+    ]
+  },
+  {
+    "id": "10be21a21d504d0e",
+    "type": "switch",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "📹 Ph",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 500,
+    "y": 1300,
+    "wires": [
+      [
+        "46732a2e87621b25"
+      ]
+    ]
+  },
+  {
+    "id": "b0c7919986624a5a",
+    "type": "telegram receiver",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 270,
+    "y": 1340,
+    "wires": [
+      [
+        "13c9d6908a6d8483",
+        "10be21a21d504d0e"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "7b338de19d8a6e35",
+    "type": "telegram sender",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d9e3064b879329d4",
+    "name": "Enviar a Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 1020,
+    "y": 1400,
+    "wires": [
+      [
+        "228324143b3ccca3"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "5e8b47e285e6eb93",
+    "type": "inject",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "Grabar 40 segundos",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 300,
+    "y": 1600,
+    "wires": [
+      [
+        "db0860a835dde1f0"
+      ]
+    ]
+  },
+  {
+    "id": "db0860a835dde1f0",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "Preparar datos",
+    "func": "const chatId = \"-4293484523\";\nconst ffmpegPath = 'C:\\\\ffmpeg\\\\bin\\\\ffmpeg.exe';\nconst basePath = 'C:\\\\Videos\\\\rastra';\n\nconst d = new Date();\nconst pad = n => String(n).padStart(2,'0');\nconst ts = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;\n\nconst filename = `camara_${ts}.mp4`;\nconst fullpath = `${basePath}\\\\${filename}`;\n\nmsg.chatId = chatId;\nmsg.filename = filename;\nmsg.fullpath = fullpath;\n\n// RTSP principal\nmsg.rtsp = \"rtsp://admin:corona1234@192.168.3.56:554/cam/realmonitor?channel=1&subtype=0\";\n\n// MP4 liviano y compatible con Telegram\nmsg.payload = `\"${ffmpegPath}\" -y -rtsp_transport tcp -i \"${msg.rtsp}\" -t 40 -an -vf scale=1280:-2 -r 15 -c:v libx264 -preset veryfast -pix_fmt yuv420p -b:v 1200k -maxrate 1200k -bufsize 2400k -movflags +faststart \"${msg.fullpath}\"`;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 1600,
+    "wires": [
+      [
+        "e93debb0bf59e39d",
+        "83ed69f002ba8443"
+      ]
+    ]
+  },
+  {
+    "id": "e93debb0bf59e39d",
+    "type": "exec",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "command": "",
+    "addpay": "payload",
+    "append": "",
+    "useSpawn": "false",
+    "timer": "",
+    "winHide": false,
+    "oldrc": false,
+    "name": "Ejecutar ffmpeg",
+    "x": 740,
+    "y": 1600,
+    "wires": [
+      [
+        "a920f352d86b45d0"
+      ],
+      [
+        "e371be933bbace58"
+      ],
+      [
+        "e371be933bbace58"
+      ]
+    ]
+  },
+  {
+    "id": "a920f352d86b45d0",
+    "type": "delay",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "Esperar 2 segundos",
+    "pauseType": "delay",
+    "timeout": "2",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 870,
+    "y": 1660,
+    "wires": [
+      [
+        "d9378f635e995bce"
+      ]
+    ]
+  },
+  {
+    "id": "d9378f635e995bce",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "Armar mensaje Telegram",
+    "func": "msg.payload = {\n    chatId: msg.chatId,\n    type: 'video',\n    content: msg.fullpath,\n    caption: 'Grabacion automatica de camara 192.168.3.60 - 40 segundos',\n    options: {\n        supports_streaming: true\n    }\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1080,
+    "y": 1700,
+    "wires": [
+      [
+        "c6f8f9d2381fe8ab",
+        "e1acd3162ed15f2c"
+      ]
+    ]
+  },
+  {
+    "id": "83ed69f002ba8443",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "Comando ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 740,
+    "y": 1560,
+    "wires": []
+  },
+  {
+    "id": "e371be933bbace58",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "Error / salida ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 770,
+    "y": 1720,
+    "wires": []
+  },
+  {
+    "id": "419c2d98585de848",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "Telegram OK",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 1080,
+    "y": 1820,
+    "wires": []
+  },
+  {
+    "id": "e1acd3162ed15f2c",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "Payload Telegram",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1120,
+    "y": 1640,
+    "wires": []
+  },
+  {
+    "id": "2a9492fa87370950",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "function 13",
+    "func": "if (msg.payload.content == \"📹 Rastra\") {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"Espere su grabacion esta en proceso...\",\n    }\n    return msg;\n}\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 460,
+    "y": 1720,
+    "wires": [
+      [
+        "c6f8f9d2381fe8ab"
+      ]
+    ]
+  },
+  {
+    "id": "f354410ee842b7b2",
+    "type": "switch",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "📹 Rastra",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 500,
+    "y": 1660,
+    "wires": [
+      [
+        "db0860a835dde1f0"
+      ]
+    ]
+  },
+  {
+    "id": "1a90d2a41e20284d",
+    "type": "telegram receiver",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 270,
+    "y": 1700,
+    "wires": [
+      [
+        "2a9492fa87370950",
+        "f354410ee842b7b2"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "c6f8f9d2381fe8ab",
+    "type": "telegram sender",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "ff209ddb73ea0502",
+    "name": "Enviar a Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 1020,
+    "y": 1760,
+    "wires": [
+      [
+        "419c2d98585de848"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "f5d58ab969a6c9dc",
+    "type": "inject",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "Grabar 40 segundos",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 300,
+    "y": 1980,
+    "wires": [
+      [
+        "9fbb69aa23b9fdc8"
+      ]
+    ]
+  },
+  {
+    "id": "9fbb69aa23b9fdc8",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "Preparar datos",
+    "func": "const chatId = \"-4293484523\";\nconst ffmpegPath = 'C:\\\\ffmpeg\\\\bin\\\\ffmpeg.exe';\nconst basePath = 'C:\\\\Videos\\\\mesa';\n\nconst d = new Date();\nconst pad = n => String(n).padStart(2,'0');\nconst ts = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;\n\nconst filename = `camara_${ts}.mp4`;\nconst fullpath = `${basePath}\\\\${filename}`;\n\nmsg.chatId = chatId;\nmsg.filename = filename;\nmsg.fullpath = fullpath;\n\n// RTSP principal\nmsg.rtsp = \"rtsp://admin:corona1234@192.168.3.83:554/cam/realmonitor?channel=1&subtype=0\";\n\n// MP4 liviano y compatible con Telegram\nmsg.payload = `\"${ffmpegPath}\" -y -rtsp_transport tcp -i \"${msg.rtsp}\" -t 40 -an -vf scale=1280:-2 -r 15 -c:v libx264 -preset veryfast -pix_fmt yuv420p -b:v 1200k -maxrate 1200k -bufsize 2400k -movflags +faststart \"${msg.fullpath}\"`;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 1980,
+    "wires": [
+      [
+        "a45921c2efae2a41",
+        "12d491925248763f"
+      ]
+    ]
+  },
+  {
+    "id": "a45921c2efae2a41",
+    "type": "exec",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "command": "",
+    "addpay": "payload",
+    "append": "",
+    "useSpawn": "false",
+    "timer": "",
+    "winHide": false,
+    "oldrc": false,
+    "name": "Ejecutar ffmpeg",
+    "x": 740,
+    "y": 1980,
+    "wires": [
+      [
+        "55bf2029326922c9"
+      ],
+      [
+        "069318180047f04e"
+      ],
+      [
+        "069318180047f04e"
+      ]
+    ]
+  },
+  {
+    "id": "55bf2029326922c9",
+    "type": "delay",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "Esperar 2 segundos",
+    "pauseType": "delay",
+    "timeout": "2",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 870,
+    "y": 2040,
+    "wires": [
+      [
+        "acae72c9ae186ee2"
+      ]
+    ]
+  },
+  {
+    "id": "acae72c9ae186ee2",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "Armar mensaje Telegram",
+    "func": "msg.payload = {\n    chatId: msg.chatId,\n    type: 'video',\n    content: msg.fullpath,\n    caption: 'Grabacion automatica de camara 192.168.3.60 - 40 segundos',\n    options: {\n        supports_streaming: true\n    }\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1080,
+    "y": 2080,
+    "wires": [
+      [
+        "4f0cf29ba7d18935",
+        "96358dbd80d67015"
+      ]
+    ]
+  },
+  {
+    "id": "12d491925248763f",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "Comando ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 740,
+    "y": 1940,
+    "wires": []
+  },
+  {
+    "id": "069318180047f04e",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "Error / salida ffmpeg",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 770,
+    "y": 2100,
+    "wires": []
+  },
+  {
+    "id": "2a032f2cfb711021",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "Telegram OK",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "true",
+    "targetType": "full",
+    "x": 1080,
+    "y": 2200,
+    "wires": []
+  },
+  {
+    "id": "96358dbd80d67015",
+    "type": "debug",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "Payload Telegram",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1120,
+    "y": 2020,
+    "wires": []
+  },
+  {
+    "id": "de6ea65837f18a2f",
+    "type": "function",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "function 14",
+    "func": "if (msg.payload.content == \"📹 Mesa\") {\n    msg.payload={\n        \"chatId\": -4293484523,\n        \"type\": \"message\",\n        \"content\": \"Espere su grabacion esta en proceso...\",\n    }\n    return msg;\n}\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 460,
+    "y": 2100,
+    "wires": [
+      [
+        "4f0cf29ba7d18935"
+      ]
+    ]
+  },
+  {
+    "id": "db531ea3b0a9bc95",
+    "type": "switch",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "",
+    "property": "payload.content",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "📹 Mesa",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 500,
+    "y": 2040,
+    "wires": [
+      [
+        "9fbb69aa23b9fdc8"
+      ]
+    ]
+  },
+  {
+    "id": "339699bf590751ae",
+    "type": "telegram receiver",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "",
+    "bot": "e5e7ea60c7c1328e",
+    "saveDataDir": "",
+    "filterCommands": false,
+    "x": 270,
+    "y": 2080,
+    "wires": [
+      [
+        "de6ea65837f18a2f",
+        "db531ea3b0a9bc95"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "4f0cf29ba7d18935",
+    "type": "telegram sender",
+    "z": "f1a1b1c1d1e1f1a1",
+    "g": "d2bb32aea15a093b",
+    "name": "Enviar a Telegram",
+    "bot": "e5e7ea60c7c1328e",
+    "haserroroutput": true,
+    "outputs": 2,
+    "x": 1020,
+    "y": 2140,
+    "wires": [
+      [
+        "2a032f2cfb711021"
+      ],
+      []
+    ]
+  }
+]

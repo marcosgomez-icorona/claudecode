@@ -19,9 +19,10 @@
        3. Compartir el Sheet como "lectura" con cualquier link
        4. Pegar SHEET_ID y API_KEY abajo
   ════════════════════════════════════════════════════════════════ -->
+  <script src="config.local.js"></script>
   <script>
-  const SHEET_ID = '1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0';
-  const API_KEY  = '';  // ← PEGAR ACA LA API KEY
+  const SHEET_ID = (typeof SHEETS_CONFIG !== 'undefined') ? SHEETS_CONFIG.SHEET_ID : '';
+  const API_KEY  = (typeof SHEETS_CONFIG !== 'undefined') ? SHEETS_CONFIG.API_KEY  : '';
 
   const RANGOS = {
     resumen:    'Resumen!A2:H',

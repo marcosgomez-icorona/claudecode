@@ -1,0 +1,1137 @@
+[
+  {
+    "id": "3ca87e0ff3081252",
+    "type": "group",
+    "z": "cfdeb900a128e016",
+    "name": "TRAPICHE",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "174430ffce08404e",
+      "91dc5ee9c34e4504",
+      "8d64239219718f9c",
+      "d274e359947510f2",
+      "185bd43f85ce1dbe",
+      "43f739f6701119bc",
+      "6dd74ee2365182e9",
+      "42bb70d2a4eb4a81",
+      "5952f3449376e6e8",
+      "46c7ccfd7f1da1df",
+      "9ba2e4ef7e883c61"
+    ],
+    "x": 34,
+    "y": 639,
+    "w": 1232,
+    "h": 149.5
+  },
+  {
+    "id": "5fc2a0635328fa05",
+    "type": "group",
+    "z": "cfdeb900a128e016",
+    "name": "CALIDAD AZUCAR",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "1519cb5124ee644f",
+      "4c10594730d73a5a",
+      "500c31d394bf4108",
+      "4e834ec224d6a312",
+      "9c6f828c4a4a7536",
+      "c8f13f1ca1398fb3"
+    ],
+    "x": 34,
+    "y": 299,
+    "w": 1192,
+    "h": 142
+  },
+  {
+    "id": "70bb3d12670a1cc9",
+    "type": "group",
+    "z": "cfdeb900a128e016",
+    "name": "RESUMEN FABRICA",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "c5dfafceb5e9d86a",
+      "26da795774246bdc",
+      "e29bc16bbf0845d8",
+      "245cb417bde35e71",
+      "06513e8af35a9627",
+      "e28a6c756b533f6a",
+      "53afc072a88851bc"
+    ],
+    "x": 34,
+    "y": 459,
+    "w": 1292,
+    "h": 122
+  },
+  {
+    "id": "4a98f89a6335ccbc",
+    "type": "group",
+    "z": "cfdeb900a128e016",
+    "name": "DATOS MOLIENDA",
+    "style": {
+      "stroke": "#000000",
+      "fill": "#bfdbef",
+      "label": true,
+      "color": "#000000"
+    },
+    "nodes": [
+      "53f3770172c3193f",
+      "9030b65581c712c9",
+      "a52fcafa3a712b06",
+      "f70ab30a513c7722",
+      "5571a3d876bc9b3c",
+      "728eddb88260cd72",
+      "85849af68ba72ec0",
+      "4105a157f7b3bcf4",
+      "c69e89ca85771fb7",
+      "b2c8cb64975a0d39",
+      "944d9b7f6f9138a5",
+      "fd04e8a33ee60462",
+      "731eae623205b23c",
+      "065ee02b63f29519",
+      "3997c4a88fadd916",
+      "ea8ae6e40a8b3f60",
+      "991ed7cc71ee15af",
+      "8818fe23609ce976",
+      "7121d82d583f6252",
+      "9eb63b2db8f16cce"
+    ],
+    "x": 34,
+    "y": 19,
+    "w": 1212,
+    "h": 262
+  },
+  {
+    "id": "91dc5ee9c34e4504",
+    "type": "calculator",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "name": "Escala",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "8.2",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 710,
+    "y": 680,
+    "wires": [
+      [
+        "8d64239219718f9c"
+      ]
+    ]
+  },
+  {
+    "id": "8d64239219718f9c",
+    "type": "calculator",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "name": "Redondear",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "0",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 870,
+    "y": 680,
+    "wires": [
+      [
+        "d274e359947510f2"
+      ]
+    ]
+  },
+  {
+    "id": "174430ffce08404e",
+    "type": "inject",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 140,
+    "y": 680,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "d274e359947510f2",
+    "type": "function",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "name": "Fomateo",
+    "func": "const mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n// Cambiado a INSERT ... ON DUPLICATE KEY UPDATE\n/*\nconst insertSql = `\n    INSERT INTO datos_generales_proceso ( fechaindustrial,hora,pol_bagazo,pol_cachaza)\n    VALUES (?, ?, ?, ?)\n    ON DUPLICATE KEY UPDATE         \n    fechaindustrial = VALUES(fechaindustrial),\n    hora = VALUES(hora),\n    pol_bagazo = VALUES(pol_bagazo),\n    pol_cachaza = VALUES(pol_cachaza);\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Convertir fecha de dd/mm/yyyy a yyyy-mm-dd\n    const fechaindustrial = row.fechaindustrial || '';\n    const hora = row.hora || '';\n    const pol_bagazo = row.pol_bagazo || '';\n    const pol_cachaza = row.pol_cachaza || '';\n\n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [fechaindustrial, hora, pol_bagazo, pol_cachaza];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql,\n        // También puedes incluir la fila original para debugging\n        _originalRow: row\n    });\n}\n*/\n// Devolver los mensajes para el nodo MySQL\nreturn [mysqlMessages];\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1020,
+    "y": 680,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "185bd43f85ce1dbe",
+    "type": "calculator",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "name": "Escala",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "8.2",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 710,
+    "y": 740,
+    "wires": [
+      [
+        "43f739f6701119bc"
+      ]
+    ]
+  },
+  {
+    "id": "43f739f6701119bc",
+    "type": "calculator",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "name": "Redondear",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "0",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 870,
+    "y": 740,
+    "wires": [
+      [
+        "42bb70d2a4eb4a81"
+      ]
+    ]
+  },
+  {
+    "id": "6dd74ee2365182e9",
+    "type": "inject",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "name": "Ejecutar",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 140,
+    "y": 740,
+    "wires": [
+      [
+        "46c7ccfd7f1da1df"
+      ]
+    ]
+  },
+  {
+    "id": "42bb70d2a4eb4a81",
+    "type": "function",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "name": "Fomateo",
+    "func": "var value= msg.payload;\n    msg.payload = value \n    \nreturn msg;\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1020,
+    "y": 740,
+    "wires": [
+      [
+        "5952f3449376e6e8"
+      ]
+    ]
+  },
+  {
+    "id": "9030b65581c712c9",
+    "type": "MSSQL",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "mssqlCN": "2651b979dd6041c5",
+    "name": "DETALLE MOLIENDA",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": 1,
+    "query": "SELECT TOP 10000 CONVERT(DATE, fechaindustrial, 103) as fechaindustrial,[numero_pesada],v_pr_grupos.GRUPO,[razon_social] AS caniero,[numeroanalisis] as nro_muestra,[peso_neto] as cania_bruta,[trash],[trashReal],[Polporciento],\r\n[Brixporciento],[Pureza],[Rendimiento],[RendimientoReal],v_pr_tipocana.NOMBRE AS tipo_cania,CONVERT(DATE, fecha_pesada, 103) as [fecha_pesada],[hora_pesada],\r\nCONVERT(DATE, fecha_salida, 103) as [fecha_salida],[hora_salida],'' AS nromuestra2,[prepesada],[usuario],v_pr_tipocontrato.NOMBRE AS tipo_contrato,\r\n[transporte],[chofer] as fletero,'' as cosechero, '' as finca,'' as nombre_finca,[patente],[observaciones],[tara]\r\nFROM [CORONA].[dbo].[pr_ezi_muestralab2]\r\nLEFT JOIN v_pr_tipocontrato on v_pr_tipocontrato.ID = tipocontrato\r\nLEFT JOIN v_pr_tipocana on v_pr_tipocana.ID = id_tipo_cana\r\nLEFT JOIN v_pr_grupos on v_pr_grupos.idcaniero = pr_ezi_muestralab2.id_caniero\r\nWHERE YEAR(CONVERT(DATE, fecha_pesada, 103)) = YEAR(CONVERT(DATE, GETDATE())) -- and fechaindustrial IS NULL\r\norder by CONVERT(DATE, fecha_pesada, 103) desc,hora_pesada desc;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 380,
+    "y": 60,
+    "wires": [
+      [
+        "f70ab30a513c7722",
+        "53f3770172c3193f"
+      ]
+    ]
+  },
+  {
+    "id": "53f3770172c3193f",
+    "type": "debug",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "debug 93",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1060,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "a52fcafa3a712b06",
+    "type": "inject",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "Cada 2 Minutos",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "120",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 60,
+    "wires": [
+      [
+        "9030b65581c712c9"
+      ]
+    ]
+  },
+  {
+    "id": "f70ab30a513c7722",
+    "type": "function",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción/actualización.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Cambiado a INSERT ... ON DUPLICATE KEY UPDATE\nconst insertSql = `\n    INSERT INTO molienda (\n        fechaindustrial, numero_pesada, GRUPO, caniero, nro_muestra, cania_bruta, \n        trash, trashReal, Polporciento, Brixporciento, Pureza, \n        Rendimiento, RendimientoReal, tipo_cania, fecha_pesada, \n        hora_pesada, fecha_salida, hora_salida, nromuestra2, \n        prepesada, usuario, tipo_contrato, transporte, \n        fletero, cosechero, finca, nombre_finca, patente, \n        observaciones, tara\n    )\n    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n    ON DUPLICATE KEY UPDATE \n        fechaindustrial = VALUES(fechaindustrial),\n        nro_muestra = VALUES(nro_muestra),\n        cania_bruta = VALUES(cania_bruta),\n        trash = VALUES(trash),\n        Polporciento = VALUES(Polporciento),\n        Brixporciento = VALUES(Brixporciento),\n        Pureza = VALUES(Pureza),\n        Rendimiento = VALUES(Rendimiento),\n        fecha_pesada = VALUES(fecha_pesada),\n        hora_pesada = VALUES(hora_pesada)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Mapear los nombres de columna de MSSQL a los parámetros de MySQL\n    const fechaindustrial = row.fechaindustrial || '';\n    const numero_pesada = row.numero_pesada || '';\n    const GRUPO = row.GRUPO || '';\n    const caniero = row.caniero || '';\n    const nro_muestra = row.nro_muestra || '';\n    const cania_bruta = row.cania_bruta || '';\n    const trash = row.trash || '';\n    const trashReal = row.trashReal || '';\n    const Polporciento = row.Polporciento || '';\n    const Brixporciento = row.Brixporciento || '';\n    const Pureza = row.Pureza || '';\n    const Rendimiento = row.Rendimiento || '';\n    const RendimientoReal = row.RendimientoReal || '';\n    const tipo_cania = row.tipo_cania || '';\n    const fecha_pesada = row.fecha_pesada || '';\n    const hora_pesada = row.hora_pesada || '';\n    const fecha_salida = row.fecha_salida || '';\n    const hora_salida = row.hora_salida || '';\n    const nromuestra2 = row.nromuestra2 || '';\n    const prepesada = row.prepesada || '';\n    const usuario = row.usuario || '';\n    const tipo_contrato = row.tipo_contrato || '';\n    const transporte = row.transporte || '';\n    const fletero = row.fletero || '';\n    const cosechero = row.cosechero || '';\n    const finca = row.finca || '';\n    const nombre_finca = row.nombre_finca || '';\n    const patente = row.patente || '';\n    const observaciones = row.observaciones || '';\n    const tara = row.tara || '';\n\n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [\n        fechaindustrial, numero_pesada, GRUPO, caniero, nro_muestra, cania_bruta,\n        trash, trashReal, Polporciento, Brixporciento, Pureza,\n        Rendimiento, RendimientoReal, tipo_cania, fecha_pesada,\n        hora_pesada, fecha_salida, hora_salida, nromuestra2,\n        prepesada, usuario, tipo_contrato, transporte,\n        fletero, cosechero, finca, nombre_finca, patente,\n        observaciones, tara\n    ];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql,\n        // También puedes incluir la fila original para debugging\n        _originalRow: row\n    });\n}\n\n// Devolver los mensajes para el nodo MySQL\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 630,
+    "y": 60,
+    "wires": [
+      [
+        "5571a3d876bc9b3c"
+      ]
+    ]
+  },
+  {
+    "id": "5571a3d876bc9b3c",
+    "type": "mysql",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "mydb": "c965cd34073f27f4",
+    "name": "Con DB Molienda",
+    "x": 870,
+    "y": 60,
+    "wires": [
+      [
+        "53f3770172c3193f"
+      ]
+    ]
+  },
+  {
+    "id": "728eddb88260cd72",
+    "type": "MSSQL",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "CONSUMO POR HORA",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": "0",
+    "query": "SELECT \r\n    COALESCE(k.fechaindustrial, g.fechaindustrial, h.fechaindustrial, e.fechaindustrial) as fechaindustrial,\r\n    COALESCE(k.HORA, g.hora, h.hora, e.hora) as hora,\r\n    COALESCE(g.kilos, 0) as gas,\r\n    COALESCE(k.KILOS, 0) as kilos,\r\n    COALESCE(h.humedad, 0) as humedad,\r\n    COALESCE(e.bolsas, 0) as bolsas\r\nFROM \r\n    (SELECT DISTINCT fechaindustrial as fechaindustrial, HORA\r\n     FROM pr_ezi_laboratorio_gral \r\n     WHERE codigoproceso='Molienda' \r\n    ) AS base\r\nFULL OUTER JOIN\r\n    (SELECT fechaindustrial as fechaindustrial, HORA, COALESCE(KILOS, 0) AS KILOS\r\n     FROM pr_ezi_laboratorio_gral \r\n     WHERE codigoproceso='Molienda' \r\n    ) AS k ON base.fechaindustrial = k.fechaindustrial AND base.HORA = k.HORA\r\nFULL OUTER JOIN\r\n    (SELECT fechaindustrial as fechaindustrial, hora, COALESCE(kilos, 0) as kilos\r\n     FROM pr_ezi_laboratorio_gral \r\n     WHERE codigoproceso='Gas' \r\n    ) AS g ON base.fechaindustrial = g.fechaindustrial AND base.HORA = g.hora\r\nFULL OUTER JOIN\r\n    (SELECT fechaindustrial as fechaindustrial, hora, COALESCE(humedad, 0) as humedad\r\n     FROM pr_ezi_laboratorio_gral2 \r\n     WHERE codigoproceso='Bagazo' \r\n    ) AS h ON base.fechaindustrial = h.fechaindustrial AND base.HORA = h.hora\r\nFULL OUTER JOIN\r\n    (SELECT fechaindustrial as fechaindustrial, \r\n            (LEFT([HORA], 2)+':00') AS hora, \r\n            SUM(COALESCE(CantBolsas, 0)) as bolsas\r\n     FROM [CORONA].[dbo].[pr_ezi_especiales2]\r\n     WHERE codigoproceso = 'Embolsado' \r\n     GROUP BY fechaindustrial, (LEFT([HORA], 2)+':00')\r\n    ) AS e ON base.fechaindustrial = e.fechaindustrial AND base.HORA = e.hora\r\nWHERE RIGHT(COALESCE(k.fechaindustrial, g.fechaindustrial, h.fechaindustrial, e.fechaindustrial),4) = YEAR(GETDATE())\r\nORDER BY fechaindustrial DESC, hora DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 390,
+    "y": 120,
+    "wires": [
+      [
+        "c69e89ca85771fb7",
+        "85849af68ba72ec0"
+      ]
+    ]
+  },
+  {
+    "id": "85849af68ba72ec0",
+    "type": "debug",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "debug 94",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1120,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "4105a157f7b3bcf4",
+    "type": "inject",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "Cada 30 Minutos",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "1800",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 120,
+    "wires": [
+      [
+        "728eddb88260cd72"
+      ]
+    ]
+  },
+  {
+    "id": "c69e89ca85771fb7",
+    "type": "function",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción/actualización.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Función simple para convertir fecha de dd/mm/yyyy a yyyy-mm-dd\nfunction convertirFecha(fechaStr) {\n    if (!fechaStr) return '';\n    \n    const fecha = fechaStr.toString().trim();\n    \n    // Si ya está en formato yyyy-mm-dd, retornar tal cual\n    if (/^\\d{4}-\\d{2}-\\d{2}$/.test(fecha)) {\n        return fecha;\n    }\n    \n    // Convertir de dd/mm/yyyy a yyyy-mm-dd\n    const partes = fecha.split('/');\n    if (partes.length === 3) {\n        const dia = partes[0].padStart(2, '0');\n        const mes = partes[1].padStart(2, '0');\n        const año = partes[2];\n        return `${año}-${mes}-${dia}`;\n    }\n    \n    return fecha; // Si no coincide, mantener original\n}\n\n// Cambiado a INSERT ... ON DUPLICATE KEY UPDATE\nconst insertSql = `\n    INSERT INTO consumos_x_hora (fechaindustrial, hora, gas, kilos, humedad, bolsas)\n    VALUES (?, ?, ?, ?, ?, ?)\n    ON DUPLICATE KEY UPDATE \n        fechaindustrial = VALUES(fechaindustrial),\n        hora = VALUES(hora),\n        gas = VALUES(gas),\n        kilos = VALUES(kilos),\n        humedad = VALUES(humedad),\n        bolsas = VALUES(bolsas)\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Convertir fecha de dd/mm/yyyy a yyyy-mm-dd\n    const fechaindustrial = convertirFecha(row.fechaindustrial) || '';\n    const hora = row.hora || '';\n    const gas = row.gas || 0;\n    const kilos = row.kilos || 0;\n    const humedad = row.humedad || 0;\n    const bolsas = row.bolsas || 0;\n\n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [fechaindustrial, hora, gas, kilos, humedad, bolsas];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql,\n        // También puedes incluir la fila original para debugging\n        _originalRow: row\n    });\n}\n\n// Devolver los mensajes para el nodo MySQL\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 670,
+    "y": 120,
+    "wires": [
+      [
+        "b2c8cb64975a0d39"
+      ]
+    ]
+  },
+  {
+    "id": "b2c8cb64975a0d39",
+    "type": "mysql",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "mydb": "c965cd34073f27f4",
+    "name": "Con DB Molienda",
+    "x": 950,
+    "y": 120,
+    "wires": [
+      [
+        "85849af68ba72ec0"
+      ]
+    ]
+  },
+  {
+    "id": "944d9b7f6f9138a5",
+    "type": "MSSQL",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "PARADAS",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": "0",
+    "query": "  SELECT TOP 1000 [DESDE]  ,[HASTA] ,[T_Neto] ,[origen] ,[maquina] ,[motivo],[fechaindustrial]\r\nFROM [CORONA].[dbo].[v_pr_ezi_paradas]\r\nORDER BY ID DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 350,
+    "y": 180,
+    "wires": [
+      [
+        "065ee02b63f29519"
+      ]
+    ]
+  },
+  {
+    "id": "fd04e8a33ee60462",
+    "type": "debug",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "debug 95",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1120,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "731eae623205b23c",
+    "type": "inject",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "Cada 30 Minutos",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 180,
+    "wires": [
+      [
+        "944d9b7f6f9138a5"
+      ]
+    ]
+  },
+  {
+    "id": "065ee02b63f29519",
+    "type": "function",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción/actualización.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Función simple para convertir fecha de dd/mm/yyyy a yyyy-mm-dd\nfunction convertirFecha(fechaStr) {\n    if (!fechaStr) return '';\n    \n    const fecha = fechaStr.toString().trim();\n    \n    // Si ya está en formato yyyy-mm-dd, retornar tal cual\n    if (/^\\d{4}-\\d{2}-\\d{2}$/.test(fecha)) {\n        return fecha;\n    }\n    \n    // Convertir de dd/mm/yyyy a yyyy-mm-dd\n    const partes = fecha.split('/');\n    if (partes.length === 3) {\n        const dia = partes[0].padStart(2, '0');\n        const mes = partes[1].padStart(2, '0');\n        const año = partes[2];\n        return `${año}-${mes}-${dia}`;\n    }\n    \n    return fecha; // Si no coincide, mantener original\n}\n\n// Cambiado a INSERT ... ON DUPLICATE KEY UPDATE\nconst insertSql = `\n    INSERT INTO paradas (DESDE, HASTA, T_Neto, origen, maquina, motivo, fechaindustrial)\n    VALUES (?, ?, ?, ?, ?, ?, STR_TO_DATE(?, '%d/%m/%Y'))\n    ON DUPLICATE KEY UPDATE         \n    DESDE = VALUES(DESDE),\n    HASTA = VALUES(HASTA),\n    T_Neto = VALUES(T_Neto),\n    origen = VALUES(origen),\n    maquina = VALUES(maquina),\n    motivo = VALUES(motivo),\n    fechaindustrial = VALUES(fechaindustrial);\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Convertir fecha de dd/mm/yyyy a yyyy-mm-dd\n    const fechaindustrial = row.fechaindustrial || '';\n    const DESDE = row.DESDE || '';\n    const HASTA = row.HASTA || '';\n    const T_Neto = row.T_Neto || 0;\n    const origen = row.origen || '';\n    const maquina = row.maquina || '';\n    const motivo = row.motivo || '';\n\n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [ DESDE, HASTA, T_Neto, origen, maquina, motivo,fechaindustrial];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql,\n        // También puedes incluir la fila original para debugging\n        _originalRow: row\n    });\n}\n\n// Devolver los mensajes para el nodo MySQL\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 670,
+    "y": 180,
+    "wires": [
+      [
+        "3997c4a88fadd916"
+      ]
+    ]
+  },
+  {
+    "id": "3997c4a88fadd916",
+    "type": "mysql",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "mydb": "c965cd34073f27f4",
+    "name": "Con DB Molienda",
+    "x": 950,
+    "y": 180,
+    "wires": [
+      [
+        "fd04e8a33ee60462"
+      ]
+    ]
+  },
+  {
+    "id": "ea8ae6e40a8b3f60",
+    "type": "MSSQL",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "DATOS_PROCESO_HORA",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": "0",
+    "query": "SELECT TOP 3000  \r\n\t(SUBSTRING(b.fechaindustrial, 7, 4)+'-'+SUBSTRING(b.fechaindustrial, 4, 2)+'-'+SUBSTRING(b.fechaindustrial, 1, 2)) AS fechaindustrial,\r\n    b.hora,\r\n    MAX(CASE WHEN b.codigoproceso = 'Bagazo' THEN b.polautomatico END) AS pol_bagazo,\r\n    MAX(CASE WHEN b.codigoproceso = 'Cachaza' THEN b.polautomatico END) AS pol_cachaza\r\nFROM pr_ezi_laboratorio_gral2 b\r\nWHERE b.codigoproceso IN ('Bagazo', 'Cachaza')\r\n  AND b.fechaindustrial IS NOT NULL \r\n  AND b.hora IS NOT NULL\r\nGROUP BY b.fechaindustrial, b.hora\r\nORDER BY \r\n    SUBSTRING(b.fechaindustrial, 7, 4) DESC,\r\n    SUBSTRING(b.fechaindustrial, 4, 2) DESC,\r\n    SUBSTRING(b.fechaindustrial, 1, 2) DESC, \r\n    b.hora DESC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 400,
+    "y": 240,
+    "wires": [
+      [
+        "7121d82d583f6252"
+      ]
+    ]
+  },
+  {
+    "id": "991ed7cc71ee15af",
+    "type": "debug",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "debug 96",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1140,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "8818fe23609ce976",
+    "type": "inject",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "Cada 30 Minutos",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 240,
+    "wires": [
+      [
+        "ea8ae6e40a8b3f60"
+      ]
+    ]
+  },
+  {
+    "id": "7121d82d583f6252",
+    "type": "function",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción/actualización.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Función simple para convertir fecha de dd/mm/yyyy a yyyy-mm-dd\nfunction convertirFecha(fechaStr) {\n    if (!fechaStr) return '';\n    \n    const fecha = fechaStr.toString().trim();\n    \n    // Si ya está en formato yyyy-mm-dd, retornar tal cual\n    if (/^\\d{4}-\\d{2}-\\d{2}$/.test(fecha)) {\n        return fecha;\n    }\n    \n    // Convertir de dd/mm/yyyy a yyyy-mm-dd\n    const partes = fecha.split('/');\n    if (partes.length === 3) {\n        const dia = partes[0].padStart(2, '0');\n        const mes = partes[1].padStart(2, '0');\n        const año = partes[2];\n        return `${año}-${mes}-${dia}`;\n    }\n    \n    return fecha; // Si no coincide, mantener original\n}\n\n// Cambiado a INSERT ... ON DUPLICATE KEY UPDATE\nconst insertSql = `\n    INSERT INTO datos_generales_proceso ( fechaindustrial,hora,pol_bagazo,pol_cachaza)\n    VALUES (?, ?, ?, ?)\n    ON DUPLICATE KEY UPDATE         \n    fechaindustrial = VALUES(fechaindustrial),\n    hora = VALUES(hora),\n    pol_bagazo = VALUES(pol_bagazo),\n    pol_cachaza = VALUES(pol_cachaza);\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Convertir fecha de dd/mm/yyyy a yyyy-mm-dd\n    const fechaindustrial = row.fechaindustrial || '';\n    const hora = row.hora || '';\n    const pol_bagazo = row.pol_bagazo || '';\n    const pol_cachaza = row.pol_cachaza || '';\n\n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [fechaindustrial, hora, pol_bagazo, pol_cachaza];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql,\n        // También puedes incluir la fila original para debugging\n        _originalRow: row\n    });\n}\n\n// Devolver los mensajes para el nodo MySQL\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 670,
+    "y": 240,
+    "wires": [
+      [
+        "9eb63b2db8f16cce"
+      ]
+    ]
+  },
+  {
+    "id": "9eb63b2db8f16cce",
+    "type": "mysql",
+    "z": "cfdeb900a128e016",
+    "g": "4a98f89a6335ccbc",
+    "mydb": "c965cd34073f27f4",
+    "name": "Con DB Molienda",
+    "x": 950,
+    "y": 240,
+    "wires": [
+      [
+        "991ed7cc71ee15af"
+      ]
+    ]
+  },
+  {
+    "id": "5952f3449376e6e8",
+    "type": "debug",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "name": "debug 97",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1160,
+    "y": 740,
+    "wires": []
+  },
+  {
+    "id": "46c7ccfd7f1da1df",
+    "type": "OpcUa-Item",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "item": "ns=2;s=molino.molino.molino1.molino_motor_veloc1",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "Velocidad del 1er Molino",
+    "x": 330,
+    "y": 740,
+    "wires": [
+      [
+        "9ba2e4ef7e883c61"
+      ]
+    ]
+  },
+  {
+    "id": "9ba2e4ef7e883c61",
+    "type": "OpcUa-Client",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "3ca87e0ff3081252",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 560,
+    "y": 740,
+    "wires": [
+      [],
+      [
+        "185bd43f85ce1dbe"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "1519cb5124ee644f",
+    "type": "MSSQL",
+    "z": "cfdeb900a128e016",
+    "g": "5fc2a0635328fa05",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "HISTORIAL(Cinta Larga-Corta)",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": "0",
+    "query": "SELECT id, codigoproceso, (SUBSTRING(fecharegistro, 7, 4)+'-'+SUBSTRING(fecharegistro, 4, 2)+'-'+SUBSTRING(fecharegistro, 1, 2)) AS fecharegistro, HORA,\r\nColor, Turbidez, ROUND(Humedad*100,2) as Humedad, ROUND(Cenizas*100,2) as Cenizas, Granulometria_20,Granulometria_30, Sediment_Test AS sedimento, SO2\r\nFROM pr_ezi_especiales\r\nWHERE codigoproceso IN ('Cinta Corta', 'Cinta Larga', 'Embolsado') AND Color IS NOT NULL AND SUBSTRING(fecharegistro, 7, 4) >= YEAR(GETDATE())-1\r\norder by SUBSTRING(fecharegistro, 7, 4) desc,SUBSTRING(fecharegistro, 4, 2) desc,SUBSTRING(fecharegistro, 1, 2) desc;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 410,
+    "y": 340,
+    "wires": [
+      [
+        "4e834ec224d6a312"
+      ]
+    ]
+  },
+  {
+    "id": "4c10594730d73a5a",
+    "type": "debug",
+    "z": "cfdeb900a128e016",
+    "g": "5fc2a0635328fa05",
+    "name": "debug 98",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1120,
+    "y": 340,
+    "wires": []
+  },
+  {
+    "id": "500c31d394bf4108",
+    "type": "inject",
+    "z": "cfdeb900a128e016",
+    "g": "5fc2a0635328fa05",
+    "name": "Cada 30 Minutos",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 340,
+    "wires": [
+      [
+        "1519cb5124ee644f",
+        "c8f13f1ca1398fb3"
+      ]
+    ]
+  },
+  {
+    "id": "4e834ec224d6a312",
+    "type": "function",
+    "z": "cfdeb900a128e016",
+    "g": "5fc2a0635328fa05",
+    "name": "Preparar INSERT para MySQL",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción/actualización.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n/*\nSELECT id, codigoproceso, (SUBSTRING(fecharegistro, 7, 4)+'-'+SUBSTRING(fecharegistro, 4, 2)+'-'+SUBSTRING(fecharegistro, 1, 2)) AS fecharegistro, HORA,\nColor, Turbidez, Humedad*100 as Humedad, Cenizas*100 as Cenizas, Granulometria_20,Granulometria_30, Sediment_Test AS sedimen\n\n*/\n// Cambiado a INSERT ... ON DUPLICATE KEY UPDATE\nconst insertSql = `\n    insert into calidad_azucar (id, fecha, hora, color, turbidez, humedad, cenizas, sedimentos, so2, codigoproceso)  \n    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n    ON DUPLICATE KEY UPDATE         \n    id = VALUES(id),\n    fecha = VALUES(fecha),\n    hora = VALUES(hora),\n    color = VALUES(color),\n    turbidez = VALUES(turbidez),\n    humedad = VALUES(humedad),\n    cenizas = VALUES(cenizas),\n    sedimentos = VALUES(sedimentos),\n    so2 = VALUES(so2),\n    codigoproceso = VALUES(codigoproceso);\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Convertir fecha de dd/mm/yyyy a yyyy-mm-dd\n    const id = row.id || '';\n    const fecha = row.fecharegistro || '';\n    const hora = row.HORA || '';\n    const color = row.Color || '';\n    const turbidez = row.Turbidez || '';\n    const humedad = row.Humedad || '';\n    const cenizas = row.Cenizas || '';\n    const sedimentos = row.sedimento || '';\n    const so2 = row.SO2 || '';\n    const codigoproceso = row.codigoproceso || '';\n    \n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [id, fecha, hora, color, turbidez, humedad, cenizas, sedimentos, so2, codigoproceso];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql,\n        // También puedes incluir la fila original para debugging\n        _originalRow: row\n    });\n}\n\n// Devolver los mensajes para el nodo MySQL\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 710,
+    "y": 340,
+    "wires": [
+      [
+        "9c6f828c4a4a7536"
+      ]
+    ]
+  },
+  {
+    "id": "9c6f828c4a4a7536",
+    "type": "mysql",
+    "z": "cfdeb900a128e016",
+    "g": "5fc2a0635328fa05",
+    "mydb": "c965cd34073f27f4",
+    "name": "Con DB Molienda",
+    "x": 950,
+    "y": 340,
+    "wires": [
+      [
+        "4c10594730d73a5a"
+      ]
+    ]
+  },
+  {
+    "id": "c8f13f1ca1398fb3",
+    "type": "MSSQL",
+    "z": "cfdeb900a128e016",
+    "g": "5fc2a0635328fa05",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "HISTORIAL (Embolsado-Crudo)",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": "0",
+    "query": "select id, codigoproceso, (SUBSTRING(fecharegistro, 7, 4)+'-'+SUBSTRING(fecharegistro, 4, 2)+'-'+SUBSTRING(fecharegistro, 1, 2)) AS fecharegistro, HORA,\r\nColor, Turbidez, ROUND(Humedad*100,2) as Humedad, ROUND(Cenizas*100,2) as Cenizas, Gran_20,Gran_30, Sedim_Test AS sedimento, SO2\r\nFROM pr_ezi_especiales2\r\nWHERE codigoproceso IN ('Embolsado','Crudo') AND Color IS NOT NULL AND SUBSTRING(fechaindustrial, 7, 4) >= YEAR(GETDATE())-1\r\norder by SUBSTRING(fechaindustrial, 7, 4) desc,SUBSTRING(fechaindustrial, 4, 2) desc,SUBSTRING(fechaindustrial, 1, 2) desc;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 410,
+    "y": 400,
+    "wires": [
+      [
+        "4e834ec224d6a312"
+      ]
+    ]
+  },
+  {
+    "id": "c5dfafceb5e9d86a",
+    "type": "inject",
+    "z": "cfdeb900a128e016",
+    "g": "70bb3d12670a1cc9",
+    "name": "Cada 30 Minutos",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 500,
+    "wires": [
+      [
+        "26da795774246bdc",
+        "e28a6c756b533f6a"
+      ]
+    ]
+  },
+  {
+    "id": "26da795774246bdc",
+    "type": "MSSQL",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "70bb3d12670a1cc9",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "HISTORIAL(PARAMETROS FABRICA)",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": "0",
+    "query": "SELECT TOP 1000 (SUBSTRING(fechaindustrial, 7, 4)+'-'+SUBSTRING(fechaindustrial, 4, 2)+'-'+SUBSTRING(fechaindustrial, 1, 2)) AS fechaindustrial,hora,\r\n\t\t\t\tcodigoproceso,brixautomatico AS brix,polautomatico AS pol, pureza, phmanual AS ph,kilos\r\nfrom pr_ezi_laboratorio_gral\r\nWHERE SUBSTRING(fechaindustrial, 7, 4) BETWEEN YEAR(GETDATE())-2 AND YEAR(GETDATE()) AND (brixautomatico IS NOT NULL OR polautomatico IS NOT NULL OR pureza IS NOT NULL OR phmanual IS NOT NULL OR KILOS IS NOT NULL)\r\norder by SUBSTRING(fechaindustrial, 7, 4) desc,SUBSTRING(fechaindustrial, 4, 2) desc,SUBSTRING(fechaindustrial, 1, 2) desc, HORA desc,codigoproceso ASC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 440,
+    "y": 500,
+    "wires": [
+      [
+        "e29bc16bbf0845d8"
+      ]
+    ]
+  },
+  {
+    "id": "e29bc16bbf0845d8",
+    "type": "function",
+    "z": "cfdeb900a128e016",
+    "d": true,
+    "g": "70bb3d12670a1cc9",
+    "name": "INSERT PROMEDIOS Y TOTALES",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción/actualización.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n/*\nSELECT id, codigoproceso, (SUBSTRING(fecharegistro, 7, 4)+'-'+SUBSTRING(fecharegistro, 4, 2)+'-'+SUBSTRING(fecharegistro, 1, 2)) AS fecharegistro, HORA,\nColor, Turbidez, Humedad*100 as Humedad, Cenizas*100 as Cenizas, Granulometria_20,Granulometria_30, Sediment_Test AS sedimen\n\n*/\n// Cambiado a INSERT ... ON DUPLICATE KEY UPDATE\nconst insertSql = `\n    insert into resumen_fabrica (fechaindustrial, hora, codigoproceso, brix, pol, pureza, ph, kilos)  \n    VALUES (?, ?, ?, ?, ?, ?, ?, ?)\n    ON DUPLICATE KEY UPDATE         \n    fechaindustrial = VALUES(fechaindustrial),\n    hora = VALUES(hora),\n    codigoproceso = VALUES(codigoproceso),\n    brix = VALUES(brix),\n    pol = VALUES(pol),\n    pureza = VALUES(pureza),\n    kilos = VALUES(kilos),\n    ph = VALUES(ph);\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Convertir fecha de dd/mm/yyyy a yyyy-mm-dd\n    const fechaindustrial = row.fechaindustrial || '';    \n    const hora = row.hora || '';    \n    const codigoproceso = row.codigoproceso || '';\n    const brix = row.brix || '';\n    const pol = row.pol || '';\n    const pureza = row.pureza || '';\n    const ph = row.ph || '';    \n    const kilos = row.kilos || '';    \n    \n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [fechaindustrial, hora, codigoproceso, brix, pol, pureza, ph, kilos];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql,\n        // También puedes incluir la fila original para debugging\n        _originalRow: row\n    });\n}\n\n// Devolver los mensajes para el nodo MySQL\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 780,
+    "y": 500,
+    "wires": [
+      [
+        "245cb417bde35e71"
+      ]
+    ]
+  },
+  {
+    "id": "245cb417bde35e71",
+    "type": "mysql",
+    "z": "cfdeb900a128e016",
+    "g": "70bb3d12670a1cc9",
+    "mydb": "c965cd34073f27f4",
+    "name": "Con DB Molienda",
+    "x": 1030,
+    "y": 500,
+    "wires": [
+      [
+        "06513e8af35a9627"
+      ]
+    ]
+  },
+  {
+    "id": "06513e8af35a9627",
+    "type": "debug",
+    "z": "cfdeb900a128e016",
+    "g": "70bb3d12670a1cc9",
+    "name": "debug 111",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1210,
+    "y": 500,
+    "wires": []
+  },
+  {
+    "id": "e28a6c756b533f6a",
+    "type": "MSSQL",
+    "z": "cfdeb900a128e016",
+    "g": "70bb3d12670a1cc9",
+    "mssqlCN": "60b2c11fdadc7019",
+    "name": "HISTORIAL SULFITADO",
+    "outField": "payload",
+    "returnType": 0,
+    "throwErrors": "0",
+    "query": "select (SUBSTRING(fechaindustrial, 7, 4)+'-'+SUBSTRING(fechaindustrial, 4, 2)+'-'+SUBSTRING(fechaindustrial, 1, 2)) AS fechaindustrial,hora,\r\n\t\t\t\tcodigoproceso,phmanual AS ph, PPMS02manual\r\nfrom pr_ezi_laboratorio_gral2\r\nWHERE codigoproceso IN ('Encalado','Sulfitado') AND SUBSTRING(fechaindustrial, 7, 4) BETWEEN YEAR(GETDATE())-2 AND YEAR(GETDATE()) AND (phmanual IS NOT NULL OR PPMS02manual IS NOT NULL)\r\norder by SUBSTRING(fechaindustrial, 7, 4) desc,SUBSTRING(fechaindustrial, 4, 2) desc,SUBSTRING(fechaindustrial, 1, 2) desc, HORA desc,codigoproceso ASC;",
+    "modeOpt": "queryMode",
+    "modeOptType": "query",
+    "queryOpt": "payload",
+    "queryOptType": "editor",
+    "paramsOpt": "queryParams",
+    "paramsOptType": "none",
+    "rows": "rows",
+    "rowsType": "msg",
+    "parseMustache": false,
+    "params": [],
+    "x": 390,
+    "y": 540,
+    "wires": [
+      [
+        "53afc072a88851bc"
+      ]
+    ]
+  },
+  {
+    "id": "53afc072a88851bc",
+    "type": "function",
+    "z": "cfdeb900a128e016",
+    "g": "70bb3d12670a1cc9",
+    "name": "INSERT SULFITADO",
+    "func": "// Este nodo 'function' transforma cada fila de la consulta MSSQL\n// en un mensaje que el nodo mysql-r2 puede usar para una inserción/actualización.\n\nconst mssqlRows = msg.payload; // msg.payload es un array de objetos de la consulta MSSQL\n\nif (!Array.isArray(mssqlRows) || mssqlRows.length === 0) {\n    node.warn(\"No se recibieron filas desde la consulta MSSQL.\");\n    return null; // Detiene el flujo si no hay datos\n}\n\nconst mysqlMessages = []; // Array para almacenar los mensajes que se enviarán al nodo MySQL\n\n// Cambiado a INSERT ... ON DUPLICATE KEY UPDATE\nconst insertSql = `\n    insert into sulfitado (fechaindustrial, hora, codigoproceso, ph, PPMS02manual)  \n    VALUES (?, ?, ?, ?, ?)\n    ON DUPLICATE KEY UPDATE         \n    fechaindustrial = VALUES(fechaindustrial),\n    hora = VALUES(hora),\n    codigoproceso = VALUES(codigoproceso),    \n    PPMS02manual = VALUES(PPMS02manual),\n    ph = VALUES(ph);\n`;\n\n// Iterar sobre cada fila recibida de MSSQL\nfor (const row of mssqlRows) {\n    // Convertir fecha de dd/mm/yyyy a yyyy-mm-dd\n    const fechaindustrial = row.fechaindustrial || '';    \n    const hora = row.hora || '';    \n    const codigoproceso = row.codigoproceso || '';\n    const PPMS02manual = row.PPMS02manual || '';\n    const ph = row.ph || '';    \n    \n    \n    // Crear el array de parámetros en el ORDEN CORRECTO para la consulta preparada\n    const params = [fechaindustrial, hora, codigoproceso, ph, PPMS02manual];\n\n    // Crear un nuevo mensaje para el nodo MySQL\n    mysqlMessages.push({\n        payload: params,\n        topic: insertSql,\n        // También puedes incluir la fila original para debugging\n        _originalRow: row\n    });\n}\n\n// Devolver los mensajes para el nodo MySQL\nreturn [mysqlMessages];",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 820,
+    "y": 540,
+    "wires": [
+      [
+        "245cb417bde35e71"
+      ]
+    ]
+  }
+]

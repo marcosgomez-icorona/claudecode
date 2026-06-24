@@ -1,0 +1,1248 @@
+[
+  {
+    "id": "8b184758fb536328",
+    "type": "OpcUa-Client",
+    "z": "1d06854d91e05168",
+    "endpoint": "e89251c6637bb9dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "KEPServer-Read",
+    "x": 670,
+    "y": 80,
+    "wires": [
+      [
+        "90acfa5cd2872046"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "d6ab27870b7f5f98",
+    "type": "inject",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 120,
+    "wires": [
+      [
+        "9b89033a0105d3b9",
+        "ebaa1711e5ce27d6"
+      ]
+    ]
+  },
+  {
+    "id": "9b89033a0105d3b9",
+    "type": "OpcUa-Item",
+    "z": "1d06854d91e05168",
+    "item": "ns=2;s=ENLACES-INALAMBRICOS.ApEnfermeria.latency",
+    "datatype": "Int16",
+    "value": "Ap Enfermeria",
+    "name": "ApEnfermeria-Latencia",
+    "x": 410,
+    "y": 80,
+    "wires": [
+      [
+        "8b184758fb536328"
+      ]
+    ]
+  },
+  {
+    "id": "455c02d409e58ca7",
+    "type": "debug",
+    "z": "1d06854d91e05168",
+    "name": "Saldida1",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1760,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "ebaa1711e5ce27d6",
+    "type": "OpcUa-Item",
+    "z": "1d06854d91e05168",
+    "item": "ns=2;s=ENLACES-INALAMBRICOS.ApComputos2.latency",
+    "datatype": "Int16",
+    "value": "",
+    "name": "ApComputos2-Latencia",
+    "x": 410,
+    "y": 160,
+    "wires": [
+      [
+        "0307a7f0f2a473a4"
+      ]
+    ]
+  },
+  {
+    "id": "edd03e4a1cfd4df0",
+    "type": "OpcUa-Item",
+    "z": "1d06854d91e05168",
+    "item": "ns=2;s=caldera.caldera.presion_aire",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "presion aire",
+    "x": 270,
+    "y": 660,
+    "wires": [
+      [
+        "818183fc1e0725af"
+      ]
+    ]
+  },
+  {
+    "id": "818183fc1e0725af",
+    "type": "OpcUa-Client",
+    "z": "1d06854d91e05168",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 480,
+    "y": 660,
+    "wires": [
+      [
+        "c1fde70f5d16ebf7",
+        "f913ef4c9e67f77a"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "fa7050d2a509c100",
+    "type": "OpcUa-Client",
+    "z": "1d06854d91e05168",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 420,
+    "y": 520,
+    "wires": [
+      [
+        "74f610724553aa93",
+        "959cf6f4bfbc77d0"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "67b6a4cc355574c8",
+    "type": "inject",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "0.1",
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "x": 90,
+    "y": 720,
+    "wires": [
+      [
+        "05d469214eeaaa7e",
+        "edd03e4a1cfd4df0",
+        "271cfaa04eefc89b",
+        "d63c2e392bf14062",
+        "d7c7b798b3e51edd"
+      ]
+    ]
+  },
+  {
+    "id": "05d469214eeaaa7e",
+    "type": "OpcUa-Item",
+    "z": "1d06854d91e05168",
+    "item": "ns=2;s=molino.molino.molino1.molino_motor_veloc1",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "veloc mol1",
+    "x": 250,
+    "y": 520,
+    "wires": [
+      [
+        "fa7050d2a509c100"
+      ]
+    ]
+  },
+  {
+    "id": "c1fde70f5d16ebf7",
+    "type": "debug",
+    "z": "1d06854d91e05168",
+    "name": "debug 29",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 580,
+    "y": 580,
+    "wires": []
+  },
+  {
+    "id": "74f610724553aa93",
+    "type": "debug",
+    "z": "1d06854d91e05168",
+    "name": "debug 30",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 600,
+    "y": 460,
+    "wires": []
+  },
+  {
+    "id": "f913ef4c9e67f77a",
+    "type": "range",
+    "z": "1d06854d91e05168",
+    "minin": "3276",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "10",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 680,
+    "y": 660,
+    "wires": [
+      [
+        "4831f14358d4902b"
+      ]
+    ]
+  },
+  {
+    "id": "3bec08cbe9d96c31",
+    "type": "function",
+    "z": "1d06854d91e05168",
+    "name": "function 80",
+    "func": "let entrada1 = msg.payload.veloc1; // This will pick up the value of 100 from the Inject node\nlet entrada2 = msg.payload.presionaire;\nlet entrada3 = msg.payload.presionvapor;\nlet entrada4 = msg.payload.presionagua;\nlet entrada5 = msg.payload.contbolsas;\nlet reporte = \"\";\n\nreporte = reporte + \"<break time='0.25s'/> por favor espere <break time='0.5s'/> su solicitud esta en proceso\";\nreporte = reporte + \"<break time='0.25s'/> En Trapiche la velocidad del primer molino es de <break time='0.25s'/>\" + entrada1 + \"rpm\";\nreporte = reporte + \"<break time='0.25s'/> la presión de aire es de <break time='0.25s'/>\" + entrada2 + \"bar\";\nreporte = reporte + \"<break time='0.25s'/> En caldera la presión de vapor es de <break time='0.25s'/>\" + entrada3 + \"bar\";\nreporte = reporte + \"<break time='0.25s'/> la presión de agua de alimentación es de <break time='0.25s'/>\" + entrada4 + \"bar\";\nreporte = reporte + \"<break time='0.25s'/> En salon la cantidad de bolsas de azucar es de <break time='0.25s'/>\" + entrada5 + \"unidades\";\nreporte = reporte + \"<break time='0.5s'/> es hora de una taza de cafe  <break time='0.25s'/> que tengas un buen dia\";\n\nmsg.payload = reporte;\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1490,
+    "y": 620,
+    "wires": [
+      [
+        "a768a377167147be"
+      ]
+    ]
+  },
+  {
+    "id": "959cf6f4bfbc77d0",
+    "type": "range",
+    "z": "1d06854d91e05168",
+    "minin": "0",
+    "maxin": "10000",
+    "minout": "0",
+    "maxout": "10000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 660,
+    "y": 520,
+    "wires": [
+      [
+        "a5ef40880003613d"
+      ]
+    ]
+  },
+  {
+    "id": "5c6de0e263cfcf9b",
+    "type": "debug",
+    "z": "1d06854d91e05168",
+    "name": "debug 31",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1680,
+    "y": 440,
+    "wires": []
+  },
+  {
+    "id": "271cfaa04eefc89b",
+    "type": "OpcUa-Item",
+    "z": "1d06854d91e05168",
+    "item": "ns=2;s=caldera.caldera.Pres_Vapor_Direc_Bajas",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "presion Vapor",
+    "x": 260,
+    "y": 800,
+    "wires": [
+      [
+        "1cbe4e02fcc95b5f"
+      ]
+    ]
+  },
+  {
+    "id": "1cbe4e02fcc95b5f",
+    "type": "OpcUa-Client",
+    "z": "1d06854d91e05168",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 460,
+    "y": 800,
+    "wires": [
+      [
+        "609fadb678853952",
+        "e930c4956a7689dd"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "609fadb678853952",
+    "type": "debug",
+    "z": "1d06854d91e05168",
+    "name": "debug 32",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 560,
+    "y": 720,
+    "wires": []
+  },
+  {
+    "id": "e930c4956a7689dd",
+    "type": "range",
+    "z": "1d06854d91e05168",
+    "minin": "3276",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "25",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 660,
+    "y": 800,
+    "wires": [
+      [
+        "04f0165aa42303e7"
+      ]
+    ]
+  },
+  {
+    "id": "f84c5304e74841f5",
+    "type": "comment",
+    "z": "1d06854d91e05168",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 330,
+    "y": 480,
+    "wires": []
+  },
+  {
+    "id": "f6f35b247dba6eb7",
+    "type": "comment",
+    "z": "1d06854d91e05168",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 370,
+    "y": 620,
+    "wires": []
+  },
+  {
+    "id": "630db6065d3e7b7e",
+    "type": "comment",
+    "z": "1d06854d91e05168",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 350,
+    "y": 760,
+    "wires": []
+  },
+  {
+    "id": "d63c2e392bf14062",
+    "type": "OpcUa-Item",
+    "z": "1d06854d91e05168",
+    "item": "ns=2;s=caldera.caldera.Pres_H2O_Alimentacion1",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "presion agua",
+    "x": 250,
+    "y": 960,
+    "wires": [
+      [
+        "bb2f2d9920f63bdd"
+      ]
+    ]
+  },
+  {
+    "id": "bb2f2d9920f63bdd",
+    "type": "OpcUa-Client",
+    "z": "1d06854d91e05168",
+    "endpoint": "78fdf6f60a0994dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 460,
+    "y": 960,
+    "wires": [
+      [
+        "6d385410d8f05854",
+        "e9d7f059eeb0621e"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "6d385410d8f05854",
+    "type": "debug",
+    "z": "1d06854d91e05168",
+    "name": "debug 33",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 560,
+    "y": 880,
+    "wires": []
+  },
+  {
+    "id": "e9d7f059eeb0621e",
+    "type": "range",
+    "z": "1d06854d91e05168",
+    "minin": "3276",
+    "maxin": "16383",
+    "minout": "0",
+    "maxout": "50",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 660,
+    "y": 960,
+    "wires": [
+      [
+        "6bd57c270b28ce7a"
+      ]
+    ]
+  },
+  {
+    "id": "7e0b07100104958e",
+    "type": "debug",
+    "z": "1d06854d91e05168",
+    "name": "debug 34",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1040,
+    "y": 860,
+    "wires": []
+  },
+  {
+    "id": "74f31c1c8366b294",
+    "type": "comment",
+    "z": "1d06854d91e05168",
+    "name": "kepserver caldera",
+    "info": "",
+    "x": 350,
+    "y": 920,
+    "wires": []
+  },
+  {
+    "id": "d7c7b798b3e51edd",
+    "type": "OpcUa-Item",
+    "z": "1d06854d91e05168",
+    "item": "ns=2;s=salon.salon.balanza.salon_contador_dia",
+    "datatype": "UInt16",
+    "value": "",
+    "name": "cont bolsas",
+    "x": 270,
+    "y": 1140,
+    "wires": [
+      [
+        "9c1fc816cfc2ab0a"
+      ]
+    ]
+  },
+  {
+    "id": "9c1fc816cfc2ab0a",
+    "type": "OpcUa-Client",
+    "z": "1d06854d91e05168",
+    "endpoint": "fafbfd5a125a6ab2",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "",
+    "x": 460,
+    "y": 1140,
+    "wires": [
+      [
+        "838db1340705b583",
+        "f4aa5d970c1da17d"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "838db1340705b583",
+    "type": "debug",
+    "z": "1d06854d91e05168",
+    "name": "debug 35",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 660,
+    "y": 1080,
+    "wires": []
+  },
+  {
+    "id": "f4aa5d970c1da17d",
+    "type": "range",
+    "z": "1d06854d91e05168",
+    "minin": "0",
+    "maxin": "20000",
+    "minout": "0",
+    "maxout": "20000",
+    "action": "scale",
+    "round": false,
+    "property": "payload",
+    "name": "Escalado",
+    "x": 660,
+    "y": 1140,
+    "wires": [
+      [
+        "945a1092c18a6fb8"
+      ]
+    ]
+  },
+  {
+    "id": "7a9755ca948d4337",
+    "type": "debug",
+    "z": "1d06854d91e05168",
+    "name": "debug 36",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1040,
+    "y": 1040,
+    "wires": []
+  },
+  {
+    "id": "5bde03e4916fcc30",
+    "type": "comment",
+    "z": "1d06854d91e05168",
+    "name": "kepserver trapiche",
+    "info": "",
+    "x": 350,
+    "y": 1100,
+    "wires": []
+  },
+  {
+    "id": "ac96a8b2cd631274",
+    "type": "change",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "veloc1",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 970,
+    "y": 520,
+    "wires": [
+      [
+        "3854200dfe0e7c15"
+      ]
+    ]
+  },
+  {
+    "id": "285621e4a46a638b",
+    "type": "change",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "presionaire",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 990,
+    "y": 660,
+    "wires": [
+      [
+        "3854200dfe0e7c15"
+      ]
+    ]
+  },
+  {
+    "id": "93deb722a4b6cef4",
+    "type": "change",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "presionvapor",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 970,
+    "y": 800,
+    "wires": [
+      [
+        "3854200dfe0e7c15"
+      ]
+    ]
+  },
+  {
+    "id": "3854200dfe0e7c15",
+    "type": "join",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "mode": "custom",
+    "build": "object",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": true,
+    "accumulate": true,
+    "timeout": "",
+    "count": "5",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "",
+    "reduceFixup": "",
+    "x": 1230,
+    "y": 540,
+    "wires": [
+      [
+        "7a7ca4af13432c1e",
+        "5c6de0e263cfcf9b"
+      ]
+    ]
+  },
+  {
+    "id": "a768a377167147be",
+    "type": "rbe",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "func": "rbe",
+    "gap": "",
+    "start": "",
+    "inout": "out",
+    "septopics": false,
+    "property": "payload",
+    "topi": "topic",
+    "x": 1650,
+    "y": 620,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "c36846b624e5c449",
+    "type": "comment",
+    "z": "1d06854d91e05168",
+    "name": "agregar topic a nodo",
+    "info": "",
+    "x": 1010,
+    "y": 480,
+    "wires": []
+  },
+  {
+    "id": "77f99190138e741c",
+    "type": "comment",
+    "z": "1d06854d91e05168",
+    "name": "unificar todos los nodos en una funcion",
+    "info": "",
+    "x": 1210,
+    "y": 580,
+    "wires": []
+  },
+  {
+    "id": "2dac3890315e0f14",
+    "type": "comment",
+    "z": "1d06854d91e05168",
+    "name": "funcion con variables unificadas y topic",
+    "info": "",
+    "x": 1490,
+    "y": 660,
+    "wires": []
+  },
+  {
+    "id": "6d012cbf0c447cb7",
+    "type": "comment",
+    "z": "1d06854d91e05168",
+    "name": "filtro antirepeticion",
+    "info": "",
+    "x": 1710,
+    "y": 560,
+    "wires": []
+  },
+  {
+    "id": "7a7ca4af13432c1e",
+    "type": "delay",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "10",
+    "timeoutUnits": "milliseconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 1310,
+    "y": 620,
+    "wires": [
+      [
+        "3bec08cbe9d96c31"
+      ]
+    ]
+  },
+  {
+    "id": "ea101e64e3d6c561",
+    "type": "change",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "presionagua",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1090,
+    "y": 960,
+    "wires": [
+      [
+        "3854200dfe0e7c15"
+      ]
+    ]
+  },
+  {
+    "id": "7fd83445088b9adf",
+    "type": "change",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "contbolsas",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1090,
+    "y": 1140,
+    "wires": [
+      [
+        "3854200dfe0e7c15"
+      ]
+    ]
+  },
+  {
+    "id": "4831f14358d4902b",
+    "type": "calculator",
+    "z": "1d06854d91e05168",
+    "name": "nodo2",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 830,
+    "y": 660,
+    "wires": [
+      [
+        "285621e4a46a638b"
+      ]
+    ]
+  },
+  {
+    "id": "a5ef40880003613d",
+    "type": "calculator",
+    "z": "1d06854d91e05168",
+    "name": "nodo1",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "div",
+    "constant": "10",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 790,
+    "y": 520,
+    "wires": [
+      [
+        "ac96a8b2cd631274"
+      ]
+    ]
+  },
+  {
+    "id": "04f0165aa42303e7",
+    "type": "calculator",
+    "z": "1d06854d91e05168",
+    "name": "nodo3",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 810,
+    "y": 800,
+    "wires": [
+      [
+        "93deb722a4b6cef4"
+      ]
+    ]
+  },
+  {
+    "id": "6bd57c270b28ce7a",
+    "type": "calculator",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "1",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 860,
+    "y": 960,
+    "wires": [
+      [
+        "7e0b07100104958e",
+        "ea101e64e3d6c561"
+      ]
+    ]
+  },
+  {
+    "id": "945a1092c18a6fb8",
+    "type": "calculator",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "inputMsgField": "payload",
+    "outputMsgField": "payload",
+    "operation": "rdec",
+    "constant": "0",
+    "round": false,
+    "truncate": false,
+    "decimals": 0,
+    "decimals2": 0,
+    "x": 860,
+    "y": 1140,
+    "wires": [
+      [
+        "7a9755ca948d4337",
+        "7fd83445088b9adf"
+      ]
+    ]
+  },
+  {
+    "id": "0307a7f0f2a473a4",
+    "type": "OpcUa-Client",
+    "z": "1d06854d91e05168",
+    "endpoint": "e89251c6637bb9dc",
+    "action": "read",
+    "deadbandtype": "a",
+    "deadbandvalue": 1,
+    "time": 10,
+    "timeUnit": "s",
+    "certificate": "n",
+    "localfile": "",
+    "localkeyfile": "",
+    "securitymode": "None",
+    "securitypolicy": "None",
+    "useTransport": false,
+    "maxChunkCount": 1,
+    "maxMessageSize": 8192,
+    "receiveBufferSize": 8192,
+    "sendBufferSize": 8192,
+    "name": "KEPServer-Read",
+    "x": 690,
+    "y": 160,
+    "wires": [
+      [
+        "149dc98403e3e3cc"
+      ],
+      [],
+      []
+    ]
+  },
+  {
+    "id": "90acfa5cd2872046",
+    "type": "change",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "ApEnfermeria",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1020,
+    "y": 80,
+    "wires": [
+      [
+        "e96722a95445e103"
+      ]
+    ]
+  },
+  {
+    "id": "149dc98403e3e3cc",
+    "type": "change",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "ApComputos",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1000,
+    "y": 160,
+    "wires": [
+      [
+        "e96722a95445e103"
+      ]
+    ]
+  },
+  {
+    "id": "e96722a95445e103",
+    "type": "join",
+    "z": "1d06854d91e05168",
+    "name": "Encapsulado",
+    "mode": "custom",
+    "build": "array",
+    "property": "payload",
+    "propertyType": "msg",
+    "key": "topic",
+    "joiner": "\\n",
+    "joinerType": "str",
+    "useparts": false,
+    "accumulate": false,
+    "timeout": "",
+    "count": "2",
+    "reduceRight": false,
+    "reduceExp": "",
+    "reduceInit": "",
+    "reduceInitType": "num",
+    "reduceFixup": "",
+    "x": 1260,
+    "y": 280,
+    "wires": [
+      [
+        "e857d62141acd794"
+      ]
+    ]
+  },
+  {
+    "id": "e857d62141acd794",
+    "type": "function",
+    "z": "1d06854d91e05168",
+    "name": "function 81",
+    "func": "let valores = msg.payload;\n\nlet sum = valores.reduce((acc, val) => acc + val, 0);\n\nlet promedio = sum / valores.length;\n\nmsg.payload = promedio\n\nreturn msg;\n\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1510,
+    "y": 280,
+    "wires": [
+      [
+        "939ed8950963dc69"
+      ]
+    ]
+  },
+  {
+    "id": "939ed8950963dc69",
+    "type": "change",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "topic",
+        "pt": "msg",
+        "to": "Area-Calderas",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1760,
+    "y": 280,
+    "wires": [
+      [
+        "455c02d409e58ca7"
+      ]
+    ]
+  },
+  {
+    "id": "0d7e351619f97baa",
+    "type": "debug",
+    "z": "1d06854d91e05168",
+    "name": "debug 40",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 640,
+    "y": 380,
+    "wires": []
+  },
+  {
+    "id": "c4f3d6e88fe1513f",
+    "type": "inject",
+    "z": "1d06854d91e05168",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 1140,
+    "wires": [
+      [
+        "d7c7b798b3e51edd"
+      ]
+    ]
+  }
+]

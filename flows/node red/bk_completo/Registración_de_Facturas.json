@@ -1,0 +1,212 @@
+[
+  {
+    "id": "9548fee737994516",
+    "type": "http in",
+    "z": "2eb68e859555e47a",
+    "name": "Recibir factura de n8n",
+    "url": "/recepcion/factura",
+    "method": "post",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 160,
+    "y": 180,
+    "wires": [
+      [
+        "a75e738f22b0d583",
+        "e6657ee63e7be1f6"
+      ]
+    ]
+  },
+  {
+    "id": "e6657ee63e7be1f6",
+    "type": "debug",
+    "z": "2eb68e859555e47a",
+    "name": "RAW recibido",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "req.query",
+    "targetType": "msg",
+    "x": 160,
+    "y": 280,
+    "wires": []
+  },
+  {
+    "id": "a75e738f22b0d583",
+    "type": "function",
+    "z": "2eb68e859555e47a",
+    "name": "Validar params + prep. check duplicado",
+    "func": "const q = msg.req.body || {};\n\nif (!q.staging_id || !q.mysql_query) {\n    msg.statusCode = 400;\n    msg.headers = { 'Content-Type': 'application/json' };\n    msg.payload = JSON.stringify({ ok: false, error: 'Faltan staging_id o mysql_query' });\n    return [null, msg];\n}\n\nmsg._factura = {\n    staging_id:    q.staging_id,\n    cuit:          q.cuit          || '',\n    razon_social:  q.razon_social  || '',\n    nro_documento: q.nro_documento || '',\n    letra:         q.letra         || 'A',\n    fecha_emision: q.fecha_emision || '',\n    total:         q.total         || '0',\n    tipo_operacion:q.tipo_operacion|| 'FACTURA_COMPRA',\n    confianza:     q.confianza_parseo || '',\n    mysql_query:   q.mysql_query,\n    items_json:    q.items_json    || '[]'\n};\n\nmsg.topic   = q.mysql_query;\nmsg.payload = {};\nreturn [msg, null];\n",
+    "outputs": 2,
+    "x": 480,
+    "y": 180,
+    "wires": [
+      [
+        "07b810e7d570131f"
+      ],
+      [
+        "39a8a651feeb8c8f"
+      ]
+    ]
+  },
+  {
+    "id": "07b810e7d570131f",
+    "type": "mysql",
+    "z": "2eb68e859555e47a",
+    "mydb": "mysql-config-automatizaciones",
+    "name": "INSERT staging_facturas",
+    "x": 450,
+    "y": 260,
+    "wires": [
+      [
+        "bdc286d5bc219e76"
+      ]
+    ]
+  },
+  {
+    "id": "bdc286d5bc219e76",
+    "type": "function",
+    "z": "2eb68e859555e47a",
+    "name": "Preparar INSERT ítems",
+    "func": "const f = msg._factura;\nlet items = [];\ntry { items = JSON.parse(f.items_json || '[]'); } catch(e) { items = []; }\nif (!items || items.length === 0) return [null, msg];\nconst esc = s => s ? String(s).replace(/\\\\/g, '\\\\\\\\').replace(/'/g, \"\\\\'\") : '';\nconst rows = items.map(it => {\n    const desc = esc(it.descripcion || '');\n    const cant = (it.cantidad != null) ? Number(it.cantidad) : 'NULL';\n    const uni  = esc(it.unidad || 'u');\n    const pu   = (it.precio_unitario != null) ? Number(it.precio_unitario) : 'NULL';\n    const aliq = (it.alicuota_iva != null) ? parseInt(it.alicuota_iva) : 'NULL';\n    const sub  = (it.subtotal != null) ? Number(it.subtotal) : 'NULL';\n    const mon  = esc(it.moneda || 'ARS');\n    const lin  = parseInt(it.linea) || 1;\n    return `('${f.staging_id}', ${lin}, '${desc}', ${cant}, '${uni}', ${pu}, ${aliq}, ${sub}, '${mon}')`;\n}).join(',\\n');\nmsg.topic   = `INSERT INTO staging_facturas_items (factura_id, linea, descripcion, cantidad, unidad, precio_unitario, alicuota_iva, subtotal, moneda) VALUES\\n${rows}`;\nmsg.payload = {};\nreturn [msg, null];\n",
+    "outputs": 2,
+    "x": 730,
+    "y": 260,
+    "wires": [
+      [
+        "b4815fc5a0c7c6ba"
+      ],
+      [
+        "1eef05f99b7a4638"
+      ]
+    ]
+  },
+  {
+    "id": "b4815fc5a0c7c6ba",
+    "type": "mysql",
+    "z": "2eb68e859555e47a",
+    "mydb": "mysql-config-automatizaciones",
+    "name": "INSERT staging_facturas_items",
+    "x": 930,
+    "y": 160,
+    "wires": [
+      [
+        "1eef05f99b7a4638"
+      ]
+    ]
+  },
+  {
+    "id": "1eef05f99b7a4638",
+    "type": "function",
+    "z": "2eb68e859555e47a",
+    "name": "Respuesta OK",
+    "func": "const f = msg._factura || {};\nmsg.statusCode = 200;\nmsg.headers = { 'Content-Type': 'application/json' };\nmsg.payload = JSON.stringify({\n    ok: true,\n    staging_id:    f.staging_id,\n    razon_social:  f.razon_social,\n    nro_documento: f.nro_documento,\n    total:         f.total,\n    mensaje:       'Factura registrada correctamente en staging_facturas'\n});\nreturn msg;\n",
+    "outputs": 1,
+    "x": 980,
+    "y": 280,
+    "wires": [
+      [
+        "44a694f71e190038",
+        "edbe7f7ab28ac46e"
+      ]
+    ]
+  },
+  {
+    "id": "44a694f71e190038",
+    "type": "http response",
+    "z": "2eb68e859555e47a",
+    "name": "HTTP 200",
+    "statusCode": "200",
+    "headers": {},
+    "x": 1210,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "edbe7f7ab28ac46e",
+    "type": "debug",
+    "z": "2eb68e859555e47a",
+    "name": "Log OK",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": true,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1200,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "39a8a651feeb8c8f",
+    "type": "http response",
+    "z": "2eb68e859555e47a",
+    "name": "HTTP 400",
+    "statusCode": "400",
+    "headers": {},
+    "x": 680,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "4d5133c592918ea3",
+    "type": "catch",
+    "z": "2eb68e859555e47a",
+    "name": "Error MySQL",
+    "scope": [
+      "07b810e7d570131f",
+      "b4815fc5a0c7c6ba"
+    ],
+    "uncaught": false,
+    "x": 130,
+    "y": 360,
+    "wires": [
+      [
+        "c18115b93ca3d364"
+      ]
+    ]
+  },
+  {
+    "id": "c18115b93ca3d364",
+    "type": "function",
+    "z": "2eb68e859555e47a",
+    "name": "Respuesta error MySQL",
+    "func": "const f = msg._factura || {};\nnode.error('Error MySQL [' + f.staging_id + ']: ' + (msg.error && msg.error.message));\nmsg.statusCode = 500;\nmsg.headers = { 'Content-Type': 'application/json' };\nmsg.payload = JSON.stringify({\n    ok: false, staging_id: f.staging_id,\n    error: (msg.error && msg.error.message) || 'Error desconocido en MySQL'\n});\nreturn msg;\n",
+    "outputs": 1,
+    "x": 370,
+    "y": 360,
+    "wires": [
+      [
+        "9504a1f9fcb981dd",
+        "b960faec1327db8d"
+      ]
+    ]
+  },
+  {
+    "id": "9504a1f9fcb981dd",
+    "type": "http response",
+    "z": "2eb68e859555e47a",
+    "name": "HTTP 500",
+    "statusCode": "500",
+    "headers": {},
+    "x": 590,
+    "y": 320,
+    "wires": []
+  },
+  {
+    "id": "b960faec1327db8d",
+    "type": "debug",
+    "z": "2eb68e859555e47a",
+    "name": "Log error MySQL",
+    "active": true,
+    "tosidebar": true,
+    "console": true,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 590,
+    "y": 400,
+    "wires": []
+  }
+]
