@@ -263,6 +263,7 @@ Para cada tipo de tarea, invocar SIEMPRE el skill correspondiente con `Skill` AN
 | **Revisión y auditoría de flows Node-RED** | `node-red-flow-reviewer` 🆕 | Usa MCP nodered para auditar flows, simular function nodes, tracear datos, detectar vulnerabilidades y revisar pre-deploy. |
 | **Revisión de consultas SQL, compatibilidad 2008 R2, performance** | `sql-reviewer` 🆕 | Usa MCPs sqlserver + mysql para probar queries en vivo. Checklist sintaxis 2008 R2, MySQL, performance, seguridad. |
 | **Diseño y revisión de workflows n8n cloud** | `n8n-architect` 🆕 | Usa MCP n8n-mcp para documentación de nodos y validación. Arquitectura cloud/on-prem, seguridad webhooks, costos de ejecución. |
+| **Producción, caña, pesaje, cachaza, vinaza, laboratorio, fincas, contratos cañeros, liquidaciones, proceso industrial** | `experto-produccion-corona` 🆕 | Schema completo del módulo PR: 11 tablas `pr_ezi_*`, 186 vistas, 988K registros. Flujo contrato→finca→entrada→pesaje→lab→liquidación. Fórmulas de Pol%, Pureza, Rendimiento, KRPol. |
 | **Gestión de repositorios GitHub, PRs, issues, push** | `github-corona` 🆕 | Usa MCP github + gh CLI. Flujo commit→push→PR, checklist pre-commit, formato conventional commits. |
 
 | Tarea | Skill a invocar |
@@ -308,7 +309,7 @@ for dir in MCPs/mcp-*/; do (cd "$dir" && npm update); done
 1. **Skill de proyecto + skill de proceso**: cuando una tarea requiere ambos (ej: "crear dashboard de CxP"), invocar primero el de proceso (`brainstorming` o `writing-plans`) y luego el de proyecto (`dashboard-portable-corona`)
 2. **No leer skills manualmente**: usar siempre la herramienta `Skill` — si un skill no está registrado como invocable, solo ahí leer el `.md` con `Read`
 3. **`html-css-bootstrap-corona` + `dashboard-portable-corona`**: cuando la tarea es un dashboard completo, invocar ambos en secuencia (arquitectura → estilado)
-4. **Skills de referencia** (`.md` simple en `/home/soporte/.claude/skills/`): leer con `Read` solo bajo demanda. Son: `code-review-ingenio.md`, `seguridad-it-ingenio.md`, `calipso-sql-server.md`, `molienda-web.md`, `git-workflow-ingenio.md`, `documentacion-tecnica.md`, `codebase-mapper.md`, `test-planner.md`, `docs-writer.md`, `automation-diagnostics.md`, `frontend-design.md`
+4. **Skills de referencia** (`.md` simple en `/home/soporte/.claude/skills/`): leer con `Read` solo bajo demanda. Son: `code-review-ingenio.md`, `seguridad-it-ingenio.md`, `calipso-sql-server.md`, `molienda-web.md`, `git-workflow-ingenio.md`, `documentacion-tecnica.md`, `codebase-mapper.md`, `test-planner.md`, `docs-writer.md`, `automation-diagnostics.md`, `frontend-design.md`, `experto-produccion-corona.md`
 
 ## Arquitectura recomendada para dashboards y apps de servicio
 
