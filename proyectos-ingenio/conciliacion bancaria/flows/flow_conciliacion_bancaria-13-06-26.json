@@ -420,7 +420,7 @@
   {
     "id": "conc_gauth",
     "type": "gauth",
-    "name": "node-red-sheets-sync@sync-calipso-corona.iam.gserviceaccount.com"
+    "name": "<service-account>@<project>.iam.gserviceaccount.com"
   },
   {
     "id": "6814eb4bb7e82ddb",

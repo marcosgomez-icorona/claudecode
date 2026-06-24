@@ -38,8 +38,8 @@
       "description": "Google Sheets MCP \u2014 lectura/escritura directa de sheets desde Claude. 25+ herramientas: read, write, format, search, charts, validation, CSV. Service account auth.",
       "env": {
         "GOOGLE_SERVICE_ACCOUNT_KEY_FILE": "/mnt/c/claudecode/.secrets/service-account-sheets.json",
-        "GOOGLE_CLIENT_ID": "106191104338479011721",
-        "GOOGLE_SHEETS_SPREADSHEET_ID": "1aJbwTlUILjV0-SpzqH9SfiKEH-Cgq5tlU-bSeeC3Ay0"
+        "GOOGLE_CLIENT_ID": "",
+        "GOOGLE_SHEETS_SPREADSHEET_ID": ""
       }
     },
     "browser": {

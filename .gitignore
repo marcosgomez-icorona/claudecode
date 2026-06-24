@@ -49,3 +49,5 @@ key-*.json
 .claude/telegram/sent/*.json
 .claude/telegram/inbox/*.json
 .claude/telegram/processed/*.json
+.mcp.local.json
+setup-env.sh

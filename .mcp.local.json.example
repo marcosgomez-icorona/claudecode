@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "gsheets": {
+      "env": {
+        "GOOGLE_SERVICE_ACCOUNT_KEY_FILE": "/ruta/a/tu/service-account-sheets.json",
+        "GOOGLE_CLIENT_ID": "TU_CLIENT_ID",
+        "GOOGLE_SHEETS_SPREADSHEET_ID": "TU_SPREADSHEET_ID"
+      }
+    },
+    "github": {
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "TU_TOKEN"
+      }
+    }
+  }
+}
