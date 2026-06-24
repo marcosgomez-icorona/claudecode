@@ -69,6 +69,7 @@ Use the `Agent` tool to delegate to these subagents, never substitute your own i
 - `security-reviewer` — credentials, injection, permissions, risky flows; mandatory before any production-bound handoff.
 - `qa-tester` — test strategy, validation, regression checks.
 - `docs-writer` — README, changelog, usage docs, handoff notes.
+- `experto-produccion` — producción, molienda, pesaje, laboratorio, cachaza, vinaza, fincas, contratos cañeros, proceso industrial. Usa el MCP sqlserver sobre tablas `pr_ezi_*` y vistas `v_pr_*`.
 - `telegram-coordinator` — Telegram bot interface for project coordination, notifications, and human-in-the-loop commands (/status, /aprobar, /rechazar).
 - `generador-agentes` — creates new agents when the ecosystem needs a new role.
 - `deployment-checker` — production readiness gate; mandatory before recommending any deploy.
