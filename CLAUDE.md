@@ -263,7 +263,8 @@ Para cada tipo de tarea, invocar SIEMPRE el skill correspondiente con `Skill` AN
 | **Revisión y auditoría de flows Node-RED** | `node-red-flow-reviewer` 🆕 | Usa MCP nodered para auditar flows, simular function nodes, tracear datos, detectar vulnerabilidades y revisar pre-deploy. |
 | **Revisión de consultas SQL, compatibilidad 2008 R2, performance** | `sql-reviewer` 🆕 | Usa MCPs sqlserver + mysql para probar queries en vivo. Checklist sintaxis 2008 R2, MySQL, performance, seguridad. |
 | **Diseño y revisión de workflows n8n cloud** | `n8n-architect` 🆕 | Usa MCP n8n-mcp para documentación de nodos y validación. Arquitectura cloud/on-prem, seguridad webhooks, costos de ejecución. |
-| **Producción, caña, pesaje, cachaza, vinaza, laboratorio, fincas, contratos cañeros, liquidaciones, proceso industrial** | `experto-produccion-corona` 🆕 | Schema completo del módulo PR: 11 tablas `pr_ezi_*`, 186 vistas, 988K registros. Flujo contrato→finca→entrada→pesaje→lab→liquidación. Fórmulas de Pol%, Pureza, Rendimiento, KRPol. |
+| **Producción, caña, pesaje, cachaza, vinaza, laboratorio, fincas, contratos cañeros, liquidaciones, proceso industrial** | `experto-produccion-corona` 🆕 | Schema completo del módulo PR: 11 tablas `pr_ezi_*`, 186 vistas, 988K registros. Flujo contrato→finca→entrada→pesaje→lab→liquidación. |
+| **Asesoría ingenieril azucarera/alcoholera (molienda, cristalización, destilación, fermentación, parámetros, benchmarking tucumano)** | `asesor-produccion-ingenio` 🆕 | Conocimiento experto de procesos: trash/pureza/rto, variedades LCP 85-384, zafra tucumana, eficiencia fabril, normativa EEAOC/INTA, diagnóstico industrial. |
 | **Gestión de repositorios GitHub, PRs, issues, push** | `github-corona` 🆕 | Usa MCP github + gh CLI. Flujo commit→push→PR, checklist pre-commit, formato conventional commits. |
 
 | Tarea | Skill a invocar |
